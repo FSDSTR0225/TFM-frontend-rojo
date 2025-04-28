@@ -18,6 +18,7 @@ import { RecOfferForm } from '../features/recruiters/pages/RecOfferForm';
 import { RecApplications } from '../features/recruiters/pages/RecApplications';
 import { MainLayout } from '../layout/MainLayout';
 import { Register } from '../features/auth/register';
+import { PortfoliosPage } from '../features/developer/pages/PortfoliosPage';
 
 
 
@@ -33,6 +34,7 @@ const router = createBrowserRouter([
       { path: 'projects', element: <Projects /> },
       { path: 'projects/:projectid', element: <ProjectsDetails /> },
       { path: 'developers/:developerid', element: <DeveloperPublicProfile /> },
+      { path: 'portfolios', element: <PortfoliosPage /> },
       //{ path: 'login', element: <Login /> },
       { path: 'register', element: <Register /> },
 
