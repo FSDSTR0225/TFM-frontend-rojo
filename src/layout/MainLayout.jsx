@@ -5,9 +5,9 @@ import { Footer } from "./Footer"
 export const MainLayout= () => {
     return (
         <>
-            <div class="flex flex-col min-h-screen bg-base-200">
+            <div className="flex flex-col min-h-screen bg-base-200">
                <Header />
-                <main class="flex-grow p-6">
+                <main className="flex-grow p-6">
                     {<Outlet />}
                 </main>
             <Footer />
