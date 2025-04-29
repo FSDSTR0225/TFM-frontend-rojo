@@ -18,6 +18,7 @@ import { RecOfferForm } from '../features/recruiters/pages/RecOfferForm';
 import { RecApplications } from '../features/recruiters/pages/RecApplications';
 import { MainLayout } from '../layout/MainLayout';
 import { Register } from '../features/auth/register';
+import { PortfoliosPage } from '../features/developer/pages/PortfoliosPage';
 
 
 
@@ -33,6 +34,7 @@ const router = createBrowserRouter([
       { path: 'projects', element: <Projects /> },
       { path: 'projects/:projectid', element: <ProjectsDetails /> },
       { path: 'developers/:developerid', element: <DeveloperPublicProfile /> },
+      { path: 'portfolios', element: <PortfoliosPage /> },
       //{ path: 'login', element: <Login /> },
       { path: 'register', element: <Register /> },
 
@@ -47,7 +49,7 @@ const router = createBrowserRouter([
           { path: 'profile/edit', element: <DeveloperEditProfile />},
           { path: 'projects', element: <Projects /> },
           { path: 'projects/new', element: <DevProjectForm /> },
-          {path: 'projects/:projectId/edit', element: <DevProjectForm />},
+          { path: 'projects/:projectId/edit', element: <DevProjectForm />},
           { path: 'applications', element: <DevApplications /> }
         ]
       },
@@ -59,7 +61,7 @@ const router = createBrowserRouter([
         //loader: authLoader,  // Verifica token y rol antes de cualquiera de sus hijos
         children: [
           // 1. Dashboard principal
-           { path: 'dashboard', element: <RecDashBoar />},
+          { path: 'dashboard', element: <RecDashBoar />},
       
           // 2. Perfil de recruiter (ver y editar)
           {path: 'profile', element: <RecProfile />},
