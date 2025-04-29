@@ -1,70 +1,214 @@
-import { Link } from "react-router"
+import { Link } from "react-router";
 
 export const Header = () => {
   return (
-    <header class= "bg-base-300 p-2   drawer border-b-1 border-base-100">
-  <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
-  <div className=" drawer-content flex flex-row">
-    {/* Navbar */}
-    <div className="navbar w-full">
-      <div className="flex-none sm:hidden">
-        <label htmlFor="my-drawer-3" aria-label="open sidebar" className="btn btn-square btn-ghost">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            className="inline-block h-6 w-6 stroke-current"
+    <header class='bg-base-300 p-2 drawer border-b-1 border-base-100'>
+      <input
+        id='my-drawer-3'
+        type='checkbox'
+        className='drawer-toggle'
+      />
+      <div className=' drawer-content flex flex-row'>
+        {/* Navbar */}
+        <div className='navbar w-full'>
+          <div className='flex-none sm:hidden'>
+            <label
+              htmlFor='my-drawer-3'
+              aria-label='open sidebar'
+              className='btn btn-square btn-ghost'
+            >
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                fill='none'
+                viewBox='0 0 24 24'
+                className='inline-block h-6 w-6 stroke-current'
+              >
+                <path
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  strokeWidth='2'
+                  d='M4 6h16M4 12h16M4 18h16'
+                ></path>
+              </svg>
+            </label>
+          </div>
+          <Link
+            to={"/"}
+            className='mr-4 pr-4 text-green-500 font-bold text-2xl'
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M4 6h16M4 12h16M4 18h16"
-            ></path>
-          </svg>
-        </label>
+            Codepply
+          </Link>
+          <div className='hidden flex-none sm:flex'>
+            <ul className='menu-md  menu-horizontal'>
+              {/* Navbar menu content here */}
+              <li>
+                <Link
+                  to='/'
+                  className='btn btn-outline text-base-300 bg-green-600 w-28 mx-2 hover:bg-green-700 '
+                >
+                  {" "}
+                  <svg
+                    xmlns='http://www.w3.org/2000/svg'
+                    class='h-5 w-5'
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    stroke='currentColor'
+                  >
+                    <path
+                      stroke-linecap='round'
+                      stroke-linejoin='round'
+                      stroke-width='2'
+                      d='M3 12h18m-6 6l6-6-6-6'
+                    />
+                  </svg>
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to='/portfolios'
+                  className='btn btn-outline text-base-300 bg-green-600 w-28 mx-2 hover:bg-green-700'
+                >
+                  {" "}
+                  <svg
+                    xmlns='http://www.w3.org/2000/svg'
+                    class='h-5 w-5'
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    stroke='currentColor'
+                  >
+                    <path
+                      stroke-linecap='round'
+                      stroke-linejoin='round'
+                      stroke-width='2'
+                      d='M3 7h18M3 12h18m-6 5h6'
+                    />
+                  </svg>
+                  Portfolios
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to='/offers'
+                  className='btn btn-outline text-base-300 bg-green-600 w-28 mx-2 hover:bg-green-700'
+                >
+                  <svg
+                    xmlns='http://www.w3.org/2000/svg'
+                    class='h-5 w-5'
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    stroke='currentColor'
+                  >
+                    <path
+                      stroke-linecap='round'
+                      stroke-linejoin='round'
+                      stroke-width='2'
+                      d='M4 6h16M4 10h16m-7 4h7'
+                    />
+                  </svg>
+                  Ofertas
+                </Link>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div className='flex gap-2 items-center '>
+          {/* Auth menu content here */}
+          <Link
+            to={"/"}
+            className='btn w-20'
+          >
+            Login
+          </Link>
+          <Link
+            to={"/register"}
+            className=' btn w-20'
+          >
+            Register
+          </Link>
+        </div>
+        {/* Page content here
+    Content */}
       </div>
-      <Link to={'/'} className="mr-4 pr-4 text-green-500 font-bold text-2xl">Codepply</Link>
-      <div className="hidden flex-none sm:flex" >
-        <ul className="menu-md  menu-horizontal">
-          {/* Navbar menu content here */}
-          <li><Link to="/" className="btn bg-green-600 w-28 mx-2 hover:bg-green-700"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12h18m-6 6l6-6-6-6" />
-                                    </svg>Home</Link></li>
-          <li><Link to="/portfolios" className="btn bg-green-600 w-28 mx-2 hover:bg-green-700" > <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 12h18m-6 5h6" />
-                                    </svg>Portfolios</Link></li>
-          <li><Link to="/offers" className="btn bg-green-600 w-28 mx-2 hover:bg-green-700"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16m-7 4h7" />
-                                    </svg>Ofertas</Link></li>
+      <div className='drawer-side'>
+        <label
+          htmlFor='my-drawer-3'
+          aria-label='close sidebar'
+          className='drawer-overlay'
+        ></label>
+        <ul className='menu bg-base-200 min-h-full w-80 p-4'>
+          {/* Sidebar content here */}
+          <li>
+            <Link
+              to='/'
+              className='btn btn-outline text-base-300 bg-green-600 m-2 hover:bg-green-700'
+            >
+              {" "}
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                class='h-5 w-5'
+                fill='none'
+                viewBox='0 0 24 24'
+                stroke='currentColor'
+              >
+                <path
+                  stroke-linecap='round'
+                  stroke-linejoin='round'
+                  stroke-width='2'
+                  d='M3 12h18m-6 6l6-6-6-6'
+                />
+              </svg>
+              Home
+            </Link>
+          </li>
+          <li>
+            <Link
+              to='/portfolios'
+              className='btn btn-outline text-base-300 bg-green-600 m-2 hover:bg-green-700'
+            >
+              {" "}
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                class='h-5 w-5'
+                fill='none'
+                viewBox='0 0 24 24'
+                stroke='currentColor'
+              >
+                <path
+                  stroke-linecap='round'
+                  stroke-linejoin='round'
+                  stroke-width='2'
+                  d='M3 7h18M3 12h18m-6 5h6'
+                />
+              </svg>
+              Portfolios
+            </Link>
+          </li>
+          <li>
+            <Link
+              to='/offers'
+              className='btn bg-green-600  m-2 hover:bg-green-700'
+            >
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                class='h-5 w-5'
+                fill='none'
+                viewBox='0 0 24 24'
+                stroke='currentColor'
+              >
+                <path
+                  stroke-linecap='round'
+                  stroke-linejoin='round'
+                  stroke-width='2'
+                  d='M4 6h16M4 10h16m-7 4h7'
+                />
+              </svg>
+              Ofertas
+            </Link>
+          </li>
         </ul>
       </div>
-    </div>
-    <div className="flex gap-2 items-center ">
-          {/* Auth menu content here */}
-          <Link  to={'/'} className="btn w-20">Login</Link>
-          <Link to={'/register'} className=" btn w-20">Register</Link>
-      </div>
-    {/* Page content here
-    Content */}
-  </div>
-  <div className="drawer-side">
-    <label htmlFor="my-drawer-3" aria-label="close sidebar" className="drawer-overlay"></label>
-    <ul className="menu bg-base-200 min-h-full w-80 p-4">
-      {/* Sidebar content here */}
-      <li><Link to="/" className="btn bg-green-600 m-2 hover:bg-green-700"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12h18m-6 6l6-6-6-6" />
-                                    </svg>Home</Link></li>
-          <li><Link to="/portfolios" className="btn bg-green-600 m-2 hover:bg-green-700" > <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 12h18m-6 5h6" />
-                                    </svg>Portfolios</Link></li>
-          <li><Link to="/offers" className="btn bg-green-600  m-2 hover:bg-green-700"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16m-7 4h7" />
-                                    </svg>Ofertas</Link></li>
-    </ul>
-
-  </div>
-                    {/* <nav class="bg-black text-white flex items-center justify-between px-6 py-4">
+      {/* <nav class="bg-black text-white flex items-center justify-between px-6 py-4">
                         <div class="flex items-center gap-4">
                             <span class="text-green-500 font-bold text-xl flex items-center">
                                 Codapply
@@ -120,5 +264,6 @@ export const Header = () => {
                             </a>
                         </div>
                     </nav> */}
-                </header>
-  )}
+    </header>
+  );
+};
