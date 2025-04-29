@@ -64,7 +64,7 @@ export const Register = () => {
             <label className="block text-sm font-medium text-gray-900">Role</label>
             <select
               id="rol"
-              {...register('rol')}
+              {...register('role')}
               className="w-full px-4 py-2 mt-1 text-sm border rounded-md focus:ring focus:ring-blue-300 focus:outline-none text-gray-900"
             >
               <option value="developer">Developer</option>
