@@ -1,7 +1,7 @@
 const urlBackEnd = 'http://localhost:3000';
 
 export const registeredUser = async (user) => {
-    try {
+
         const resp = await fetch(urlBackEnd + '/users/register', {
             method: 'POST',
             headers: {
@@ -12,7 +12,4 @@ export const registeredUser = async (user) => {
         const data = await resp.json();
         return data;
 
-    } catch (error) {
-        throw error;
     }
-}
