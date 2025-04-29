@@ -10,7 +10,6 @@ export const registeredUser = async (user) => {
             },
             body: JSON.stringify(user)
         });
-        
     } catch (error) {
         throw error;
     }
