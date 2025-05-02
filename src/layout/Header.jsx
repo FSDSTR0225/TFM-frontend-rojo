@@ -32,12 +32,13 @@ export const Header = () => {
               </svg>
             </label>
           </div>
-          <Link
-            to={"/"}
-            className='mr-4 pr-4 text-green-500 font-bold text-2xl'
-          >
-            Codepply
-          </Link>
+          <Link to={"/"} className="mr-4 pr-4 flex items-center">
+            <img
+              src="/src/assets/CodepplyLogo.svg"
+              alt="Codepply Logo"
+              className="h-6 ml-3"
+            />
+        </Link>
           <div className='hidden flex-none sm:flex'>
             <ul className='menu-md  menu-horizontal'>
               {/* Navbar menu content here */}

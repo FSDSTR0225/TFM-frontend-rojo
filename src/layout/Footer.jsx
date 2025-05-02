@@ -5,12 +5,13 @@ export const Footer = () => {
   return (
     <footer className="footer sm:footer-horizontal bg-base-300 text-base-content p-10">
   <aside>
-  <Link
-            to={"/"}
-            className='mr-4 pr-4 text-green-500 font-bold text-2xl'
-          >
-            Codepply
-          </Link>
+  <Link to={"/"} className="mr-4 pr-4 flex items-center">
+            <img
+              src="/src/assets/Codepply-Logo-gradient.svg"
+              alt="Codepply Logo"
+              className="h-6"
+            />
+        </Link>
     <p>
       ACME Industries Ltd.
       <br />
