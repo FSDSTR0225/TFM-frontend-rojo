@@ -4,12 +4,13 @@ import { createBrowserRouter, RouterProvider } from 'react-router';
 import { ErrorPage } from '../pages/ErrorPage';
 import { Home } from '../pages/Home';
 import { Offers } from '../features/recruiters/pages/Offers';
-import { Projects } from '../features/developer/pages/Projects';
-import { ProjectsDetails } from '../features/developer/pages/ProjectsDetails';
-import { DeveloperPublicProfile } from '../features/developer/pages/DeveloperPublicProfile';
-import { DeveloperEditProfile } from '../features/developer/pages/DeveloperEditProfile';
-import { DevProjectForm } from '../features/developer/pages/DevProjectForm';
-import { DevApplications } from '../features/developer/pages/DevApplications';
+import { ProjectsPage } from '../features/developer/pages/ProjectsPage';
+import { NewProjectPage } from '../features/developer/pages/NewProjectPage';
+import { ProjectDetailsPage } from '../features/developer/pages/ProjectDetailsPage';
+import { EditProjectDetailsPage } from '../features/developer/pages/EditProjectDetailsPage';
+import { ProfileDevPage } from '../features/developer/pages/ProfileDevPage';
+import { EditDevProfilePage } from '../features/developer/pages/EditDevProfilePage';
+import { InfoEditDevPage } from '../features/developer/pages/InfoEditDevPage';
 import { RecDashBoar } from '../features/recruiters/pages/RecDashBoar';
 import { RecProfile } from '../features/recruiters/pages/RecProfile';
 import { RecruiterEditForm } from '../features/recruiters/pages/RecruiterEditForm';
@@ -18,7 +19,7 @@ import { RecOfferForm } from '../features/recruiters/pages/RecOfferForm';
 import { RecApplications } from '../features/recruiters/pages/RecApplications';
 import { MainLayout } from '../layout/MainLayout';
 import { Register } from '../features/auth/register';
-import { PortfoliosPage } from '../features/developer/pages/PortfoliosPage';
+
 
 
 
@@ -31,10 +32,11 @@ const router = createBrowserRouter([
       // Rutas públicas
       { index: true, element: <Home /> },
       { path: 'offers', element: <Offers />},
-      { path: 'projects', element: <Projects /> },
-      { path: 'projects/:projectid', element: <ProjectsDetails /> },
-      { path: 'developers/:developerid', element: <DeveloperPublicProfile /> },
-      { path: 'portfolios', element: <PortfoliosPage /> },
+      { path: 'projects', element: <ProjectsPage /> },
+      { path: 'projects/details/:projectid', element: <ProjectDetailsPage /> }, 
+      { path: 'developers/:developerid', element: <ProfileDevPage /> },
+
+
       //{ path: 'login', element: <Login /> },
       { path: 'register', element: <Register /> },
 
@@ -45,12 +47,12 @@ const router = createBrowserRouter([
         //loader: authLoader,
         children: [
           //{ path: 'dashboard', element: <DeveloperDashboard />, loader: developerLoader },
-          { path: 'profile', element: <DeveloperPublicProfile /> },
-          { path: 'profile/edit', element: <DeveloperEditProfile />},
-          { path: 'projects', element: <Projects /> },
-          { path: 'projects/new', element: <DevProjectForm /> },
-          { path: 'projects/:projectId/edit', element: <DevProjectForm />},
-          { path: 'applications', element: <DevApplications /> }
+          { path: 'profile', element: <ProfileDevPage /> },
+          { path: 'profile/edit', element: <EditDevProfilePage />},
+          { path: 'projects', element: <ProjectsPage /> },
+          { path: 'projects/new', element: <NewProjectPage /> },
+          { path: 'projects/:projectId/edit', element: <EditProjectDetailsPage />},
+          { path: 'developers/:developerid/edit', element: <InfoEditDevPage /> },
         ]
       },
 

@@ -41,32 +41,10 @@ export const Header = () => {
           <div className='hidden flex-none sm:flex'>
             <ul className='menu-md  menu-horizontal'>
               {/* Navbar menu content here */}
+
               <li>
                 <Link
-                  to='/'
-                  className='btn btn-outline text-base-300 bg-green-600 w-28 mx-2 hover:bg-green-700 '
-                >
-                  {" "}
-                  <svg
-                    xmlns='http://www.w3.org/2000/svg'
-                    class='h-5 w-5'
-                    fill='none'
-                    viewBox='0 0 24 24'
-                    stroke='currentColor'
-                  >
-                    <path
-                      stroke-linecap='round'
-                      stroke-linejoin='round'
-                      stroke-width='2'
-                      d='M3 12h18m-6 6l6-6-6-6'
-                    />
-                  </svg>
-                  Home
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to='/portfolios'
+                  to='/projects'
                   className='btn btn-outline text-base-300 bg-green-600 w-28 mx-2 hover:bg-green-700'
                 >
                   {" "}
@@ -84,7 +62,7 @@ export const Header = () => {
                       d='M3 7h18M3 12h18m-6 5h6'
                     />
                   </svg>
-                  Portfolios
+                  Projects
                 </Link>
               </li>
               <li>
@@ -106,7 +84,7 @@ export const Header = () => {
                       d='M4 6h16M4 10h16m-7 4h7'
                     />
                   </svg>
-                  Ofertas
+                  Jobs
                 </Link>
               </li>
             </ul>
@@ -181,7 +159,7 @@ export const Header = () => {
                   d='M3 7h18M3 12h18m-6 5h6'
                 />
               </svg>
-              Portfolios
+              Projects
             </Link>
           </li>
           <li>
@@ -203,7 +181,7 @@ export const Header = () => {
                   d='M4 6h16M4 10h16m-7 4h7'
                 />
               </svg>
-              Ofertas
+              Jobs
             </Link>
           </li>
         </ul>
