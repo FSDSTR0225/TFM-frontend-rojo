@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import ProjectCard from "../components/ProjectCard";
 
-import ProjectCardImageProv from "../../../assets/card-1.png";
-import ProjectCardImageProv2 from "../../../assets/card-2.png";
+import ProjectCardImageProv from "../../../assets/image-1.jpg";
+import ProjectCardImageProv2 from "../../../assets/image-2.jpg";
+import ProjectCardImageProv3 from "../../../assets/image-3.jpg";
+import ProjectCardImageProv4 from "../../../assets/image-4.jpg";
 import Avatar1 from "../../../assets/avatar-1.png";
 import Avatar2 from "../../../assets/avatar-2.png";
 
@@ -50,7 +52,7 @@ export const ProjectsPage = () => {
           title: "Clasificador de Imágenes", 
           category: "DevOps", 
           avatar: Avatar2,
-          image: ProjectCardImageProv2,
+          image: ProjectCardImageProv3,
           projectLink: "/project/3",
         },
         { 
@@ -59,7 +61,7 @@ export const ProjectsPage = () => {
           title: "Dashboard Admin", 
           category: "Full Stack", 
           avatar: Avatar2,
-          image: ProjectCardImageProv,
+          image: ProjectCardImageProv4,
           projectLink: "/project/4",
         },
       ];

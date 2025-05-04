@@ -20,7 +20,11 @@ const ProjectCard = ({ userName, avatar, image, projectLink, title, badgeText })
 
       {/* Imagen que ocupa el resto */}
       <div className="flex-grow overflow-hidden z-0">
-        <img src={image} alt={title} className="w-full h-full object-cover" />
+      <img
+        src={image}
+        alt={title}
+        className="w-full h-auto object-contain "
+      />
       </div>
 
       {/* Hover overlay con botón */}
