@@ -3,7 +3,6 @@ import React from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router';
 import { ErrorPage } from '../pages/ErrorPage';
 import { Home } from '../pages/Home';
-import { Offers } from '../features/recruiters/pages/Offers';
 import { ProjectsPage } from '../features/developer/pages/ProjectsPage';
 import { NewProjectPage } from '../features/developer/pages/NewProjectPage';
 import { ProjectDetailsPage } from '../features/developer/pages/ProjectDetailsPage';
@@ -19,6 +18,7 @@ import { RecOfferForm } from '../features/recruiters/pages/RecOfferForm';
 import { RecApplications } from '../features/recruiters/pages/RecApplications';
 import { MainLayout } from '../layout/MainLayout';
 import { Register } from '../features/auth/register';
+import { OffersInfoPage } from '../features/recruiters/pages/OffersInfoPage';
 
 
 
@@ -31,7 +31,7 @@ const router = createBrowserRouter([
     children: [
       // Rutas públicas
       { index: true, element: <Home /> },
-      { path: 'offers', element: <Offers />},
+      { path: 'offers', element: <OffersInfoPage />},
       { path: 'projects', element: <ProjectsPage /> },
       { path: 'projects/details/:projectid', element: <ProjectDetailsPage /> }, 
       { path: 'developers/:developerid', element: <ProfileDevPage /> },
