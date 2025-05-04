@@ -36,7 +36,7 @@ const ProjectCard = ({ userName, avatar, image, projectLink, title, badgeText })
             to={`/projects/${projectLink}`}
             className="z-40 border border-white text-white font-semibold py-2 px-4 rounded pointer-events-auto bg-transparent transition-colors duration-300 hover:border-[#171717] hover:text-[#171717]"
           >
-            View Project
+            View project
         </Link>
         </div>
 

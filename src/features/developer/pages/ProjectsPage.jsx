@@ -76,8 +76,8 @@ export const ProjectsPage = () => {
 
   return (
     <div className="p-4 max-w-screen-xl mx-auto">
-      <h1 className="text-3xl font-bold mb-3">Developer Porfolios</h1>
-      <p className="text-md font-normal mb-4">Discover talented developers for your next project</p>
+      <h1 className="text-3xl font-bold mb-2">Developer Porfolios</h1>
+      <p className="text-md font-normal mb-4 text-[#4b5563]">Discover talented developers for your next project</p>
 
       {/* Tabs */}
       <div className="flex justify-center gap-2 mb-6 px-4 py-0.5 bg-[#262626] rounded-md">
