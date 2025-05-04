@@ -1,5 +1,6 @@
 import React from 'react';
 import Badge from '../../../components/badge';
+import { Link } from 'react-router';
 
 const ProjectCard = ({ userName, avatar, image, projectLink, title, badgeText }) => {
     return (
@@ -31,12 +32,12 @@ const ProjectCard = ({ userName, avatar, image, projectLink, title, badgeText })
             {title} {/* Título del proyecto en el hover */}
         </div>
         {/* Botón con hover */}
-        <a
-            href={projectLink}
+          <Link
+            to={`/projects/${projectLink}`}
             className="z-40 border border-white text-white font-semibold py-2 px-4 rounded pointer-events-auto bg-transparent transition-colors duration-300 hover:border-[#171717] hover:text-[#171717]"
-        >
+          >
             View Project
-        </a>
+        </Link>
         </div>
 
     </div>

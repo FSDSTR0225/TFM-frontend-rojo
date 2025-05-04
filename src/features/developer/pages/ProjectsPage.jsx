@@ -6,13 +6,18 @@ import ProjectCardImageProv2 from "../../../assets/card-2.png";
 import Avatar1 from "../../../assets/avatar-1.png";
 import Avatar2 from "../../../assets/avatar-2.png";
 
-
-
-
-const categories = ["Todos", "Web", "Móvil", "IA"];
+const categories = [
+  "All",
+  "Frontend",
+  "Backend",
+  "Full Stack",
+  "Mobile",
+  "DevOps",
+  "UX/UI",
+];
 
 export const ProjectsPage = () => {
-  const [activeTab, setActiveTab] = useState("Todos");
+  const [activeTab, setActiveTab] = useState("All"); // La categoría activa por defecto es "All"
   const [projects, setProjects] = useState([]);
 
   useEffect(() => {
@@ -23,7 +28,7 @@ export const ProjectsPage = () => {
           id: 1,
           userName: "Beli Ochando", 
           title: "Landing Page", 
-          category: "Web", 
+          category: "UX/UI", 
           avatar: Avatar1,
           image: ProjectCardImageProv2,
           projectLink: "/project/1",
@@ -33,7 +38,7 @@ export const ProjectsPage = () => {
           id: 2, 
           userName: "Toni Arce",
           title: "App de Recetas", 
-          category: "Móvil", 
+          category: "Frontend", 
           avatar: Avatar2,
           image: ProjectCardImageProv,
           projectLink: "/project/2",
@@ -43,7 +48,7 @@ export const ProjectsPage = () => {
           id: 3, 
           userName: "Carlos Daymond",
           title: "Clasificador de Imágenes", 
-          category: "IA", 
+          category: "DevOps", 
           avatar: Avatar2,
           image: ProjectCardImageProv2,
           projectLink: "/project/3",
@@ -52,7 +57,7 @@ export const ProjectsPage = () => {
           id: 4,
           userName: "Jeremie Klose", 
           title: "Dashboard Admin", 
-          category: "Web", 
+          category: "Full Stack", 
           avatar: Avatar2,
           image: ProjectCardImageProv,
           projectLink: "/project/4",
@@ -65,24 +70,26 @@ export const ProjectsPage = () => {
   }, []);
 
   const filteredProjects =
-    activeTab === "Todos"
+    activeTab === "All"
       ? projects
       : projects.filter((p) => p.category === activeTab);
 
   return (
     <div className="p-4 max-w-screen-xl mx-auto">
-      <h1 className="text-3xl font-bold mb-4">Proyectos</h1>
+      <h1 className="text-3xl font-bold mb-3">Developer Porfolios</h1>
+      <p className="text-md font-normal mb-4">Discover talented developers for your next project</p>
 
       {/* Tabs */}
-      <div className="flex gap-2 mb-6">
+      <div className="flex justify-center gap-2 mb-6 px-4 py-0.5 bg-[#262626] rounded-md">
         {categories.map((category) => (
           <button
             key={category}
-            className={`px-4 py-2 rounded-md font-medium ${
-              activeTab === category
-                ? "bg-green-600 text-white"
-                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-            }`}
+            className={`px-3 py-1.5 rounded-md font-medium text-sm transition-colors duration-200 cursor-pointer
+              ${activeTab === category
+                ? "bg-[#171717] text-white"
+                : "bg-transparent text-[#A1A1AA] hover:bg-green-600 hover:text-white  focus:text-white"
+              }`}
+            
             onClick={() => setActiveTab(category)}
           >
             {category}
