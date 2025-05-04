@@ -1,13 +1,17 @@
+import { Link } from "react-router";
 
-export const OfferCard = () => {
+export const OfferCard = ({ classProps, children, onClick, key, link }) => {
   return (
-     <li key={offer._id} className='card'>
-                    <div className='card-body'>
-                      <h2>{offer.position}</h2>
-                      <div className='flex items-center gap-3'><TfiLocationPin />{offer.location}</div>
-                      <p>{offer.description}</p> 
-                        
-                    </div>
-                  </li>
-  )
-}
+    <Link to={`/offers/${link}`}>
+      <li
+        key={key}
+        className={`${
+          classProps && classProps
+        } card bg-base-300 border border-base-100 cursor-pointer`}
+        onClick={onClick}
+      >
+        <div className='card-body'>{children}</div>
+      </li>
+    </Link>
+  );
+};
