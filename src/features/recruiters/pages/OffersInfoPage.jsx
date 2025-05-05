@@ -4,7 +4,7 @@ import { getOffers } from '../../../services/offersServices'
 import { useEffect } from 'react'
 import { TfiLocationPin } from "react-icons/tfi";
 import { OfferCard } from '../components/OfferCard';
-import { OffertList } from '../components/OffertList';
+import { OffertList } from '../components/OfferList';
 import { MdOutlineAccessTime } from 'react-icons/md';
 
 

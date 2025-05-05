@@ -18,7 +18,7 @@ export const getOffers = async () =>{
 
 export const getOffersById = async (_id) => {
 try {
-    const response = await fetch(API_URL + '/' + _id)
+    const response = await fetch(`${API_URL}/${_id}`);
     if(!response.ok){
         throw new Error("Error getting offer")
     }
