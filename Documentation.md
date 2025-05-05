@@ -23,3 +23,19 @@ Card height: 256px
 Gap between components: 32px
 
 ---
+
+
+## Carlos Damota - 04-05
+
+Frontend:
+Create new branch: feature/offers
+Enhanced the offers page with several improvements:
+- Added timestamp display showing days since post creation
+- Implemented improved card layout with better styling
+- Created reusable OfferCard component
+- Added applicant count display for each offer
+- Integrated new icons for better visual feedback
+- Improved responsive design with proper spacing
+- Added link functionality to offer cards for navigation
+
+---
