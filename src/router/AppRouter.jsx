@@ -19,6 +19,7 @@ import { RecApplications } from '../features/recruiters/pages/RecApplications';
 import { MainLayout } from '../layout/MainLayout';
 import { Register } from '../features/auth/register';
 import { OffersInfoPage } from '../features/recruiters/pages/OffersInfoPage';
+import { OfferInfoPage } from '../features/recruiters/pages/OfferInfoPage';
 
 
 
@@ -32,6 +33,7 @@ const router = createBrowserRouter([
       // Rutas públicas
       { index: true, element: <Home /> },
       { path: 'offers', element: <OffersInfoPage />},
+      { path: 'offers/:id', element: <OfferInfoPage />},
       { path: 'projects', element: <ProjectsPage /> },
       { path: 'projects/details/:projectid', element: <ProjectDetailsPage /> }, 
       { path: 'developers/:developerid', element: <ProfileDevPage /> },
