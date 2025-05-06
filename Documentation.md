@@ -39,3 +39,25 @@ Enhanced the offers page with several improvements:
 - Added link functionality to offer cards for navigation
 
 ---
+
+
+## Carlos Damota - 06-05
+
+Frontend:
+Enhanced offers page interface and components:
+- Created new EditButton reusable component with integrated onClick handler
+- Added new SectionOffers component for consistent layout
+- Enhanced OfferInfoPage with detailed recruiter information display:
+  * Recruiter logo
+  * Recruiter contact details
+  * Website links
+  * Email contact
+- Improved overall layout and styling:
+  * Enhanced card shadows and borders
+  * Adjusted grid layout for better responsiveness
+  * Refined spacing and alignment
+  * Updated color scheme in MainLayout
+- Enhanced OffertList component with improved grid system
+- Added new icons for external links and email contacts
+
+---
