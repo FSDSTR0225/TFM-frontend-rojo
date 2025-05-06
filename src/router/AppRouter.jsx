@@ -33,7 +33,7 @@ const router = createBrowserRouter([
       { index: true, element: <Home /> },
       { path: 'offers', element: <Offers />},
       { path: 'projects', element: <ProjectsPage /> },
-      { path: 'projects/details/:projectid', element: <ProjectDetailsPage /> }, 
+      { path: 'projects/:projectid', element: <ProjectDetailsPage /> }, 
       { path: 'developers/:developerid', element: <ProfileDevPage /> },
 
 
@@ -47,7 +47,7 @@ const router = createBrowserRouter([
         //loader: authLoader,
         children: [
           //{ path: 'dashboard', element: <DeveloperDashboard />, loader: developerLoader },
-          // { path: 'profile', element: <ProfileDevPage /> },
+          { path: 'profile', element: <ProfileDevPage /> },
           { path: 'profile/edit', element: <EditDevProfilePage />},
           { path: 'projects', element: <ProjectsPage /> },
           { path: 'projects/new', element: <NewProjectPage /> },
@@ -66,7 +66,7 @@ const router = createBrowserRouter([
           { path: 'dashboard', element: <RecDashBoar />},
       
           // 2. Perfil de recruiter (ver y editar)
-          // {path: 'profile', element: <RecProfile />},
+          {path: 'profile', element: <RecProfile />},
           {path: 'profile/edit', element: <RecruiterEditForm /> },
       
           // 3. Gestión de ofertas
@@ -86,6 +86,3 @@ const router = createBrowserRouter([
 export default function AppRouter() {
   return <RouterProvider router={router} />;
 }
-
-
-
