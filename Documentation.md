@@ -24,12 +24,12 @@ Gap between components: 32px
 
 ---
 
-
 ## Carlos Damota - 04-05
 
 Frontend:
 Create new branch: feature/offers
 Enhanced the offers page with several improvements:
+
 - Added timestamp display showing days since post creation
 - Implemented improved card layout with better styling
 - Created reusable OfferCard component
@@ -37,5 +37,23 @@ Enhanced the offers page with several improvements:
 - Integrated new icons for better visual feedback
 - Improved responsive design with proper spacing
 - Added link functionality to offer cards for navigation
+
+---
+
+## Beli Ochando - 06-05
+
+Frontend:
+
+- Accent color correction for developers.
+- Created a projectServices file to centralize all project-related fetch calls.
+- Implemented the getAllProjects fetch function.
+- Created and commented the ProjectsPage component, including the import of getAllProjects from projectServices, and the useEffect to fetch data from the backend (to be completed once we can render the full project card).
+- Verified that the frontend receives data from the backend, but rendering is pending until the database is cleaned and image imports are available.
+- Created the Pagination component with styles to allow functional page transitions.
+- Renamed badge component to Badge.
+- Added small category labels in the “All” tab. These disappear when switching to a different category.
+- Added a loading animation when switching pages.
+- Updated logo colors in reversed order: green for devs and projects, blue for offers and recruiters.
+- Updated ProjectCard.jsx, separating name and surname.
 
 ---
