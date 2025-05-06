@@ -15,3 +15,18 @@ export const getOffers = async () =>{
     }
         
 }
+
+export const getOffersById = async (_id) => {
+try {
+    const response = await fetch(`${API_URL}/${_id}`);
+    if(!response.ok){
+        throw new Error("Error getting offer")
+    }
+    const offerData = await response.json()
+    console.log("🚀 ~ getOffersById ~ offerData:", offerData)
+    return offerData
+} catch (error) {
+    console.error("OffersService Error:", error);
+        throw error;
+}
+}
