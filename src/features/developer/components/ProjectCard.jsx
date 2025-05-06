@@ -1,5 +1,6 @@
 import React from 'react';
 import Badge from '../../../components/badge';
+import { Link } from 'react-router';
 
 const ProjectCard = ({ userName, avatar, image, projectLink, title, badgeText }) => {
     return (
@@ -19,7 +20,11 @@ const ProjectCard = ({ userName, avatar, image, projectLink, title, badgeText })
 
       {/* Imagen que ocupa el resto */}
       <div className="flex-grow overflow-hidden z-0">
-        <img src={image} alt={title} className="w-full h-full object-cover" />
+      <img
+        src={image}
+        alt={title}
+        className="w-full h-auto object-contain "
+      />
       </div>
 
       {/* Hover overlay con botón */}
@@ -31,12 +36,12 @@ const ProjectCard = ({ userName, avatar, image, projectLink, title, badgeText })
             {title} {/* Título del proyecto en el hover */}
         </div>
         {/* Botón con hover */}
-        <a
-            href={projectLink}
+          <Link
+            to={`/projects/${projectLink}`}
             className="z-40 border border-white text-white font-semibold py-2 px-4 rounded pointer-events-auto bg-transparent transition-colors duration-300 hover:border-[#171717] hover:text-[#171717]"
-        >
-            View Project
-        </a>
+          >
+            View project
+        </Link>
         </div>
 
     </div>
