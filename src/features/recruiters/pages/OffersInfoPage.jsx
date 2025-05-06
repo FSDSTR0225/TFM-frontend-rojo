@@ -6,6 +6,7 @@ import { TfiLocationPin } from "react-icons/tfi";
 import { OfferCard } from '../components/OfferCard';
 import { OffertList } from '../components/OfferList';
 import { MdOutlineAccessTime } from 'react-icons/md';
+import { SectionOffers } from '../components/sectionOffers';
 
 
 export const OffersInfoPage = () => {
@@ -38,7 +39,7 @@ export const OffersInfoPage = () => {
   };
 
   return (
-    <section className='flex flex-col justify-center w-[95vw] md:w-[80vw] lg:w-[60vw] bg-base-400 p-10 mx-auto'>
+    <SectionOffers>
         <h2 className='text-3xl font-bold'>Your Next Tech Career Starts Here</h2>
         <p className='text-gray-600 text-lg'>Discover job opportunities for developers, designers, and engineers in fast-growing tech fields.</p>
          <OffertList view={true}>
@@ -61,6 +62,6 @@ export const OffersInfoPage = () => {
               </OfferCard>
             )})}
          </OffertList>
-    </section>
+    </SectionOffers>
   )
 }
