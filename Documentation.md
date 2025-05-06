@@ -1,6 +1,6 @@
 # Documentación del Proyecto TFM-Frontend-Rojo
 
-Este documento mantiene un registro actualizado del proyecto, sus funcionalidades y los cambios realizados por el equipo. Se seguirá el estilo de documentación de Warp para mantener consistencia.
+Este documento mantiene un registro actualizado del proyecto, sus funcionalidades y los cambios realizados por el equipo.
 
 ## Beli Ochando - 02-05
 
