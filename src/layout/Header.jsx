@@ -2,7 +2,7 @@ import { Link } from "react-router";
 
 export const Header = () => {
   return (
-    <header class='bg-[#1c1c1c] p-2 drawer border-b-1 border-base-100'>
+    <header class='bg-[#1c1c1c] p-2 drawer border-b-1 border-[#222222]'>
       <input
         id='my-drawer-3'
         type='checkbox'
