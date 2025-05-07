@@ -34,7 +34,8 @@ export const RecProfile = () => {
         <div className="w-full flex-1">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-semibold">Mis ofertas de empleo</h2>
-            <button onClick={()=>document.getElementById('my_modal_1').showModal()} className="bg-white text-black px-4 py-2 rounded hover:bg-gray-200 transition cursor-pointer text-sm">
+            <button onClick={()=>document.getElementById('my_modal_1').showModal()} className="bg-green-600 text-black px-4 py-2 rounded hover:bg-green-700 transition cursor-pointer
+             text-sm">
               + Create new offer
             </button>
             <dialog id="my_modal_1" className="modal">

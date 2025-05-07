@@ -18,6 +18,7 @@ import { RecOfferForm } from '../features/recruiters/pages/RecOfferForm';
 import { RecApplications } from '../features/recruiters/pages/RecApplications';
 import { MainLayout } from '../layout/MainLayout';
 import { Register } from '../features/auth/register';
+import { Login } from '../features/auth/login';
 import { OffersInfoPage } from '../features/recruiters/pages/OffersInfoPage';
 
 
@@ -37,7 +38,7 @@ const router = createBrowserRouter([
       { path: 'developers/:developerid', element: <ProfileDevPage /> },
 
 
-      //{ path: 'login', element: <Login /> },
+      { path: 'login', element: <Login /> },
       { path: 'register', element: <Register /> },
 
       // --- Private Dev (developers) ---

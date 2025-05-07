@@ -108,7 +108,7 @@ export const OfferModal = () => {
           </div>
           {/* Buttons */}
           <div className="form-control mt-8 flex justify-between">
-            <button className="btn btn-primary w-full md:w-auto text-lg">Created Offer</button>
+            <button className="w-full md:w-auto text-lg bg-green-600 text-black hover:bg-green-700 transition-colors px-4 py-2 rounded">Created Offer</button>
             <button className="btn w-full md:w-auto text-lg" onClick={handleClose} type="button"> Close </button>
           </div>
         </form>
