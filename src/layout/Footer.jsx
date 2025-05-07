@@ -7,7 +7,7 @@ export const Footer = () => {
   <aside>
   <Link to={"/"} className="mr-4 pr-4 flex items-center">
             <img
-              src="/src/assets/Codepply-Logo-gradient.svg"
+              src="/src/assets/Codepply-Logotype-gradient.svg"
               alt="Codepply Logo"
               className="h-6"
             />
