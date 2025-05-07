@@ -15,17 +15,17 @@ export const OffertList = ({ children, view = false }) => {
   return (
     <div className='flex flex-col'>
       <div className='flex justify-end'>
-        <button onClick={handleChange} className='border border-gray-300 p-2 rounded-md'>
+        <button onClick={handleChange} className='border hidden xl:block border-gray-300 p-2 rounded-md'>
           {viewList ? <BsGrid3X3GapFill /> : <HiOutlineViewList />}
         </button>
       </div>
 
       {viewList ? (
-        <ul className='grid grid-cols-1 gap-5 mt-5'>
+        <ul className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-4'>
           {children}
         </ul>
       ) : (
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mt-5'>
+        <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mt-4'>
           {children}
         </div>
       )}
