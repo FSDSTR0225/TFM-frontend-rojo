@@ -94,7 +94,7 @@ export const Header = () => {
         <div className='flex gap-2 items-center '>
           {/* Auth menu content here */}
           <Link
-            to={"/"}
+            to={"/login"}
             className='btn w-20'
           >
             Login

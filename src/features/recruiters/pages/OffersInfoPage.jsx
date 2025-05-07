@@ -3,8 +3,7 @@ import { useState } from 'react'
 import { getOffers } from '../../../services/offersServices'
 import { useEffect } from 'react'
 import { TfiLocationPin } from "react-icons/tfi";
-import { OfferCard } from '../components/OfferCard';
-import { OffertList } from '../components/OfferList';
+import { OfferCard } from './components/OfferCard';
 import { MdOutlineAccessTime } from 'react-icons/md';
 import { SectionOffers } from '../components/sectionOffers';
 
