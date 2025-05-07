@@ -2,3 +2,42 @@
 @plugin "daisyui" {
  themes: dark --default, cupcake;
 }
+/* 1. Definición de todas tus variables en theme */
+@theme {
+  /* Primary Colors */
+  --Primary-10:  #D7F4DA;
+  --Primary-20:  #AFE9B6;
+  --Primary-30:  #87DE91;
+  --Primary-40:  #5FD36D;
+  --Primary-50:  #37C848;
+  --Primary-60:  #32B441;
+  --Primary-70:  #2CA03A;
+  --Primary-80:  #21782B;
+  --Primary-90:  #16501D;
+  --Primary-100: #0B280E;
+
+  /* Secondary Colors */
+  --Secondary-10:  #D7E5F4;
+  --Secondary-20:  #99C9FF;
+  --Secondary-30:  #60AAFF;
+  --Secondary-40:  #3392FF;
+  --Secondary-50:  #0077FF;
+  --Secondary-60:  #1D6DC9;
+  --Secondary-70:  #1A61B2;
+  --Secondary-80:  #134986;
+  --Secondary-90:  #0D3059;
+  --Secondary-100: #06182D;
+
+  /* Neutral Colors */
+  --Neutral-0:   #FFFFFF;
+  --Neutral-10:  #CCCCCC;
+  --Neutral-20:  #A5A5A5;
+  --Neutral-30:  #797979;
+  --Neutral-40:  #595959;
+  --Neutral-50:  #404040;
+  --Neutral-60:  #262626;
+  --Neutral-70:  #222222;
+  --Neutral-80:  #1C1C1C;
+  --Neutral-90:  #171717;
+  --Neutral-100: #000000;
+}
