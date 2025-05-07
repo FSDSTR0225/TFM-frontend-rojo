@@ -1,5 +1,6 @@
 import { useForm } from 'react-hook-form';
-import { createdOffert } from '../../../services/offersServices'
+import { createdOffert } from '../../../services/offersServices';
+
 export const OfferModal = () => {
   const { register,
     watch,

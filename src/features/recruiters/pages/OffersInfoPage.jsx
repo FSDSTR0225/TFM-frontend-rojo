@@ -3,10 +3,12 @@ import { useState } from 'react'
 import { getOffers } from '../../../services/offersServices'
 import { useEffect } from 'react'
 import { TfiLocationPin } from "react-icons/tfi";
-import { OfferCard } from './components/OfferCard';
+import { OfferCard } from '../components/OfferCard';
 import { MdOutlineAccessTime } from 'react-icons/md';
 import { SectionOffers } from '../components/sectionOffers';
 import { getDaysSince } from '../../../utils/utils';
+import {OfferList} from '../components/OfferList'
+
 
 
 export const OffersInfoPage = () => {
@@ -42,7 +44,7 @@ export const OffersInfoPage = () => {
     <SectionOffers>
         <h2 className='text-3xl font-bold'>Your Next Tech Career Starts Here</h2>
         <p className='text-gray-600 text-lg'>Discover job opportunities for developers, designers, and engineers in fast-growing tech fields.</p>
-         <OffertList view={true}>
+         <OfferList view={true}>
             {offers.map((offer)=>{ 
               const daysAgo = offer.createdAt ? getDaysSince(offer.createdAt) : 0;
               return (
@@ -61,7 +63,7 @@ export const OffersInfoPage = () => {
                   </div>
               </OfferCard>
             )})}
-         </OffertList>
+         </OfferList>
     </SectionOffers>
   )
 }

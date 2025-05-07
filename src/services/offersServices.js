@@ -30,3 +30,25 @@ try {
         throw error;
 }
 }
+
+
+export const createdOffert = async (offert) => {
+
+    try {
+        const resp = await fetch(API_URL + '/',{
+            method:'POST',
+            headers:{
+                'content-type':'application/json'
+            },
+            body:JSON.stringify(offert)
+        });
+        if(!resp.ok){
+            throw new Error("Error created offers")
+        }
+        const data = await resp.json();
+        return data;
+    } catch (error) {
+        console.log("Error: ", error);
+        throw error;
+    }
+}

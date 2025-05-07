@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { BsGrid3X3GapFill } from "react-icons/bs";
 import { HiOutlineViewList } from "react-icons/hi";
 
-export const OffertList = ({ children, view = false }) => {
+export const OfferList = ({ children, view = false }) => {
   const [viewList, setViewList] = useState(view);
 
   // Actualiza el estado interno si la prop view cambia desde afuera

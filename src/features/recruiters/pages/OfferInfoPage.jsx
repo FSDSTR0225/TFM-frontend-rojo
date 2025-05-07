@@ -1,15 +1,13 @@
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
-import { getOffersById } from "../../../services/offersServices";
 import { Link, useParams } from "react-router";
 import { SectionOffers } from "../components/sectionOffers";
-import { TfiLocationPin } from "react-icons/tfi";
-import { EditButton } from "../../../components/EditButton";
 import { FiExternalLink } from "react-icons/fi";
 import { MdOutlineMailOutline } from "react-icons/md";
 import { getInitials } from "../../../utils/utils";
 import { OfferInfo } from "../components/OfferInfo";
+import { getOffersById } from "../../../services/offersServices";
 
 
 export const OfferInfoPage = () => {
