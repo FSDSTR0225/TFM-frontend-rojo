@@ -1,43 +1,43 @@
-@import "tailwindcss";
+/* 1️⃣ Importación de Tailwind v4 (CSS-first) MUST ir primero */
+@import "tailwindcss"; 
+
+/* 2️⃣ DaisyUI v5 como plugin CSS-first */
 @plugin "daisyui" {
- themes: dark --default, cupcake;
+  themes: dark --default, cupcake;
 }
-/* 1. Definición de todas tus variables en theme */
+
 @theme {
-  /* Primary Colors */
-  --Primary-10:  #D7F4DA;
-  --Primary-20:  #AFE9B6;
-  --Primary-30:  #87DE91;
-  --Primary-40:  #5FD36D;
-  --Primary-50:  #37C848;
-  --Primary-60:  #32B441;
-  --Primary-70:  #2CA03A;
-  --Primary-80:  #21782B;
-  --Primary-90:  #16501D;
-  --Primary-100: #0B280E;
-
-  /* Secondary Colors */
-  --Secondary-10:  #D7E5F4;
-  --Secondary-20:  #99C9FF;
-  --Secondary-30:  #60AAFF;
-  --Secondary-40:  #3392FF;
-  --Secondary-50:  #0077FF;
-  --Secondary-60:  #1D6DC9;
-  --Secondary-70:  #1A61B2;
-  --Secondary-80:  #134986;
-  --Secondary-90:  #0D3059;
-  --Secondary-100: #06182D;
-
-  /* Neutral Colors */
-  --Neutral-0:   #FFFFFF;
-  --Neutral-10:  #CCCCCC;
-  --Neutral-20:  #A5A5A5;
-  --Neutral-30:  #797979;
-  --Neutral-40:  #595959;
-  --Neutral-50:  #404040;
-  --Neutral-60:  #262626;
-  --Neutral-70:  #222222;
-  --Neutral-80:  #1C1C1C;
-  --Neutral-90:  #171717;
-  --Neutral-100: #000000;
-}
+    --color-primary-10: #D7F4DA;
+    --color-primary-20: #AFE9B6;
+    --color-primary-30: #87DE91;
+    --color-primary-40: #5FD36D;
+    --color-primary-50: #37C848;
+    --color-primary-60: #32B441;
+    --color-primary-70: #2CA03A;
+    --color-primary-80: #21782B;
+    --color-primary-90: #16501D;
+    --color-primary-100: #0B280E;
+  
+    --color-secondary-10: #D7E5F4;
+    --color-secondary-20: #99C9FF;
+    --color-secondary-30: #60AAFF;
+    --color-secondary-40: #3392FF;
+    --color-secondary-50: #0077FF;
+    --color-secondary-60: #1D6DC9;
+    --color-secondary-70: #1A61B2;
+    --color-secondary-80: #134986;
+    --color-secondary-90: #0D3059;
+    --color-secondary-100: #06182D;
+  
+    --color-neutral-0: #FFFFFF;
+    --color-neutral-10: #CCCCCC;
+    --color-neutral-20: #A5A5A5;
+    --color-neutral-30: #797979;
+    --color-neutral-40: #595959;
+    --color-neutral-50: #404040;
+    --color-neutral-60: #262626;
+    --color-neutral-70: #222222;
+    --color-neutral-80: #1C1C1C;
+    --color-neutral-90: #171717;
+    --color-neutral-100: #000000;
+  }
