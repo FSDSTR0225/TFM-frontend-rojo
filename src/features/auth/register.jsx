@@ -1,8 +1,9 @@
 import { useForm } from 'react-hook-form';
 import { registeredUser } from '../../services/authService';
 import { Link } from 'react-router';
+import { useNavigate } from "react-router";
 export const Register = () => {
-
+  const navigate = useNavigate();
   const { register,
     watch,
     handleSubmit,
@@ -14,6 +15,7 @@ export const Register = () => {
     if (resp) {
       console.log('holaaa: ', resp);
     }
+    navigate(`/login`);
   }
 
   return (
@@ -39,10 +41,6 @@ export const Register = () => {
                   minLength: {
                     value: 4,
                     message: 'El campo debe tener al menos 4 caracteres'
-                  },
-                  maxLength: {
-                    value: 10,
-                    message: 'El campo debe tener maximo 10 caracteres'
                   }
                 })}
               />
@@ -95,10 +93,6 @@ export const Register = () => {
                   minLength:{
                     value:4,
                     message:'El campo debe tener al menos 4 caracteres'
-                  },
-                  maxLength:{
-                    value:10,
-                    message:'El campo debe tener maximo 10 caracteres'
                   }
                 })}
               />
