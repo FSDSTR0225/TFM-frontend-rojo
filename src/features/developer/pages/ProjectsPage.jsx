@@ -73,7 +73,7 @@ export const ProjectsPage = () => {
   return (
     <div className="p-4 max-w-screen-xl mx-auto">
       <h1 className="text-3xl font-bold mb-2">Developer Projects</h1>
-      <p className="text-md font-normal mb-4 text-[#606a79]">Discover talented developers for your next project</p>
+      <p className="text-md font-normal mb-4 text-[#797979]">Discover talented developers for your next project</p>
 
       {/* Tabs */}
       <div className="flex justify-center gap-2 mb-6 px-4 py-0.5 bg-[#262626] rounded-md">
@@ -99,7 +99,7 @@ export const ProjectsPage = () => {
       ) : (
         <div>
           {filteredProjects.length === 0 ? (
-            <p className="text-center mt-4 text-sm text-[#606a79]">
+            <p className="text-center mt-4 text-sm text-[#797979]">
               No projects available in this category.
             </p>
           ) : (

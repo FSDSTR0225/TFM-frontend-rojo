@@ -2,7 +2,7 @@ import { Link } from "react-router";
 
 export const Header = () => {
   return (
-    <header class='bg-base-300 p-2 drawer border-b-1 border-base-100'>
+    <header class='bg-[#1c1c1c] p-2 drawer border-b-1 border-base-100'>
       <input
         id='my-drawer-3'
         type='checkbox'
@@ -46,7 +46,7 @@ export const Header = () => {
               <li>
                 <Link
                   to='/projects'
-                  className='btn btn-outline text-base-300 bg-green-600 w-28 mx-2 hover:bg-green-700'
+                  className='btn text-base-300 bg-[#37C848] w-28 mx-2 hover:bg-[#32B441] hover:text-white'
                 >
                   {" "}
                   <svg
@@ -69,7 +69,7 @@ export const Header = () => {
               <li>
                 <Link
                   to='/offers'
-                  className='btn btn-outline text-base-300 bg-green-600 w-28 mx-2 hover:bg-green-700'
+                  className='btn text-base-300 bg-[#37C848] w-28 mx-2 hover:bg-[#32B441] hover:text-white'
                 >
                   <svg
                     xmlns='http://www.w3.org/2000/svg'

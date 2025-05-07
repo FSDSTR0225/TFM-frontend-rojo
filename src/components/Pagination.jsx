@@ -5,7 +5,7 @@ const Pagination = ({ currentPage, totalPages, handlePageChange, filteredProject
     <div className="mt-4">
 
       {filteredProjects.length > 0 && (
-        <p className="text-center text-sm text-[#606a79]">
+        <p className="text-center text-sm text-[#797979]">
           Page {currentPage} of {totalPages} total
         </p>
       )}

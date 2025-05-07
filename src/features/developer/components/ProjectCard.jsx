@@ -14,7 +14,7 @@ const ProjectCard = ({ name, surname, avatar, image, projectLink, title, badgeTe
 
             {/* Mostrar categoría solo si estamos en la pestaña "All" */}
             {category && (
-              <span className="text-sm text-[#606a79] mx-2">• {category}</span> // Mostrar categoría
+              <span className="text-sm text-[#797979] mx-2">• {category}</span> // Mostrar categoría
             )}
     
             {/* Badge, centrado en el contenedor de avatar y userName */}
