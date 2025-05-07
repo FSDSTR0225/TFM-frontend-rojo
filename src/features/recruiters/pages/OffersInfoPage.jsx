@@ -6,6 +6,7 @@ import { TfiLocationPin } from "react-icons/tfi";
 import { OfferCard } from './components/OfferCard';
 import { MdOutlineAccessTime } from 'react-icons/md';
 import { SectionOffers } from '../components/sectionOffers';
+import { getDaysSince } from '../../../utils/utils';
 
 
 export const OffersInfoPage = () => {
@@ -30,12 +31,12 @@ export const OffersInfoPage = () => {
   if(loading) return <span className="loading loading-bars loading-md"></span>
   if (error) return <p>Error al cargar las ofertas: {error}</p>;
 
-  const getDaysSince = (dateString) => {
-    const createdAt = new Date(dateString);
-    const today = new Date();
-    const diffMs = today - createdAt;
-    return Math.floor(diffMs / (1000 * 60 * 60 * 24));
-  };
+  // const getDaysSince = (dateString) => {
+  //   const createdAt = new Date(dateString);
+  //   const today = new Date();
+  //   const diffMs = today - createdAt;
+  //   return Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  // };
 
   return (
     <SectionOffers>
