@@ -45,7 +45,7 @@ export const RecProfile = () => {
 
           {/* Aca falta pintar las ofertas creadas por el recruiter */}
           <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3 auto-rows-fr">
-             <OfferCard/>
+             {/* <OfferCard/> */}
           </div>
 
         </div>

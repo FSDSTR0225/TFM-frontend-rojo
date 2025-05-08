@@ -1,4 +1,4 @@
-import React from 'react'
+
 import { capitalize, getInitials } from '../../../utils/utils'
 import { FiExternalLink } from 'react-icons/fi'
 import { MdOutlineMailOutline } from 'react-icons/md'

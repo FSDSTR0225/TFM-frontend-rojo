@@ -9,7 +9,7 @@ import { RecContactCard } from "../components/RecContactCard";
 
 
 export const OfferInfoPage = () => {
-  const [offer, setOffer] = useState();
+  const [offer, setOffer] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -27,14 +27,29 @@ export const OfferInfoPage = () => {
       }
     };
     fetchOffer();
-  }, []);
+  }, [id]);
 
-  //if (isLoading) return <div>Loading...</div>;
+  if (isLoading) {
+    return (
+      <SectionOffers classProps="lg:flex-row flex-col-reverse gap-4 lg:items-start">
+        <div className="w-full p-4 space-y-6">
+          <div className="h-8 bg-base-200 rounded-lg skeleton"></div>
+          <div className="h-4 bg-base-200 rounded-lg skeleton w-3/4"></div>
+          <div className="h-4 bg-base-200 rounded-lg skeleton w-2/3"></div>
+        </div>
+        <div className="w-full p-4 space-y-4 border rounded-lg">
+          <div className="h-6 bg-base-200 rounded-full skeleton w-1/2"></div>
+          <div className="h-4 bg-base-200 rounded-lg skeleton w-4/6"></div>
+          <div className="h-4 bg-base-200 rounded-lg skeleton w-5/6"></div>
+        </div>
+      </SectionOffers>
+    );
+  }
   if (error) return <p>Error al cargar las ofertas: {error}</p>;
   return (
     <SectionOffers classProps={"lg:flex-row flex-col-reverse gap-4 lg:items-start"}>
-    <OfferInfo isLoading={isLoading} offer={offer} />
-    <RecContactCard isLoading={isLoading} owner={offer.owner} />
+    <OfferInfo offer={offer} />
+    <RecContactCard  owner={offer?.owner}  />
     </SectionOffers>
   );
 };
