@@ -2,9 +2,18 @@
 import { EditButton } from '../../../components/EditButton';
 import { TfiLocationPin } from 'react-icons/tfi';
 
-export const OfferInfo = ({offer}) => {
+export const OfferInfo = ({offer, isLoading}) => {
+  if (isLoading) {
+    return (
+      <div className="w-full space-y-4 p-4 animate-pulse">
+        <div className="h-6 bg-base-200 rounded-lg skeleton"></div>
+        <div className="h-4 bg-base-200 rounded-lg skeleton w-5/6"></div>
+        <div className="h-4 bg-base-200 rounded-lg skeleton w-4/6"></div>
+      </div>
+    );
+  }
   return (
-    <article className='lg:w-[60%] card bg-base-200 shadow-xl border border-base-100 flex-col  w-full '>
+    <article className=' card bg-base-200 shadow-xl border border-base-100 flex-col  w-full '>
             <div className='card-body gap-6'>
               <EditButton classProps={"self-end"} />
               <h2 className='text-xl md:text-2xl  font-bold m'>{offer.position}</h2>

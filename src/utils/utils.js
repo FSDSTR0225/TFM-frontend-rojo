@@ -21,3 +21,7 @@ export const getDaysSince = (dateString) => {
   };
 
   //<span>{getInitials(offer.owner?.name)}</span>
+
+ export const capitalize = (str) => {
+    return str ? str.charAt(0).toUpperCase() + str.slice(1) : '';
+  }
