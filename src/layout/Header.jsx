@@ -2,7 +2,7 @@ import { Link } from "react-router";
 
 export const Header = () => {
   return (
-    <header class='bg-[#1c1c1c] p-2 drawer border-b-1 border-[#222222]'>
+    <header class='bg-neutral-80 p-2 drawer  border-b-1 border-neutral-70'>
       <input
         id='my-drawer-3'
         type='checkbox'
@@ -45,8 +45,8 @@ export const Header = () => {
 
               <li>
                 <Link
-                  to='/projects'
-                  className='btn text-base-300 bg-[#37C848] w-28 mx-2 hover:bg-[#32B441] hover:text-white'
+                  to="/projects"
+                  className="btn text-neutral-0 bg-neutral-90 w-28 mx-2 hover:bg-primary-60 hover:text-neutral-0 focus:bg-neutral-60  focus:text-neutral-0"
                 >
                   {" "}
                   <svg
@@ -69,7 +69,7 @@ export const Header = () => {
               <li>
                 <Link
                   to='/offers'
-                  className='btn text-base-300 bg-[#37C848] w-28 mx-2 hover:bg-[#32B441] hover:text-white'
+                  className="btn text-neutral-0 bg-neutral-90 w-28 mx-2 hover:bg-secondary-60 hover:text-neutral-0 focus:bg-neutral-60 focus:text-neutral-0"
                 >
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
@@ -95,13 +95,13 @@ export const Header = () => {
           {/* Auth menu content here */}
           <Link
             to={"/login"}
-            className='btn w-20'
+             className="btn rounded-full text-neutral-0 bg-primary-60 w-20 mx-2 hover:bg-primary-70 hover:text-neutral-0"
           >
             Login
           </Link>
           <Link
             to={"/register"}
-            className=' btn w-20'
+            className="btn rounded-full text-neutral-0 bg-neutral-90 border:-2 border-neutral-60 w-22  hover:bg-neutral-60 hover:text-neutral-0"
           >
             Register
           </Link>
@@ -115,12 +115,12 @@ export const Header = () => {
           aria-label='close sidebar'
           className='drawer-overlay'
         ></label>
-        <ul className='menu bg-base-200 min-h-full w-80 p-4'>
+        <ul className='menu bg-neutral-70 min-h-full w-80 p-4'>
           {/* Sidebar content here */}
           <li>
             <Link
               to='/'
-              className='btn btn-outline text-base-300 bg-green-600 m-2 hover:bg-green-700'
+              className='btn text-neutral-0 bg-neutral-90 m-2 hover:bg-neutral-40'
             >
               {" "}
               <svg
@@ -143,7 +143,7 @@ export const Header = () => {
           <li>
             <Link
               to='/portfolios'
-              className='btn btn-outline text-base-300 bg-green-600 m-2 hover:bg-green-700'
+              className='btn text-neutral-0 bg-neutral-90 m-2 hover:bg-primary-60'
             >
               {" "}
               <svg
@@ -166,7 +166,7 @@ export const Header = () => {
           <li>
             <Link
               to='/offers'
-              className='btn bg-green-600  m-2 hover:bg-green-700'
+              className='btn text-neutral-0 bg-neutral-90 m-2 hover:bg-secondary-60'
             >
               <svg
                 xmlns='http://www.w3.org/2000/svg'

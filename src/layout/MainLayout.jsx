@@ -7,7 +7,7 @@ export const MainLayout= () => {
         <>
             <div className="flex flex-col min-h-screen ">
                <Header />
-                <main className="flex-grow p-6 bg-secondary-10">
+                <main className="flex-grow bg-neutral-90">
                     {<Outlet />}
                 </main>
             <Footer />

@@ -97,3 +97,13 @@ Continued enhancement of offers functionality and components:
 - Added new offers service functions for data management
 
 ---
+
+## Beli Ochando - 08-05
+
+Frontend:
+
+- Creation of general colors and a basic guide for color implementation.
+- Creation of primary, secondary, and neutral colors, with their variants from 0 to 100, in increments of 10.
+- Main Button Styles Definition and implementation.
+- Implementation of new color variables in: projectPage.jsx, projectCard.jsx, header, MainLayout, login, and register.
+- Layout of login and register + inclusion of logo and copyright.

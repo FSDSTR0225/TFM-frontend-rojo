@@ -2,12 +2,10 @@ import { useForm } from 'react-hook-form';
 import { registeredUser } from '../../services/authService';
 import { Link } from 'react-router';
 import { useNavigate } from "react-router";
+
 export const Register = () => {
   const navigate = useNavigate();
-  const { register,
-    watch,
-    handleSubmit,
-    formState: { errors } } = useForm();
+  const { register, watch, handleSubmit, formState: { errors } } = useForm();
 
   const registerUser = async (formDatos) => {
     let newUser = { ...formDatos };
@@ -16,119 +14,98 @@ export const Register = () => {
       console.log('holaaa: ', resp);
     }
     navigate(`/login`);
-  }
+  };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-base-200 px-4">
-      <div className="card w-full max-w-md bg-base-300 shadow-2xl text-base-content">
+    <div className="flex items-center justify-center px-4 mt-24 mb-56">
+      <div className="card w-full max-w-md bg-neutral-80 shadow-2xl text-neutral-0 border-1 border-neutral-60">
         <div className="card-body">
-          <h2 className="text-3xl font-extrabold text-center mb-4">Create Account <span className="text-green-500">Codepply</span></h2>
+          <h2 className="text-2xl font-bold text-center mb-4 mt-4">Create account</h2>
 
           <form onSubmit={handleSubmit(registerUser)} className="space-y-3">
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">Name</span>
-              </label>
-              <input
-                type="text"
-                placeholder="Your name"
-                className="input input-bordered input-md w-full bg-base-100"
-                {...register('name', {
-                  required: {
-                    value: true,
-                    message: 'El campo es requerido'
-                  },
-                  minLength: {
-                    value: 4,
-                    message: 'El campo debe tener al menos 4 caracteres'
-                  }
-                })}
-              />
-              {
-                errors.name && <p style={{ color: 'red' }}>{errors.name.message}</p>
-              }
-            </div>
-            
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">Surname</span>
-              </label>
-              <input
-                type="text"
-                placeholder="Your surname"
-                className="input input-bordered input-md w-full bg-base-100"
-                {...register('surname', {
-                  required: {
-                    value: true,
-                    message: 'El campo es requerido'
-                  },
-                  minLength: {
-                    value: 4,
-                    message: 'El campo debe tener al menos 4 caracteres'
-                  },
-                  maxLength: {
-                    value: 10,
-                    message: 'El campo debe tener maximo 10 caracteres'
-                  }
-                })}
-              />
-              {
-                errors.name && <p style={{ color: 'red' }}>{errors.name.message}</p>
-              }
+
+            {/* Name + Surname side by side */}
+            <div className="flex gap-4">
+              <div className="form-control w-2/5">
+                <label className="label">
+                  <span className="label-text text-neutral-20">Name</span>
+                </label>
+                <input
+                  type="text"
+                  placeholder="Your name"
+                  className="input input-bordered input-md w-full bg-neutral-60 border-neutral-50"
+                  {...register('name', {
+                    required: { value: true, message: 'El campo es requerido' },
+                    minLength: { value: 4, message: 'El campo debe tener al menos 4 caracteres' }
+                  })}
+                />
+                {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
+              </div>
+
+              <div className="form-control w-3/5">
+                <label className="label">
+                  <span className="label-text text-neutral-20">Surname</span>
+                </label>
+                <input
+                  type="text"
+                  placeholder="Your surname"
+                  className="input input-bordered input-md w-full bg-neutral-60 border-neutral-50"
+                  {...register('surname', {
+                    required: { value: true, message: 'El campo es requerido' },
+                    minLength: { value: 4, message: 'El campo debe tener al menos 4 caracteres' },
+                    maxLength: { value: 10, message: 'El campo debe tener máximo 10 caracteres' }
+                  })}
+                />
+                {errors.surname && <p className="text-red-500 text-sm">{errors.surname.message}</p>}
+              </div>
             </div>
 
             <div className="form-control">
               <label className="label">
-                <span className="label-text">Email</span>
+                <span className="label-text text-neutral-20">Email</span>
               </label>
               <input
                 type="email"
                 placeholder="Your email"
-                className="input input-bordered input-md w-full bg-base-100"
-                {...register('email',{
-                  required:{
-                    value:true,
-                    message:'El campo es requerido'
-                  },
-                  minLength:{
-                    value:4,
-                    message:'El campo debe tener al menos 4 caracteres'
-                  }
+                className="input input-bordered input-md w-full bg-neutral-60 border-neutral-50"
+                {...register('email', {
+                  required: { value: true, message: 'El campo es requerido' },
+                  minLength: { value: 4, message: 'El campo debe tener al menos 4 caracteres' }
                 })}
               />
             </div>
 
             <div className="form-control">
               <label className="label">
-                <span className="label-text">Password</span>
+                <span className="label-text text-neutral-20">Password</span>
               </label>
               <input
                 {...register('password')}
                 type="password"
                 placeholder="Your password"
-                className="input input-bordered input-md w-full bg-base-100"
+                className="input input-bordered input-md w-full bg-neutral-60 border-neutral-50"
               />
             </div>
 
             <div className="form-control">
               <label className="label">
-                <span className="label-text">Confirm Password</span>
+                <span className="label-text text-neutral-20">Confirm Password</span>
               </label>
               <input
                 {...register('confirm-password')}
                 type="password"
                 placeholder="Confirm your password"
-                className="input input-bordered input-md w-full bg-base-100"
+                className="input input-bordered input-md w-full bg-neutral-60 border-neutral-50"
               />
             </div>
 
             <div className="form-control">
               <label className="label">
-                <span className="label-text">Role</span>
+                <span className="label-text text-neutral-20">Role</span>
               </label>
               <select
                 {...register('role')}
-                className="select select-bordered w-full bg-base-100"
+                className="input input-bordered input-md w-full bg-neutral-60 border-neutral-50"
               >
                 <option value="developer">Developer</option>
                 <option value="recruiter">Recruiter</option>
@@ -136,7 +113,7 @@ export const Register = () => {
             </div>
 
             <div className="form-control mt-6">
-              <button className="btn bg-green-600 w-full text-base font-semibold tracking-wide">
+              <button className="btn bg-gradient-to-r from-primary-50 to-secondary-60 w-full text-lg text-neutral-0 font-semibold tracking-wide hover:bg-primary-70">
                 Sign Up
               </button>
             </div>
@@ -144,8 +121,16 @@ export const Register = () => {
 
           <p className="text-sm text-center mt-4">
             Already have an account?{' '}
-            <Link to={'/login'} className="text-green-500 hover:underline">Log in</Link>
+            <Link to={'/login'} className="text-primary-50 hover:underline">Log in</Link>
           </p>
+          <img
+            src="/src/assets/Codepply-Logotype-gradient.svg"
+            alt="Codepply Logo"
+            className="h-6 mx-auto mt-8"
+          />
+          <small className="text-[11px] text-neutral-30 text-center block mt-1">
+            Codepply Spain ® 2025
+          </small>
         </div>
       </div>
     </div>
