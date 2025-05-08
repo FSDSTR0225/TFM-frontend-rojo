@@ -2,7 +2,7 @@ import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { Link, useParams } from "react-router";
-import { SectionOffers } from "../components/sectionOffers";
+import { SectionContainer } from "../../../components/SectionContainer";
 import { OfferInfo } from "../components/OfferInfo";
 import { getOffersById } from "../../../services/offersServices";
 import { RecContactCard } from "../components/RecContactCard";
@@ -31,7 +31,7 @@ export const OfferInfoPage = () => {
 
   if (isLoading) {
     return (
-      <SectionOffers classProps="lg:flex-row flex-col-reverse gap-4 lg:items-start">
+      <SectionContainer classProps="lg:flex-row flex-col-reverse gap-4 lg:items-start">
         <div className="w-full p-4 space-y-6">
           <div className="h-8 bg-base-200 rounded-lg skeleton"></div>
           <div className="h-4 bg-base-200 rounded-lg skeleton w-3/4"></div>
@@ -42,14 +42,14 @@ export const OfferInfoPage = () => {
           <div className="h-4 bg-base-200 rounded-lg skeleton w-4/6"></div>
           <div className="h-4 bg-base-200 rounded-lg skeleton w-5/6"></div>
         </div>
-      </SectionOffers>
+      </SectionContainer>
     );
   }
   if (error) return <p>Error al cargar las ofertas: {error}</p>;
   return (
-    <SectionOffers classProps={"lg:flex-row flex-col-reverse gap-4 lg:items-start"}>
+    <SectionContainer classProps={"lg:flex-row flex-col-reverse gap-4 lg:items-start"}>
     <OfferInfo offer={offer} />
     <RecContactCard  owner={offer?.owner}  />
-    </SectionOffers>
+    </SectionContainer>
   );
 };

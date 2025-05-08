@@ -2,11 +2,8 @@ import React from 'react'
 import { useState } from 'react'
 import { getOffers } from '../../../services/offersServices'
 import { useEffect } from 'react'
-import { TfiLocationPin } from "react-icons/tfi";
 import { OfferCard } from '../components/OfferCard';
-import { MdOutlineAccessTime } from 'react-icons/md';
-import { SectionOffers } from '../components/sectionOffers';
-import { getDaysSince } from '../../../utils/utils';
+import { SectionContainer } from '../../../components/SectionContainer';
 import {OfferList} from '../components/OfferList'
 
 
@@ -15,6 +12,7 @@ export const OffersInfoPage = () => {
   const [offers, setOffers] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+
 
   useEffect(()=>{
     const fetchOffers = async () => {
@@ -30,22 +28,39 @@ export const OffersInfoPage = () => {
     fetchOffers()
   },[])
 
-  if(loading) return <span className="loading loading-bars loading-md"></span>
-  if (error) return <p>Error al cargar las ofertas: {error}</p>;
+  if (loading) {
+    return (
+      <SectionContainer classProps="flex flex-col space-y-6">
+        {/* Título y descripción skeleton */}
+        <div className="space-y-4 p-4">
+          <div className="h-8 bg-base-200 rounded-lg skeleton"></div>
+          <div className="h-4 bg-base-200 rounded-lg skeleton w-5/6"></div>
+          <div className="h-4 bg-base-200 rounded-lg skeleton w-4/6"></div>
+        </div>
+        {/* Lista de tarjetas skeleton */}
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 p-4">
+          {Array.from({ length: 6 }).map((_, idx) => (
+            <div key={idx} className="p-4 border rounded-lg space-y-3 animate-pulse">
+              <div className="h-4 bg-base-200 rounded-lg skeleton w-3/4"></div>
+              <div className="h-3 bg-base-200 rounded-lg skeleton w-full"></div>
+              <div className="h-3 bg-base-200 rounded-lg skeleton w-5/6"></div>
+              <div className="h-8 bg-base-200 rounded-lg skeleton w-1/2"></div>
+            </div>
+          ))}
+        </div>
+      </SectionContainer>
+          );
+        }
+      if (error) return <p>Error al cargar las ofertas: {error}</p>;
 
-  // const getDaysSince = (dateString) => {
-  //   const createdAt = new Date(dateString);
-  //   const today = new Date();
-  //   const diffMs = today - createdAt;
-  //   return Math.floor(diffMs / (1000 * 60 * 60 * 24));
-  // };
+
 
   return (
-    <SectionOffers>
+    <SectionContainer>
         <h2 className='text-3xl font-bold'>Your Next Tech Career Starts Here</h2>
         <p className='text-gray-600 text-lg'>Discover job opportunities for developers, designers, and engineers in fast-growing tech fields.</p>
          <OfferList view={true}>
-            {offers.map((offer)=>{ 
+            {offers?.map((offer)=>{ 
               
               return (
 
@@ -53,6 +68,6 @@ export const OffersInfoPage = () => {
 
             )})}
          </OfferList>
-    </SectionOffers>
+    </SectionContainer>
   )
 }
