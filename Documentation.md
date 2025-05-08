@@ -77,3 +77,23 @@ Frontend:
 - Added a loading animation when switching pages.
 - Updated logo colors in reversed order: green for devs and projects, blue for offers and recruiters.
 - Updated ProjectCard.jsx, separating name and surname.
+
+---
+
+## Carlos Damota - 08-05
+
+Frontend:
+Continued enhancement of offers functionality and components:
+
+- Added new MainRecButton component for consistent recruiter-related actions
+- Created SectionContainer component for standardized layout sections
+- Refactored OfferCard and OfferInfoPage components for improved functionality:
+  - Implemented proper loading states
+  - Enhanced data handling and passing
+  - Updated component structure for better maintainability
+- Refactored RecContactCard component for better user experience
+- Updated OfferInfo component with loading state management
+- Fixed component naming consistency in OfferList
+- Added new offers service functions for data management
+
+---
