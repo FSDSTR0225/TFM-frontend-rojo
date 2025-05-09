@@ -57,8 +57,8 @@ export const OffersInfoPage = () => {
 
   return (
     <SectionContainer>
-        <h2 className='text-3xl font-bold'>Your Next Tech Career Starts Here</h2>
-        <p className='text-gray-600 text-lg'>Discover job opportunities for developers, designers, and engineers in fast-growing tech fields.</p>
+        <h2 className='text-3xl font-bold text-neutral-0'>Your Next Tech Career Starts Here</h2>
+        <p className='text-neutral-10 text-lg '>Discover job opportunities for developers, designers, and engineers in fast-growing tech fields.</p>
          <OfferList view={true}>
             {offers?.map((offer)=>{ 
               
