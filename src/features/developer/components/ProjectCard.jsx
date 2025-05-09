@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 
 const ProjectCard = ({ name, surname, avatar, image, projectLink, title, badgeText, category, developerId }) => {
   return (
-    <div className="h-[256px] bg-neutral-80 flex flex-col rounded-lg shadow-md relative overflow-hidden border border-neutral-70">
+    <div className="h-[256px] bg-neutral-80 flex flex-col rounded-lg shadow-md relative overflow-hidden  transition-transform transform hover:scale-105 border border-neutral-70">
       
       <div className="flex items-center gap-2 mb-2 px-2 pt-2 z-10 relative">
         <img src={avatar} alt="Avatar" className="w-6 h-6 rounded-full" />

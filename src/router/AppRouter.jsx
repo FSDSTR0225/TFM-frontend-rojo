@@ -10,6 +10,7 @@ import { EditProjectDetailsPage } from '../features/developer/pages/EditProjectD
 import { ProfileDevPage } from '../features/developer/pages/ProfileDevPage';
 import { EditDevProfilePage } from '../features/developer/pages/EditDevProfilePage';
 import { InfoEditDevPage } from '../features/developer/pages/InfoEditDevPage';
+import { DevsPage } from '../features/developer/pages/DevsPage';
 import { RecDashBoar } from '../features/recruiters/pages/RecDashBoar';
 import { RecProfile } from '../features/recruiters/pages/RecProfile';
 import { RecruiterEditForm } from '../features/recruiters/pages/RecruiterEditForm';
@@ -38,6 +39,7 @@ const router = createBrowserRouter([
       { path: 'projects', element: <ProjectsPage /> },
       { path: 'projects/:id', element: <ProjectDetailsPage /> }, 
       { path: 'profile/:developerid', element: <ProfileDevPage /> },
+      { path: 'developers', element: <DevsPage /> },
 
 
       { path: 'login', element: <Login /> },
