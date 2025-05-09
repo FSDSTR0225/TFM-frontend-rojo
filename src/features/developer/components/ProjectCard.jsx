@@ -21,7 +21,7 @@ const ProjectCard = ({ name, surname, avatar, image, projectLink, title, badgeTe
       
         {badgeText && (
           <div className="absolute top-1/2 transform -translate-y-1/2 right-2">
-            <Badge text={badgeText} color="border-green-500" textColor="text-green-500" />
+            <Badge text={badgeText} color="border-primary-50" textColor="text-primary-50" />
           </div>
         )}
       </div>
