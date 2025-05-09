@@ -107,3 +107,22 @@ Frontend:
 - Main Button Styles Definition and implementation.
 - Implementation of new color variables in: projectPage.jsx, projectCard.jsx, header, MainLayout, login, and register.
 - Layout of login and register + inclusion of logo and copyright.
+
+## Beli Ochando - 09-05
+
+Frontend:
+
+- Created new branch: AllDevsPage
+
+  - Added "Developers" button to header
+  - Created new page: DevsPage to display all developers
+  - Created new card component: DevsCard to showcase developers
+  - Styled and added animations to cards
+  - Implemented card animation in projects
+
+- Fixed colors in Badge: implemented new theme variables
+
+Pending:
+
+- Add filters and include additional developer profile details as needed
+- Fetch developers from the backend
