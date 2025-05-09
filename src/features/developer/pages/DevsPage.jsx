@@ -21,7 +21,7 @@ export const DevsPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
 
-  const projectsPerPage = 9;
+  const projectsPerPage = 12;
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -35,7 +35,11 @@ export const DevsPage = () => {
         { id: 7, name: "Luisa", surname: "Pérez", title: "App de Viajes", category: "Mobile", avatar: Avatar1, profession: "Mobile Developer", experienceYears: 3, location: "Buenos Aires, Argentina", skills: ["React Native", "Java", "Swift"], },
         { id: 8, name: "Luisa", surname: "Pérez", title: "App de Viajes", category: "Mobile", avatar: Avatar1, profession: "Mobile Developer", experienceYears: 3, location: "Buenos Aires, Argentina", skills: ["React Native", "Java", "Swift"],  },
         { id: 9, name: "Luisa", surname: "Pérez", title: "App de Viajes", category: "Mobile", avatar: Avatar1, profession: "Mobile Developer", experienceYears: 3, location: "Buenos Aires, Argentina", skills: ["React Native", "Java", "Swift"], },
-        { id: 10, name: "Luisa", surname: "Pérez", title: "App de Viajes", category: "Mobile", avatar: Avatar1, profession: "Mobile Developer", experienceYears: 3, location: "Buenos Aires, Argentina", skills: ["React Native", "Java", "Swift"],  }
+        { id: 10, name: "Luisa", surname: "Pérez", title: "App de Viajes", category: "Mobile", avatar: Avatar1, profession: "Mobile Developer", experienceYears: 3, location: "Buenos Aires, Argentina", skills: ["React Native", "Java", "Swift"],  },
+        { id: 11, name: "Luisa", surname: "Pérez", title: "App de Viajes", category: "Mobile", avatar: Avatar1, profession: "Mobile Developer", experienceYears: 3, location: "Buenos Aires, Argentina", skills: ["React Native", "Java", "Swift"], },
+        { id: 12, name: "Luisa", surname: "Pérez", title: "App de Viajes", category: "Mobile", avatar: Avatar1, profession: "Mobile Developer", experienceYears: 3, location: "Buenos Aires, Argentina", skills: ["React Native", "Java", "Swift"],  },
+        { id: 13, name: "Luisa", surname: "Pérez", title: "App de Viajes", category: "Mobile", avatar: Avatar1, profession: "Mobile Developer", experienceYears: 3, location: "Buenos Aires, Argentina", skills: ["React Native", "Java", "Swift"], },
+        { id: 14, name: "Luisa", surname: "Pérez", title: "App de Viajes", category: "Mobile", avatar: Avatar1, profession: "Mobile Developer", experienceYears: 3, location: "Buenos Aires, Argentina", skills: ["React Native", "Java", "Swift"],  }
       ];
       setProjects(data);
     };
