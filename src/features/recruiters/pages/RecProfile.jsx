@@ -1,19 +1,21 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { OfferCard } from '../components/OfferCard'
-import { useState } from 'react'
 import { OfferModal } from '../components/OfferModal'
+import { AuthContext } from '../../../context/authContext';
 
 export const RecProfile = () => {
+  const { profile } = useContext(AuthContext);
+
   return (
     <div className="min-h-screen text-white px-4 py-8">
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-8 justify-center items-start">
         {/* Card perfil */}
-        <div className="w-full lg:w-1/3 bg-[#161b22] rounded-xl p-6 shadow-md min-h-[575px]">
 
+        <div className="w-full lg:w-1/3 bg-[#161b22] rounded-xl p-6 shadow-md min-h-[575px]">
           <div className="flex flex-col items-center text-center">
             <div className="w-20 h-20 bg-gray-600 rounded-full mb-4" />
-            <h2 className="text-lg font-semibold">Mara Rodríguez</h2>
-            <p className="text-sm text-gray-400 mb-4">Talent Recruiter</p>
+            <h2 className="text-lg font-semibold">{profile.name} {profile.surname}</h2>
+            <p className="text-sm text-gray-400 mb-4">{profile.role.type}</p>
           </div>
           <ul className="text-sm text-gray-300 space-y-1 mb-4">
             <li>+ Nombre Empresa</li>
@@ -34,18 +36,18 @@ export const RecProfile = () => {
         <div className="w-full flex-1">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-semibold">Mis ofertas de empleo</h2>
-            <button onClick={()=>document.getElementById('my_modal_1').showModal()} className="bg-green-600 text-black px-4 py-2 rounded hover:bg-green-700 transition cursor-pointer
+            <button onClick={() => document.getElementById('my_modal_1').showModal()} className="bg-green-600 text-black px-4 py-2 rounded hover:bg-green-700 transition cursor-pointer
              text-sm">
               + Create new offer
             </button>
             <dialog id="my_modal_1" className="modal">
-              <OfferModal/>
+              <OfferModal />
             </dialog>
           </div>
 
           {/* Aca falta pintar las ofertas creadas por el recruiter */}
           <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3 auto-rows-fr">
-             {/* <OfferCard/> */}
+            {/* <OfferCard/> */}
           </div>
 
         </div>

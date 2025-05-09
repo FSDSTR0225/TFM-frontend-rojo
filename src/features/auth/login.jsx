@@ -9,15 +9,17 @@ export const Login = () => {
         handleSubmit,
         formState: { errors } } = useForm();
     const navigate = useNavigate();
-    const { getProfile,profile } = useContext(AuthContext);
+    const { getProfile } = useContext(AuthContext);
+
     const loginUser = async () => {
-        const resp = await getProfile(watch('email'),watch('password'));
-        if(profile.role.type === 'developer'){
+        const user = await getProfile(watch('email'), watch('password')); // ahora tienes el usuario directamente
+        if (user.role.type === 'developer') {
             navigate('/private-dev/profile');
-        }else{
+        } else {
             navigate('/private-rec/profile');
         }
     }
+
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-base-200 px-4">

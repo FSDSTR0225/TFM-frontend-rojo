@@ -6,10 +6,11 @@ export const AuthContext = createContext();
 export const AuthProvider = ({children})=>{
     const [profile, setProfile] = useState();
 
-    const getProfile = async (email,password) =>{
-        const resp = await loginUser(email,password);
-        console.log('datos recibidos: ',resp);
+    const getProfile = async (email, password) => {
+        const resp = await loginUser(email, password);
         setProfile(resp.user);
+        console.log('datos del profile: ', profile);
+        return resp.user; // <-- devolver explícitamente
     }
 
     return (
