@@ -23,7 +23,7 @@ const handleOnClick = (e) => {
         key={offer?._id}
         className={`${
           classProps && classProps
-        } card border bg-neutral-80 border-neutral-70 cursor-pointer max-h-80 shadow-xl hover:bg-secondary-100`}
+        } card border bg-neutral-80 border-neutral-70 cursor-pointer max-h-80 shadow-xl hover:bg-neutral-90`}
       >
         <div className='card-body'>
         <MenuCard onClick={handleOnClick} />
