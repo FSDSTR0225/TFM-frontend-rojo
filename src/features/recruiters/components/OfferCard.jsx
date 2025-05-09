@@ -5,7 +5,7 @@ import { MdOutlineAccessTime } from "react-icons/md";
 import { useState } from "react";
 import { TiThMenuOutline } from "react-icons/ti";
 import { MainRecButton } from "../../../components/MainRecButton";
-import { ModalMenuCard } from "./ModalMenuCard";
+import { MenuCard } from "./MenuCard";
 
 export const OfferCard = ({ classProps, offer}) => {
   const [openMenu, setOpenMenu] = useState(false)
@@ -26,7 +26,7 @@ const handleOnClick = (e) => {
         } card border bg-neutral-80 border-neutral-70 cursor-pointer max-h-80 shadow-xl hover:bg-secondary-100`}
       >
         <div className='card-body'>
-        <ModalMenuCard />
+        <MenuCard onClick={handleOnClick} />
         
         <div className='flex flex-col justify-between'>
               <h3 className='text-xl font-bold'>{offer?.position}</h3>
