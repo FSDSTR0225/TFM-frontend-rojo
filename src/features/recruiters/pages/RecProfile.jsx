@@ -1,10 +1,16 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { OfferCard } from '../components/OfferCard'
 import { OfferModal } from '../components/OfferModal'
 import { AuthContext } from '../../../context/authContext';
-
+import { useNavigate } from "react-router";
 export const RecProfile = () => {
-  const { profile } = useContext(AuthContext);
+  const { profile,token } = useContext(AuthContext);
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!token) {
+      navigate('/login'); // Redirige al login si no hay token
+    }
+  }, [token]);
 
   return (
     <div className="min-h-screen text-white px-4 py-8">

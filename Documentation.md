@@ -77,3 +77,52 @@ Frontend:
 - Added a loading animation when switching pages.
 - Updated logo colors in reversed order: green for devs and projects, blue for offers and recruiters.
 - Updated ProjectCard.jsx, separating name and surname.
+
+---
+
+## Carlos Damota - 08-05
+
+Frontend:
+Continued enhancement of offers functionality and components:
+
+- Added new MainRecButton component for consistent recruiter-related actions
+- Created SectionContainer component for standardized layout sections
+- Refactored OfferCard and OfferInfoPage components for improved functionality:
+  - Implemented proper loading states
+  - Enhanced data handling and passing
+  - Updated component structure for better maintainability
+- Refactored RecContactCard component for better user experience
+- Updated OfferInfo component with loading state management
+- Fixed component naming consistency in OfferList
+- Added new offers service functions for data management
+
+---
+
+## Beli Ochando - 08-05
+
+Frontend:
+
+- Creation of general colors and a basic guide for color implementation.
+- Creation of primary, secondary, and neutral colors, with their variants from 0 to 100, in increments of 10.
+- Main Button Styles Definition and implementation.
+- Implementation of new color variables in: projectPage.jsx, projectCard.jsx, header, MainLayout, login, and register.
+- Layout of login and register + inclusion of logo and copyright.
+
+## Beli Ochando - 09-05
+
+Frontend:
+
+- Created new branch: AllDevsPage
+
+  - Added "Developers" button to header
+  - Created new page: DevsPage to display all developers
+  - Created new card component: DevsCard to showcase developers
+  - Styled and added animations to cards
+  - Implemented card animation in projects
+
+- Fixed colors in Badge: implemented new theme variables
+
+Pending:
+
+- Add filters and include additional developer profile details as needed
+- Fetch developers from the backend
