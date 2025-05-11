@@ -1,34 +1,46 @@
 import { useState, createContext, useEffect } from "react";
-import { getUserLogged, loginUser } from "../services/authService";
+import { getUserLogged } from "../services/authService";
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [profile, setProfile] = useState();
-    const [token, setToken] = useState();
+    const [profile, setProfile] = useState(null);
+    const [token, setToken] = useState(null);
 
-    const getProfile = async (email, password) => {
-        const resp = await loginUser(email, password); 
-        localStorage.setItem('token', resp.token);
-        setToken(resp.token);
-        return resp.token;
+    const infoUserLogged = async () => {
+        try {
+            const resp = await getUserLogged(token);
+            setProfile(resp);
+        } catch (err) {
+            setProfile(null);
+            setToken(null);
+            localStorage.removeItem('token');
+        }
     };
 
-    // Cargar perfil si ya hay sesión guardada
+    const logout = () => {
+        setProfile(null);
+        setToken(null);
+        localStorage.removeItem('token');
+    };
+
+
     useEffect(() => {
         const storedToken = localStorage.getItem('token');
-        getUserLogged(storedToken)
-            .then(user => setProfile(user))
-            .catch(() => {
-                localStorage.removeItem('token');
-                setToken(null);
-                setProfile(null);
-            });
+        if (storedToken) {
+            setToken(storedToken);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (token && !profile) {
+            infoUserLogged();
+        }
     }, [token]);
 
     return (
-        <AuthContext.Provider value={{ getProfile, profile, token }}>
+        <AuthContext.Provider value={{ profile, setProfile, token, setToken,logout }}>
             {children}
         </AuthContext.Provider>
     );
-}
+};
