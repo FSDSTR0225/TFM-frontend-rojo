@@ -1,27 +1,34 @@
 
-import React, { useContext } from 'react'
-import { useForm } from 'react-hook-form';
+import React, { useContext, useEffect, useState } from 'react'
+import { set, useForm } from 'react-hook-form';
 import { Link, Navigate } from 'react-router';
 import { AuthContext } from '../../context/authContext';
 import { useNavigate } from "react-router";
+import { getUserLogged, loginUser } from '../../services/authService';
 export const Login = () => {
     const { register,
         watch,
         handleSubmit,
         formState: { errors } } = useForm();
     const navigate = useNavigate();
-    const { getProfile,profile } = useContext(AuthContext);
+    const { token, setToken,profile } = useContext(AuthContext);
 
-    const loginUser = async () => {
-        const resp = await getProfile(watch('email'), watch('password')); 
-        console.log('Profile: ',profile);
-        if (profile.role.type === 'developer') {
-            navigate('/private-dev/profile');
-        } else {
-            navigate('/private-rec/profile');
+    const login = async () => {
+        const resp = await loginUser(watch('email'), watch('password'));
+        localStorage.setItem('token', resp.token);
+        setToken(resp.token); // Esto dispara el efecto en el contexto
+    };
+
+    // Cuando el profile se carga, redirigimos
+    useEffect(() => {
+        if (profile) {
+            if (profile.role.type === 'developer') {
+                navigate('/private-dev/profile');
+            } else {
+                navigate('/private-rec/profile');
+            }
         }
-    }
-
+    }, [profile]);
 
     return (
         <div className="flex items-center justify-center px-4 mt-32 mb-56">
@@ -30,7 +37,7 @@ export const Login = () => {
                 <div className="card-body">
                     <h2 className="text-2xl font-bold text-center mb-4 mt-4">Login Account </h2>
 
-                    <form onSubmit={handleSubmit(loginUser)} className="space-y-3">
+                    <form onSubmit={handleSubmit(login)} className="space-y-3">
                         <div className="form-control">
                             <label className="label">
                                 <span className="label-text text-neutral-20">Email</span>
@@ -75,7 +82,7 @@ export const Login = () => {
                     </form>
 
                     <p className="text-sm text-center mt-2">
-                    Don't have an account yet?{' '}
+                        Don't have an account yet?{' '}
                         <Link to={'/register'} className="text-primary-50 hover:underline">Sign Up</Link>
                     </p>
                     <img
@@ -86,9 +93,9 @@ export const Login = () => {
                     <small className="text-[11px] text-neutral-30 text-center block mt-1">
                         Codepply Spain ® 2025
                     </small>
-                    
+
                 </div>
             </div>
         </div>
-  );
+    );
 };

@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
-import { createdOffert } from '../../../services/offersServices';
+import { createdOffert } from '../../../services/offersServices-';
 
-export const OfferModal = () => {
+export const OfferModal = ({token}) => {
   const { register,
     watch,
     handleSubmit,
@@ -9,7 +9,7 @@ export const OfferModal = () => {
     formState: { errors } } = useForm();
 
   const createNewOffer = async (formDatos) => {
-    const respOffert = await createdOffert(formDatos);
+    const respOffert = await createdOffert(formDatos,token);
     console.log('nueva oferta: ', respOffert);
     reset();
     document.getElementById("my_modal_1")?.close();
@@ -19,7 +19,6 @@ export const OfferModal = () => {
     reset(); // Limpiar formulario sin enviar
     document.getElementById("my_modal_1")?.close();
   };
-
 
   return (
     <div className="modal-box">

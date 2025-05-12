@@ -1,6 +1,9 @@
 import { Link } from "react-router";
+import { AuthContext } from "../context/authContext";
+import { useContext } from "react";
 
 export const Header = () => {
+  const { profile, logout } = useContext(AuthContext);
   return (
     <header className="bg-neutral-80 p-2 drawer border-b-1 border-neutral-70">
       <input
@@ -66,7 +69,7 @@ export const Header = () => {
                   Developers
                 </Link>
               </li>
-              
+
               {/* Button for Projects */}
               <li>
                 <Link
@@ -118,18 +121,69 @@ export const Header = () => {
 
         <div className="flex gap-2 items-center">
           {/* Auth menu content here */}
-          <Link
-            to={"/login"}
-            className="btn rounded-full text-neutral-0 bg-primary-60 w-20 mx-2 hover:bg-primary-70 hover:text-neutral-0"
-          >
-            Login
-          </Link>
-          <Link
-            to={"/register"}
-            className="btn rounded-full text-neutral-0 bg-neutral-90 border:-2 border-neutral-60 w-22  hover:bg-neutral-60 hover:text-neutral-0"
-          >
-            Register
-          </Link>
+          {!profile ? (
+            <div className="flex gap-2 items-center">
+              <Link
+                to={"/login"}
+                className="btn rounded-full text-neutral-0 bg-primary-60 w-20 mx-2 hover:bg-primary-70 hover:text-neutral-0"
+              >
+                Login
+              </Link>
+              <Link
+                to={"/register"}
+                className="btn rounded-full text-neutral-0 bg-neutral-90 border:-2 border-neutral-60 w-22  hover:bg-neutral-60 hover:text-neutral-0"
+              >
+                Register
+              </Link>
+            </div>
+          ) : (
+            <div className="flex items-center justify-end gap-4 p-2 pr-6 text-white">
+              {/* Contenedor foto + nombre */}
+              <div className="flex items-center">
+                {profile.imageUrl && (
+                  <div className="w-10 h-10 rounded-full overflow-hidden border border-gray-600">
+                    <img
+                      src={profile.imageUrl}
+                      alt="Foto de perfil"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                )}
+                <div className="flex flex-col">
+                  <p className="font-semibold text-sm leading-none">
+                    {profile.name} {profile.surname}
+                  </p>
+                  <span className="text-xs text-gray-400">{profile.role.type}</span>
+                </div>
+              </div>
+
+              {/* Botones */}
+              <div className="flex gap-2">
+                {profile.role.type === "recruiter" ? (
+                  <Link
+                    to="/private-rec/profile"
+                    className="btn btn-sm rounded-full text-white bg-green-600 hover:bg-green-700"
+                  >
+                    Ver Perfil
+                  </Link>
+                ) : (
+                  <Link
+                    to="/private-dev/profile"
+                    className="btn btn-sm rounded-full text-white bg-green-600 hover:bg-green-700"
+                  >
+                    Ver Perfil
+                  </Link>
+                )}
+                <button
+                  onClick={() => logout()}
+                  className="btn btn-sm btn-outline border-red-500 text-red-400 hover:bg-red-600 hover:text-white hover:border-red-600 transition"
+                >
+                  Logout
+                </button>
+              </div>
+            </div>
+
+          )}
         </div>
       </div>
 
@@ -141,7 +195,7 @@ export const Header = () => {
         ></label>
         <ul className="menu bg-neutral-70 min-h-full w-80 p-4">
           {/* Sidebar content here */}
-          
+
           {/* Button for Developers */}
           <li>
             <Link

@@ -4,19 +4,22 @@ import { OfferModal } from '../components/OfferModal'
 import { AuthContext } from '../../../context/authContext';
 import { useNavigate } from "react-router";
 export const RecProfile = () => {
-  const { profile,token } = useContext(AuthContext);
+  const { profile, token } = useContext(AuthContext);
   const navigate = useNavigate();
+
   useEffect(() => {
     if (!token) {
-      navigate('/login'); // Redirige al login si no hay token
+      navigate('/login');
     }
   }, [token]);
 
   return (
     <div className="min-h-screen text-white px-4 py-8">
-      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-8 justify-center items-start">
+      {!profile ? (
+        <p className="text-white text-center mt-10">Cargando perfil...</p>
+      ):(
+              <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-8 justify-center items-start">
         {/* Card perfil */}
-
         <div className="w-full lg:w-1/3 bg-[#161b22] rounded-xl p-6 shadow-md min-h-[575px]">
           <div className="flex flex-col items-center text-center">
             <div className="w-20 h-20 bg-gray-600 rounded-full mb-4" />
@@ -42,22 +45,21 @@ export const RecProfile = () => {
         <div className="w-full flex-1">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-semibold">Mis ofertas de empleo</h2>
-            <button onClick={() => document.getElementById('my_modal_1').showModal()} className="bg-green-600 text-black px-4 py-2 rounded hover:bg-green-700 transition cursor-pointer
-             text-sm">
+            <button onClick={() => document.getElementById('my_modal_1').showModal()} className="bg-green-600 text-black px-4 py-2 rounded hover:bg-green-700 transition cursor-pointer text-sm">
               + Create new offer
             </button>
             <dialog id="my_modal_1" className="modal">
-              <OfferModal />
+              <OfferModal token={token} />
             </dialog>
           </div>
 
-          {/* Aca falta pintar las ofertas creadas por el recruiter */}
           <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3 auto-rows-fr">
             {/* <OfferCard/> */}
           </div>
-
         </div>
       </div>
+      )
+      }
     </div>
-  )
-}
+  );
+};
