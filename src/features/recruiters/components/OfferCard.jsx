@@ -50,7 +50,7 @@ const completeName = `${name} ${surname}`.trim() || 'Unknown Recruiter';
             )}
             <p>{completeName}</p>
           </div>
-          <MenuCard onClick={handleOnClick}/>
+          <MenuCard onClick={handleOnClick} id={offer._id}/>
         </div>
           
 
