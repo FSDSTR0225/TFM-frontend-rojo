@@ -92,7 +92,40 @@ function InfoDeveloper({ profileInfo }) {
 
             {/* TABS (Experiences, Projects, Studies) */}
             <div className="bg-sky-950 rounded-t-lg p-2 mb-4 rounded-md">
-            <div className="tabs tabs-lifted">
+                <div className="tabs tabs-border">
+                    <input type="radio" name="my_tabs_2" className="tab" aria-label="Experiences" />
+                        <div className="tab-content border-base-300 bg-base-100 p-10">
+                            <ExperienceCard/>
+                        </div>
+
+                    <input type="radio" name="my_tabs_2" className="tab" aria-label="Projects" defaultChecked />
+                        <div className="tab-content border-base-300 bg-base-100 p-10">
+                            <OwnProjectCard/>
+                        </div>
+
+                    <input type="radio" name="my_tabs_2" className="tab" aria-label="Studies" />
+                        <div className="tab-content border-base-300 bg-base-100 p-10">
+                            <StudyCard/>
+                        </div>
+                </div>
+            </div>
+
+            {/* CONTENIDO DE LAS TABS */}
+            {/* <div className="tab-content">
+
+            </div> */}
+        </div>
+    </div>
+    );
+}
+
+export default InfoDeveloper;
+
+
+
+
+
+{/* <div className="tabs tabs-border">
                 <button
                 className={`tab ${activeTab === 'experiences' ? 'tab-active' : ''}`}
                 onClick={() => setActiveTab('experiences')}
@@ -111,33 +144,27 @@ function InfoDeveloper({ profileInfo }) {
                 >
                 Studies
                 </button>
-            </div>
-            </div>
+            </div> */}
 
-            {/* CONTENIDO DE LAS TABS */}
-            <div className="tab-content">
-            {activeTab === 'experiences' && (
-                <div>
-                    <ExperienceCard/>
-                </div>
-            )}
 
-            {activeTab === 'projects' && (
-                <div>
-                    <OwnProjectCard/>
-                </div>
-            )}
 
-            {activeTab === 'studies' && (
-                <div>
-                    <StudyCard/>
-                </div>
-            )}
-            </div>
-        </div>
-    </div>
-    );
-}
 
-export default InfoDeveloper;
 
+
+            //             {activeTab === 'experiences' && (
+            //     <div>
+            //         <ExperienceCard/>
+            //     </div>
+            // )}
+
+            // {activeTab === 'projects' && (
+            //     <div>
+            //         <OwnProjectCard/>
+            //     </div>
+            // )}
+
+            // {activeTab === 'studies' && (
+            //     <div>
+            //         <StudyCard/>
+            //     </div>
+            // )}

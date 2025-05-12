@@ -1,6 +1,6 @@
 import React from 'react';
 
-const OwnProjectCard = () => {
+export const OwnProjectCard = () => {
     return (
     <div>
         <h2 className="text-xl font-bold mb-4">Project</h2>
@@ -12,5 +12,3 @@ const OwnProjectCard = () => {
     </div>
     )
 };
-
-export default OwnProjectCard;

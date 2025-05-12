@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ExperienceCard = () => {
+export const ExperienceCard = () => {
     return (
     <div>
         <h2 className="text-xl font-bold mb-4">Experiences</h2>
@@ -12,5 +12,3 @@ const ExperienceCard = () => {
     </div>
     )
 };
-
-export default ExperienceCard;
