@@ -6,11 +6,11 @@ import { MdOutlineAccessTime } from "react-icons/md";
 import { MainRecButton } from "../../../components/MainRecButton";
 import { MenuCard } from "./MenuCard";
 
-export const OfferCard = ({ classProps, offer, owner, id }) => {
+export const OfferCard = ({ classProps, offer, id }) => {
   const navigate = useNavigate()
 
-const name = capitalize(owner?.name || '');
-const surname = capitalize(owner?.surname || '');
+const name = capitalize(offer.owner?.name || '');
+const surname = capitalize(offer.owner?.surname || '');
 const completeName = `${name} ${surname}`.trim() || 'Unknown Recruiter';
 
   const handleOnClick = (e) => {
@@ -32,11 +32,11 @@ const completeName = `${name} ${surname}`.trim() || 'Unknown Recruiter';
         <div className='card-body'>
         <div className="flex justify-between">
         <div className='avatar gap-2 items-center'>
-            {owner?.role?.recruiter?.logo ? (
+            {offer.owner?.role?.recruiter?.logo ? (
               <div className='avatar'>
                 <div className='size-8 sm:size-8 rounded-full'>
                   <img
-                    src={owner.role.recruiter.logo}
+                    src={offer.owner.role.recruiter.logo}
                     alt='Logo'
                   />
                 </div>
@@ -68,7 +68,7 @@ const completeName = `${name} ${surname}`.trim() || 'Unknown Recruiter';
           <p className='line-clamp-3'>{offer.description}</p>
           <div className='flex items-center justify-end gap-4 m-2'>
             <MainRecButton onClick={handleOnClick} classProps='rounded-full w-18'>Apply</MainRecButton>
-            <MainRecButton onClick={handleOnClick} classProps='rounded-full w-18 hover:border-neutral-0 hover:text-neutral-0'>
+            <MainRecButton onClick={handleOnClick} classProps='rounded-full w-18 hover:border-neutral-0 hover:text-neutral-0 text-secondary-40 hover:bg-transparent bg-transparent'>
               Contact
             </MainRecButton>
           </div>

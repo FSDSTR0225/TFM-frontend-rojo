@@ -5,6 +5,7 @@ import { useEffect } from 'react'
 import { OfferCard } from '../components/OfferCard';
 import { SectionContainer } from '../../../components/SectionContainer';
 import {OfferList} from '../components/OfferList'
+import { Pagination } from '../../../components/Pagination';
 
 
 
@@ -12,6 +13,21 @@ export const OffersInfoPage = () => {
   const [offers, setOffers] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+const [currentPage, setCurrentPage] = useState(1);
+
+
+  const totalPages = Math.ceil(offers.length / 6);
+  const startIndex = (currentPage - 1) * 6;
+  const currentOffers= offers.slice(startIndex, startIndex + 6);
+
+  const handlePageChange = (pageNum) => {
+    if (pageNum === currentPage) return;
+    setCurrentPage(pageNum); // Primero actualizamos la página
+    setLoading(true);        // Luego activamos el loading
+    setTimeout(() => {
+      setLoading(false);     // Después de un pequeño retraso, desactivamos el loading
+    }, 500);
+  };
 
 
   useEffect(()=>{
@@ -60,14 +76,22 @@ export const OffersInfoPage = () => {
         <h2 className='text-3xl font-bold text-neutral-0'>Your Next Tech Career Starts Here</h2>
         <p className='text-neutral-10 text-lg '>Discover job opportunities for developers, designers, and engineers in fast-growing tech fields.</p>
          <OfferList view={true}>
-            {offers?.map((offer)=>{ 
+            {currentOffers?.map((offer)=>{ 
               
               return (
 
               <OfferCard offer={offer} owner={offer.owner} key={offer._id}  />
 
             )})}
+            
+            
          </OfferList>
+            <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    handlePageChange={handlePageChange}
+                    filteredProjects={offers}
+                  />
     </SectionContainer>
   )
 }

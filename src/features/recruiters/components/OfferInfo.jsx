@@ -19,7 +19,7 @@ export const OfferInfo = ({offer}) => {
               <h3>Necessary Skills:</h3>
               <div className='flex gap-5 flex-wrap'>
                 {offer.skills.map((skill) => {
-                  return <span className='badge badge-soft badge-accent"'>{skill}</span>;
+                  return <span key={skill.index} className='badge badge-soft badge-accent"'>{skill}</span>;
                 })}
               </div>
               {offer.language && (
