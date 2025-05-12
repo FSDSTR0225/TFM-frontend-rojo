@@ -5,7 +5,7 @@ import { TfiLocationPin } from 'react-icons/tfi';
 export const OfferInfo = ({offer}) => {
 
   return (
-    <article className=' card bg-base-200 shadow-xl border border-base-100 flex-col  w-full '>
+    <article  className=' card bg-base-200 shadow-xl border border-base-100 flex-col  w-full '>
             <div className='card-body gap-6'>
               <EditButton classProps={"self-end"} />
               <h2 className='text-xl md:text-2xl  font-bold m'>{offer.position}</h2>

@@ -64,7 +64,7 @@ export const OffersInfoPage = () => {
               
               return (
 
-              <OfferCard offer={offer}  />
+              <OfferCard offer={offer} owner={offer.owner} key={offer._id}  />
 
             )})}
          </OfferList>
