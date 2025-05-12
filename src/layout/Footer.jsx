@@ -3,11 +3,11 @@ import { Link } from 'react-router'
 
 export const Footer = () => {
   return (
-    <footer className="footer sm:footer-horizontal bg-base-300 text-base-content p-10">
+    <footer className="footer sm:footer-horizontal bg-[#1c1c1c] text-base-content p-10">
   <aside>
   <Link to={"/"} className="mr-4 pr-4 flex items-center">
             <img
-              src="/src/assets/Codepply-Logo-gradient.svg"
+              src="/src/assets/Codepply-Logotype-gradient.svg"
               alt="Codepply Logo"
               className="h-6"
             />

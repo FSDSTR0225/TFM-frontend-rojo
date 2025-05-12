@@ -1,4 +1,43 @@
-@import "tailwindcss";
+/* 1️⃣ Importación de Tailwind v4 (CSS-first) MUST ir primero */
+@import "tailwindcss"; 
+
+/* 2️⃣ DaisyUI v5 como plugin CSS-first */
 @plugin "daisyui" {
- themes: dark --default, cupcake;
+  themes: dark --default, cupcake;
+}
+
+@theme {
+  --color-primary-10: #D7F4DA;
+  --color-primary-20: #AFE9B6;
+  --color-primary-30: #87DE91;
+  --color-primary-40: #5FD36D;
+  --color-primary-50: #37C848;
+  --color-primary-60: #32B441;
+  --color-primary-70: #289034;
+  --color-primary-80: #21782B;
+  --color-primary-90: #16501D;
+  --color-primary-100: #0B280E;
+
+  --color-secondary-10: #D7E5F4;
+  --color-secondary-20: #99C9FF;
+  --color-secondary-30: #60AAFF;
+  --color-secondary-40: #3392FF;
+  --color-secondary-50: #0077FF;
+  --color-secondary-60: #1D6DC9;
+  --color-secondary-70: #1A61B2;
+  --color-secondary-80: #134986;
+  --color-secondary-90: #0D3059;
+  --color-secondary-100: #06182D;
+
+  --color-neutral-0: #FFFFFF;
+  --color-neutral-10: #CCCCCC;
+  --color-neutral-20: #A5A5A5;
+  --color-neutral-30: #797979;
+  --color-neutral-40: #595959;
+  --color-neutral-50: #404040;
+  --color-neutral-60: #262626;
+  --color-neutral-70: #222222;
+  --color-neutral-80: #1C1C1C;
+  --color-neutral-90: #171717;
+  --color-neutral-100: #000000;
 }

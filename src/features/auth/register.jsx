@@ -1,86 +1,137 @@
 import { useForm } from 'react-hook-form';
 import { registeredUser } from '../../services/authService';
+import { Link } from 'react-router';
+import { useNavigate } from "react-router";
+
 export const Register = () => {
+  const navigate = useNavigate();
+  const { register, watch, handleSubmit, formState: { errors } } = useForm();
 
-  const {register,
-    watch,
-    handleSubmit,
-    formState:{errors}}=useForm();
-
-  const registerUser = async (formDatos)=>{
-    let newUser = {...formDatos};
+  const registerUser = async (formDatos) => {
+    let newUser = { ...formDatos };
     const resp = await registeredUser(newUser);
-    if(resp){
-      console.log('holaaa: ',resp );
+    if (resp) {
+      console.log('holaaa: ', resp);
     }
-  }
+    navigate(`/login`);
+  };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold text-center text-gray-800">Create Account</h2>
-        <form className="space-y-4" onSubmit={handleSubmit(registerUser)}>
-          <div>
-            <label className="block text-sm font-medium text-gray-900">Name</label>
-            <input
-              {...register('name')}
-              type="text"
-              id="name"
-              className="w-full px-4 py-2 mt-1 text-sm border rounded-md focus:ring focus:ring-blue-300 focus:outline-none text-gray-900"
-              placeholder="Your name"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-900">Email</label>
-            <input
-             {...register('email')}
-              type="email"
-              id="email"
-              className="w-full px-4 py-2 mt-1 text-sm border rounded-md focus:ring focus:ring-blue-300 focus:outline-none text-gray-900"
-              placeholder="Your email"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-900">Password</label>
-            <input
-              type="password"
-              {...register('password')}
-              id="password"
-              className="w-full px-4 py-2 mt-1 text-sm border rounded-md focus:ring focus:ring-blue-300 focus:outline-none text-gray-900"
-              placeholder="Your password"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-900">Confirm Password</label>
-            <input
-              type="password"
-              {...register('confirm-password')}
-              id="confirm-password"
-              className="w-full px-4 py-2 mt-1 text-sm border rounded-md focus:ring focus:ring-blue-300 focus:outline-none text-gray-900"
-              placeholder="Confirm your password"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-900">Role</label>
-            <select
-              id="rol"
-              {...register('role')}
-              className="w-full px-4 py-2 mt-1 text-sm border rounded-md focus:ring focus:ring-blue-300 focus:outline-none text-gray-900"
-            >
-              <option value="developer">Developer</option>
-              <option value="recruiter">Recruiter</option>
-            </select>
-          </div>
-          <button
-            type="submit"
-            className="w-full px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
-          >
-            Sign Up
-          </button>
-        </form>
-        <p className="text-sm text-center text-gray-900">
-          Already have an account? <a href="/login" className="text-blue-500 hover:underline">Log in</a>
-        </p>
+    <div className="flex items-center justify-center px-4 mt-24 mb-56">
+      <div className="card w-full max-w-md bg-neutral-80 shadow-2xl text-neutral-0 border-1 border-neutral-60">
+        <div className="card-body">
+          <h2 className="text-2xl font-bold text-center mb-4 mt-4">Create account</h2>
+
+          <form onSubmit={handleSubmit(registerUser)} className="space-y-3">
+
+            {/* Name + Surname side by side */}
+            <div className="flex gap-4">
+              <div className="form-control w-2/5">
+                <label className="label">
+                  <span className="label-text text-neutral-20">Name</span>
+                </label>
+                <input
+                  type="text"
+                  placeholder="Your name"
+                  className="input input-bordered input-md w-full bg-neutral-60 border-neutral-50"
+                  {...register('name', {
+                    required: { value: true, message: 'El campo es requerido' },
+                    minLength: { value: 4, message: 'El campo debe tener al menos 4 caracteres' }
+                  })}
+                />
+                {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
+              </div>
+
+              <div className="form-control w-3/5">
+                <label className="label">
+                  <span className="label-text text-neutral-20">Surname</span>
+                </label>
+                <input
+                  type="text"
+                  placeholder="Your surname"
+                  className="input input-bordered input-md w-full bg-neutral-60 border-neutral-50"
+                  {...register('surname', {
+                    required: { value: true, message: 'El campo es requerido' },
+                    minLength: { value: 4, message: 'El campo debe tener al menos 4 caracteres' },
+                    maxLength: { value: 10, message: 'El campo debe tener máximo 10 caracteres' }
+                  })}
+                />
+                {errors.surname && <p className="text-red-500 text-sm">{errors.surname.message}</p>}
+              </div>
+            </div>
+
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text text-neutral-20">Email</span>
+              </label>
+              <input
+                type="email"
+                placeholder="Your email"
+                className="input input-bordered input-md w-full bg-neutral-60 border-neutral-50"
+                {...register('email', {
+                  required: { value: true, message: 'El campo es requerido' },
+                  minLength: { value: 4, message: 'El campo debe tener al menos 4 caracteres' }
+                })}
+              />
+            </div>
+
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text text-neutral-20">Password</span>
+              </label>
+              <input
+                {...register('password')}
+                type="password"
+                placeholder="Your password"
+                className="input input-bordered input-md w-full bg-neutral-60 border-neutral-50"
+              />
+            </div>
+
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text text-neutral-20">Confirm Password</span>
+              </label>
+              <input
+                {...register('confirm-password')}
+                type="password"
+                placeholder="Confirm your password"
+                className="input input-bordered input-md w-full bg-neutral-60 border-neutral-50"
+              />
+            </div>
+
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text text-neutral-20">Role</span>
+              </label>
+              <select
+                {...register('role')}
+                className="input input-bordered input-md w-full bg-neutral-60 border-neutral-50"
+              >
+                <option value="developer">Developer</option>
+                <option value="recruiter">Recruiter</option>
+              </select>
+            </div>
+
+            <div className="form-control mt-6">
+              <button className="btn bg-gradient-to-r from-primary-50 to-secondary-60 w-full text-lg text-neutral-0 font-semibold tracking-wide hover:bg-primary-70">
+                Sign Up
+              </button>
+            </div>
+          </form>
+
+          <p className="text-sm text-center mt-4">
+            Already have an account?{' '}
+            <Link to={'/login'} className="text-primary-50 hover:underline">Log in</Link>
+          </p>
+          <img
+            src="/src/assets/Codepply-Logotype-gradient.svg"
+            alt="Codepply Logo"
+            className="h-6 mx-auto mt-8"
+          />
+          <small className="text-[11px] text-neutral-30 text-center block mt-1">
+            Codepply Spain ® 2025
+          </small>
+        </div>
       </div>
     </div>
   );

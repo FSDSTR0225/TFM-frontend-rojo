@@ -1,94 +1,128 @@
 # Documentación del Proyecto TFM-Frontend-Rojo
 
-## 1. Resumen del Proyecto
+Este documento mantiene un registro actualizado del proyecto, sus funcionalidades y los cambios realizados por el equipo.
 
-Este documento mantiene un registro actualizado del proyecto, sus funcionalidades y los cambios realizados por el equipo. Se seguirá el estilo de documentación de Warp para mantener consistencia.
+## Beli Ochando - 02-05
 
-### Estado Actual (30-04-2025)
+Frontend:
+Create new branch: feature/DevProfile
+Create mains developers and projects pages and components
+Import routers to new pages and components in "AppRouter.jsx".
+Change in header: name of file "ofertas" to "jobs". The link is keeping "offers". Maybe we had to change in the future to "/jobs".
+Change in header: name of file "porfolios" to "projects". The link is changed to "projects".
+Test new pages in web.
+Logotype provisional implementation in header and footer. Two differents styles.
 
-El proyecto actualmente incluye:
-- Sistema de registro de usuarios
-- Estructura de navegación y enrutamiento base
-- Componentes de layout modular y reutilizable
-- Integración de bibliotecas UI (DaisyUI y react-icons)
+New Branch: feature/Projects.
+Creation of generic ProjectCard.jsx component: Created with basic initial styles. Needs to be refined later using daisyUI.
+Implementation in ProjectPage with a frontend array for layout purposes. Once the layout is complete, we’ll fetch data from the backend.
+Implementation of 8px-based sizing for components and gaps between them. Responsive layout adjustment of the website.
+Maximum width: 1360px
+Card width (max 3 cards): 432px
+Card height: 256px
+Gap between components: 32px
 
-## 2. Últimos Cambios (30-04-2025)
+---
 
-- Refactorización completa de los componentes de layout
-- Implementación de estructura de router y componentes base
-- Desarrollo de funcionalidades de login y registro
-- Instalación y configuración de bibliotecas UI
-- Implementación del sistema de documentación
+## Carlos Damota - 04-05
 
-## 3. Contribuciones por Miembro
+Frontend:
+Create new branch: feature/offers
+Enhanced the offers page with several improvements:
 
-### CARLOS (29-04-2025)
+- Added timestamp display showing days since post creation
+- Implemented improved card layout with better styling
+- Created reusable OfferCard component
+- Added applicant count display for each offer
+- Integrated new icons for better visual feedback
+- Improved responsive design with proper spacing
+- Added link functionality to offer cards for navigation
 
-**Branch**: feature/refactor-layout, dev
+---
 
-**Descripción detallada**: 
-- Implementación y prueba de nuevos componentes en el sistema
-- Refactorización de la estructura de componentes para mejorar la organización
-- Creación de un sistema de enlaces más modular y mantenible
-- Mejoras en la estructura del layout general de la aplicación
-- Se realizaron múltiples actualizaciones en el servicio de autenticación
-- Se implementó una corrección en la funcionalidad de fetch
-- Se incluyeron mejoras en el tema oscuro de la aplicación
+## Carlos Damota - 06-05
 
-**Archivos principales modificados**:
-- src/components/*
-- src/routes/*
-- src/layouts/*
-- src/services/authService.js
-- src/layout/MainLayout.jsx
-- src/layout/Header.jsx
-- src/layout/Footer.jsx
+Frontend:
+Enhanced offers page interface and components:
 
-**Estado**: Completado
+- Created new EditButton reusable component with integrated onClick handler
+- Added new SectionOffers component for consistent layout
+- Enhanced OfferInfoPage with detailed recruiter information display:
+  - Recruiter logo
+  - Recruiter contact details
+  - Website links
+  - Email contact
+- Improved overall layout and styling:
+  - Enhanced card shadows and borders
+  - Adjusted grid layout for better responsiveness
+  - Refined spacing and alignment
+  - Updated color scheme in MainLayout
+- Enhanced OffertList component with improved grid system
+- Added new icons for external links and email contacts
 
-## 4. Cómo Documentar Cambios
+---
 
-Para mantener esta documentación actualizada, utiliza el siguiente prompt al interactuar con Warp:
+## Beli Ochando - 06-05
 
-```
-# Prompt para Actualización de Documentación en Warp
+Frontend:
 
-Warp, actualiza el archivo Documentation.md manteniendo la estructura existente. Es ESENCIAL que:
+- Accent color correction for developers.
+- Created a projectServices file to centralize all project-related fetch calls.
+- Implemented the getAllProjects fetch function.
+- Created and commented the ProjectsPage component, including the import of getAllProjects from projectServices, and the useEffect to fetch data from the backend (to be completed once we can render the full project card).
+- Verified that the frontend receives data from the backend, but rendering is pending until the database is cleaned and image imports are available.
+- Created the Pagination component with styles to allow functional page transitions.
+- Renamed badge component to Badge.
+- Added small category labels in the “All” tab. These disappear when switching to a different category.
+- Added a loading animation when switching pages.
+- Updated logo colors in reversed order: green for devs and projects, blue for offers and recruiters.
+- Updated ProjectCard.jsx, separating name and surname.
 
-1. Las secciones "1. Resumen del Proyecto" y "2. Últimos Cambios" SIEMPRE permanezcan en las mismas posiciones al inicio del documento.
+---
 
-2. Debes actualizar estas secciones con la información nueva, pero nunca cambiar su ubicación.
+## Carlos Damota - 08-05
 
-3. La sección "3. Contribuciones por Miembro" debe mostrar las entradas ordenadas por fecha (más reciente primero).
+Frontend:
+Continued enhancement of offers functionality and components:
 
-4. Si hay varios cambios del mismo autor en la misma fecha, debes consolidarlos en una sola entrada.
+- Added new MainRecButton component for consistent recruiter-related actions
+- Created SectionContainer component for standardized layout sections
+- Refactored OfferCard and OfferInfoPage components for improved functionality:
+  - Implemented proper loading states
+  - Enhanced data handling and passing
+  - Updated component structure for better maintainability
+- Refactored RecContactCard component for better user experience
+- Updated OfferInfo component with loading state management
+- Fixed component naming consistency in OfferList
+- Added new offers service functions for data management
 
-## Información para actualizar:
+---
 
-Nombre: [NOMBRE]
-Fecha: [FECHA en formato DD-MM-YYYY]
-Branch: [BRANCH]
+## Beli Ochando - 08-05
 
-Descripción detallada:
-[DESCRIPCIÓN COMPLETA DE LOS CAMBIOS]
+Frontend:
 
-Archivos principales modificados:
-- [RUTA/ARCHIVO]
-- [RUTA/ARCHIVO]
+- Creation of general colors and a basic guide for color implementation.
+- Creation of primary, secondary, and neutral colors, with their variants from 0 to 100, in increments of 10.
+- Main Button Styles Definition and implementation.
+- Implementation of new color variables in: projectPage.jsx, projectCard.jsx, header, MainLayout, login, and register.
+- Layout of login and register + inclusion of logo and copyright.
 
-Estado: [COMPLETADO/EN PROGRESO/EN REVISIÓN]
+## Beli Ochando - 09-05
 
-## Para actualizar "Estado Actual" (Sección 1):
-Las siguientes funcionalidades o cambios deben añadirse/modificarse en el "Estado Actual":
-- [NUEVA FUNCIONALIDAD 1]
-- [NUEVA FUNCIONALIDAD 2]
+Frontend:
 
-## Para actualizar "Últimos Cambios" (Sección 2):
-Añade estos nuevos cambios al inicio de la lista de "Últimos Cambios":
-- [NUEVO CAMBIO 1]
-- [NUEVO CAMBIO 2]
+- Created new branch: AllDevsPage
 
-IMPORTANTE: Mantén siempre las secciones 1 y 2 al inicio del documento, y actualiza la fecha en ambas secciones al día actual [FECHA].
-```
+  - Added "Developers" button to header
+  - Created new page: DevsPage to display all developers
+  - Created new card component: DevsCard to showcase developers
+  - Styled and added animations to cards
+  - Implemented card animation in projects
 
-Warp procesará esta información y actualizará el documento manteniendo su estructura y el historial de cambios previos.
+- Fixed colors in Badge: implemented new theme variables
+
+Pending:
+
+- Add filters and include additional developer profile details as needed
+- Fetch developers from the backend

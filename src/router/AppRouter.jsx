@@ -3,7 +3,6 @@ import React from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router';
 import { ErrorPage } from '../pages/ErrorPage';
 import { Home } from '../pages/Home';
-import { Offers } from '../features/recruiters/pages/Offers';
 import { ProjectsPage } from '../features/developer/pages/ProjectsPage';
 import { NewProjectPage } from '../features/developer/pages/NewProjectPage';
 import { ProjectDetailsPage } from '../features/developer/pages/ProjectDetailsPage';
@@ -11,6 +10,7 @@ import { EditProjectDetailsPage } from '../features/developer/pages/EditProjectD
 import { ProfileDevPage } from '../features/developer/pages/ProfileDevPage';
 import { EditDevProfilePage } from '../features/developer/pages/EditDevProfilePage';
 import { InfoEditDevPage } from '../features/developer/pages/InfoEditDevPage';
+import { DevsPage } from '../features/developer/pages/DevsPage';
 import { RecDashBoar } from '../features/recruiters/pages/RecDashBoar';
 import { RecProfile } from '../features/recruiters/pages/RecProfile';
 import { RecruiterEditForm } from '../features/recruiters/pages/RecruiterEditForm';
@@ -19,6 +19,9 @@ import { RecOfferForm } from '../features/recruiters/pages/RecOfferForm';
 import { RecApplications } from '../features/recruiters/pages/RecApplications';
 import { MainLayout } from '../layout/MainLayout';
 import { Register } from '../features/auth/register';
+import { Login } from '../features/auth/login';
+import { OffersInfoPage } from '../features/recruiters/pages/OffersInfoPage';
+import { OfferInfoPage } from '../features/recruiters/pages/OfferInfoPage';
 
 
 
@@ -31,13 +34,15 @@ const router = createBrowserRouter([
     children: [
       // Rutas públicas
       { index: true, element: <Home /> },
-      { path: 'offers', element: <Offers />},
+      { path: 'offers', element: <OffersInfoPage />},
+      { path: 'offers/:id', element: <OfferInfoPage />},
       { path: 'projects', element: <ProjectsPage /> },
-      { path: 'projects/:projectid', element: <ProjectDetailsPage /> }, 
+      { path: 'projects/:id', element: <ProjectDetailsPage /> }, 
       { path: 'profile/:developerid', element: <ProfileDevPage /> },
+      { path: 'developers', element: <DevsPage /> },
 
 
-      //{ path: 'login', element: <Login /> },
+      { path: 'login', element: <Login /> },
       { path: 'register', element: <Register /> },
 
       // --- Private Dev (developers) ---
