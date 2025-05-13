@@ -2,19 +2,22 @@ import React, { useContext, useEffect, useState } from 'react'
 import { OfferCard } from '../components/OfferCard'
 import { OfferModal } from '../components/OfferModal'
 import { AuthContext } from '../../../context/authContext';
-import { useNavigate } from "react-router";
+import {  useParams } from "react-router";
 import { getOffersbyOwner } from '../../../services/offersServices';
 import { SectionContainer } from '../../../components/SectionContainer';
 import { Pagination } from '../../../components/Pagination';
+import { getRecruiterById } from '../../../services/profileService';
 
 export const RecProfile = () => {
-  const [offers, setOffers] = useState([])
+  const { profile, token } = useContext(AuthContext) || {};
+  const { id } = useParams(); // ID del reclutador desde la URL
+  const [offers, setOffers] = useState([]);
+  const [recruiter, setRecruiter] = useState(null);
+  
 
+  const isOwner = profile?._id === id;
 
-  const { profile, token } = useContext(AuthContext);
-  const navigate = useNavigate();
-
-const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
 
 
   const totalPages = Math.ceil(offers.length / 4);
@@ -24,43 +27,41 @@ const [currentPage, setCurrentPage] = useState(1);
   const handlePageChange = (pageNum) => {
     if (pageNum === currentPage) return;
     setCurrentPage(pageNum); // Primero actualizamos la página     // Luego activamos el loading
-    setTimeout(() => {    // Después de un pequeño retraso, desactivamos el loading
-    }, 500);
   };
 
 
   useEffect(() => {
-    if (!token) {
-      navigate('/login');
-    }
-  }, [token]);
-
-  useEffect(()=>{
-      const fetchOffers = async () => {
-        try {
-          const offerData = await getOffersbyOwner(profile._id)
-          setOffers(offerData)
-        } catch (error) {
-          return (error.message)
-        }
+    const fetchData = async () => {
+      try {
+        // Obtener datos del reclutador
+        const recruiterData = await getRecruiterById(id);
+        setRecruiter(recruiterData);
+  
+        // Obtener ofertas según si el usuario es el dueño
+        const offersData = await getOffersbyOwner(id) 
+          
+  
+        setOffers(offersData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
       }
-      fetchOffers()
-    },[])
+    };
+  
+    fetchData();
+  }, [id, isOwner]);
 
 
   return (
     <SectionContainer >
-      {!profile ? (
-        <p className="text-white text-center mt-10">Cargando perfil...</p>
-      ):(
+    
         <div className='flex flex-col md:flex-row md:justify-between gap-8 items-start'>
         <div className="card bg-base-200 shadow-xl border border-base-100 flex-col text-sm md:text-lg min-w-50">
         {/* Card perfil */}
         <div className="card-body bg-base-200">
           <div className="flex  flex-col items-center">
             <div className="w-20 h-20 bg-gray-600 rounded-full mb-4" />
-            <h2 className="text-lg font-semibold">{profile.name} {profile.surname}</h2>
-            <p className="text-sm text-gray-400 mb-4">{profile.role.type}</p>
+            <h2 className="text-lg font-semibold">{recruiter?.name} {recruiter?.surname}</h2>
+            <p className="text-sm text-gray-400 mb-4">{recruiter?.role.type}</p>
           </div>
           <ul className="text-sm text-gray-300 space-y-1 mb-4">
             <li>+ Nombre Empresa</li>
@@ -114,8 +115,6 @@ const [currentPage, setCurrentPage] = useState(1);
         </div>
         </div>
               
-      )
-      }
     </SectionContainer>
   );
 };

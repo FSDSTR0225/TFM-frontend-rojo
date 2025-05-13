@@ -1,9 +1,11 @@
-import { Link } from "react-router";
+import { Link} from "react-router";
 import { AuthContext } from "../context/authContext";
 import { useContext } from "react";
 
+
 export const Header = () => {
   const { profile, logout } = useContext(AuthContext);
+ 
   return (
     <header className="bg-neutral-80 p-2 drawer border-b-1 border-neutral-70">
       <input
@@ -161,21 +163,23 @@ export const Header = () => {
               <div className="flex gap-2">
                 {profile.role.type === "recruiter" ? (
                   <Link
-                    to="/private-rec/profile"
+                    to={`recruiter/${profile._id}`}
                     className="btn btn-sm rounded-full text-white bg-green-600 hover:bg-green-700"
                   >
                     Ver Perfil
                   </Link>
                 ) : (
                   <Link
-                    to="/private-dev/profile"
+                    to={`recruiter/${profile._id}`}
                     className="btn btn-sm rounded-full text-white bg-green-600 hover:bg-green-700"
                   >
                     Ver Perfil
                   </Link>
                 )}
                 <button
-                  onClick={() => logout()}
+                  onClick={() => {
+    logout();
+  }}
                   className="btn btn-sm btn-outline border-red-500 text-red-400 hover:bg-red-600 hover:text-white hover:border-red-600 transition"
                 >
                   Logout

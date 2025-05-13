@@ -2,6 +2,7 @@
 import { capitalize, getInitials } from '../../../utils/utils'
 import { FiExternalLink } from 'react-icons/fi'
 import { MdOutlineMailOutline } from 'react-icons/md'
+import { Link } from 'react-router';
 
 export const RecContactCard = ({owner}) => {
 
@@ -12,7 +13,7 @@ const completeName = `${name} ${surname}`.trim() || 'Unknown Recruiter';
   return (
     <aside className='card bg-base-200 shadow-xl border border-base-100 flex-col text-sm md:text-lg lg:min-w-60'>
             <div className='card-body flex-row lg:flex-col  gap-4 items-center'>
-              <div className='avatar'>
+              <Link to={`../recruiter/${owner._id}`} className='avatar'>
                 {owner?.role?.recruiter?.logo ? (
                   <div className='avatar'>
                   <div className='size-18 sm:size-24 rounded-full'>
@@ -27,7 +28,7 @@ const completeName = `${name} ${surname}`.trim() || 'Unknown Recruiter';
                   </div>
                   
                 )}
-              </div>
+              </Link>
               <div>
                 {owner?.role?.recruiter?.companyName || owner?.role?.recruiter?.company ? (
                   <>
