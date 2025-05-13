@@ -1,68 +1,56 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router';
-import OwnProjectCard from './OwnProjectCard';
-import { StudyCard } from './StudyCard';
-import ExperienceCard from './ExperienceCard';
+import RightPanel from "./RightPanel";
+import { PiGithubLogo, PiLinkedinLogo, PiEye } from "react-icons/pi";
+
 
 function InfoDeveloper({ profileInfo }) {
-  const [activeTab, setActiveTab] = useState('experiences');
 
   if (!profileInfo) return <p>Error al cargar el profile</p>;
-  console.log("activeTab:", activeTab);
-
     return (
-    <div className="grid grid-cols-3 gap-4 mx-15 p-10">
+<div className="grid grid-cols-3 gap-4 mx-15 p-10">
         
         {/* PARTE IZQUIERDO INFO PERSONAL */}
-        <div className="grid justify-items-center bg-sky-950  p-6 rounded-md">
+        <div className="grid justify-items-center bg-neutral-80 border border-neutral-60  p-6 rounded-md">
             <img
             src="https://cdn-icons-png.flaticon.com/512/3135/3135768.png"
             className=" w-40 h-40 mb-4 rounded-full"
             alt="Perfil"
             />
-            <h1 className="text-xl font-bold text-white mt-4 mb-2">
+            <h1 className="text-xl font-bold mt-4 mb-2">
             {profileInfo.name} {profileInfo.surname}
             </h1>
-            <h3 className="text-xl text-white mb-2">{profileInfo.roles.developer.professionalPosition}</h3>
-            <span className="mb-2">{profileInfo.roles.developer.location}</span>
+            <h3 className="text-xlmb-2">{profileInfo.role.developer.professionalPosition}</h3>
+            <span className="mb-2">{profileInfo.role.developer.location}</span>
 
             {/* MEDIA */}
-            <div className="mt-4">
-                <button className=" bg-sky-500/70 rounded-full">
-                    <Link to={`${profileInfo.roles.developer.github}`}>
-                        <img
-                            src="https://pixsector.com/cache/dc0ee776/avd5c445f01ca4712be88.png"
-                            className="w-8 h-8 rounded-full"
-                            alt="Perfil"
-                        />
-                    </Link>
-                </button>
-                <button className=" bg-sky-500/70  mx-4 rounded-full">
-                    <Link to={`${profileInfo.roles.developer.linkedin}`}>
-                        <img
-                            src="https://pixsector.com/cache/dc0ee776/avd5c445f01ca4712be88.png"
-                            className="w-8 h-8 rounded-full"
-                            alt="Perfil"
-                        />
-                    </Link>
-                </button>
-                <button className=" bg-sky-500/70 rounded-full">
-                    <Link to={`${profileInfo.roles.developer.github}`}>
-                        <img
-                            src="https://pixsector.com/cache/dc0ee776/avd5c445f01ca4712be88.png"
-                            className="w-8 h-8 rounded-full"
-                            alt="Perfil"
-                        />
-                    </Link>
-                </button>
+            <div className="flex flex-wrap gap-2 mt-2 mb-2">
+                <Link 
+                    to={profileInfo.role.developer.instagram} 
+                    className="p-2 m-2 bg-primary-60 hover:bg-primary-70 rounded-full hover:shadow-lg"
+                    aria-label="Linkedin">
+                    <PiGithubLogo className="text-xl" />
+                </Link>
+                <Link 
+                    to={profileInfo.role.developer.linkedin} 
+                    className="p-2 m-2 bg-primary-60 hover:bg-primary-70 rounded-full hover:shadow-lg"
+                    aria-label="Linkedin">
+                    <PiLinkedinLogo className="text-xl" />
+                </Link>
+                <Link 
+                    to={profileInfo.role.developer.github} 
+                    className="p-2 m-2 bg-primary-60 hover:bg-primary-70 rounded-full hover:shadow-lg"
+                    aria-label="GitHub">
+                    <PiGithubLogo className="text-xl" />
+                </Link>
             </div>
 
             {/* IDIOMA */}
-            <h2 className="mt-4 mb-2">Languages</h2>
+            <h2 className="mt-2 mb-2">Languages</h2>
             
-            <div className="flex flex-wrap gap-2 mt-4 mb-4">
-                {profileInfo.roles.developer.languages.map((lang, index) => (
-                <span key={index} className="bg-sky-700 text-white px-3 py-1 rounded-full text-sm">
+            <div className="flex flex-wrap gap-2 mt-2 mb-2">
+                {profileInfo.role.developer.languages.map((lang, index) => (
+                <span key={index} className="bg-primary-60 px-3 py-1 rounded-full text-sm">
                     {lang.language} ({lang.languageLevel})
                 </span>
                 ))}
@@ -71,100 +59,32 @@ function InfoDeveloper({ profileInfo }) {
             {/* SKILLS */}
             <h2 className="mt-4 mb-2">Skills</h2>
 
-            <div className="flex flex-wrap gap-2 mt-4 mb-4">
-                {profileInfo.roles.developer.skills.map((skill, index) => (
-                <span key={index} className="bg-sky-700 text-white px-3 py-1 rounded-full text-sm">
+            <div className="flex flex-wrap justify-center gap-2 mt-4 mb-4">
+                {profileInfo.role.developer.skills.map((skill, index) => (
+                <span key={index} className="flex flex-row justify-center w-24 bg-primary-60 p-1 rounded-full text-sm">
                     {skill}
                 </span>
                 ))}
             </div>
         </div>
 
-        {/* PANEL DERECHO */}
-        <div className="col-span-2 pl-3 ">
+        
+    <div className="col-span-2">
             {/* ABOUT ME */}
-            <div className="about-me bg-sky-900 p-8 mb-4 rounded-md">
-                <h2 className='text-xl font-bold text-white mt-4 mb-4'>About Me</h2>
-                <span className='mt-4 mb-4'>
-                    {profileInfo.roles.developer.aboutme}
-                </span>
-            </div>
-
-            {/* TABS (Experiences, Projects, Studies) */}
-            <div className="bg-sky-950 rounded-t-lg p-2 mb-4 rounded-md">
-                <div className="tabs tabs-border">
-                    <input type="radio" name="my_tabs_2" className="tab" aria-label="Experiences" />
-                        <div className="tab-content border-base-300 bg-base-100 p-10">
-                            <ExperienceCard/>
-                        </div>
-
-                    <input type="radio" name="my_tabs_2" className="tab" aria-label="Projects" defaultChecked />
-                        <div className="tab-content border-base-300 bg-base-100 p-10">
-                            <OwnProjectCard/>
-                        </div>
-
-                    <input type="radio" name="my_tabs_2" className="tab" aria-label="Studies" />
-                        <div className="tab-content border-base-300 bg-base-100 p-10">
-                            <StudyCard/>
-                        </div>
-                </div>
-            </div>
-
-            {/* CONTENIDO DE LAS TABS */}
-            {/* <div className="tab-content">
-
-            </div> */}
+        <div className="about-me bg-neutral-80 border border-neutral-60 p-8 mb-4 rounded-md">
+            <h2 className='text-xl font-bold mb-4'>About Me</h2>
+            <span className='mt-4 mb-4'>
+                {profileInfo.description}
+            </span>
+        </div>
+        <div>
+        {/* PANEL DERECHO */}        
+            <RightPanel profileInfo={profileInfo} />
         </div>
     </div>
+        
+</div>
     );
 }
 
 export default InfoDeveloper;
-
-
-
-
-
-{/* <div className="tabs tabs-border">
-                <button
-                className={`tab ${activeTab === 'experiences' ? 'tab-active' : ''}`}
-                onClick={() => setActiveTab('experiences')}
-                >
-                Experiences
-                </button>
-                <button
-                className={`tab ${activeTab === 'projects' ? 'tab-active' : ''}`}
-                onClick={() => setActiveTab('projects')}
-                >
-                Projects
-                </button>
-                <button
-                className={`tab ${activeTab === 'studies' ? 'tab-active' : ''}`}
-                onClick={() => setActiveTab('studies')}
-                >
-                Studies
-                </button>
-            </div> */}
-
-
-
-
-
-
-            //             {activeTab === 'experiences' && (
-            //     <div>
-            //         <ExperienceCard/>
-            //     </div>
-            // )}
-
-            // {activeTab === 'projects' && (
-            //     <div>
-            //         <OwnProjectCard/>
-            //     </div>
-            // )}
-
-            // {activeTab === 'studies' && (
-            //     <div>
-            //         <StudyCard/>
-            //     </div>
-            // )}

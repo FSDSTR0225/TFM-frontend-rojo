@@ -3,11 +3,11 @@ import InfoDeveloper from "../components/InfoDeveloper";
 import { getProfileDev } from "../../../services/profileService";
 import { useParams } from 'react-router';
 
-
 export function ProfileDevPage() {
 
    
   const [profile, setProfile] = useState("");
+  // const [stuff, setStuff] = useState("");
   const {developerid} = useParams();
 
 
@@ -29,7 +29,7 @@ export function ProfileDevPage() {
 
   return (
       <div>
-        <InfoDeveloper profileInfo={profile}  />
+        <InfoDeveloper profileInfo={profile}  /> 
       </div>
       
 
