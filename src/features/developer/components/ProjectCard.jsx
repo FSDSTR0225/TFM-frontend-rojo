@@ -2,7 +2,7 @@ import React from 'react';
 import Badge from '../../../components/Badge';
 import { Link } from 'react-router';
 
-const ProjectCard = ({ name, surname, avatar, image, projectLink, title, badgeText, category, developerId }) => {
+const ProjectCard = ({ name, surname, avatar, image, projectId, title, badgeText, category, developerId }) => {
   return (
     <div className="h-[256px] bg-neutral-80 flex flex-col rounded-lg shadow-md relative overflow-hidden  transition-transform transform hover:scale-105 border border-neutral-70">
       
@@ -30,7 +30,6 @@ const ProjectCard = ({ name, surname, avatar, image, projectLink, title, badgeTe
       <div className="relative flex-grow overflow-hidden group">
         <img
           src={image}
-          alt={title}
           className="w-auto h-auto object-contain "
         />
       
@@ -40,7 +39,7 @@ const ProjectCard = ({ name, surname, avatar, image, projectLink, title, badgeTe
             {title}
           </div>
           <Link
-            to={`/projects/${projectLink}`}
+            to={`/projects/${projectId}`}
             className="z-40 border border-neutral-0 text-neutral-0 font-semibold py-2 px-4 rounded pointer-events-auto bg-transparent transition-colors duration-300 hover:border-neutral-90 hover:text-neutral-90"
           >
             View project
