@@ -40,6 +40,7 @@ const router = createBrowserRouter([
       { path: 'projects/:id', element: <ProjectDetailsPage /> }, 
       { path: 'profile/:developerid', element: <ProfileDevPage /> },
       { path: 'developers', element: <DevsPage /> },
+      {path: 'profile/recruiter/:id', element: <RecProfile />},
 
 
       { path: 'login', element: <Login /> },

@@ -23,6 +23,11 @@ const completeName = `${name} ${surname}`.trim() || 'Unknown Recruiter';
     navigate(`/offers/${offer._id}`);
   };
 
+//  const handleOwnerClick = (e) => {
+//   e.stopPropagation();
+//   navigate(`profile/recruiter/${offer.owner._id}`)
+//  }
+
   const daysAgo = offer?.createdAt ? getDaysSince(offer?.createdAt) : 0;
   return (
       <li
@@ -34,7 +39,7 @@ const completeName = `${name} ${surname}`.trim() || 'Unknown Recruiter';
       >
         <div className='card-body'>
         <div className="flex justify-between">
-        <div className='avatar gap-2 items-center'>
+        <Link to={`/profile/recruiter/${offer.owner._id}`} className='avatar gap-2 items-center' onClick={handleOnClick}>
             {offer.owner?.role?.recruiter?.logo ? (
               <div className='avatar'>
                 <div className='size-8 sm:size-8 rounded-full'>
@@ -52,7 +57,7 @@ const completeName = `${name} ${surname}`.trim() || 'Unknown Recruiter';
               </div>
             )}
             <p>{completeName}</p>
-          </div>
+          </Link>
           {profile?.role?.type === 'recruiter' && <MenuCard onClick={handleOnClick} id={offer._id}/>}
         </div>
           
