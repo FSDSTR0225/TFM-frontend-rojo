@@ -9,6 +9,7 @@ import { Pagination } from '../../../components/Pagination';
 
 
 
+
 export const OffersInfoPage = () => {
   const [offers, setOffers] = useState([])
   const [loading, setLoading] = useState(true)
@@ -54,7 +55,7 @@ const [currentPage, setCurrentPage] = useState(1);
           <div className="h-4 bg-base-200 rounded-lg skeleton w-4/6"></div>
         </div>
         {/* Lista de tarjetas skeleton */}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 p-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-4">
           {Array.from({ length: 6 }).map((_, idx) => (
             <div key={idx} className="p-4 border rounded-lg space-y-3 animate-pulse">
               <div className="h-4 bg-base-200 rounded-lg skeleton w-3/4"></div>

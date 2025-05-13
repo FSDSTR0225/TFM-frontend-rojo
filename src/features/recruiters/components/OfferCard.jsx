@@ -5,9 +5,12 @@ import { MdOutlineAccessTime } from "react-icons/md";
 
 import { MainRecButton } from "../../../components/MainRecButton";
 import { MenuCard } from "./MenuCard";
+import { useContext } from "react";
+import { AuthContext } from "../../../context/authContext";
 
 export const OfferCard = ({ classProps, offer, id }) => {
   const navigate = useNavigate()
+  const {profile} = useContext(AuthContext);
 
 const name = capitalize(offer.owner?.name || '');
 const surname = capitalize(offer.owner?.surname || '');
@@ -50,7 +53,7 @@ const completeName = `${name} ${surname}`.trim() || 'Unknown Recruiter';
             )}
             <p>{completeName}</p>
           </div>
-          <MenuCard onClick={handleOnClick} id={offer._id}/>
+          {profile?.role?.type === 'recruiter' && <MenuCard onClick={handleOnClick} id={offer._id}/>}
         </div>
           
 
