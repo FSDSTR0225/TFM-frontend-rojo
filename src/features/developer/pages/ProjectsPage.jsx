@@ -31,16 +31,16 @@ export const ProjectsPage = () => {
   useEffect(() => {
     const fetchProjects = async () => {
       const data = [
-        { id: 1, name: "Beli", surname: "Ochando", title: "Landing Page", category: "UX/UI", avatar: Avatar1, image: ProjectCardImageProv2, projectLink: "/project/1", badgeText: "New" },
-        { id: 2, name: "Toni", surname: "Arce", title: "App de Recetas", category: "Frontend", avatar: Avatar2, image: ProjectCardImageProv, projectLink: "/project/2", badgeText: "New" },
-        { id: 3, name: "Carlos", surname:"Daymond", title: "Clasificador de Imágenes", category: "DevOps", avatar: Avatar2, image: ProjectCardImageProv3, projectLink: "/project/3" },
-        { id: 4, name: "Jeremie", surname:"Klose", title: "Dashboard Admin", category: "Full Stack", avatar: Avatar2, image: ProjectCardImageProv4, projectLink: "/project/4" },
-        { id: 5, name: "Luisa", surname:"Pérez", title: "App de Viajes", category: "Mobile", avatar: Avatar1, image: ProjectCardImageProv, projectLink: "/project/5" },
-        { id: 6, name: "Luisa", surname:"Pérez", title: "App de Viajes", category: "Mobile", avatar: Avatar1, image: ProjectCardImageProv, projectLink: "/project/6" },
-        { id: 7, name: "Luisa", surname:"Pérez", title: "App de Viajes", category: "Mobile", avatar: Avatar1, image: ProjectCardImageProv, projectLink: "/project/7" },
-        { id: 8, name: "Luisa", surname:"Pérez", title: "App de Viajes", category: "Mobile", avatar: Avatar1, image: ProjectCardImageProv, projectLink: "/project/8" },
-        { id: 9, name: "Luisa", surname:"Pérez", title: "App de Viajes", category: "Mobile", avatar: Avatar1, image: ProjectCardImageProv, projectLink: "/project/9" },
-        { id: 10, name: "Luisa", surname:"Pérez", title: "App de Viajes", category: "Mobile", avatar: Avatar1, image: ProjectCardImageProv, projectLink: "/project/10" },
+        { id: 1, name: "Beli", surname: "Ochando", title: "Landing Page", category: "UX/UI", avatar: Avatar1, image: ProjectCardImageProv2, projectLink: "304384539458345", badgeText: "New" },
+        { id: 2, name: "Toni", surname: "Arce", title: "App de Recetas", category: "Frontend", avatar: Avatar2, image: ProjectCardImageProv, projectLink: "304384539458345", badgeText: "New" },
+        { id: 3, name: "Carlos", surname:"Daymond", title: "Clasificador de Imágenes", category: "DevOps", avatar: Avatar2, image: ProjectCardImageProv3, projectLink: "304384539458345" },
+        { id: 4, name: "Jeremie", surname:"Klose", title: "Dashboard Admin", category: "Full Stack", avatar: Avatar2, image: ProjectCardImageProv4, projectLink: "304384539458345" },
+        { id: 5, name: "Luisa", surname:"Pérez", title: "App de Viajes", category: "Mobile", avatar: Avatar1, image: ProjectCardImageProv, projectLink: "304384539458345" },
+        { id: 6, name: "Luisa", surname:"Pérez", title: "App de Viajes", category: "Mobile", avatar: Avatar1, image: ProjectCardImageProv, projectLink: "304384539458345" },
+        { id: 7, name: "Luisa", surname:"Pérez", title: "App de Viajes", category: "Mobile", avatar: Avatar1, image: ProjectCardImageProv, projectLink: "304384539458345" },
+        { id: 8, name: "Luisa", surname:"Pérez", title: "App de Viajes", category: "Mobile", avatar: Avatar1, image: ProjectCardImageProv, projectLink: "304384539458345" },
+        { id: 9, name: "Luisa", surname:"Pérez", title: "App de Viajes", category: "Mobile", avatar: Avatar1, image: ProjectCardImageProv, projectLink: "304384539458345" },
+        { id: 10, name: "Luisa", surname:"Pérez", title: "App de Viajes", category: "Mobile", avatar: Avatar1, image: ProjectCardImageProv, projectLink: "304384539458345" },
       ];
       setProjects(data);
     };
