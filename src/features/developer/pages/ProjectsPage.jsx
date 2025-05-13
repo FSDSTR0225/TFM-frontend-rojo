@@ -1,7 +1,7 @@
 // ProjectsPage.js
 import React, { useState, useEffect } from "react";
 import ProjectCard from "../components/ProjectCard";
-import Pagination from '../../../components/Pagination'
+import { Pagination }  from '../../../components/Pagination'
 import { getAllProjects } from "../../../services/projectService";
 
 const categories = [
