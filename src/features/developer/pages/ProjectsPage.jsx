@@ -1,7 +1,7 @@
 // ProjectsPage.js
 import React, { useState, useEffect } from "react";
 import ProjectCard from "../components/ProjectCard";
-import Pagination from '../../../components/Pagination'
+import {Pagination} from '../../../components/Pagination'
 
 import ProjectCardImageProv from "../../../assets/image-1.jpg";
 import ProjectCardImageProv2 from "../../../assets/image-2.jpg";

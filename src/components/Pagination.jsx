@@ -1,10 +1,10 @@
 import React from "react";
 
-const Pagination = ({ currentPage, totalPages, handlePageChange, filteredProjects }) => {
+export const Pagination = ({ currentPage, totalPages, handlePageChange, filteredProjects}) => {
   return (
     <div className="mt-4">
 
-      {filteredProjects.length > 0 && (
+      {(filteredProjects.length) > 0 && (
         <p className="text-center text-sm text-[#797979]">
           Page {currentPage} of {totalPages} total
         </p>
@@ -43,4 +43,4 @@ const Pagination = ({ currentPage, totalPages, handlePageChange, filteredProject
   );
 };
 
-export default Pagination;
+
