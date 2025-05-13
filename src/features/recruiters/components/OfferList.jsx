@@ -21,11 +21,11 @@ export const OfferList = ({ children, view = false }) => {
       </div>
 
       {viewList ? (
-        <ul className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-4'>
+        <ul className='grid grid-cols-1 md:grid-cols-2 gap-8 mt-4'>
           {children}
         </ul>
       ) : (
-        <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mt-4'>
+        <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 mt-4'>
           {children}
         </div>
       )}

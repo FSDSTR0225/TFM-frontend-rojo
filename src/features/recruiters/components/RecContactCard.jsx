@@ -5,7 +5,9 @@ import { MdOutlineMailOutline } from 'react-icons/md'
 
 export const RecContactCard = ({owner}) => {
 
-  const completeName = `${capitalize(owner?.name)} ${capitalize(owner?.surname)}`
+  const name = capitalize(owner?.name || '');
+const surname = capitalize(owner?.surname || '');
+const completeName = `${name} ${surname}`.trim() || 'Unknown Recruiter';
 
   return (
     <aside className='card bg-base-200 shadow-xl border border-base-100 flex-col text-sm md:text-lg lg:min-w-60'>
@@ -27,27 +29,27 @@ export const RecContactCard = ({owner}) => {
                 )}
               </div>
               <div>
-                {owner.role.recruiter.companyName ? (
+                {owner?.role?.recruiter?.companyName || owner?.role?.recruiter?.company ? (
                   <>
                     <p className='font-bold text-md md:text-xl'>{completeName}</p>
-                    <p>{owner.role.recruiter.companyName}</p>
+                    <p>{owner?.role?.recruiter?.companyName || owner?.role?.recruiter?.company}</p>
                   </>
                 ) : (
-                  <p>{owner.name}</p>
+                  <p>{completeName}</p>
                 )}
-                {owner.role.recruiter.website &&(<a
+                {owner?.role?.recruiter?.website &&(<a
                   href='goole.com'
                   className='flex items-center gap-2'
                 >
                   <FiExternalLink />
-                  {owner.role.recruiter.website}
+                  {owner?.role?.recruiter?.website}
                 </a>)}
                 {owner?.role?.recruiter?.contact[0]?.email &&(<a
                   href='goole.com'
                   className='flex items-center gap-2'
                 >
                   <MdOutlineMailOutline />
-                  {owner.role.recruiter.contact[0].email}
+                  {owner?.role?.recruiter?.contact[0].email}
                 </a>)}
                 <button className="btn w-full btn-sm lg:btn-md mt-2 lg:mt-6">Contact</button>
               </div>

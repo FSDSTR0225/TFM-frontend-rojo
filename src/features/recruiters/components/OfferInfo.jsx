@@ -5,7 +5,7 @@ import { TfiLocationPin } from 'react-icons/tfi';
 export const OfferInfo = ({offer}) => {
 
   return (
-    <article className=' card bg-base-200 shadow-xl border border-base-100 flex-col  w-full '>
+    <article  className=' card bg-base-200 shadow-xl border border-base-100 flex-col  w-full '>
             <div className='card-body gap-6'>
               <EditButton classProps={"self-end"} />
               <h2 className='text-xl md:text-2xl  font-bold m'>{offer.position}</h2>
@@ -18,8 +18,8 @@ export const OfferInfo = ({offer}) => {
               <p className=''>{offer.description}</p>
               <h3>Necessary Skills:</h3>
               <div className='flex gap-5 flex-wrap'>
-                {offer.skills.map((skill) => {
-                  return <span className='badge badge-soft badge-accent"'>{skill}</span>;
+                {offer.skills.map((skill, index) => {
+                  return <span key={index} className='badge badge-soft badge-accent"'>{skill}</span>;
                 })}
               </div>
               {offer.language && (

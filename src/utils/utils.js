@@ -23,5 +23,14 @@ export const getDaysSince = (dateString) => {
   //<span>{getInitials(offer.owner?.name)}</span>
 
  export const capitalize = (str) => {
-    return str ? str.charAt(0).toUpperCase() + str.slice(1) : '';
-  }
+  return str
+    ? str
+        .toLowerCase()
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ')
+    : '';
+}
+// const name = capitalize(owner?.name || '');
+// const surname = capitalize(owner?.surname || '');
+// const completeName = `${name} ${surname}`.trim() || 'Unknown Recruiter';
