@@ -1,15 +1,19 @@
 
 import { EditButton } from '../../../components/EditButton';
 import { TfiLocationPin } from 'react-icons/tfi';
+import { MainRecButton } from '../../../components/MainRecButton';
 
 export const OfferInfo = ({offer}) => {
 
   return (
-    <article  className=' card bg-base-200 shadow-xl border border-base-100 flex-col  w-full '>
+    <article  className=' card bg-neutral-80 shadow-xl border border-neutral-70 flex-col  w-full '>
             <div className='card-body gap-6'>
               <EditButton classProps={"self-end"} />
+              <div className='space-y-4'>
               <h2 className='text-xl md:text-2xl  font-bold m'>{offer.position}</h2>
-              <p>{offer.role}</p>
+              <p className='text-neutral-10'>{offer.role}</p>
+              </div>
+              
               <div className='flex items-center gap-4 m-4'>
                 <TfiLocationPin />
                 {offer.location}
@@ -32,9 +36,9 @@ export const OfferInfo = ({offer}) => {
                   <p>Salary: {offer.salary}</p>
                 </>
               )}
-              <button className='btn btn-outline bg-green-600 hover:bg-green-700 text-base-300'>
+              <MainRecButton > 
                 Apply Now
-              </button>
+              </MainRecButton>
             </div>
           </article>
   )

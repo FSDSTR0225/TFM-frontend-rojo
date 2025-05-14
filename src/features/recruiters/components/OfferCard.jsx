@@ -12,6 +12,7 @@ export const OfferCard = ({ classProps, offer, id }) => {
   const navigate = useNavigate()
   const {profile} = useContext(AuthContext);
 
+  const isOwner = profile?._id === offer?.owner?._id
 const name = capitalize(offer.owner?.name || '');
 const surname = capitalize(offer.owner?.surname || '');
 const completeName = `${name} ${surname}`.trim() || 'Unknown Recruiter';
@@ -53,7 +54,7 @@ const completeName = `${name} ${surname}`.trim() || 'Unknown Recruiter';
             )}
             <p>{completeName}</p>
           </div>
-          {profile?.role?.type === 'recruiter' && <MenuCard onClick={handleOnClick} id={offer._id}/>}
+          {(isOwner && profile?.role?.type === 'recruiter') && <MenuCard onClick={handleOnClick} id={offer._id}/>}
         </div>
           
 

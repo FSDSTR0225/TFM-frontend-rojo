@@ -7,6 +7,8 @@ import { getOffersbyOwner } from '../../../services/offersServices';
 import { SectionContainer } from '../../../components/SectionContainer';
 import { Pagination } from '../../../components/Pagination';
 import { getRecruiterById } from '../../../services/profileService';
+import { PiBuildingOffice, PiEnvelope, PiGlobe, PiMapPinArea, PiPhone } from 'react-icons/pi';
+import { RecProfileCard } from '../components/RecProfileCard';
 
 export const RecProfile = () => {
   const { profile, token } = useContext(AuthContext) || {};
@@ -55,32 +57,8 @@ export const RecProfile = () => {
     <SectionContainer >
     
         <div className='flex flex-col md:flex-row md:justify-between gap-8 items-start'>
-        <div className="card bg-base-200 shadow-xl border border-base-100 flex-col text-sm md:text-lg min-w-50">
-        {/* Card perfil */}
-        <div className="card-body bg-base-200">
-          <div className="flex  flex-col items-center">
-            <div className="w-20 h-20 bg-gray-600 rounded-full mb-4" />
-            <h2 className="text-lg font-semibold">{recruiter?.name} {recruiter?.surname}</h2>
-            <p className="text-sm text-gray-400 mb-4">{recruiter?.role.type}</p>
-          </div>
-          <ul className="text-sm text-gray-300 space-y-1 mb-4">
-            <li>+ Nombre Empresa</li>
-            <li>+ Ubicación empresa</li>
-            <li>+ Email recruiter</li>
-            <li>+ Phone</li>
-            <li>+ Url empresa</li>
-          </ul>
-          <div>
-            <h3 className="text-white font-semibold mb-1">Sobre la empresa</h3>
-            <p className="text-sm text-gray-400">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce quis sapien sed quam dignissim efficitur...
-            </p>
-          </div>
-        </div>
-
-        {/* Sección ofertas */}
-
-      </div>
+        <RecProfileCard recruiter={recruiter} />
+        
       <div className="w-full">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-semibold">Mis ofertas de empleo</h2>
