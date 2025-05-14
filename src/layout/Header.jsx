@@ -1,71 +1,78 @@
-import { Link} from "react-router";
+import { Link } from "react-router";
 import { AuthContext } from "../context/authContext";
 import { useContext } from "react";
-
+import { capitalize, getInitials } from "../utils/utils";
 
 export const Header = () => {
   const { profile, logout } = useContext(AuthContext);
- 
+
+  const name = capitalize(profile?.name || "");
+  const surname = capitalize(profile?.surname || "");
+  const completeName = `${name} ${surname}`.trim() || "Unknown Recruiter";
+
   return (
-    <header className="bg-neutral-80 p-2 drawer border-b-1 border-neutral-70">
+    <header className='bg-neutral-80 p-2 drawer border-b-1 border-neutral-70'>
       <input
-        id="my-drawer-3"
-        type="checkbox"
-        className="drawer-toggle"
+        id='my-drawer-3'
+        type='checkbox'
+        className='drawer-toggle'
       />
-      <div className="drawer-content flex flex-row">
+      <div className='drawer-content flex flex-row'>
         {/* Navbar */}
-        <div className="navbar w-full">
-          <div className="flex-none sm:hidden">
+        <div className='navbar w-full'>
+          <div className='flex-none sm:hidden'>
             <label
-              htmlFor="my-drawer-3"
-              aria-label="open sidebar"
-              className="btn btn-square btn-ghost"
+              htmlFor='my-drawer-3'
+              aria-label='open sidebar'
+              className='btn btn-square btn-ghost'
             >
               <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                className="inline-block h-6 w-6 stroke-current"
+                xmlns='http://www.w3.org/2000/svg'
+                fill='none'
+                viewBox='0 0 24 24'
+                className='inline-block h-6 w-6 stroke-current'
               >
                 <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M4 6h16M4 12h16M4 18h16"
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  strokeWidth='2'
+                  d='M4 6h16M4 12h16M4 18h16'
                 ></path>
               </svg>
             </label>
           </div>
-          <Link to={"/"} className="mr-4 pr-4 flex items-center">
+          <Link
+            to={"/"}
+            className='mr-4 pr-4 flex items-center'
+          >
             <img
-              src="/src/assets/CodepplyLogo.svg"
-              alt="Codepply Logo"
-              className="h-6 ml-3"
+              src='/src/assets/CodepplyLogo.svg'
+              alt='Codepply Logo'
+              className='h-6 ml-3'
             />
           </Link>
-          <div className="hidden flex-none sm:flex">
-            <ul className="menu-md menu-horizontal">
+          <div className='hidden flex-none sm:flex'>
+            <ul className='menu-md menu-horizontal'>
               {/* Navbar menu content here */}
 
               {/* Button for Developers */}
               <li>
                 <Link
-                  to="/developers"
-                  className="btn text-neutral-0 bg-neutral-90 w-28 mx-2 hover:bg-primary-60 hover:text-neutral-0 focus:bg-neutral-60  focus:text-neutral-0"
+                  to='/developers'
+                  className='btn text-neutral-0 bg-neutral-90 w-28 mx-2 hover:bg-primary-60 hover:text-neutral-0 focus:bg-neutral-60  focus:text-neutral-0'
                 >
                   <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
+                    xmlns='http://www.w3.org/2000/svg'
+                    className='h-5 w-5'
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    stroke='currentColor'
                   >
                     <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M3 7h18M3 12h18m-6 5h6"
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      strokeWidth='2'
+                      d='M3 7h18M3 12h18m-6 5h6'
                     />
                   </svg>
                   Developers
@@ -75,21 +82,21 @@ export const Header = () => {
               {/* Button for Projects */}
               <li>
                 <Link
-                  to="/projects"
-                  className="btn text-neutral-0 bg-neutral-90 w-28 mx-2 hover:bg-primary-60 hover:text-neutral-0 focus:bg-neutral-60  focus:text-neutral-0"
+                  to='/projects'
+                  className='btn text-neutral-0 bg-neutral-90 w-28 mx-2 hover:bg-primary-60 hover:text-neutral-0 focus:bg-neutral-60  focus:text-neutral-0'
                 >
                   <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
+                    xmlns='http://www.w3.org/2000/svg'
+                    className='h-5 w-5'
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    stroke='currentColor'
                   >
                     <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M3 7h18M3 12h18m-6 5h6"
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      strokeWidth='2'
+                      d='M3 7h18M3 12h18m-6 5h6'
                     />
                   </svg>
                   Projects
@@ -97,21 +104,21 @@ export const Header = () => {
               </li>
               <li>
                 <Link
-                  to="/offers"
-                  className="btn text-neutral-0 bg-neutral-90 w-28 mx-2 hover:bg-secondary-60 hover:text-neutral-0 focus:bg-neutral-60 focus:text-neutral-0"
+                  to='/offers'
+                  className='btn text-neutral-0 bg-neutral-90 w-28 mx-2 hover:bg-secondary-60 hover:text-neutral-0 focus:bg-neutral-60 focus:text-neutral-0'
                 >
                   <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
+                    xmlns='http://www.w3.org/2000/svg'
+                    className='h-5 w-5'
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    stroke='currentColor'
                   >
                     <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M4 6h16M4 10h16m-7 4h7"
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      strokeWidth='2'
+                      d='M4 6h16M4 10h16m-7 4h7'
                     />
                   </svg>
                   Jobs
@@ -121,103 +128,106 @@ export const Header = () => {
           </div>
         </div>
 
-        <div className="flex gap-2 items-center">
+        <div className='flex gap-2 items-center'>
           {/* Auth menu content here */}
           {!profile ? (
-            <div className="flex gap-2 items-center">
+            <div className='flex gap-2 items-center'>
               <Link
                 to={"/login"}
-                className="btn rounded-full text-neutral-0 bg-primary-60 w-20 mx-2 hover:bg-primary-70 hover:text-neutral-0"
+                className='btn rounded-full text-neutral-0 bg-primary-60 w-20 mx-2 hover:bg-primary-70 hover:text-neutral-0'
               >
                 Login
               </Link>
               <Link
                 to={"/register"}
-                className="btn rounded-full text-neutral-0 bg-neutral-90 border:-2 border-neutral-60 w-22  hover:bg-neutral-60 hover:text-neutral-0"
+                className='btn rounded-full text-neutral-0 bg-neutral-90 border:-2 border-neutral-60 w-22  hover:bg-neutral-60 hover:text-neutral-0'
               >
                 Register
               </Link>
             </div>
           ) : (
-            <div className="flex items-center justify-end gap-4 p-2 pr-6 text-white">
-              {/* Contenedor foto + nombre */}
-              <div className="flex items-center">
-                {profile.imageUrl && (
-                  <div className="w-10 h-10 rounded-full overflow-hidden border border-gray-600">
+            <div className='flex items-center gap-4  pr-6  text-white'>
+            <div className="hidden  lg:flex items-center gap-4 min-w-40">
+              {profile?.avatar ? (
+                <div className='avatar'>
+                  <div className='size-10 rounded-full'>
                     <img
-                      src={profile.imageUrl}
-                      alt="Foto de perfil"
-                      className="w-full h-full object-cover"
+                      src={profile?.avatar}
+                      alt='Logo'
                     />
                   </div>
-                )}
-                <div className="flex flex-col">
-                  <p className="font-semibold text-sm leading-none">
-                    {profile.name} {profile.surname}
-                  </p>
-                  <span className="text-xs text-gray-400">{profile.role.type}</span>
                 </div>
+              ) : (
+                <div className='avatar avatar-placeholder'>
+                  <div className='bg-neutral text-neutral-content rounded-full size-20'>
+                    <span className=' font-bold'>{getInitials(completeName)}</span>
+                  </div>
+                </div>
+              )}
+              <div className="felx flex-col -space-y-1">
+                <p className='text-sm'>{completeName}</p>
+                <p className="text-xs text-neutral-10 ">{profile.role.type}</p>
+              </div>
               </div>
 
               {/* Botones */}
-              <div className="flex gap-2">
+              <div className='flex gap-2'>
                 {profile.role.type === "recruiter" ? (
                   <Link
                     to={`recruiter/${profile._id}`}
-                    className="btn btn-sm rounded-full text-white bg-green-600 hover:bg-green-700"
+                    className='btn btn-sm rounded-full text-white bg-green-600 hover:bg-green-700'
                   >
                     Ver Perfil
                   </Link>
                 ) : (
                   <Link
                     to={`recruiter/${profile._id}`}
-                    className="btn btn-sm rounded-full text-white bg-green-600 hover:bg-green-700"
+                    className='btn btn-sm rounded-full text-white bg-green-600 hover:bg-green-700'
                   >
                     Ver Perfil
                   </Link>
                 )}
                 <button
                   onClick={() => {
-    logout();
-  }}
-                  className="btn btn-sm btn-outline border-red-500 text-red-400 hover:bg-red-600 hover:text-white hover:border-red-600 transition"
+                    logout();
+                  }}
+                  className='btn btn-sm btn-outline border-red-500 text-red-400 hover:bg-red-600 hover:text-white hover:border-red-600 transition'
                 >
                   Logout
                 </button>
               </div>
             </div>
-
           )}
         </div>
       </div>
 
-      <div className="drawer-side">
+      <div className='drawer-side'>
         <label
-          htmlFor="my-drawer-3"
-          aria-label="close sidebar"
-          className="drawer-overlay"
+          htmlFor='my-drawer-3'
+          aria-label='close sidebar'
+          className='drawer-overlay'
         ></label>
-        <ul className="menu bg-neutral-70 min-h-full w-80 p-4">
+        <ul className='menu bg-neutral-70 min-h-full w-80 p-4'>
           {/* Sidebar content here */}
 
           {/* Button for Developers */}
           <li>
             <Link
-              to="/developers"
-              className="btn text-neutral-0 bg-neutral-90 m-2 hover:bg-primary-60"
+              to='/developers'
+              className='btn text-neutral-0 bg-neutral-90 m-2 hover:bg-primary-60'
             >
               <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
+                xmlns='http://www.w3.org/2000/svg'
+                className='h-5 w-5'
+                fill='none'
+                viewBox='0 0 24 24'
+                stroke='currentColor'
               >
                 <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M3 7h18M3 12h18m-6 5h6"
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  strokeWidth='2'
+                  d='M3 7h18M3 12h18m-6 5h6'
                 />
               </svg>
               Developers
@@ -227,21 +237,21 @@ export const Header = () => {
           {/* Button for Projects */}
           <li>
             <Link
-              to="/projects"
-              className="btn text-neutral-0 bg-neutral-90 m-2 hover:bg-neutral-40"
+              to='/projects'
+              className='btn text-neutral-0 bg-neutral-90 m-2 hover:bg-neutral-40'
             >
               <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
+                xmlns='http://www.w3.org/2000/svg'
+                className='h-5 w-5'
+                fill='none'
+                viewBox='0 0 24 24'
+                stroke='currentColor'
               >
                 <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M3 12h18m-6 6l6-6-6-6"
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  strokeWidth='2'
+                  d='M3 12h18m-6 6l6-6-6-6'
                 />
               </svg>
               Home
@@ -249,21 +259,21 @@ export const Header = () => {
           </li>
           <li>
             <Link
-              to="/portfolios"
-              className="btn text-neutral-0 bg-neutral-90 m-2 hover:bg-primary-60"
+              to='/portfolios'
+              className='btn text-neutral-0 bg-neutral-90 m-2 hover:bg-primary-60'
             >
               <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
+                xmlns='http://www.w3.org/2000/svg'
+                className='h-5 w-5'
+                fill='none'
+                viewBox='0 0 24 24'
+                stroke='currentColor'
               >
                 <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M3 7h18M3 12h18m-6 5h6"
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  strokeWidth='2'
+                  d='M3 7h18M3 12h18m-6 5h6'
                 />
               </svg>
               Projects
@@ -271,21 +281,21 @@ export const Header = () => {
           </li>
           <li>
             <Link
-              to="/offers"
-              className="btn text-neutral-0 bg-neutral-90 m-2 hover:bg-secondary-60"
+              to='/offers'
+              className='btn text-neutral-0 bg-neutral-90 m-2 hover:bg-secondary-60'
             >
               <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
+                xmlns='http://www.w3.org/2000/svg'
+                className='h-5 w-5'
+                fill='none'
+                viewBox='0 0 24 24'
+                stroke='currentColor'
               >
                 <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M4 6h16M4 10h16m-7 4h7"
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  strokeWidth='2'
+                  d='M4 6h16M4 10h16m-7 4h7'
                 />
               </svg>
               Jobs

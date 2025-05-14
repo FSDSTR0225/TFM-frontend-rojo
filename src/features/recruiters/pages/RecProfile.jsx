@@ -7,14 +7,16 @@ import { getOffersbyOwner } from '../../../services/offersServices';
 import { SectionContainer } from '../../../components/SectionContainer';
 import { Pagination } from '../../../components/Pagination';
 import { getRecruiterById } from '../../../services/profileService';
-import { PiBuildingOffice, PiEnvelope, PiGlobe, PiMapPinArea, PiPhone } from 'react-icons/pi';
+
 import { RecProfileCard } from '../components/RecProfileCard';
+import { ModalDelete } from '../components/ModalDelete';
 
 export const RecProfile = () => {
   const { profile, token } = useContext(AuthContext) || {};
   const { id } = useParams(); // ID del reclutador desde la URL
   const [offers, setOffers] = useState([]);
   const [recruiter, setRecruiter] = useState(null);
+  const [isOpenModalDelete, setIsOpenModalDelete] = useState(false)
   
 
   const isOwner = profile?._id === id;
@@ -62,12 +64,13 @@ export const RecProfile = () => {
       <div className="w-full">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-semibold">Mis ofertas de empleo</h2>
-            <button onClick={() => document.getElementById('my_modal_1').showModal()} className="bg-green-600 text-black px-4 py-2 rounded hover:bg-green-700 transition cursor-pointer text-sm">
+            { (isOwner && profile?.role?.type === 'recruiter') &&(<><button onClick={() => document.getElementById('my_modal_1').showModal()} className="bg-green-600 text-black px-4 py-2 rounded hover:bg-green-700 transition cursor-pointer text-sm">
               + Create new offer
             </button>
             <dialog id="my_modal_1" className="modal">
               <OfferModal token={token} />
             </dialog>
+            </>)}
           </div>
         <div>
         <div className=" grid lg:grid-cols-2 gap-8 py-10">
@@ -75,7 +78,7 @@ export const RecProfile = () => {
                           
                           return (
             
-                          <OfferCard offer={offer} owner={offer.owner} key={offer._id}  />
+                          <OfferCard offer={offer} owner={offer.owner} setIsOpenModalDelete={setIsOpenModalDelete} isOpenModalDelete={isOpenModalDelete} key={offer._id}  />
             
                         )})}
                         
@@ -90,7 +93,9 @@ export const RecProfile = () => {
                             />
           </div>
           
-        </div>
+        </div> 
+         {isOpenModalDelete &&<ModalDelete isOpen={isOpenModalDelete} setIsOpen={setIsOpenModalDelete} />}
+        
         </div>
               
     </SectionContainer>
