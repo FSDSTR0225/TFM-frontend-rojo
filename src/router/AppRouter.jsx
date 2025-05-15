@@ -40,7 +40,7 @@ const router = createBrowserRouter([
       { path: 'projects/:id', element: <ProjectDetailsPage /> }, 
       { path: 'profile/:developerid', element: <ProfileDevPage /> },
       { path: 'developers', element: <DevsPage /> },
-
+      {path: 'recruiter/:id', element: <RecProfile />},
 
       { path: 'login', element: <Login /> },
       { path: 'register', element: <Register /> },
@@ -58,6 +58,7 @@ const router = createBrowserRouter([
           { path: 'projects/new', element: <NewProjectPage /> },
           { path: 'projects/:projectId/edit', element: <EditProjectDetailsPage />},
           { path: 'developers/:developerid/edit', element: <InfoEditDevPage /> },
+          {path: 'profile', element: <RecProfile />}
         ]
       },
 
@@ -91,6 +92,3 @@ const router = createBrowserRouter([
 export default function AppRouter() {
   return <RouterProvider router={router} />;
 }
-
-
-

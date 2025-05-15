@@ -1,64 +1,103 @@
 import React, { useContext, useEffect } from 'react'
+import { OfferCard } from '../components/OfferCard'
 import { OfferModal } from '../components/OfferModal'
 import { AuthContext } from '../../../context/authContext';
-import { useNavigate } from "react-router";
+import {  useParams } from "react-router";
+import { getOffersbyOwner } from '../../../services/offersServices';
+import { SectionContainer } from '../../../components/SectionContainer';
+import { Pagination } from '../../../components/Pagination';
+import { getRecruiterById } from '../../../services/profileService';
+
+import { RecProfileCard } from '../components/RecProfileCard';
+import { ModalDelete } from '../components/ModalDelete';
+
 export const RecProfile = () => {
-  const { profile, token } = useContext(AuthContext);
-  const navigate = useNavigate();
+  const { profile, token } = useContext(AuthContext) || {};
+  const { id } = useParams(); // ID del reclutador desde la URL
+  const [offers, setOffers] = useState([]);
+  const [recruiter, setRecruiter] = useState(null);
+  const [isOpenModalDelete, setIsOpenModalDelete] = useState(false)
+  
+
+  const isOwner = profile?._id === id;
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+
+  const totalPages = Math.ceil(offers.length / 4);
+  const startIndex = (currentPage - 1) * 4;
+  const currentOffers= offers.slice(startIndex, startIndex + 4);
+
+  const handlePageChange = (pageNum) => {
+    if (pageNum === currentPage) return;
+    setCurrentPage(pageNum); // Primero actualizamos la página     // Luego activamos el loading
+  };
+
 
   useEffect(() => {
-    if (!token) {
-      navigate('/login');
-    }
-  }, [token]);
+    const fetchData = async () => {
+      try {
+        // Obtener datos del reclutador
+        const recruiterData = await getRecruiterById(id);
+        setRecruiter(recruiterData);
+  
+        // Obtener ofertas según si el usuario es el dueño
+        const offersData = await getOffersbyOwner(id) 
+          
+  
+        setOffers(offersData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+  
+    fetchData();
+  }, [id, isOwner]);
+
 
   return (
-    <div className="min-h-screen text-white px-4 py-8">
-      {!profile ? (
-        <p className="text-white text-center mt-10">Cargando perfil...</p>
-      ):(
-              <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-8 justify-center items-start">
-        {/* Card perfil */}
-        <div className="w-full lg:w-1/3 bg-[#161b22] rounded-xl p-6 shadow-md min-h-[575px]">
-          <div className="flex flex-col items-center text-center">
-            <div className="w-20 h-20 bg-gray-600 rounded-full mb-4" />
-            <h2 className="text-lg font-semibold">{profile.name} {profile.surname}</h2>
-            <p className="text-sm text-gray-400 mb-4">{profile.role.type}</p>
-          </div>
-          <ul className="text-sm text-gray-300 space-y-1 mb-4">
-            <li>+ Nombre Empresa</li>
-            <li>+ Ubicación empresa</li>
-            <li>+ Email recruiter</li>
-            <li>+ Phone</li>
-            <li>+ Url empresa</li>
-          </ul>
-          <div>
-            <h3 className="text-white font-semibold mb-1">Sobre la empresa</h3>
-            <p className="text-sm text-gray-400">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce quis sapien sed quam dignissim efficitur...
-            </p>
-          </div>
-        </div>
-
-        {/* Sección ofertas */}
-        <div className="w-full flex-1">
+    <SectionContainer >
+    
+        <div className='flex flex-col md:flex-row md:justify-between gap-8 items-start'>
+        <RecProfileCard recruiter={recruiter} />
+        
+      <div className="w-full">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-semibold">Mis ofertas de empleo</h2>
-            <button onClick={() => document.getElementById('my_modal_1').showModal()} className="bg-green-600 text-black px-4 py-2 rounded hover:bg-green-700 transition cursor-pointer text-sm">
+            { (isOwner && profile?.role?.type === 'recruiter') &&(<><button onClick={() => document.getElementById('my_modal_1').showModal()} className="bg-green-600 text-black px-4 py-2 rounded hover:bg-green-700 transition cursor-pointer text-sm">
               + Create new offer
             </button>
             <dialog id="my_modal_1" className="modal">
               <OfferModal token={token} />
             </dialog>
+            </>)}
           </div>
-
-          <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3 auto-rows-fr">
-            {/* <OfferCard/> */}
+        <div>
+        <div className=" grid lg:grid-cols-2 gap-8 py-10">
+                        {offers?.map((offer)=>{ 
+                          
+                          return (
+            
+                          <OfferCard offer={offer} owner={offer.owner} setIsOpenModalDelete={setIsOpenModalDelete} isOpenModalDelete={isOpenModalDelete} key={offer._id}  />
+            
+                        )})}
+                        
+                        
+            
           </div>
+          <Pagination
+                              currentPage={currentPage}
+                              totalPages={totalPages}
+                              handlePageChange={handlePageChange}
+                              filteredProjects={currentOffers}
+                            />
+          </div>
+          
+        </div> 
+         {isOpenModalDelete &&<ModalDelete isOpen={isOpenModalDelete} setIsOpen={setIsOpenModalDelete} />}
+        
         </div>
-      </div>
-      )
-      }
-    </div>
+              
+    </SectionContainer>
   );
 };

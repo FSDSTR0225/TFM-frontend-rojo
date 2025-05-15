@@ -5,6 +5,9 @@ import { useEffect } from 'react'
 import { OfferCard } from '../components/OfferCard';
 import { SectionContainer } from '../../../components/SectionContainer';
 import {OfferList} from '../components/OfferList'
+import { Pagination } from '../../../components/Pagination';
+import { ModalDelete } from '../components/ModalDelete';
+
 
 
 
@@ -12,6 +15,21 @@ export const OffersInfoPage = () => {
   const [offers, setOffers] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+const [currentPage, setCurrentPage] = useState(1);
+const [isOpenModalDelete, setIsOpenModalDelete] = useState(false)
+
+  const totalPages = Math.ceil(offers.length / 6);
+  const startIndex = (currentPage - 1) * 6;
+  const currentOffers= offers.slice(startIndex, startIndex + 6);
+
+  const handlePageChange = (pageNum) => {
+    if (pageNum === currentPage) return;
+    setCurrentPage(pageNum); // Primero actualizamos la página
+    setLoading(true);        // Luego activamos el loading
+    setTimeout(() => {
+      setLoading(false);     // Después de un pequeño retraso, desactivamos el loading
+    }, 500);
+  };
 
 
   useEffect(()=>{
@@ -38,7 +56,7 @@ export const OffersInfoPage = () => {
           <div className="h-4 bg-base-200 rounded-lg skeleton w-4/6"></div>
         </div>
         {/* Lista de tarjetas skeleton */}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 p-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-4">
           {Array.from({ length: 6 }).map((_, idx) => (
             <div key={idx} className="p-4 border rounded-lg space-y-3 animate-pulse">
               <div className="h-4 bg-base-200 rounded-lg skeleton w-3/4"></div>
@@ -60,14 +78,23 @@ export const OffersInfoPage = () => {
         <h2 className='text-3xl font-bold text-neutral-0'>Your Next Tech Career Starts Here</h2>
         <p className='text-neutral-10 text-lg '>Discover job opportunities for developers, designers, and engineers in fast-growing tech fields.</p>
          <OfferList view={true}>
-            {offers?.map((offer)=>{ 
+            {currentOffers?.map((offer)=>{ 
               
               return (
 
-              <OfferCard offer={offer} owner={offer.owner} key={offer._id}  />
+              <OfferCard offer={offer} owner={offer.owner} key={offer._id} setIsOpenModalDelete={setIsOpenModalDelete} isOpenModalDelete={isOpenModalDelete}   />
 
             )})}
+            
+            
          </OfferList>
+         {isOpenModalDelete &&<ModalDelete isOpen={isOpenModalDelete} setIsOpen={setIsOpenModalDelete} />}
+            <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    handlePageChange={handlePageChange}
+                    filteredProjects={offers}
+                  />
     </SectionContainer>
   )
 }
