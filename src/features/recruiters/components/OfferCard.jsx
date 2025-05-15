@@ -31,6 +31,11 @@ export const OfferCard = ({ classProps, offer, id, setIsOpenModalDelete, isOpenM
     navigate(`/offers/${offer._id}`);
   };
 
+//  const handleOwnerClick = (e) => {
+//   e.stopPropagation();
+//   navigate(`profile/recruiter/${offer.owner._id}`)
+//  }
+
   const daysAgo = offer?.createdAt ? getDaysSince(offer?.createdAt) : 0;
   return (
     <li
