@@ -7,6 +7,7 @@ import { MainRecButton } from "../../../components/MainRecButton";
 import { MenuCard } from "./MenuCard";
 import { useContext } from "react";
 import { AuthContext } from "../../../context/authContext";
+import { PiMapPinArea } from "react-icons/pi";
 
 
 export const OfferCard = ({ classProps, offer, id, setIsOpenModalDelete, isOpenModalDelete }) => {
@@ -46,7 +47,7 @@ export const OfferCard = ({ classProps, offer, id, setIsOpenModalDelete, isOpenM
       } card border bg-neutral-80 border-neutral-70 cursor-pointer max-h-80 shadow-xl hover:bg-neutral-90 transition-transform transform hover:scale-105 `}
     >
       <div className='card-body'>
-        <div className='flex justify-between'>
+        <div className='flex justify-between items-center'>
           <div className='avatar gap-2 items-center'>
             {offer.owner?.role?.recruiter?.logo ? (
               <div className='avatar'>
@@ -82,7 +83,7 @@ export const OfferCard = ({ classProps, offer, id, setIsOpenModalDelete, isOpenM
         </div>
         <div className='flex gap-4'>
           <div className='flex items-center gap-2'>
-            <TfiLocationPin />
+            <PiMapPinArea  className="size-4"/>
             {offer.location}
           </div>
           <div className='badge text-neutral-0 bg-neutral-60'>{offer?.contractType}</div>
