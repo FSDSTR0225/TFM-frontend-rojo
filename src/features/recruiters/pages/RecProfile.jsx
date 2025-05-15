@@ -12,16 +12,18 @@ import { RecProfileCard } from '../components/RecProfileCard';
 import { ModalDelete } from '../components/ModalDelete';
 
 export const RecProfile = () => {
-  const { profile, token } = useContext(AuthContext) || {};
-  const { id } = useParams(); // ID del reclutador desde la URL
   const [offers, setOffers] = useState([]);
-  const [recruiter, setRecruiter] = useState(null);
   const [isOpenModalDelete, setIsOpenModalDelete] = useState(false)
+  const [recruiter, setRecruiter] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  
+  const { profile, token } = useContext(AuthContext) || {};
+  
+  const { id } = useParams(); // ID del reclutador desde la URL
   
 
   const isOwner = profile?._id === id;
 
-  const [currentPage, setCurrentPage] = useState(1);
 
 
   const totalPages = Math.ceil(offers.length / 4);
@@ -30,7 +32,7 @@ export const RecProfile = () => {
 
   const handlePageChange = (pageNum) => {
     if (pageNum === currentPage) return;
-    setCurrentPage(pageNum); // Primero actualizamos la página     // Luego activamos el loading
+    setCurrentPage(pageNum); // Primero actualizamos la página 
   };
 
 
@@ -74,7 +76,7 @@ export const RecProfile = () => {
           </div>
         <div>
         <div className=" grid lg:grid-cols-2 gap-8 py-10">
-                        {offers?.map((offer)=>{ 
+                        {currentOffers?.map((offer)=>{ 
                           
                           return (
             
@@ -89,7 +91,7 @@ export const RecProfile = () => {
                               currentPage={currentPage}
                               totalPages={totalPages}
                               handlePageChange={handlePageChange}
-                              filteredProjects={currentOffers}
+                              filteredProjects={offers}
                             />
           </div>
           
