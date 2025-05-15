@@ -12,7 +12,7 @@ const surname = capitalize(owner?.surname || '');
 const completeName = `${name} ${surname}`.trim() || 'Unknown Recruiter';
 
   return (
-    <aside className='card bg-neutral-80 shadow-xl border border-neutral-70 flex-col text-sm md:text-lg lg:min-w-80'>
+    <aside className='card bg-neutral-80 shadow-xl border border-neutral-70 flex-col text-sm md:text-lg lg:min-w-60'>
             <div className='card-body flex-row lg:flex-col  gap-4 items-center'>
               <Link to={`../recruiter/${owner._id}`} className='avatar'>
                 {owner?.role?.recruiter?.logo ? (

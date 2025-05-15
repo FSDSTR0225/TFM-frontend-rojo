@@ -1,10 +1,10 @@
 
-import React, { useContext, useEffect, useState } from 'react'
-import { set, useForm } from 'react-hook-form';
+import React, { useContext, useEffect } from 'react'
+import { useForm } from 'react-hook-form';
 import { Link, Navigate } from 'react-router';
 import { AuthContext } from '../../context/authContext';
 import { useNavigate } from "react-router";
-import { getUserLogged, loginUser } from '../../services/authService';
+import { loginUser } from '../../services/authService';
 export const Login = () => {
     const { register,
         watch,
@@ -23,9 +23,9 @@ export const Login = () => {
     useEffect(() => {
         if (profile) {
             if (profile.role.type === 'developer') {
-                navigate('/private-dev/profile');
+                navigate(`../profile/${profile._id}`);
             } else {
-                navigate('/private-rec/profile');
+                navigate(`../recruiter/${profile._id}`);
             }
         }
     }, [profile]);
