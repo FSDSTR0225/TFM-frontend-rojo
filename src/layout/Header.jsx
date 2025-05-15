@@ -181,7 +181,7 @@ export const Header = () => {
                   </Link>
                 ) : (
                   <Link
-                    to={`recruiter/${profile._id}`}
+                    to={`profile/${profile._id}`}
                     className='btn btn-sm rounded-full text-white bg-green-600 hover:bg-green-700'
                   >
                     Ver Perfil
