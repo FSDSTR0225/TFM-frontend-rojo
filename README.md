@@ -25,43 +25,57 @@ Este frontend proporciona la interfaz de usuario para una plataforma diseñada p
 - Búsqueda avanzada y sistema de filtrado
 - Experiencia de usuario optimizada para móviles y escritorio
 
-**Versión:** 0.0.0 (Desarrollo inicial)
-
 ## 💻 Tecnologías Utilizadas
 
-* **React** (v19.0.0) - Biblioteca para construir interfaces de usuario.
-* **React DOM** (v19.0.0) - Renderización de React para el navegador.
-* **React Router** (v7.5.0) - Navegación y enrutamiento para aplicaciones React.
-* **React Hook Form** (v7.55.0) - Manejo de formularios con React Hooks.
-* **Tailwind CSS** (v4.1.3) - Framework de CSS utilitario.
-* **Vite** (v6.2.0) - Herramienta de construcción frontend rápida.
-* **ESLint** (v9.21.0) - Herramienta de linting para identificar problemas en el código.
+* **React** (v18.2.0) - Biblioteca para construir interfaces de usuario
+* **React DOM** (v18.2.0) - Renderización de React para el navegador
+* **React Router DOM** (v6.22.3) - Navegación y enrutamiento
+* **React Hook Form** (v7.51.0) - Manejo de formularios
+* **React Icons** (v5.5.0) - Biblioteca de iconos
+* **Tailwind CSS** (v3.4.1) - Framework de CSS utilitario
+* **DaisyUI** (v5.0.28) - Componentes de Tailwind CSS
+* **Vite** (v5.1.6) - Build tool y dev server
+* **ESLint** (v8.57.0) - Linting y buenas prácticas
 
-## 📂Posible Estructura del Proyecto
+## 📂 Estructura del Proyecto Actual
 
 ```
 tfm-frontend-rojo/
-├── public/         # Archivos estáticos accesibles públicamente
-├── src/            # Código fuente de la aplicación
-│   ├── assets/     # Imágenes, fuentes y otros recursos
-│   ├── components/ # Componentes reutilizables
-│   ├── contexts/   # Contextos de React
-│   ├── hooks/      # Hooks personalizados
-│   ├── layouts/    # Componentes de diseño
-│   ├── pages/      # Componentes de página
-│   ├── routes/     # Configuración de rutas
-│   ├── services/   # Servicios para API y otras operaciones
-│   ├── styles/     # Estilos globales y configuración de Tailwind
-│   ├── types/      # Definiciones de tipos de TypeScript
-│   ├── utils/      # Funciones de utilidad
-│   ├── App.jsx     # Componente principal de la aplicación
-│   └── main.jsx    # Punto de entrada
-├── .eslintrc.js    # Configuración de ESLint
-├── index.html      # Plantilla HTML
-├── package.json    # Dependencias y scripts del proyecto
-├── tailwind.config.js # Configuración de Tailwind CSS
-├── vite.config.js  # Configuración de Vite
-└── README.md       # Documentación del proyecto
+├── public/               # Archivos estáticos públicos
+├── src/
+│   ├── assets/          # Recursos estáticos
+│   ├── features/        # Características por dominio
+│   │   ├── auth/       # Autenticación
+│   │   │   ├── login.jsx      # Componente de login
+│   │   │   └── Register.jsx   # Componente de registro
+│   │   ├── developer/  # Funcionalidades de desarrolladores
+│   │   │   └── pages/  
+│   │   │       ├── DevApplications.jsx
+│   │   │       ├── DevProjectForm.jsx
+│   │   │       ├── DeveloperEditProfile.jsx
+│   │   │       ├── DeveloperPublicProfile.jsx
+│   │   │       ├── Projects.jsx
+│   │   │       └── ProjectsDetails.jsx
+│   │   └── recruiters/ # Funcionalidades de reclutadores
+│   │       └── pages/
+│   │           ├── Offers.jsx
+│   │           ├── RecApplications.jsx
+│   │           ├── RecDashBoar.jsx
+│   │           ├── RecOfferForm.jsx
+│   │           ├── RecOffers.jsx
+│   │           ├── RecProfile.jsx
+│   │           └── RecruiterEditForm.jsx
+│   ├── layout/         # Componentes de layout
+│   │   └── MainLayout.jsx
+│   ├── pages/          # Páginas principales
+│   │   ├── ErrorPage.jsx
+│   │   └── Home.jsx
+│   ├── router/         # Configuración de rutas
+│   │   └── AppRouter.jsx
+│   ├── services/       # Servicios y API
+│   │   └── authService.jsx
+│   ├── index.css       # Estilos globales
+│   └── main.jsx        # Punto de entrada
 ```
 
 ## ⚙️ Cómo Configurar el Proyecto
@@ -81,7 +95,6 @@ tfm-frontend-rojo/
 
 2. **Instala las dependencias con pnpm:**
    ```bash
-   npm i pnpm
    pnpm install
    ```
 
@@ -91,68 +104,31 @@ tfm-frontend-rojo/
    ```
 
 4. **Accede a la aplicación:**
-   * La aplicación estará disponible en `http://localhost:5173`.
+   * La aplicación estará disponible en `http://localhost:5173`
 
 ### Scripts Disponibles
 
-* **`pnpm dev`**: Inicia el servidor de desarrollo.
-* **`pnpm build`**: Compila la aplicación para producción.
-* **`pnpm preview`**: Previsualiza la versión compilada antes de desplegar.
-* **`pnpm lint`**: Ejecuta el linter para identificar problemas en el código.
+* **`pnpm dev`**: Inicia el servidor de desarrollo
+* **`pnpm build`**: Compila la aplicación para producción
+* **`pnpm preview`**: Previsualiza la versión compilada antes de desplegar
+* **`pnpm lint`**: Ejecuta el linter para identificar problemas en el código
 
 ## 🌿 Gestión de Ramas
-
-Al ser un equipo de 4 personas sin roles definidos, seguiremos una estrategia de ramificación (branching) simplificada pero efectiva para colaborar en el proyecto.
 
 ### Ramas Principales
 
 - **`main`**: Rama de producción. Contiene el código estable y listo para desplegar.
-- **`develop`**: Rama de desarrollo principal. Todas las funcionalidades se integran aquí antes de pasar a `main`.
+- **`dev`**: Rama de desarrollo principal. Todas las funcionalidades se integran aquí antes de pasar a `main`.
 
 ### Ramas de Trabajo
 
-Para el desarrollo de nuevas funcionalidades, corrección de errores o mejoras, seguiremos la siguiente convención:
+Para nuevas funcionalidades o correcciones:
 
-- **`feature/nombre-funcionalidad`**: Para nuevas funcionalidades (ej: `feature/login-page`, `feature/developer-profile`).
-- **`fix/nombre-error`**: Para corrección de errores (ej: `fix/responsive-layout`).
-- **`refactor/nombre-componente`**: Para mejoras de código existente (ej: `refactor/form-components`).
-
-### Flujo de Trabajo
-
-1. **Crear una rama de trabajo**:
-   ```bash
-   git checkout develop
-   git pull origin develop
-   git checkout -b feature/mi-nueva-funcionalidad
-   ```
-
-2. **Realizar commits frecuentes y descriptivos**:
-   ```bash
-   git commit -m "Añade componente de formulario de registro"
-   ```
-
-3. **Mantener la rama actualizada**:
-   ```bash
-   git pull origin develop
-   ```
-
-4. **Subir cambios a GitHub**:
-   ```bash
-   git push origin feature/mi-nueva-funcionalidad
-   ```
-
-5. **Crear Pull Request**:
-   - Desde la rama de trabajo hacia `develop`
-   - Asignar al menos un revisor del equipo
-   - Incluir descripción clara de los cambios
-
-6. **Integración a main**:
-   - Periódicamente, cuando `develop` tenga funcionalidades estables, se creará un PR desde `develop` a `main`
-   - Este PR debe ser revisado y aprobado por al menos 2 miembros del equipo
+- **`feature/nombre-funcionalidad`**: Para nuevas funcionalidades
+- **`fix/nombre-error`**: Para corrección de errores
+- **`refactor/nombre-componente`**: Para mejoras de código existente
 
 ### Convenciones de Commits
-
-Para mantener el historial organizado, utilizaremos la siguiente estructura para los mensajes de commit:
 
 ```
 [tipo]: descripción corta
@@ -160,42 +136,33 @@ Para mantener el historial organizado, utilizaremos la siguiente estructura para
 Descripción detallada si es necesaria
 ```
 
-Donde `tipo` puede ser:
+Tipos de commit:
 - `feat`: Nueva funcionalidad
 - `fix`: Corrección de bug
 - `docs`: Cambios en documentación
-- `style`: Cambios que no afectan el significado del código (espacios, formato, etc.)
-- `refactor`: Código que no corrige bugs ni añade funcionalidades
-- `test`: Añadir o corregir tests
-- `chore`: Cambios en el proceso de build o herramientas auxiliares
-
-Ejemplo:
-```
-feat: implementa página de perfil de desarrollador
-
-- Añade formulario para datos personales
-- Implementa sección de habilidades con etiquetas
-- Crea componente para mostrar experiencia laboral
-```
+- `style`: Cambios que no afectan el código
+- `refactor`: Mejoras en el código
+- `test`: Cambios en tests
+- `chore`: Cambios en configuración
 
 ## 🔗 Enlaces Útiles
 
-* **Notion:** [Documentación del Proyecto](https://www.notion.so/1ce4f680cf84804ebde5e064376d2da1?v=1ce4f680cf8480ac9ae7000c147e9a86&pvs=4)
-* **Trello:** [Tablero de Tareas](https://trello.com/b/SMoorg1M/tfm-fsdstr0225-rojo)
-* **GitHub Frontend:** [Repositorio Frontend](https://github.com/FSDSTR0225/TFM-frontend-rojo)
-* **GitHub Backend:** [Repositorio Backend](https://github.com/FSDSTR0225/TFM-backend-rojo)
+* [Documentación del Proyecto](https://www.notion.so/1ce4f680cf84804ebde5e064376d2da1?v=1ce4f680cf8480ac9ae7000c147e9a86&pvs=4)
+* [Tablero de Tareas](https://trello.com/b/SMoorg1M/tfm-fsdstr0225-rojo)
+* [Repositorio Frontend](https://github.com/FSDSTR0225/TFM-frontend-rojo)
+* [Repositorio Backend](https://github.com/FSDSTR0225/TFM-backend-rojo)
 
 ## 🤝 Contribuciones
 
-¡Las contribuciones son bienvenidas! Si deseas contribuir al proyecto:
+Para contribuir al proyecto:
 
-1. Haz un fork del repositorio.
-2. Crea una nueva rama (`git checkout -b feature/nombre-de-la-funcionalidad`).
-3. Realiza tus cambios y haz commit (`git commit -m "Añadir funcionalidad"`).
-4. Sube tus cambios (`git push origin feature/nombre-de-la-funcionalidad`).
-5. Abre un pull request describiendo tus cambios.
+1. Haz un fork del repositorio
+2. Crea una rama para tu funcionalidad (`git checkout -b feature/nombre-funcionalidad`)
+3. Haz commit de tus cambios (`git commit -m "feat: nueva funcionalidad"`)
+4. Sube tus cambios (`git push origin feature/nombre-funcionalidad`)
+5. Abre un Pull Request
 
-## 📜 Licencia
+## 📄 Licencia
 
 Este proyecto se considera de uso privado para fines educativos.
 
