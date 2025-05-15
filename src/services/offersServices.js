@@ -32,12 +32,12 @@ try {
 }
 
 
-export const createdOffert = async (offert) => {
-
+export const createdOffert = async (offert,token) => {
     try {
         const resp = await fetch(API_URL + '/',{
             method:'POST',
             headers:{
+                 authorization: "Bearer " + token,
                 'content-type':'application/json'
             },
             body:JSON.stringify(offert)
@@ -51,4 +51,6 @@ export const createdOffert = async (offert) => {
         console.log("Error: ", error);
         throw error;
     }
+
+
 }

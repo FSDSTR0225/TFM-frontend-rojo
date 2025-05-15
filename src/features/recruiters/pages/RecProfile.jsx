@@ -1,5 +1,4 @@
 import React, { useContext, useEffect } from 'react'
-import { OfferCard } from '../components/OfferCard'
 import { OfferModal } from '../components/OfferModal'
 import { AuthContext } from '../../../context/authContext';
 import { useNavigate } from "react-router";
