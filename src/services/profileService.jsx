@@ -30,6 +30,5 @@ export const getRecruiterById = async (_id) =>{
     } catch (error) {
         console.error("profileService Error:", error);
         throw error;
-    }
-        
+    }        
 }

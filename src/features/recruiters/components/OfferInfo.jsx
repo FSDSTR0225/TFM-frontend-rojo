@@ -2,6 +2,7 @@
 import { EditButton } from '../../../components/EditButton';
 import { TfiLocationPin } from 'react-icons/tfi';
 import { MainRecButton } from '../../../components/MainRecButton';
+import { PiMapPinArea } from 'react-icons/pi';
 
 export const OfferInfo = ({offer}) => {
 
@@ -15,7 +16,7 @@ export const OfferInfo = ({offer}) => {
               </div>
               
               <div className='flex items-center gap-4 m-4'>
-                <TfiLocationPin />
+                <PiMapPinArea className='size-6' />
                 {offer.location}
                 <span className='badge badge-soft badge-info'>{offer.contractType}</span>
               </div>
@@ -36,7 +37,7 @@ export const OfferInfo = ({offer}) => {
                   <p>Salary: {offer.salary}</p>
                 </>
               )}
-              <MainRecButton > 
+              <MainRecButton classProps='w-25 self-end'> 
                 Apply Now
               </MainRecButton>
             </div>

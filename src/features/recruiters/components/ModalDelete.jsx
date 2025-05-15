@@ -2,7 +2,8 @@
 
 export const ModalDelete = ({isOpen, setIsOpen}) => {
   return (
-<dialog open={isOpen} className="modal modal-bottom sm:modal-middle">
+
+<dialog open={isOpen} className="modal modal-bottom left- sm:modal-middle">
           <div className="modal-box">
             <h3 className="font-bold text-lg">Hello!</h3>
             <p className="py-4">Are you sure you want to delete this offer?</p>
@@ -16,5 +17,6 @@ export const ModalDelete = ({isOpen, setIsOpen}) => {
             </div>
           </div>
         </dialog>
+
   )
 }
