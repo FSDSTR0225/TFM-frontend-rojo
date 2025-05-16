@@ -2,7 +2,7 @@ const urlBackEnd = 'http://localhost:3000';
 
 export const getProfileDev = async (_id) => {
     try {
-        const response = await fetch(urlBackEnd + `/profile/${_id}`, {
+        const response = await fetch(urlBackEnd + `/devs/${_id}`, {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json'
