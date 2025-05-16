@@ -1,7 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router';
 import RightPanel from "./RightPanel";
+import { EditButton } from '../../../components/EditButton';
 import { PiGithubLogo, PiLinkedinLogo, PiEye } from "react-icons/pi";
+// import { SectionContainer } from "../../../components/SectionContainer";
 
 
 function InfoDeveloper({ profileInfo }) {
@@ -9,9 +11,14 @@ function InfoDeveloper({ profileInfo }) {
   if (!profileInfo) return <p>Error al cargar el profile</p>;
     return (
 <div className="grid grid-cols-3 gap-4 mx-15 p-10">
+
+          {/* <SectionContainer classProps="lg:flex-row flex-col-reverse gap-4 lg:items-start">
+
+          </SectionContainer> */}
         
         {/* PARTE IZQUIERDO INFO PERSONAL */}
         <div className="grid justify-items-center bg-neutral-80 border border-neutral-60  p-6 rounded-md">
+            <EditButton classProps={"self-end"} />
             <img
             src="https://cdn-icons-png.flaticon.com/512/3135/3135768.png"
             className=" w-40 h-40 mb-4 rounded-full"
