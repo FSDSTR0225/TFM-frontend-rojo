@@ -7,9 +7,10 @@ import { MainRecButton } from "../../../components/MainRecButton";
 import { MenuCard } from "./MenuCard";
 import { useContext } from "react";
 import { AuthContext } from "../../../context/authContext";
+import { PiMapPinArea } from "react-icons/pi";
 
 
-export const OfferCard = ({ classProps, offer, id, setIsOpenModalDelete, isOpenModalDelete }) => {
+export const OfferCard = ({ classProps, offer, id, setIsOpenModalDelete, isOpenModalDelete, setSelectedOfferId }) => {
   const navigate = useNavigate();
   const { profile } = useContext(AuthContext);
 
@@ -17,10 +18,11 @@ export const OfferCard = ({ classProps, offer, id, setIsOpenModalDelete, isOpenM
   const name = capitalize(offer.owner?.name || "");
   const surname = capitalize(offer.owner?.surname || "");
   const completeName = `${name} ${surname}`.trim() || "Unknown Recruiter";
-  
+
   const handleOnModal = (e) => {
     e.stopPropagation();
-    setIsOpenModalDelete(true)
+    setIsOpenModalDelete(true);
+    setSelectedOfferId(offer._id);
     console.log("🚀 ~ handleOnModal ~ isOpenModalDelete:", isOpenModalDelete)
   };
 
@@ -31,22 +33,21 @@ export const OfferCard = ({ classProps, offer, id, setIsOpenModalDelete, isOpenM
     navigate(`/offers/${offer._id}`);
   };
 
-//  const handleOwnerClick = (e) => {
-//   e.stopPropagation();
-//   navigate(`profile/recruiter/${offer.owner._id}`)
-//  }
+  //  const handleOwnerClick = (e) => {
+  //   e.stopPropagation();
+  //   navigate(`profile/recruiter/${offer.owner._id}`)
+  //  }
 
   const daysAgo = offer?.createdAt ? getDaysSince(offer?.createdAt) : 0;
   return (
     <li
       key={id}
       onClick={handleCardClick}
-      className={`${
-        classProps && classProps
-      } card border bg-neutral-80 border-neutral-70 cursor-pointer max-h-80 shadow-xl hover:bg-neutral-90 transition-transform transform hover:scale-105 `}
+      className={`${classProps && classProps
+        } card border bg-neutral-80 border-neutral-70 cursor-pointer max-h-80 shadow-xl hover:bg-neutral-90 transition-transform transform hover:scale-105 `}
     >
       <div className='card-body'>
-        <div className='flex justify-between'>
+        <div className='flex justify-between items-center'>
           <div className='avatar gap-2 items-center'>
             {offer.owner?.role?.recruiter?.logo ? (
               <div className='avatar'>
@@ -82,7 +83,7 @@ export const OfferCard = ({ classProps, offer, id, setIsOpenModalDelete, isOpenM
         </div>
         <div className='flex gap-4'>
           <div className='flex items-center gap-2'>
-            <TfiLocationPin />
+            <PiMapPinArea className="size-4" />
             {offer.location}
           </div>
           <div className='badge text-neutral-0 bg-neutral-60'>{offer?.contractType}</div>

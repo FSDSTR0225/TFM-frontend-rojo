@@ -25,10 +25,7 @@ const [isOpenModalDelete, setIsOpenModalDelete] = useState(false)
   const handlePageChange = (pageNum) => {
     if (pageNum === currentPage) return;
     setCurrentPage(pageNum); // Primero actualizamos la página
-    setLoading(true);        // Luego activamos el loading
-    setTimeout(() => {
-      setLoading(false);     // Después de un pequeño retraso, desactivamos el loading
-    }, 500);
+ 
   };
 
 
