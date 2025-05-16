@@ -14,9 +14,7 @@ export const MenuCard = ({ onClick, id, openModal }) => {
       className='dropdown self-center'
     >
       <summary className='btn h-4 btn-outline rounded-full btn-square btn-sm bg-neutral-70 text-secondary-40  hover:bg-transparent hover:text-neutral-0 hover:border-neutral-0 '>
-        
-<PiDotsThreeBold className="text-3xl font-black p-0 "/>
-
+        <PiDotsThreeBold className="text-3xl font-black p-0 " />
       </summary>
       <ul className='menu p-0 dropdown-content rounded-box z-1 w-25 shadow-xl text-sm bg-secondary-40 text-neutral-90 left-[-200%]'>
         <li
@@ -41,7 +39,7 @@ export const MenuCard = ({ onClick, id, openModal }) => {
           onClick={openModal}
           className=' rounded-b-box hover:bg-red-600 hover:text-neutral-0 '
         ><div><MdOutlineDeleteSweep />
-          Delete</div>
+            Delete</div>
         </li>
       </ul>
     </details>
