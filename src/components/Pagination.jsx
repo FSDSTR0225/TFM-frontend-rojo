@@ -1,6 +1,6 @@
 import React from "react";
 
-const Pagination = ({ currentPage, totalPages, handlePageChange, filteredProjects }) => {
+export const Pagination = ({ currentPage, totalPages, handlePageChange, filteredProjects }) => {
   return (
     <div className="mt-4">
 
@@ -43,4 +43,3 @@ const Pagination = ({ currentPage, totalPages, handlePageChange, filteredProject
   );
 };
 
-export default Pagination;

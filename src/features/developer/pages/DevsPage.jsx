@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import DevsCard from "../components/DevsCard";  // Asegúrate de que DevsCard esté correctamente importado
-import Pagination from '../../../components/Pagination';
+import { Pagination } from '../../../components/Pagination';
 
 import Avatar1 from "../../../assets/avatar-1.png";
 import Avatar2 from "../../../assets/avatar-2.png";
