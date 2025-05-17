@@ -15,13 +15,19 @@ export const DevModal = ({token, profileData}) => { // Añadido profileData como
     if (profileData) {
       setValue('name', profileData.name);
       setValue('surname', profileData.surname);
-      setValue('professionalPosition', profileData.professionalPosition);
     }
   }, [profileData, setValue]);
 
   const editDevProfile = async (formData) => {
-    const editProfile = await updateProfile(formData, token);
+    const editProfile = await updateProfile({...profileData, ...formData}, token);
     console.log('Datos del perfil actualizados: ', editProfile);
+    
+    if (editProfile?.user) {
+      reset();
+      document.getElementById("my_modal_1")?.close();
+      window.location.reload();
+    }
+
     reset();
     document.getElementById("my_modal_1")?.close();
   }
@@ -57,17 +63,6 @@ export const DevModal = ({token, profileData}) => { // Añadido profileData como
                 className="input input-bordered" 
                 {...register('surname')} 
                 placeholder="e.g. Martinez" 
-              />
-            </div>
-
-            {/* Professional Position */}
-            <div className="form-control">
-              <label className="label"><span className="label-text font-semibold">Professional Position</span></label>
-              <input 
-                type="text" 
-                className="input input-bordered" 
-                {...register('professionalPosition')} 
-                placeholder="e.g. Cerrajero" 
               />
             </div>
           </div>

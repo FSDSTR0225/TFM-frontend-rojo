@@ -18,12 +18,15 @@ export const getProfileDev = async (_id) => {
 }
 
 export const updateProfile = async (devProfile,token) => {
+    console.log('Dev Profile:', devProfile);
+    console.log('Dev token:', token);
+
     try {
-        const resp = await fetch(urlBackEnd + '/profile',{
-            method:'PUT',
+        const resp = await fetch(urlBackEnd + '/devs/profile', {
+            method:"PUT",
             headers:{
                  authorization: "Bearer " + token,
-                'content-type':'application/json'
+                'Content-Type':'application/json'
             },
             body:JSON.stringify(devProfile)
         });
@@ -35,4 +38,5 @@ export const updateProfile = async (devProfile,token) => {
     } catch (error) {
         console.log("Error: ", error);
         throw error;
-    }};
+    }
+    };
