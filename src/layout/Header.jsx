@@ -259,8 +259,8 @@ export const Header = () => {
           </li>
           <li>
             <Link
-              to='/portfolios'
-              className='btn text-neutral-0 bg-neutral-90 m-2 hover:bg-primary-60'
+              to="/projects"
+              className="btn text-neutral-0 bg-neutral-90 m-2 hover:bg-primary-60"
             >
               <svg
                 xmlns='http://www.w3.org/2000/svg'
