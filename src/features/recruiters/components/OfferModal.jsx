@@ -1,17 +1,19 @@
 import { useForm } from 'react-hook-form';
 import { createdOffert } from '../../../services/offersServices';
-import { useState } from 'react';
+import { TagsInputRecruiter } from './TagsInputRecruiter';
 
-export const OfferModal = ({token,reloadPage}) => {
+export const OfferModal = ({ token, reloadPage }) => {
   const { register,
     watch,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors } } = useForm();
-  
-  const [skills, setSkills] = useState();
+
+  const skills = watch("skills") || [];
+
   const createNewOffer = async (formDatos) => {
-    const respOffert = await createdOffert(formDatos,token);
+    const respOffert = await createdOffert(formDatos, token);
     console.log('nueva oferta: ', respOffert);
     reloadPage();
     reset();
@@ -75,14 +77,22 @@ export const OfferModal = ({token,reloadPage}) => {
 
             {/* Skills */}
             <div className="form-control w-full mb-4">
-              <label className="label"><span className="label-text font-semibold">Skills</span></label>
+              <label className="block text-sm text-neutral-20 mb-1" htmlFor="skills">
+                Skills
+              </label>
+              <TagsInputRecruiter
+                value={skills}
+                onChange={(tags) => setValue("skills", tags, { shouldValidate: true })}
+              />
+
+              {/* <label className="label"><span className="label-text font-semibold">Skills</span></label>
               <input
                 type="text"
                 {...register('skills')}
                 name="skills"
                 className="input input-bordered focus:ring-2 focus:ring-blue-500"
                 placeholder="e.g. JavaScript, Node.js, MongoDB"
-              />
+              /> */}
             </div>
 
             {/* Language */}

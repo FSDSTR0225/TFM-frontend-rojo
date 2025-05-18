@@ -67,9 +67,14 @@ export const deleteOffer = async (id, token) => {
     }
 }
 
-export const getSkills = async () => {
+export const getSkillsByQuery = async (query) => {
     try {
-        
+        const resp = await fetch(`${API_URL}/technology?q=${query}`);
+        if (!resp.ok) {
+            throw new Error("Error getting skills")
+        }
+        const data = await resp.json();
+        return data;
     } catch (error) {
         console.log("Error: ", error);
         throw error;
