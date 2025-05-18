@@ -17,7 +17,6 @@ export const getProfileDev = async (_id) => {
     }
 }
 
-<<<<<<< HEAD
 export const updateProfile = async (devProfile,token) => {
     console.log('Dev Profile:', devProfile);
     console.log('Dev token:', token);
@@ -41,7 +40,9 @@ export const updateProfile = async (devProfile,token) => {
         throw error;
     }
     };
-=======
+
+
+
 export const getRecruiterById = async (_id) =>{
     try {
         const response = await fetch(`${urlBackEnd}/recruiters/${_id}`)
@@ -56,5 +57,4 @@ export const getRecruiterById = async (_id) =>{
         console.error("profileService Error:", error);
         throw error;
     }        
-}
->>>>>>> dev
+};
