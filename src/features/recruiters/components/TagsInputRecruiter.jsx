@@ -6,7 +6,7 @@ import { set } from "react-hook-form";
 export const TagsInputRecruiter = ({ value = [], onChange }) => {
   const [inputValue, setInputValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
-
+  
   const skills = async (inputValue) => {
     const skillsSuggestions = await getSkillsByQuery(inputValue);
     console.log("🚀 ~ skills:", skillsSuggestions);
