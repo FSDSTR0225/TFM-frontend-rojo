@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import ProjectCard from "../components/ProjectCard";
 import { Pagination } from '../../../components/Pagination';
@@ -24,19 +23,19 @@ export const ProjectsPage = () => {
 
   useEffect(() => {
     const fetchProjects = async () => {
-      setLoading(true); // Mostrar spinner
+      setLoading(true);
       const response = await getAllProjects();
-  
+
       if (response?.error) {
         console.error("Error fetching projects:", response.message);
-        setProjects([]); // Deja vacío si hubo error
+        setProjects([]);
       } else {
-        setProjects(response); // Carga los proyectos
+        setProjects(response);
       }
-  
-      setLoading(false); // Ocultar spinner
+
+      setLoading(false);
     };
-  
+
     fetchProjects();
   }, []);
 
@@ -55,10 +54,10 @@ export const ProjectsPage = () => {
 
   const handlePageChange = (pageNum) => {
     if (pageNum === currentPage) return;
-    setCurrentPage(pageNum); // Primero actualizamos la página
-    setLoading(true);        // Luego activamos el loading
+    setCurrentPage(pageNum);
+    setLoading(true);
     setTimeout(() => {
-      setLoading(false);     // Después de un pequeño retraso, desactivamos el loading
+      setLoading(false);
     }, 500);
   };
 
@@ -67,7 +66,7 @@ export const ProjectsPage = () => {
       <h1 className="text-3xl font-bold mb-2">Developer Projects</h1>
       <p className="text-md font-normal mb-4 text-[#606a79]">Discover talented developers for your next project</p>
 
-      <div className="flex justify-center gap-2 mb-6 px-4 py-0.5 bg-[#262626] rounded-md">
+      <div className="flex flex-wrap justify-center gap-2 mb-6 px-4 py-0.5 bg-[#262626] rounded-md">
         {categories.map((category) => (
           <button
             key={category}
@@ -94,19 +93,30 @@ export const ProjectsPage = () => {
               No projects available in this category.
             </p>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+            <div
+              className="grid gap-8 justify-center"
+              style={{
+                gridTemplateColumns: 'repeat(auto-fit, minmax(394px, 1fr))',
+              }}
+            >
               {currentProjects.map((project) => (
-                <ProjectCard
-                  key={project.id}
-                  name={project.owner?.name}
-                  surname={project.owner?.surname}
-                  avatar={project.owner?.avatar}
-                  title={project.title}
-                  category={activeTab === "All" ? project.category : null} // Solo pasamos la categoría cuando estamos en "All"
-                  image={project.image}
-                  projectLink={project.projectLink}
-                  badgeText={project.badgeText}
-                />
+                <div
+                  key={project._id}
+                  className="mx-auto w-[394px]"
+                  style={{ aspectRatio: '394 / 256' }}
+                >
+                  <ProjectCard
+                    developerId={project.owner?._id}
+                    name={project.owner?.name}
+                    surname={project.owner?.surname}
+                    avatar={project.owner?.avatar}
+                    title={project.title}
+                    category={activeTab === "All" ? project.category : null}
+                    gallery={project.gallery}
+                    projectid={project._id}
+                    badgeText={project.badgeText}
+                  />
+                </div>
               ))}
             </div>
           )}

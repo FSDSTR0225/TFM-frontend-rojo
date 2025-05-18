@@ -1,13 +1,17 @@
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import { PiTrash } from "react-icons/pi";
-
+import { PiTrash, PiImages, PiFilmSlate, PiCodeBlock, PiFile } from "react-icons/pi";
+import { CategorySelect } from "../components/CategorySelect";
+import { TagsInput } from "../components/TagsInput";
+import { createProject } from '../../../services/projectService';
 
 export const NewProjectModal = ({ onClose }) => {
   const navigate = useNavigate();
 
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit, reset, formState: { errors }, setValue, watch } = useForm({
+    mode: "onChange",
+  });
   const [codeSections, setCodeSections] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -15,6 +19,10 @@ export const NewProjectModal = ({ onClose }) => {
   const [galleryUrls, setGalleryUrls] = useState([""]);
   const [videoUrl, setVideoUrl] = useState("");
   const [showVideo, setShowVideo] = useState(false);
+  
+const skills = watch("projectSkills") || [];
+  
+  const currentYear = new Date().getFullYear();
 
   const handleGalleryChange = (index, value) => {
     const updated = [...galleryUrls];
@@ -61,211 +69,298 @@ export const NewProjectModal = ({ onClose }) => {
       ...data,
       codeSections,
       gallery: filteredGallery,
-      video: cleanVideoUrl,
+      videoUrl: cleanVideoUrl,
     };
 
-    try {
-      const response = await fetch("/api/projects", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      if (!response.ok) {
-        throw new Error("Error al guardar el proyecto");
-      }
-
-      const project = await response.json();
-
-      reset();
-      setCodeSections([""]);
-      setGalleryUrls([""]);
-      setVideoUrl("");
-      setShowVideo(false);
-      onClose();
-
-      // Redirige con React Router
-      navigate(`/projects/${project.id}`);
-    } catch (err) {
-      setError(err.message || "Error desconocido");
-    } finally {
-      setLoading(false);
+    const token = localStorage.getItem("token");
+    if (!token) {
+        setError("No authentication token found, please login");
+        setLoading(false);
+        return;
     }
-  };
+
+    try {
+        const project = await createProject(payload, token);
+
+    reset();
+    setCodeSections([""]);
+    setGalleryUrls([""]);
+    setVideoUrl("");
+    setShowVideo(false);
+    onClose();
+
+    navigate(`/projects/${project.id}`);
+  } catch (err) {
+    setError(err.message || "Unknown error");
+  } finally {
+    setLoading(false);
+  }
+};
+
+  function toYouTubeEmbedUrl(url) {
+    try {
+      const urlObj = new URL(url);
+      if (
+        urlObj.hostname === "www.youtube.com" ||
+        urlObj.hostname === "youtube.com"
+      ) {
+        const videoId = urlObj.searchParams.get("v");
+        if (videoId) {
+          return `https://www.youtube.com/embed/${videoId}`;
+        }
+      }
+      if (urlObj.hostname === "youtu.be") {
+        const videoId = urlObj.pathname.slice(1);
+        return `https://www.youtube.com/embed/${videoId}`;
+      }
+    } catch {
+      // URL inválida o no es youtube
+    }
+    return url;
+  }
 
   return (
-    <dialog id="project_modal" className="modal modal-open">
-      <div className="modal-box max-w-3xl bg-neutral-80 border border-neutral-70 text-neutral-0 shadow-md rounded-lg">
-        <h2 className="text-2xl font-bold mb-4">Create New Project</h2>
+  <dialog id="project_modal" className="modal modal-open">
+    <div className="modal-box max-w-3xl bg-neutral-80 border border-neutral-70 text-neutral-0 shadow-md rounded-lg">
+      <h2 className="space-y-4 pt-2 text-2xl font-bold mb-4">Create New Project</h2>
+      <hr className="border-t border-neutral-60 pt-4 mt-3" />
 
-        {error && <p className="text-red-400 mb-2">{error}</p>}
+      {error && <p className="text-red-400 mb-2">{error}</p>}
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          {/* Project Title */}
-          <input
-            type="text"
-            placeholder="Project Title"
-            className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full"
-            {...register("title", { required: true })}
-          />
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 
-          {/* Skills */}
-          <input
-            type="text"
-            placeholder="Skills (comma separated)"
-            className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full"
-            {...register("skills")}
-          />
+        <section className="space-y-4 mt-3">
+            <header className="flex items-center gap-2 text-primary-50 font-semibold text-lg ">
+                <PiFile size={20} />
+                <h3>Project Details</h3>
+            </header>
 
-          {/* Year, Category, Role, Duration */}
-          <div className="grid grid-cols-2 gap-4">
+            {/* Project Title */}
+            <label className="block text-sm text-neutral-20 mb-1" htmlFor="title">
+                Project Title
+            </label>
             <input
-              type="number"
-              placeholder="Year of Creation"
-              className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full"
-              {...register("year", { required: true })}
+                id="title"
+                type="text"
+                placeholder="Write your project title..."
+                className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
+                {...register("title", { required: true })}
             />
-            <input
-              type="text"
-              placeholder="Category"
-              className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full"
-              {...register("category", { required: true })}
+
+            {/* Year, Role, Duration */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label className="block text-sm text-neutral-20 mb-1" htmlFor="year">
+                    Year of creation
+                    </label>
+                    <input
+                    id="year"
+                    type="number"
+                    placeholder="(e.g. 2020)"
+                    className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
+                    {...register("year", {
+                        required: "Year is required",
+                        min: { value: 1900, message: "Year must be ≥ 1900" },
+                        max: { value: currentYear, message: `Year must be ≤ ${currentYear}` },
+                        validate: (value) =>
+                        value.toString().length === 4 || "Year must have exactly 4 digits",
+                    })}
+                    />
+                    {errors.year && (
+                    <p className="mt-1 text-sm text-red-500">{errors.year.message}</p>
+                    )}
+                </div>
+
+                <div>
+                <label className="block text-sm text-neutral-20 mb-1" htmlFor="role">
+                    Professional Role
+                </label>
+                <input
+                    id="professionalRole"
+                    type="text"
+                    placeholder="(e.g. Lead Developer)"
+                    className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
+                    {...register("professionalRole")}
+                />
+                </div>
+
+                <div>
+                <label className="block text-sm text-neutral-20 mb-1" htmlFor="duration">
+                    Duration
+                </label>
+                <input
+                    id="duration"
+                    type="text"
+                    placeholder="(e.g. 3 months)"
+                    className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
+                    {...register("duration")}
+                />
+                </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+                <div>
+                <label className="block text-sm text-neutral-20 mb-1" htmlFor="projectSkills">
+                    Skills
+                </label>
+                <TagsInput
+                    value={skills}
+                    onChange={(tags) => setValue("projectSkills", tags, { shouldValidate: true })}
+                />
+                {errors.projectSkills && (
+                    <p className="text-red-400 text-sm mt-1">{errors.projectSkills.message}</p>
+                )}
+                </div>
+
+                <div>
+                <label className="block text-sm text-neutral-20 mb-1" htmlFor="category-select">
+                    Category
+                </label>
+                <CategorySelect
+                    id="category"
+                    register={register}
+                    error={errors.category}
+                    setValue={setValue}
+                />
+                </div>
+            </div>
+
+            {/* Project Description */}
+            <label className="block text-sm text-neutral-20 mb-1" htmlFor="description">
+                Description
+            </label>
+            <textarea
+                id="description"
+                placeholder="Describe your project here..."
+                className="textarea textarea-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
+                {...register("description")}
             />
+
+          <hr className="border-t border-neutral-60 mt-3" />
+        </section>
+
+        {/* Image Gallery Section */}
+        <div className="space-y-4 pt-4">
+          <div className="text-primary-50">
+            <label className="font-semibold flex items-center gap-2 mb-1">
+              <PiImages size={20} />
+              Add Images
+            </label>
+            <p className="text-sm text-neutral-30">Add up to five images. The first will be the project thumbnail.</p>
+          </div>
+
+          <div className="flex gap-4 overflow-x-auto pb-2">
+            {galleryUrls.map((url, index) => (
+              <div
+                key={index}
+                className="relative flex-shrink-0 w-28 h-28 rounded overflow-hidden border border-neutral-60 bg-neutral-70"
+              >
+                {url && /\.(jpg|jpeg|png|gif|webp)$/i.test(url) ? (
+                  <img
+                    src={url}
+                    alt={`Image ${index + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <span className="flex items-center justify-center w-full h-full text-sm text-neutral-40 ">
+                    Preview
+                  </span>
+                )}
+                <button
+                  type="button"
+                  onClick={() => handleRemoveGallery(index)}
+                  className="absolute top-1 right-1 bg-neutral-90 text-primary-40 hover:text-primary-70 font-bold rounded-full w-6 h-6 flex items-center justify-center shadow"
+                  aria-label={`Remove image #${index + 1}`}
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+          </div>
+
+            <div className="space-y-3">
+            {galleryUrls.map((url, index) => (
+                <input
+                key={index}
+                type="url"
+                placeholder={`Image URL #${index + 1}`}
+                value={url}
+                onChange={(e) => handleGalleryChange(index, e.target.value)}
+                className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic placeholder:text-sm"
+                aria-label={`Image URL #${index + 1}`}
+                />
+            ))}
+            </div>
+
+          {galleryUrls.length < 5 && (
+            <button
+              type="button"
+              onClick={handleAddGallery}
+              className="btn btn-sm bg-neutral-90 border border-neutral-60 text-neutral-0 hover:text-primary-40 hover:border-primary-40"
+            >
+              + Add more
+            </button>
+          )}
+          <hr className="border-t border-neutral-60" />
+        </div>
+
+        {/* Video Section with toggle */}
+        <div className="space-y-6 pt-2">
+          <div className="flex items-center justify-between">
+            <label
+              className={`font-semibold flex items-center gap-2 ${
+                showVideo ? "text-primary-50" : "text-neutral-30"
+              }`}
+            >
+              <PiFilmSlate size={20} />
+              Add a video URL (optional)
+            </label>
             <input
-              type="text"
-              placeholder="Professional Role"
-              className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full"
-              {...register("role")}
-            />
-            <input
-              type="text"
-              placeholder="Duration (e.g. 3 months)"
-              className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full"
-              {...register("duration")}
+              type="checkbox"
+              className="toggle toggle-sm border-neutral-50 bg-neutral-90 checked:bg-primary-60"
+              checked={showVideo}
+              onChange={(e) => setShowVideo(e.target.checked)}
             />
           </div>
 
-          {/* Image Gallery Section */}
-            <div className="space-y-4">
-                <label className="block font-semibold text-neutral-0">
-                    Añade hasta 5 imágenes a tu proyecto
-                </label>
-
-                {/* Previews en una sola línea, con scroll horizontal */}
-                <div className="flex gap-4 overflow-x-auto pb-2">
-                    {galleryUrls.map((url, index) => (
-                    <div
-                        key={index}
-                        className="relative flex-shrink-0 w-28 h-28 rounded overflow-hidden border border-neutral-60 bg-neutral-70"
-                    >
-                        {url && /\.(jpg|jpeg|png|gif|webp)$/i.test(url) ? (
-                        <img
-                            src={url}
-                            alt={`Imagen ${index + 1}`}
-                            className="w-full h-full object-cover"
-                        />
-                        ) : (
-                        <span className="flex items-center justify-center w-full h-full text-sm text-neutral-40">
-                            Preview
-                        </span>
-                        )}
-                        <button
-                        type="button"
-                        onClick={() => handleRemoveGallery(index)}
-                        className="absolute top-1 right-1 bg-neutral-90 text-red-500 hover:text-red-700 font-bold rounded-full w-6 h-6 flex items-center justify-center shadow"
-                        aria-label={`Eliminar imagen #${index + 1}`}
-                        >
-                        ×
-                        </button>
-                    </div>
-                    ))}
-                </div>
-
-                    {/* Inputs de URL */}
-                    <div className="space-y-3">
-                        {galleryUrls.map((url, index) => (
-                        <input
-                            key={index}
-                            type="url"
-                            placeholder={`URL Imagen #${index + 1}`}
-                            value={url}
-                            onChange={(e) => handleGalleryChange(index, e.target.value)}
-                            className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full"
-                            aria-label={`URL Imagen #${index + 1}`}
-                        />
-                        ))}
-                    </div>
-
-                    {/* Botón para añadir más */}
-                    {galleryUrls.length < 5 && (
-                        <button
-                        type="button"
-                        onClick={handleAddGallery}
-                        className="btn btn-sm border border-neutral-60 text-neutral-0 hover:text-primary-40"
-                        >
-                        + Añadir imagen
-                        </button>
-                    )}
-                    </div>
-
-            {/* Sección de vídeo actualizada */}
-            <div className="space-y-2 pt-6">
-                <label className="block font-semibold text-neutral-0">
-                ¿Quieres añadir un vídeo al proyecto? (opcional)
-                </label>
-
-                {!showVideo && (
-                <button
-                    type="button"
-                    onClick={() => setShowVideo(true)}
-                    className="btn btn-sm opacity-50 border border-neutral-60 text-neutral-0 hover:opacity-100"
-                >
-                    Añadir vídeo
-                </button>
-                )}
-
-                {showVideo && (
-                <div className="space-y-2">
-                    <div className="aspect-video w-full rounded border border-neutral-60 bg-neutral-70 flex items-center justify-center overflow-hidden">
-                    {videoUrl && /\.(mp4|webm|ogg)$/i.test(videoUrl) ? (
-                        <video controls className="w-full h-full object-cover">
-                        <source src={videoUrl} />
-                        Tu navegador no soporta la reproducción de vídeo.
-                        </video>
-                    ) : (
-                        <span className="text-sm text-neutral-30">
-                        Vista previa del vídeo
-                        </span>
-                    )}
-                    </div>
-                    <input
-                    type="url"
-                    placeholder="URL del vídeo (formato mp4, webm u ogg)"
-                    value={videoUrl}
-                    onChange={(e) => setVideoUrl(e.target.value)}
-                    className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full"
-                    />
-                </div>
-                )}
-            </div>
-
-
-
-          {/* Project Description */}
-          <textarea
-            placeholder="Project Description"
-            className="textarea textarea-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full"
-            {...register("description")}
-          />
-
-          {/* Code Snippets */}
+          {showVideo && (
             <div className="space-y-2">
-            <label className="block font-semibold text-neutral-0">Code Sections</label>
+                <input
+                type="url"
+                placeholder="Paste a YouTube video URL here"
+                value={videoUrl}
+                onChange={(e) => setVideoUrl(e.target.value)}
+                className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full -mt-2 placeholder-neutral-40 placeholder:italic placeholder:text-sm"
+                />
+
+              {videoUrl.trim() && (
+                <div className="aspect-video w-full rounded border border-neutral-60 bg-neutral-70 overflow-hidden">
+                  <iframe
+                    src={toYouTubeEmbedUrl(videoUrl)} // tu función embedVideoUrl()
+                    title="Video Preview"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className="w-full h-full object-cover"
+                    frameBorder="0"
+                  />
+                </div>
+              )}
+            </div>
+          )}
+          <hr className="border-t border-neutral-60" />
+        </div>
+
+        {/* Code Snippets */}
+            <div className="space-y-4 pt-4">
+            <label className="flex items-center gap-2 font-semibold text-primary-50">
+                <PiCodeBlock size={20} />
+                Code Section
+            </label>
 
             {codeSections.map((code, index) => (
-                <div key={index} className="relative">
+                <div key={index} className="flex items-start gap-2">
                 <textarea
-                    className="textarea textarea-bordered bg-[#1e1e1e] text-white border border-neutral-60 w-full font-mono pr-10"
+                    className="textarea textarea-bordered bg-neutral-90 text-white border border-neutral-60 w-full font-mono placeholder-neutral-20"
                     placeholder={`Code block #${index + 1}`}
                     value={code}
                     onChange={(e) => handleCodeChange(index, e.target.value)}
@@ -277,8 +372,8 @@ export const NewProjectModal = ({ onClose }) => {
                     updated.splice(index, 1);
                     setCodeSections(updated);
                     }}
-                    className="absolute top-2 right-2 text-red-400 hover:text-red-600"
-                    aria-label={`Eliminar bloque de código #${index + 1}`}
+                    className="text-primary-70 hover:text-primary-40 mt-1"
+                    aria-label={`Remove code block #${index + 1}`}
                 >
                     <PiTrash size={18} />
                 </button>
@@ -288,50 +383,61 @@ export const NewProjectModal = ({ onClose }) => {
             <button
                 type="button"
                 onClick={handleAddCodeSection}
-                className="btn btn-sm border border-neutral-60 text-neutral-0 hover:text-primary-40"
+                className="btn btn-sm bg-neutral-90 border border-neutral-60 text-neutral-0 hover:text-primary-40 hover:border-primary-40"
             >
                 + Add Code Block
             </button>
             </div>
 
-
-
-          {/* Links */}
-          <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-4">
+        <div>
+            <label className="block text-sm text-neutral-20 mb-1" htmlFor="liveLink">
+            Live Project URL
+            </label>
             <input
-              type="url"
-              placeholder="Live Project URL"
-              className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full"
-              {...register("liveLink")}
+            id="liveLink"
+            type="url"
+            placeholder="(e.g. https://example.com)"
+            className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
+            {...register("liveLink")}
             />
-            <input
-              type="url"
-              placeholder="GitHub Code URL"
-              className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full"
-              {...register("githubLink")}
-            />
-          </div>
+        </div>
 
-          {/* Buttons */}
-          <div className="flex justify-end gap-4 pt-4">
-            <button
-              type="submit"
-              disabled={loading}
-              className="btn bg-primary-60 text-neutral-0 hover:bg-primary-50 border border-primary-50"
-            >
-              {loading ? "Saving..." : "Save Project"}
-            </button>
-            <button
-              type="button"
-              className="btn border border-neutral-70 text-neutral-0 hover:text-primary-40"
-              onClick={onClose}
-              disabled={loading}
-            >
-              Cancel
-            </button>
-          </div>
-        </form>
-      </div>
-    </dialog>
+        <div>
+            <label className="block text-sm text-neutral-20 mb-1" htmlFor="githubProjectLink">
+            GitHub Code URL
+            </label>
+            <input
+            id="githubProjectLink"
+            type="url"
+            placeholder="(e.g. https://github.com/user/repo)"
+            className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
+            {...register("githubProjectLink")}
+            />
+        </div>
+        </div>
+
+
+        {/* Buttons */}
+        <div className="flex justify-end gap-4 pt-4">
+          <button
+            type="submit"
+            disabled={loading}
+            className="btn bg-primary-60 text-neutral-0 hover:bg-primary-50 border border-primary-50"
+          >
+            {loading ? "Saving..." : "Publish Project"}
+          </button>
+          <button
+            type="button"
+            className="btn border border-neutral-70 text-neutral-0 hover:text-primary-40"
+            onClick={onClose}
+            disabled={loading}
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  </dialog>
   );
 };
