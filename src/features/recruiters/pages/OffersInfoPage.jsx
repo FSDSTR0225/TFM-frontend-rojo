@@ -7,6 +7,7 @@ import { SectionContainer } from '../../../components/SectionContainer';
 import {OfferList} from '../components/OfferList'
 import { Pagination } from '../../../components/Pagination';
 import { ModalDelete } from '../components/ModalDelete';
+import { PiFunnel } from 'react-icons/pi';
 
 
 
@@ -29,7 +30,7 @@ const getFilteredOffers = () => {
   let filtered = [...offers]
 
   if (contractTypeFilter) {
-    filtered = filtered.filter((offer)=> offer.contractType === contractTypeFilter)
+    filtered = filtered.filter((offer)=> offer.contractType.includes(contractTypeFilter))
   }
   
   if (skillsFilter.length > 0) {
@@ -47,7 +48,7 @@ const getFilteredOffers = () => {
 }
 
   const filteredOffers = getFilteredOffers()
-  const totalPages = Math.ceil(offers.length / 6);
+  const totalPages = Math.ceil(filteredOffers.length / 6);
   const startIndex = (currentPage - 1) * 6;
   const currentOffers= filteredOffers.slice(startIndex, startIndex + 6);
 
@@ -123,9 +124,17 @@ console.log("🚀 ~ OffersInfoPage ~ hardSkills:", hardSkills)
         <h2 className='text-3xl font-bold text-neutral-0'>Your Next Tech Career Starts Here</h2>
         <p className='text-neutral-10 text-lg '>Discover job opportunities for developers, designers, and engineers in fast-growing tech fields.</p>
 
-        {/* selectores del filtro */}
-        <div className="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-        <label>
+      {/* change popover-1 and --anchor-1 names. Use unique names for each dropdown */}
+{/* For TSX uncomment the commented types below */}
+<button className="btn p-2 w-10" popoverTarget="popover-1" style={{ anchorName: "--anchor-1" } /* as React.CSSProperties */}>
+ <PiFunnel className='size-6'/>
+</button>
+
+{/* selectores del filtro */}
+<ul className="dropdown menu w-100 rounded-box bg-base-100 shadow-lgm"
+  popover="auto" id="popover-1" style={{ positionAnchor: "--anchor-1" } /* as React.CSSProperties */ }>
+  <li className='p-4 border-b-2 border-neutral-50'>
+  <label>
         Type Contract:
         <select 
         value={contractTypeFilter}
@@ -135,10 +144,12 @@ console.log("🚀 ~ OffersInfoPage ~ hardSkills:", hardSkills)
         {contractsTypes.map((contract, index) =>(<option key={index} value={contract}>{contract}</option>))}
         </select>
         </label>
-        <fieldset>
+        </li>
+  <li className='flex flex-col flex-wrap p-4'>
+    <fieldset className=' flex flex-col flex-wrap'>
           <legend>Skills:</legend>
           {hardSkills.map((skill)=>(
-            <label key={skill}>
+            <label key={skill} className=''>
               <input type="checkbox"
              checked={skillsFilter.includes(skill)}
              onChange={(e) =>{
@@ -151,6 +162,13 @@ console.log("🚀 ~ OffersInfoPage ~ hardSkills:", hardSkills)
             </label>
           ))}
         </fieldset>
+  </li>
+</ul>
+
+        
+        <div className="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+        
+        
 
           <label>
             Sort by date:
