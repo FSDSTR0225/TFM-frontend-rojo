@@ -44,30 +44,35 @@ function InfoDeveloper({ profileInfo, token, onProfileUpdated }) {
             <div className="flex flex-wrap gap-2 mt-2 mb-2">
                 <Link 
                     to={profileInfo.role.developer.instagram} 
-                    className="p-2 m-2 bg-primary-60 hover:bg-primary-70 rounded-full hover:shadow-lg"
+                    className="btn btn-primary bg-primary-60 hover:bg-primary-70 rounded-full hover:shadow-lg text-sm"
                     aria-label="Linkedin">
                     <PiGithubLogo className="text-xl" />
                 </Link>
                 <Link 
                     to={profileInfo.role.developer.linkedin} 
-                    className="p-2 m-2 bg-primary-60 hover:bg-primary-70 rounded-full hover:shadow-lg"
+                    className="btn btn-primary bg-primary-60 hover:bg-primary-70 rounded-full hover:shadow-lg text-smg"
                     aria-label="Linkedin">
                     <PiLinkedinLogo className="text-xl" />
                 </Link>
                 <Link 
                     to={profileInfo.role.developer.github} 
-                    className="p-2 m-2 bg-primary-60 hover:bg-primary-70 rounded-full hover:shadow-lg"
+                    className="btn btn-primary bg-primary-60 hover:bg-primary-70 rounded-full hover:shadow-lg text-sm"
                     aria-label="GitHub">
                     <PiGithubLogo className="text-xl" />
                 </Link>
             </div>
+
+            {/* CONTACT Y DOWNLOAD CV */}
+
+            <button class="btn bg-neutral-90 hover:bg-neutral-60 border border-neutral-60 rounded-md ">Contact</button>
+            <button class="btn bg-neutral-90 hover:bg-neutral-60 border border-neutral-60 rounded-md ">Download CV</button>
 
             {/* IDIOMA */}
             <h2 className="mt-2 mb-2">Languages</h2>
             
             <div className="flex flex-wrap gap-2 mt-2 mb-2">
                 {profileInfo.role.developer.languages.map((lang, index) => (
-                <span key={index} className="bg-primary-60 px-3 py-1 rounded-full text-sm">
+                <span key={index} className="bg-primary-60 rounded-md px-2 py-0.5 text-sm">
                     {lang.language} ({lang.languageLevel})
                 </span>
                 ))}
@@ -76,10 +81,10 @@ function InfoDeveloper({ profileInfo, token, onProfileUpdated }) {
             {/* SKILLS */}
             <h2 className="mt-4 mb-2">Skills</h2>
 
-            <div className="flex flex-wrap justify-center gap-2 mt-4 mb-4">
+            <div className="flex flex-wrap col-span-3 gap-2 mt-4">
                 {profileInfo.role.developer.skills.map((skill, index) => (
-                <span key={index} className="flex flex-row justify-center w-24 bg-primary-60 p-1 rounded-full text-sm">
-                    {skill}
+                <span key={index} className="bg-primary-60 rounded-md px-2 py-0.5 text-sm">
+                {skill}
                 </span>
                 ))}
             </div>

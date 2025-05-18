@@ -8,7 +8,7 @@ function StudyCard({ profileInfo }) {
             <div className="flex justify-end mb-2">
                 <Link 
                     to={profileInfo.role.developer.github} 
-                    className=" flex flex-row w-28 mb-2 justify-center bg-primary-60 hover:bg-primary-70 rounded-full hover:shadow-lg text-sm"
+                    className="btn btn-primary bg-primary-60 hover:bg-primary-70 rounded-md hover:shadow-lg text-sm"
                     aria-label="Create study">
                     Create study
                 </Link>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { PiPlus } from "react-icons/pi";
+// import { PiPlus } from "react-icons/pi";
 import { Link } from 'react-router';
 
 function ExperienceCard({ profileInfo }) {
@@ -9,9 +9,10 @@ function ExperienceCard({ profileInfo }) {
             <div className="flex justify-end mb-2">
             <Link 
                 to={profileInfo.role.developer.github} 
-                className=" flex flex-row w-8 mb-2 justify-center bg-primary-60 hover:bg-primary-70 rounded-full hover:shadow-lg text-sm"
+                className="btn btn-primary bg-primary-60 hover:bg-primary-70 rounded-md hover:shadow-lg text-sm"
                 aria-label="Create experience">
-                <PiPlus className="text-xl font-bold text-white"/>
+                    Create Experience
+                {/* <PiPlus className="text-xl font-bold text-white"/> */}
             </Link>
             </div>
             <div className="grid grid-cols-3 bg-neutral-80 border border-neutral-60 p-8 mb-4 rounded-md">

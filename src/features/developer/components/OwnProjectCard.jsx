@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NewProjectModal } from '../components/NewProjectModal';
-import { PiGithubLogo, PiEye, PiArrowSquareOut } from "react-icons/pi";
+import { PiPlus, PiArrowSquareOut, PiGithubLogo, PiEye} from "react-icons/pi";
 import { Link } from 'react-router';
 
 function OwnProjectCard({ profileInfo }) {
@@ -17,15 +17,16 @@ function OwnProjectCard({ profileInfo }) {
     
     if (!profileInfo) return <p>Error al cargar los proyectos</p>;
     return (
-        <div>
-<div className="flex justify-end mb-2">
-        <button
+    <div>
+      <div className="flex justify-end mb-2">
+        <Link
           onClick={handleOpenModal}
-          className="flex flex-row w-28 mb-2 justify-center bg-primary-60 hover:bg-primary-70 rounded-full hover:shadow-lg text-sm"
+          className="btn btn-primary bg-primary-60 hover:bg-primary-70 rounded-md hover:shadow-lg text-sm"
           aria-label="Create project"
         >
           Create project
-        </button>
+          {/* <PiPlus className="text-xl font-bold text-white"/> */}
+        </Link>
       </div>
 
       {isModalOpen && (
@@ -34,52 +35,53 @@ function OwnProjectCard({ profileInfo }) {
           onClose={handleCloseModal}
         />
       )}
-            <div className="grid grid-cols-3 gap-4 bg-neutral-80 border border-neutral-60 p-8 rounded-md">
-                <div className="ml-4">
-                    <img
-                    src="https://www.codedonostia.com/wp-content/uploads/2022/12/Diseno-web-de-un-negocio-1.jpg"
-                    className=" w-80 h-60 rounded-md"
-                    alt="projectImages"
-                    />
-                </div>
-                <div className="col-span-2">
-                    <div className="grid grid-cols-3 gap-4 rounded-md">
-                        <h3 className="col-span-2 text-xl uppercase font-bold">E-commerce Platform</h3>
-                        <span className="flex flex-row justify-center w-24 bg-primary-60 p-1 rounded-full text-sm ">Website</span>
-                        <span className="col-span-2  ">2018</span>
-                        <span className="col-span-3 ">Full-featured online store with cart, payment integration, and admin dashboard.</span>
-                        <div className="flex flex-wrap col-span-3 gap-2 mt-4">
-                            {profileInfo.role.developer.skills.map((skill, index) => (
-                            <span key={index} className="bg-primary-60 px-3 py-1 rounded-full text-sm">
-                            {skill}
-                            </span>
-                            ))}
-                        </div>
-                        <div className="flex space-x-2 col-span-2">
-                            <Link 
-                                to={profileInfo.role.developer.github} 
-                                className="flex flex-row p-2 m-2 bg-neutral-90 hover:bg-neutral-60 border border-neutral-60 rounded-md "
-                                aria-label="GitHub Profile">
-                                <PiGithubLogo className="text-xl" />Github
-                            </Link>
-                            <Link 
-                                to={profileInfo.role.developer.github} 
-                                className="flex flex-row h-8 px-3 py-1 m-2 bg-transparent border-2 border-primary-50 text-primary-50  hover:bg-neutral-0 hover:text-neutral-90 hover:border-neutral-0 rounded-full hover:shadow-lg"
-                                aria-label="View Profile">
-                                <PiEye className="text-xl" />View Project
-                            </Link>
-                            <Link 
-                                to={profileInfo.role.developer.github} 
-                                className="flex flex-row p-2 m-2 bg-primary-60 hover:bg-primary-70 text-neutral-90 rounded-full"
-                                aria-label="View Profile">
-                                <PiArrowSquareOut className="text-xl" />Project Details
-                            </Link>
-                        </div>
-                    </div>
-                </div>
 
+      {/* ///////////////////////////// */}
+
+      <div class="card lg:card-side bg-base-100 shadow-sm">
+          <figure>
+            <img
+              src="https://img.daisyui.com/images/stock/photo-1635805737707-575885ab0820.webp"
+              alt="ProjectImage" />
+          </figure>
+          
+          <div class="card-body">
+            <div className="grid grid-cols-2">
+              <h2 class="card-title">E-commerce Platform</h2> 
+              <span className="justify-self-end bg-primary-60 text-neutral-90 rounded-md px-2 py-0.5">
+                Website
+              </span>                 
             </div>
-        </div>  
+            
+            <span>Full-featured online store with cart, payment integration, and admin dashboard.</span>
+            <span>2018</span>
+
+            <div className="flex flex-wrap col-span-3 gap-2 mt-4">
+                {profileInfo.role.developer.skills.map((skill, index) => (
+                <span key={index} className="bg-primary-60 rounded-md px-2 py-0.5 text-sm">
+                {skill}
+                </span>
+                ))}
+            </div>
+
+            <div class="card-actions justify-end">
+              <button class="btn btn-primary bg-neutral-90 hover:bg-neutral-60 border border-neutral-60 rounded-md ">
+                <PiGithubLogo className="text-xl" />
+                Github
+              </button>
+              <button class="btn btn-primary  bg-transparent border-2 border-primary-50 text-primary-50  hover:bg-neutral-0 hover:text-neutral-90 hover:border-neutral-0 rounded-md hover:shadow-lg">
+                <PiEye className="text-xl" />
+                View Project
+              </button>
+              <button class="btn btn-primary bg-primary-60 hover:bg-primary-70 text-neutral-90 rounded-md">
+                <PiArrowSquareOut className="text-xl" />
+                Project Details
+              </button>
+            </div>
+          </div>
+      </div>
+
+    </div>  
     )
 };
 
