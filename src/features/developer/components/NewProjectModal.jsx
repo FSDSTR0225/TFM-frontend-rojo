@@ -20,9 +20,14 @@ export const NewProjectModal = ({ onClose }) => {
   const [videoUrl, setVideoUrl] = useState("");
   const [showVideo, setShowVideo] = useState(false);
   
-const skills = watch("projectSkills") || [];
-  
+  const skills = watch("projectSkills") || [];
+
   const currentYear = new Date().getFullYear();
+
+  const isValidImageUrl = (url) => {
+  if (!url) return false;
+  return /\.(jpg|jpeg|png|gif|webp)$/i.test(url) || /format=auto/.test(url);
+  };
 
   const handleGalleryChange = (index, value) => {
     const updated = [...galleryUrls];
@@ -81,6 +86,7 @@ const skills = watch("projectSkills") || [];
 
     try {
         const project = await createProject(payload, token);
+        console.log('ID del proyecto creado:', project.project._id);
 
     reset();
     setCodeSections([""]);
@@ -89,7 +95,7 @@ const skills = watch("projectSkills") || [];
     setShowVideo(false);
     onClose();
 
-    navigate(`/projects/${project.id}`);
+    navigate(`/projects/${project.project._id}`);
   } catch (err) {
     setError(err.message || "Unknown error");
   } finally {
@@ -97,28 +103,8 @@ const skills = watch("projectSkills") || [];
   }
 };
 
-  function toYouTubeEmbedUrl(url) {
-    try {
-      const urlObj = new URL(url);
-      if (
-        urlObj.hostname === "www.youtube.com" ||
-        urlObj.hostname === "youtube.com"
-      ) {
-        const videoId = urlObj.searchParams.get("v");
-        if (videoId) {
-          return `https://www.youtube.com/embed/${videoId}`;
-        }
-      }
-      if (urlObj.hostname === "youtu.be") {
-        const videoId = urlObj.pathname.slice(1);
-        return `https://www.youtube.com/embed/${videoId}`;
-      }
-    } catch {
-      // URL inválida o no es youtube
-    }
-    return url;
-  }
 
+  
   return (
   <dialog id="project_modal" className="modal modal-open">
     <div className="modal-box max-w-3xl bg-neutral-80 border border-neutral-70 text-neutral-0 shadow-md rounded-lg">
@@ -250,30 +236,30 @@ const skills = watch("projectSkills") || [];
           </div>
 
           <div className="flex gap-4 overflow-x-auto pb-2">
-            {galleryUrls.map((url, index) => (
-              <div
-                key={index}
-                className="relative flex-shrink-0 w-28 h-28 rounded overflow-hidden border border-neutral-60 bg-neutral-70"
-              >
-                {url && /\.(jpg|jpeg|png|gif|webp)$/i.test(url) ? (
-                  <img
-                    src={url}
-                    alt={`Image ${index + 1}`}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <span className="flex items-center justify-center w-full h-full text-sm text-neutral-40 ">
-                    Preview
-                  </span>
-                )}
-                <button
-                  type="button"
-                  onClick={() => handleRemoveGallery(index)}
-                  className="absolute top-1 right-1 bg-neutral-90 text-primary-40 hover:text-primary-70 font-bold rounded-full w-6 h-6 flex items-center justify-center shadow"
-                  aria-label={`Remove image #${index + 1}`}
+              {galleryUrls.map((url, index) => (
+                <div
+                  key={index}
+                  className="relative flex-shrink-0 w-28 h-28 rounded overflow-hidden border border-neutral-60 bg-neutral-70"
                 >
-                  ×
-                </button>
+                  {url && isValidImageUrl(url) ? (
+                    <img
+                      src={url}
+                      alt={`Image ${index + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <span className="flex items-center justify-center w-full h-full text-sm text-neutral-40 ">
+                      Preview
+                    </span>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveGallery(index)}
+                    className="absolute top-1 right-1 bg-neutral-90 text-primary-40 hover:text-primary-70 font-bold rounded-full w-6 h-6 flex items-center justify-center shadow"
+                    aria-label={`Remove image #${index + 1}`}
+                  >
+                    ×
+                  </button>
               </div>
             ))}
           </div>
@@ -336,7 +322,7 @@ const skills = watch("projectSkills") || [];
               {videoUrl.trim() && (
                 <div className="aspect-video w-full rounded border border-neutral-60 bg-neutral-70 overflow-hidden">
                   <iframe
-                    src={toYouTubeEmbedUrl(videoUrl)} // tu función embedVideoUrl()
+                    src={videoUrl}
                     title="Video Preview"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
@@ -429,7 +415,7 @@ const skills = watch("projectSkills") || [];
           </button>
           <button
             type="button"
-            className="btn border border-neutral-70 text-neutral-0 hover:text-primary-40"
+            className="btn bg-neutral-90 border border-neutral-70 text-neutral-0 hover:text-primary-40"
             onClick={onClose}
             disabled={loading}
           >

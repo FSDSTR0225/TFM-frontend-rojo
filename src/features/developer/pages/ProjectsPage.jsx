@@ -63,8 +63,8 @@ export const ProjectsPage = () => {
 
   return (
     <div className="p-4 max-w-screen-xl mx-auto">
-      <h1 className="text-3xl font-bold mb-2">Developer Projects</h1>
-      <p className="text-md font-normal mb-4 text-[#606a79]">Discover talented developers for your next project</p>
+      <h1 className="text-3xl font-bold mb-2 mt-10 text-neutral-0">Developer Projects</h1>
+      <p className="text-md font-normal mb-4 text-neutral-30">Discover talented developers for your next project</p>
 
       <div className="flex flex-wrap justify-center gap-2 mb-6 px-4 py-0.5 bg-[#262626] rounded-md">
         {categories.map((category) => (
