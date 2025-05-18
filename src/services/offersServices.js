@@ -76,12 +76,6 @@ export const getSkills = async () => {
     }
 }
 
-
-
-
-
-
-
 export const createdOffert = async (offert, token) => {
     try {
         const resp = await fetch(API_URL + '/', {
