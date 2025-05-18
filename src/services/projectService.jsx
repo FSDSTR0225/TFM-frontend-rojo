@@ -16,3 +16,25 @@ export const getAllProjects = async () => {
     return { error: true, message: error.message };
   }
 };
+
+export const createProject = async (payload, token) => {
+  try {
+    const resp = await fetch(urlBackEnd + '/projects', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!resp.ok) throw new Error('Error saving the project');
+
+    const project = await resp.json();
+    console.log('Respuesta del backend (createProject):', project)
+    return project;
+  } catch (error) {
+    console.error('Failed to create project:', error);
+    return { error: true, message: error.message };
+  }
+};

@@ -6,6 +6,7 @@ import { OfferCard } from '../components/OfferCard';
 import { SectionContainer } from '../../../components/SectionContainer';
 import {OfferList} from '../components/OfferList'
 import { Pagination } from '../../../components/Pagination';
+import { ModalDelete } from '../components/ModalDelete';
 
 
 
@@ -15,7 +16,7 @@ export const OffersInfoPage = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 const [currentPage, setCurrentPage] = useState(1);
-
+const [isOpenModalDelete, setIsOpenModalDelete] = useState(false)
 
   const totalPages = Math.ceil(offers.length / 6);
   const startIndex = (currentPage - 1) * 6;
@@ -24,10 +25,7 @@ const [currentPage, setCurrentPage] = useState(1);
   const handlePageChange = (pageNum) => {
     if (pageNum === currentPage) return;
     setCurrentPage(pageNum); // Primero actualizamos la página
-    setLoading(true);        // Luego activamos el loading
-    setTimeout(() => {
-      setLoading(false);     // Después de un pequeño retraso, desactivamos el loading
-    }, 500);
+ 
   };
 
 
@@ -81,12 +79,13 @@ const [currentPage, setCurrentPage] = useState(1);
               
               return (
 
-              <OfferCard offer={offer} owner={offer.owner} key={offer._id}  />
+              <OfferCard offer={offer} owner={offer.owner} key={offer._id} setIsOpenModalDelete={setIsOpenModalDelete} isOpenModalDelete={isOpenModalDelete}   />
 
             )})}
             
             
          </OfferList>
+         {isOpenModalDelete &&<ModalDelete isOpen={isOpenModalDelete} setIsOpen={setIsOpenModalDelete} />}
             <Pagination
                     currentPage={currentPage}
                     totalPages={totalPages}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import InfoDeveloper from "../components/InfoDeveloper";
-import { getProfileDev } from "../../../services/profileService";
+import { getProfileDev } from '../../../services/profileService'; 
 import { useParams } from 'react-router';
 import { AuthContext } from '../../../context/authContext'; // Asegúrate de tener esto
 

@@ -1,19 +1,39 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { NewProjectModal } from '../components/NewProjectModal';
 import { PiGithubLogo, PiEye, PiArrowSquareOut } from "react-icons/pi";
 import { Link } from 'react-router';
 
 function OwnProjectCard({ profileInfo }) {
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = () => setIsModalOpen(true);
+  const handleCloseModal = () => setIsModalOpen(false);
+
+  const handleSubmitProject = (projectData) => {
+    console.log("Proyecto enviado al backend:", projectData);
+    // Aquí puedes llamar a tu API con fetch o axios si lo deseas
+  };
+    
     if (!profileInfo) return <p>Error al cargar los proyectos</p>;
     return (
         <div>
-            <div className="flex justify-end mb-2">
-            <Link 
-                to={profileInfo.role.developer.github} 
-                className=" flex flex-row w-28 mb-2 justify-center bg-primary-60 hover:bg-primary-70 rounded-full hover:shadow-lg text-sm"
-                aria-label="Create project">
-                Create project
-            </Link>
-            </div>
+<div className="flex justify-end mb-2">
+        <button
+          onClick={handleOpenModal}
+          className="flex flex-row w-28 mb-2 justify-center bg-primary-60 hover:bg-primary-70 rounded-full hover:shadow-lg text-sm"
+          aria-label="Create project"
+        >
+          Create project
+        </button>
+      </div>
+
+      {isModalOpen && (
+        <NewProjectModal
+          onSubmitProject={handleSubmitProject}
+          onClose={handleCloseModal}
+        />
+      )}
             <div className="grid grid-cols-3 gap-4 bg-neutral-80 border border-neutral-60 p-8 rounded-md">
                 <div className="ml-4">
                     <img

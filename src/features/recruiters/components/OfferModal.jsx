@@ -1,16 +1,19 @@
 import { useForm } from 'react-hook-form';
-import { createdOffert } from '../../../services/offersServices-';
+import { createdOffert } from '../../../services/offersServices';
+import { useState } from 'react';
 
-export const OfferModal = ({token}) => {
+export const OfferModal = ({token,reloadPage}) => {
   const { register,
     watch,
     handleSubmit,
     reset,
     formState: { errors } } = useForm();
-
+  
+  const [skills, setSkills] = useState();
   const createNewOffer = async (formDatos) => {
     const respOffert = await createdOffert(formDatos,token);
     console.log('nueva oferta: ', respOffert);
+    reloadPage();
     reset();
     document.getElementById("my_modal_1")?.close();
   }
