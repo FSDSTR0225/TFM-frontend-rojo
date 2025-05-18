@@ -67,6 +67,20 @@ export const deleteOffer = async (id, token) => {
     }
 }
 
+export const getSkills = async () => {
+    try {
+        
+    } catch (error) {
+        console.log("Error: ", error);
+        throw error;
+    }
+}
+
+
+
+
+
+
 
 export const createdOffert = async (offert, token) => {
     try {
