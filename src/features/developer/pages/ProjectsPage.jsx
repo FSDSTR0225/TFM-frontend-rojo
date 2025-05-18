@@ -94,31 +94,33 @@ export const ProjectsPage = () => {
             </p>
           ) : (
             <div
-              className="grid gap-8 justify-center"
-              style={{
-                gridTemplateColumns: 'repeat(auto-fit, minmax(394px, 1fr))',
-              }}
-            >
-              {currentProjects.map((project) => (
-                <div
-                  key={project._id}
-                  className="mx-auto w-[394px]"
-                  style={{ aspectRatio: '394 / 256' }}
-                >
-                  <ProjectCard
-                    developerId={project.owner?._id}
-                    name={project.owner?.name}
-                    surname={project.owner?.surname}
-                    avatar={project.owner?.avatar}
-                    title={project.title}
-                    category={activeTab === "All" ? project.category : null}
-                    gallery={project.gallery}
-                    projectid={project._id}
-                    badgeText={project.badgeText}
-                  />
-                </div>
-              ))}
-            </div>
+  className="grid gap-x-6 gap-y-6 justify-center"
+  style={{
+    gridTemplateRows: 'repeat(3, minmax(0, 1fr))', // 3 filas iguales en altura
+    gridAutoFlow: 'column', // fluye en columnas para llenar filas primero
+    gridAutoColumns: 'minmax(250px, 1fr)', // columnas con ancho mínimo, máximo flexible
+  }}
+>
+  {currentProjects.map((project) => (
+    <div
+      key={project._id}
+      className="mx-auto w-full max-w-[394px]"
+      style={{ aspectRatio: '394 / 256' }}
+    >
+      <ProjectCard
+        developerId={project.owner?._id}
+        name={project.owner?.name}
+        surname={project.owner?.surname}
+        avatar={project.owner?.avatar}
+        title={project.title}
+        category={activeTab === "All" ? project.category : null}
+        gallery={project.gallery}
+        projectid={project._id}
+        badgeText={project.badgeText}
+      />
+    </div>
+  ))}
+</div>
           )}
         </div>
       )}
