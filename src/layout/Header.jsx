@@ -181,7 +181,7 @@ export const Header = () => {
                   </Link>
                 ) : (
                   <Link
-                    to={`recruiter/${profile._id}`}
+                    to={`profile/${profile._id}`}
                     className='btn btn-sm rounded-full text-white bg-green-600 hover:bg-green-700'
                   >
                     Ver Perfil
@@ -259,8 +259,8 @@ export const Header = () => {
           </li>
           <li>
             <Link
-              to='/portfolios'
-              className='btn text-neutral-0 bg-neutral-90 m-2 hover:bg-primary-60'
+              to="/projects"
+              className="btn text-neutral-0 bg-neutral-90 m-2 hover:bg-primary-60"
             >
               <svg
                 xmlns='http://www.w3.org/2000/svg'
