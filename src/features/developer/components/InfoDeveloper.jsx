@@ -1,122 +1,140 @@
-
+import React from 'react';
 import { Link } from 'react-router';
 import RightPanel from "./RightPanel";
 import { EditButton } from '../../../components/EditButton';
-import { PiGithubLogo, PiLinkedinLogo, PiEye } from "react-icons/pi";
+import { PiGithubLogo, PiLinkedinLogo, PiChatCenteredDots, PiTranslate, PiCodeSimple } from 'react-icons/pi';
 import { DevModal } from './devModal';
-// import { SectionContainer } from "../../../components/SectionContainer";
+import { SectionContainer } from "../../../components/SectionContainer";
 
 function InfoDeveloper({ profileInfo, token, onProfileUpdated }) {
-  // Estado para controlar si el modal está visible
-  
-
   const handleOpenModal = () => {
     document.getElementById("my_modal_1").showModal();
   };
 
-    if (!profileInfo) return <p>Error al cargar el profile</p>;
+  if (!profileInfo) return <p>Error al cargar el profile</p>;
 
-    return (
-    <div className="grid grid-cols-3 gap-4 mx-15 p-10">
+  return (
+    <SectionContainer classProps="lg:flex-row flex-col-reverse gap-4 lg:items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-3">
+        {/* PARTE IZQUIERDA INFO PERSONAL */}
+        <div className="flex flex-col items-center bg-neutral-80 border border-neutral-60 p-6 rounded-md">
+          <div className="w-full flex justify-end mb-2">
+            <EditButton onClick={handleOpenModal} />
+          </div>
 
-          {/* <SectionContainer classProps="lg:flex-row flex-col-reverse gap-4 lg:items-start">
-
-          </SectionContainer> */}
-        
-        {/* PARTE IZQUIERDO INFO PERSONAL */}
-        <div className="grid justify-items-center bg-neutral-80 border border-neutral-60  p-6 rounded-md">
-            <EditButton 
-                onClick={handleOpenModal} 
-                classProps={"self-end"} 
-            />
+          <div className="flex flex-col items-center">
             <img
-            src="https://cdn-icons-png.flaticon.com/512/3135/3135768.png"
-            className=" w-40 h-40 mb-4 rounded-full"
-            alt="Perfil"
+              src={profileInfo.avatar || 'https://cdn-icons-png.flaticon.com/512/3135/3135768.png'}
+              className="w-32 h-32 rounded-full border-4 border-primary-60"
+              alt="Perfil"
             />
-            <h1 className="text-xl font-bold mt-4 mb-2">
-            {profileInfo.name} {profileInfo.surname}
+            <h1 className="text-xl font-bold mt-4 text-center">
+              {profileInfo.name} {profileInfo.surname}
             </h1>
-            <h3 className="text-xlmb-2">{profileInfo.role.developer.professionalPosition}</h3>
-            <span className="mb-2">{profileInfo.role.developer.location}</span>
+            <h3 className="text-lg mb-2 text-center">
+              {profileInfo.role.developer.professionalPosition}
+            </h3>
+            <span className="mb-4 text-center">
+              {profileInfo.role.developer.location}
+            </span>
+          </div>
 
-            {/* MEDIA */}
-            <div className="flex flex-wrap gap-2 mt-2 mb-2">
+          {/* MEDIA */}
+          <div className="flex justify-center gap-2 my-4 w-full">
+                        <div className="flex justify-center gap-2 my-4 w-full">
                 <Link 
-                    to={profileInfo.role.developer.instagram} 
-                    className="btn btn-primary bg-primary-60 hover:bg-primary-70 rounded-full hover:shadow-lg text-sm"
-                    aria-label="Linkedin">
-                    <PiGithubLogo className="text-xl" />
+                to={profileInfo.role.developer.instagram} 
+                className="btn btn-circle bg-transparent border-2 border-primary-50 text-primary-50  hover:bg-neutral-0 hover:text-neutral-90 hover:border-neutral-0 "
+                aria-label="Linkedin">
+                <PiGithubLogo className="text-xl" />
                 </Link>
                 <Link 
-                    to={profileInfo.role.developer.linkedin} 
-                    className="btn btn-primary bg-primary-60 hover:bg-primary-70 rounded-full hover:shadow-lg text-smg"
-                    aria-label="Linkedin">
-                    <PiLinkedinLogo className="text-xl" />
+                to={profileInfo.role.developer.linkedin} 
+                className="btn btn-circle bg-transparent border-2 border-primary-50 text-primary-50  hover:bg-neutral-0 hover:text-neutral-90 hover:border-neutral-0 "
+                aria-label="Linkedin">
+                <PiLinkedinLogo className="text-xl" />
                 </Link>
                 <Link 
-                    to={profileInfo.role.developer.github} 
-                    className="btn btn-primary bg-primary-60 hover:bg-primary-70 rounded-full hover:shadow-lg text-sm"
-                    aria-label="GitHub">
-                    <PiGithubLogo className="text-xl" />
+                to={profileInfo.role.developer.github} 
+                className="btn btn-circle bg-transparent border-2 border-primary-50 text-primary-50  hover:bg-neutral-0 hover:text-neutral-90 hover:border-neutral-0 "
+                aria-label="GitHub">
+                <PiGithubLogo className="text-xl" />
                 </Link>
             </div>
+          </div>
 
-            {/* CONTACT Y DOWNLOAD CV */}
+          {/* CONTACT Y DOWNLOAD CV */}
+          <div className="grid grid-cols-1 gap-2 w-full my-4">
+            <Link
+              to={profileInfo.role.developer.github}
+              className="btn w-full bg-neutral-90 hover:bg-neutral-60 border border-neutral-60 rounded-md"
+            >
+              Contact
+            </Link>
+            <Link
+              to={profileInfo.role.developer.github}
+              className="btn w-full bg-neutral-90 hover:bg-neutral-60 border border-neutral-60 rounded-md"
+            >
+              Download CV
+            </Link>
+          </div>
 
-            <button class="btn bg-neutral-90 hover:bg-neutral-60 border border-neutral-60 rounded-md ">Contact</button>
-            <button class="btn bg-neutral-90 hover:bg-neutral-60 border border-neutral-60 rounded-md ">Download CV</button>
+          {/* ABOUT ME */}
+          <div className="w-full mt-2">
+            <h2 className="flex font-bold mb-3">
+              <PiChatCenteredDots className="text-xl mr-2" />
+              About Me
+            </h2>
+            <p>{profileInfo.description}</p>
+          </div>
 
-            {/* IDIOMA */}
-            <h2 className="mt-2 mb-2">Languages</h2>
-            
-            <div className="flex flex-wrap gap-2 mt-2 mb-2">
-                {profileInfo.role.developer.languages.map((lang, index) => (
-                <span key={index} className="bg-primary-60 rounded-md px-2 py-0.5 text-sm">
+          {/* LANGUAGES */}
+          <div className="w-full mt-4">
+            <h2 className="flex font-bold mb-3">
+              <PiTranslate className="text-xl mr-2" />
+              Languages
+            </h2>
+            <div className="flex flex-wrap gap-2">
+              {profileInfo.role.developer.languages.map((lang, index) => (
+                <span key={index} className="bg-transparent border-2 border-primary-50 text-primary-50 rounded-md px-2 py-0.5 text-sm">
                     {lang.language} ({lang.languageLevel})
                 </span>
-                ))}
+              ))}
             </div>
+          </div>
 
-            {/* SKILLS */}
-            <h2 className="mt-4 mb-2">Skills</h2>
-
-            <div className="flex flex-wrap col-span-3 gap-2 mt-4">
-                {profileInfo.role.developer.skills.map((skill, index) => (
-                <span key={index} className="bg-primary-60 rounded-md px-2 py-0.5 text-sm">
+          {/* SKILLS */}
+          <div className="w-full mt-6">
+            <h2 className="flex font-bold mb-3">
+              <PiCodeSimple className="text-xl mr-2" />
+              Skills
+            </h2>
+            <div className="flex flex-wrap gap-2">
+              {profileInfo.role.developer.skills.map((skill, index) => (
+                <span key={index} className="bg-transparent border-2 border-primary-50 text-primary-50 rounded-md px-2 py-0.5 text-sm">
                 {skill}
                 </span>
                 ))}
             </div>
+          </div>
         </div>
 
-        
-        <div className="col-span-2">
-                {/* ABOUT ME */}
-            <div className="about-me bg-neutral-80 border border-neutral-60 p-8 mb-4 rounded-md">
-                <h2 className='text-xl font-bold mb-4'>About Me</h2>
-                <span className='mt-4 mb-4'>
-                    {profileInfo.description}
-                </span>
-            </div>
-            <div>
-            {/* PANEL DERECHO */}        
-                <RightPanel profileInfo={profileInfo} />
-            </div>
+        {/* PANEL DERECHO */}
+        <div className="col-span-1 lg:col-span-2">
+          <RightPanel profileInfo={profileInfo} token={token} onProfileUpdated={onProfileUpdated} />
         </div>
+
         {/* Modal para editar perfil */}
         <dialog id="my_modal_1" className="modal">
-          <DevModal 
-            token={token} 
-            profileData={{
-            ...profileInfo
-            }}
-            onProfileUpdated={onProfileUpdated} 
+          <DevModal
+            token={token}
+            profileData={{ ...profileInfo }}
+            onProfileUpdated={onProfileUpdated}
           />
         </dialog>
-        
-    </div>
-    );
+      </div>
+    </SectionContainer>
+  );
 }
 
 export default InfoDeveloper;
