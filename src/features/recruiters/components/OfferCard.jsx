@@ -10,7 +10,7 @@ import { AuthContext } from "../../../context/authContext";
 import { PiMapPinArea } from "react-icons/pi";
 
 
-export const OfferCard = ({ classProps, offer, id, setIsOpenModalDelete, isOpenModalDelete, setSelectedOfferId }) => {
+export const OfferCard = ({ classProps, offer, id, setIsOpenModalDelete, isOpenModalDelete, setSelectedOfferId, isOpenModalEdit, setIsOpenModalEdit }) => {
   const navigate = useNavigate();
   const { profile } = useContext(AuthContext);
 
@@ -25,6 +25,14 @@ export const OfferCard = ({ classProps, offer, id, setIsOpenModalDelete, isOpenM
     setSelectedOfferId(offer._id);
     console.log("🚀 ~ handleOnModal ~ isOpenModalDelete:", isOpenModalDelete)
   };
+
+  const handleOnModalEdit = (e) => {
+    e.stopPropagation();
+    setIsOpenModalEdit(true);
+    setSelectedOfferId(offer._id);
+    console.log("🚀 ~ handleOnModal ~ isOpenModalEdit:", isOpenModalEdit)
+  };
+
 
   const handleOnClick = (e) => {
     e.stopPropagation();
@@ -71,6 +79,7 @@ export const OfferCard = ({ classProps, offer, id, setIsOpenModalDelete, isOpenM
             <MenuCard
               isOpen={isOpenModalDelete}
               openModal={handleOnModal}
+              openModalEdit={handleOnModalEdit}
               onClick={handleOnClick}
               id={offer._id}
             />

@@ -13,11 +13,14 @@ import { ModalDelete } from '../components/ModalDelete';
 
 export const RecProfile = () => {
   const [offers, setOffers] = useState([]);
-  const [isOpenModalDelete, setIsOpenModalDelete] = useState(false)
+  const [isOpenModalDelete, setIsOpenModalDelete] = useState(false);
+  const [isOpenModalCreate, setTsOpenModalCreate] = useState(false);
+  const [isOpenModalEdit, setIsOpenModalEdit] = useState(false);
   const [recruiter, setRecruiter] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedOfferId, setSelectedOfferId] = useState(null);
   const { profile, token } = useContext(AuthContext) || {};
+  const [operacion, setOperacion] = useState('crear');
 
   const { id } = useParams(); // ID del reclutador desde la URL
 
@@ -50,8 +53,9 @@ export const RecProfile = () => {
 
 
   useEffect(() => {
+    console.log("isOpenModalEdit:", isOpenModalEdit)
     fetchData();
-  }, [id, isOwner]);
+  }, [id, isOwner, isOpenModalEdit]);
 
 
   return (
@@ -63,14 +67,15 @@ export const RecProfile = () => {
         <div className="w-full">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-semibold">Mis ofertas de empleo</h2>
-            {(isOwner && profile?.role?.type === 'recruiter') && (<><button onClick={() => document.getElementById('my_modal_1').showModal()} className="bg-green-600 text-black px-4 py-2 rounded hover:bg-green-700 transition cursor-pointer text-sm">
+            {(isOwner && profile?.role?.type === 'recruiter') && (<><button onClick={() => setTsOpenModalCreate(true)} className="bg-green-600 text-black px-4 py-2 rounded hover:bg-green-700 transition cursor-pointer text-sm">
               + Create new offer
             </button>
-              <dialog id="my_modal_1" className="modal">
-                <OfferModal
-                  token={token}
-                  reloadPage={fetchData} />
-              </dialog>
+              <OfferModal
+                isOpen={isOpenModalCreate}
+                setIsOpen={setTsOpenModalCreate}
+                token={token}
+                operacion={operacion}
+                reloadPage={fetchData} />
             </>)}
           </div>
           <div>
@@ -83,6 +88,8 @@ export const RecProfile = () => {
                     setIsOpenModalDelete={setIsOpenModalDelete}
                     isOpenModalDelete={isOpenModalDelete}
                     setSelectedOfferId={setSelectedOfferId}
+                    isOpenModalEdit={isOpenModalEdit}
+                    setIsOpenModalEdit={setIsOpenModalEdit}
                     key={offer._id} />
                 )
               })}
@@ -102,6 +109,14 @@ export const RecProfile = () => {
           idOffer={selectedOfferId}
           reloadPage={fetchData} />}
 
+        {isOpenModalEdit && <dialog id="my_modal_1" className="modal">
+          <OfferModal
+            idOffer={selectedOfferId}
+            isOpen={isOpenModalEdit}
+            setIsOpen={setIsOpenModalEdit}
+            token={token}
+            reloadPage={fetchData} />
+        </dialog>}
       </div>
 
     </SectionContainer>

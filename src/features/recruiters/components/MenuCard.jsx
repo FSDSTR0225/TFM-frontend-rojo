@@ -7,7 +7,8 @@ import { Link } from "react-router";
 import { ModalDelete } from "./ModalDelete";
 import { PiDotsThree, PiDotsThreeBold } from "react-icons/pi";
 
-export const MenuCard = ({ onClick, id, openModal }) => {
+export const MenuCard = ({ onClick, id, openModal, openModalEdit }) => {
+
   return (
     <details
       onClick={onClick}
@@ -27,7 +28,7 @@ export const MenuCard = ({ onClick, id, openModal }) => {
           </Link>
         </li>
         <li
-          onClick={onClick}
+          onClick={openModalEdit}
           className=' hover:bg-neutral-60 hover:text-neutral-0'
         >
           <button>

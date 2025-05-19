@@ -39,7 +39,6 @@ export const getOffersById = async (_id) => {
             throw new Error("Error getting offer")
         }
         const offerData = await response.json()
-        console.log("🚀 ~ getOffersById ~ offerData:", offerData)
         return offerData
     } catch (error) {
         console.error("OffersService Error:", error);
@@ -102,5 +101,25 @@ export const createdOffert = async (offert, token) => {
     }
 
 
+}
+export const updateOffert = async (id, offert, token) => {
+    try {
+        const resp = await fetch(`${API_URL}/${id}`, {
+            method: 'PUT',
+            headers: {
+                authorization: "Bearer " + token,
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(offert)
+        });
+        if (!resp.ok) {
+            throw new Error("Error created offers")
+        }
+        const data = await resp.json();
+        return data;
+    } catch (error) {
+        console.log("Error: ", error);
+        throw error;
+    }
 }
 
