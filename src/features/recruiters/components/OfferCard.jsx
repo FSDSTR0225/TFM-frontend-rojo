@@ -48,7 +48,7 @@ export const OfferCard = ({ classProps, offer, id, setIsOpenModalDelete, isOpenM
     >
       <div className='card-body'>
         <div className='flex justify-between items-center'>
-          <div className='avatar gap-2 items-center'>
+          <Link to={`../recruiter/${offer.owner._id}`} className='avatar gap-2 items-center' onClick={handleOnClick}>
             {offer.owner?.role?.recruiter?.logo ? (
               <div className='avatar'>
                 <div className='size-8 sm:size-8 rounded-full'>
@@ -66,7 +66,7 @@ export const OfferCard = ({ classProps, offer, id, setIsOpenModalDelete, isOpenM
               </div>
             )}
             <p>{completeName}</p>
-          </div>
+          </Link>
           {isOwner && profile?.role?.type === "recruiter" && (
             <MenuCard
               isOpen={isOpenModalDelete}

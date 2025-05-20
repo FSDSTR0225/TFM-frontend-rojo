@@ -1,127 +1,113 @@
-import React, { useState, useMemo } from 'react';
-import { OfferCard } from './OfferCard';
-import { OfferList } from './OfferList';
 
-export const FilterOffers = ({ offers }) => {
-  const [selectedContract, setSelectedContract] = useState('');
-  const [selectedSkills, setSelectedSkills] = useState([]);
-  const [sortOrder, setSortOrder] = useState('desc');
+import { PiFunnel, PiFunnelX, PiSortAscending, PiSortDescending } from "react-icons/pi";
 
-  const availableSkills = ["React", "Node.js", "Python", "Docker", "AWS"];
 
-  const filteredOffers = useMemo(() => {
-    return offers
-      .filter(offer => {
-        const matchesContract = selectedContract 
-          ? offer.contractType === selectedContract 
-          : true;
+export const FilterOffers = ({offers, filtersOpen, setFiltersOpen, contractTypeFilter, setContractTypeFilter, skillsFilter, setSkillsFilter, sortOrder, setSortOrder, resetFilters}) => {
 
-        const matchesSkills = selectedSkills.length > 0 
-          ? selectedSkills.every(skill => offer.skills?.includes(skill)) 
-          : true;
 
-        return matchesContract && matchesSkills;
-      })
-      .sort((a, b) => {
-        const dateA = new Date(a.createdAt);
-        const dateB = new Date(b.createdAt);
-        return sortOrder === 'desc' ? dateB - dateA : dateA - dateB;
-      });
-  }, [offers, selectedContract, selectedSkills, sortOrder]);
 
-  const handleSkillToggle = (skill) => {
-    if (selectedSkills.includes(skill)) {
-      setSelectedSkills(selectedSkills.filter(s => s !== skill));
-    } else {
-      setSelectedSkills([...selectedSkills, skill]);
-    }
-  };
 
+  const contractsTypes = [...new Set(offers.flatMap(offer =>offer.contractType.map(type => type.trim())))]
+
+const hardSkills = [
+  ...new Set(
+    offers.flatMap(offer =>
+      offer.skills
+        .flatMap(s => s.split(","))
+        .map(s => s.trim())
+        .filter(Boolean) // Elimina vacíos
+    )
+  )
+];
+  
   return (
-    <div className="p-6">
-      <div className="mb-6">
-        <h2 className="text-2xl font-bold mb-2">Filtrar ofertas</h2>
-        
-        {/* Filtro por tipo de contrato */}
-        <div className="mb-4">
-          <label htmlFor="contract-filter" className="block mb-1">Tipo de contrato:</label>
+    <div className='flex items-center gap-4 xl:-mb-8 mt-6'>
+    <div className='relative'>
+    <label className="btn btn-md swap swap-rotate w-25">
+      <input
+        type="checkbox"
+        checked={filtersOpen}
+        onChange={() => setFiltersOpen(prev => !prev)}
+      />
+      <div className="swap-on flex items-center gap-2">
+        <PiFunnelX className="size-5" /> Filters
+      </div>
+      <div className="swap-off flex items-center gap-2">
+        <PiFunnel className="size-5" /> Filters
+      </div>
+    </label>
+    
+    {/* selectores del filtro */}
+    {filtersOpen && (
+      <ul className="absolute top-12  z-50 rounded-box bg-neutral-90 shadow-lg border-2 border-neutral-70 min-w-85">
+        <li className="flex flex-col p-4 border-b-2 border-neutral-50">
+          <label>
+            Type Contract:
+            
+          </label>
           <select
-            id="contract-filter"
-            value={selectedContract}
-            onChange={(e) => setSelectedContract(e.target.value)}
-            className="p-2 border rounded"
-          >
-            <option value="">Todos</option>
-            <option value="Full-time">Full-time</option>
-            <option value="Remote">Remote</option>
-            <option value="Part-time">Part-time</option>
-          </select>
-        </div>
-
-        {/* Filtro por habilidades */}
-        <div className="mb-4">
-          <p className="mb-1">Habilidades:</p>
-          <div className="flex flex-wrap gap-2">
-            {availableSkills.map(skill => (
-              <label key={skill} className="flex items-center gap-1">
+          className='p-2 mt-2 bg-neutral-90 border-2 border-neutral-70'
+              value={contractTypeFilter}
+              onChange={(e) => setContractTypeFilter(e.target.value)}
+            >
+              <option value="" className='bg-neutral-90 p-2'>All</option>
+              {contractsTypes.map((contract, index) => (
+                <option className='bg-neutral-90 p-2' key={index} value={contract}>
+                  {contract}
+                </option>
+              ))}
+            </select>
+        </li>
+    
+        <li className="flex flex-col flex-wrap p-4 border-b-2 border-neutral-50">
+          <fieldset className="flex items-center gap-2 flex-wrap">
+            <legend className='mb-2'>Skills:</legend>
+            {hardSkills.map((skill) => (
+              <label className="flex items-center  cursor-pointer " key={skill}>
                 <input
+                className='btn btn-sm btn-outline btn-secondary-40 rounded-full'
+                aria-label={skill}
                   type="checkbox"
-                  checked={selectedSkills.includes(skill)}
-                  onChange={() => handleSkillToggle(skill)}
+                  checked={skillsFilter.includes(skill)}
+                  onChange={(e) => {
+                    const checked = e.target.checked;
+                    setSkillsFilter((prev) =>
+                      checked ? [...prev, skill] : prev.filter((s) => s !== skill)
+                    );
+                  }}
                 />
-                {skill}
+                {/* <span className="bg-neutral-70 border border-neutral-60 px-3 py-1 rounded-full shadow-xl ">{skill}</span> */}
               </label>
             ))}
-          </div>
-        </div>
-
-        {/* Orden */}
-        <div className="mb-4">
-          <label htmlFor="sort-order" className="block mb-1">Orden:</label>
-          <select
-            id="sort-order"
-            value={sortOrder}
-            onChange={(e) => setSortOrder(e.target.value)}
-            className="p-2 border rounded"
+          </fieldset>
+        </li>
+    
+        <li className="p-4">
+          <button
+            onClick={resetFilters}
+            className="btn btn-outline btn-error w-full"
           >
-            <option value="desc">Más recientes</option>
-            <option value="asc">Más antiguos</option>
-          </select>
-        </div>
-
-        {/* Botón de limpiar */}
-        <button
-          onClick={() => {
-            setSelectedContract('');
-            setSelectedSkills([]);
-            setSortOrder('desc');
-          }}
-          className="mt-2 text-sm text-gray-400 hover:text-white"
-        >
-          Limpiar filtros
-        </button>
-      </div>
-
-      {/* Mostrar ofertas filtradas */}
-      <div>
-      <OfferList view={true}>
-        {filteredOffers.length > 0 ? (
-          filteredOffers.map(offer => (
-            <OfferCard key={offer._id} offer={offer} />
-          ))
-        ) : (
-          <p>No hay ofertas con estos filtros.</p>
-        )}
-        </OfferList>
-      </div>
-    </div>
-  );
-};
-
-//  {currentOffers?.map((offer)=>{ 
-              
-//               return (
-
-//               <OfferCard offer={offer} owner={offer.owner} key={offer._id} setIsOpenModalDelete={setIsOpenModalDelete} isOpenModalDelete={isOpenModalDelete}   />
-
-//             )})}
+            Reset Filters
+          </button>
+        </li>
+      </ul>
+    )}</div>
+    
+    
+            
+    
+            
+            
+    
+              <label className="btn btn-md swap swap-rotate w-25">
+      <input  
+        type="checkbox"
+        checked={sortOrder === 'desc'} // ✅ Activa visualmente el swap
+        onChange={() => setSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'))}
+      />
+      <div className="swap-on flex inline-center gap-2"><PiSortAscending className='size-5' />Latest</div>
+      <div className="swap-off flex inline-center gap-2"><PiSortDescending className='size-5'/>Oldest</div>
+    </label>
+      </div>      
+  )
+}
