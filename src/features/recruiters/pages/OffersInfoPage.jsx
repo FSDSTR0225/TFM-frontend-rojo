@@ -7,7 +7,7 @@ import { SectionContainer } from '../../../components/SectionContainer';
 import {OfferList} from '../components/OfferList'
 import { Pagination } from '../../../components/Pagination';
 import { ModalDelete } from '../components/ModalDelete';
-import { PiFunnel } from 'react-icons/pi';
+import { PiFunnel, PiFunnelX, PiSortAscending, PiSortDescending } from 'react-icons/pi';
 
 
 
@@ -22,9 +22,15 @@ export const OffersInfoPage = () => {
 const [currentPage, setCurrentPage] = useState(1);
 const [isOpenModalDelete, setIsOpenModalDelete] = useState(false)
 
+const [filtersOpen, setFiltersOpen] = useState(false);
 const [contractTypeFilter, setContractTypeFilter] = useState('')
 const [skillsFilter, setSkillsFilter] =useState([])
 const [sortOrder, setSortOrder] = useState('desc')
+
+const resetFilters = () => {
+  setContractTypeFilter('');
+  setSkillsFilter([]);
+};
 
 const getFilteredOffers = () => {
   let filtered = [...offers]
@@ -46,6 +52,7 @@ const getFilteredOffers = () => {
   })
   return filtered
 }
+
 
   const filteredOffers = getFilteredOffers()
   const totalPages = Math.ceil(filteredOffers.length / 6);
@@ -125,64 +132,96 @@ console.log("🚀 ~ OffersInfoPage ~ hardSkills:", hardSkills)
         <p className='text-neutral-10 text-lg '>Discover job opportunities for developers, designers, and engineers in fast-growing tech fields.</p>
 
       {/* change popover-1 and --anchor-1 names. Use unique names for each dropdown */}
-{/* For TSX uncomment the commented types below */}
-<button className="btn p-2 w-10" popoverTarget="popover-1" style={{ anchorName: "--anchor-1" } /* as React.CSSProperties */}>
- <PiFunnel className='size-6'/>
-</button>
+      <div className='flex items-center gap-4 xl:-mb-8 mt-6'>
+<div className='relative'>
+<label className="btn btn-md swap swap-rotate w-25">
+  <input
+    type="checkbox"
+    checked={filtersOpen}
+    onChange={() => setFiltersOpen(prev => !prev)}
+  />
+  <div className="swap-on flex items-center gap-2">
+    <PiFunnelX className="size-5" /> Filters
+  </div>
+  <div className="swap-off flex items-center gap-2">
+    <PiFunnel className="size-5" /> Filters
+  </div>
+</label>
 
 {/* selectores del filtro */}
-<ul className="dropdown menu w-100 rounded-box bg-base-100 shadow-lgm"
-  popover="auto" id="popover-1" style={{ positionAnchor: "--anchor-1" } /* as React.CSSProperties */ }>
-  <li className='p-4 border-b-2 border-neutral-50'>
-  <label>
+{filtersOpen && (
+  <ul className="absolute top-12  z-50 rounded-box bg-neutral-90 shadow-lg border-2 border-neutral-70 min-w-85">
+    <li className="flex flex-col p-4 border-b-2 border-neutral-50">
+      <label>
         Type Contract:
-        <select 
-        value={contractTypeFilter}
-        onChange={(e) => setContractTypeFilter(e.target.value)}
+        
+      </label>
+      <select
+      className='p-2 mt-2 bg-neutral-90 border-2 border-neutral-70'
+          value={contractTypeFilter}
+          onChange={(e) => setContractTypeFilter(e.target.value)}
         >
-        <option value="">All</option>
-        {contractsTypes.map((contract, index) =>(<option key={index} value={contract}>{contract}</option>))}
-        </select>
-        </label>
-        </li>
-  <li className='flex flex-col flex-wrap p-4'>
-    <fieldset className=' flex flex-col flex-wrap'>
-          <legend>Skills:</legend>
-          {hardSkills.map((skill)=>(
-            <label key={skill} className=''>
-              <input type="checkbox"
-             checked={skillsFilter.includes(skill)}
-             onChange={(e) =>{
-              const checked = e.target.checked
-              setSkillsFilter((prev)=>
-              checked ? [...prev, skill] : prev.filter((s)=> s !== skill))
-             } } 
-               />
-               <span>{skill}</span>
-            </label>
+          <option value="" className='bg-neutral-90 p-2'>All</option>
+          {contractsTypes.map((contract, index) => (
+            <option className='bg-neutral-90 p-2' key={index} value={contract}>
+              {contract}
+            </option>
           ))}
-        </fieldset>
-  </li>
-</ul>
+        </select>
+    </li>
 
-        
-        <div className="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-        
-        
-
-          <label>
-            Sort by date:
-            <select
-              value={sortOrder}
-              onChange={(e)=>setSortOrder(e.target.value)}
-            >
-            <option value="desc">Latest</option>
-            <option value="asc">Oldest</option>
-            </select>
+    <li className="flex flex-col flex-wrap p-4 border-b-2 border-neutral-50">
+      <fieldset className="flex items-center gap-2 flex-wrap">
+        <legend className='mb-2'>Skills:</legend>
+        {hardSkills.map((skill) => (
+          <label className="flex items-center  cursor-pointer " key={skill}>
+            <input
+            className='btn btn-sm btn-outline btn-secondary-40 rounded-full'
+            aria-label={skill}
+              type="checkbox"
+              checked={skillsFilter.includes(skill)}
+              onChange={(e) => {
+                const checked = e.target.checked;
+                setSkillsFilter((prev) =>
+                  checked ? [...prev, skill] : prev.filter((s) => s !== skill)
+                );
+              }}
+            />
+            {/* <span className="bg-neutral-70 border border-neutral-60 px-3 py-1 rounded-full shadow-xl ">{skill}</span> */}
           </label>
+        ))}
+      </fieldset>
+    </li>
+
+    <li className="p-4">
+      <button
+        onClick={resetFilters}
+        className="btn btn-outline btn-error w-full"
+      >
+        Reset Filters
+      </button>
+    </li>
+  </ul>
+)}</div>
+
+
         
 
-        </div>
+        
+        
+
+          <label className="btn btn-md swap swap-rotate w-25">
+  <input  
+    type="checkbox"
+    checked={sortOrder === 'desc'} // ✅ Activa visualmente el swap
+    onChange={() => setSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'))}
+  />
+  <div className="swap-on flex inline-center gap-2"><PiSortAscending className='size-5' />Latest</div>
+  <div className="swap-off flex inline-center gap-2"><PiSortDescending className='size-5'/>Oldest</div>
+</label>
+  </div>      
+
+
 
          <OfferList view={true}>
             {currentOffers?.map((offer)=>{ 
