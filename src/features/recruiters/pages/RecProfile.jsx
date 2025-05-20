@@ -109,14 +109,13 @@ export const RecProfile = () => {
           idOffer={selectedOfferId}
           reloadPage={fetchData} />}
 
-        {isOpenModalEdit && <dialog id="my_modal_1" className="modal">
-          <OfferModal
-            idOffer={selectedOfferId}
-            isOpen={isOpenModalEdit}
-            setIsOpen={setIsOpenModalEdit}
-            token={token}
-            reloadPage={fetchData} />
-        </dialog>}
+        {isOpenModalEdit && <OfferModal
+          idOffer={selectedOfferId}
+          isOpen={isOpenModalEdit}
+          setIsOpen={setIsOpenModalEdit}
+          token={token}
+          reloadPage={fetchData} />
+        }
       </div>
 
     </SectionContainer>
