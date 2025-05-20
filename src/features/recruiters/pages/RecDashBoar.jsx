@@ -1,53 +1,56 @@
 import { useDragAndDrop } from '@formkit/drag-and-drop/react'
 export const RecDashBoar = () => {
- const [todoList, todos] = useDragAndDrop(
-    [
-      "Schedule perm",
-      "Rewind VHS tapes",
-      "Make change for the arcade",
-      "Get disposable camera developed",
-      "Learn C++",
-      "Return Nintendo Power Glove",
-    ],
-    { group: "tasks" }
-  );
+  // Estados iniciales por cada columna
+  const pendingItems = ['CV recibido', 'Esperando respuesta'];
+  const reviewedItems = ['Revisado por RRHH'];
+  const interviewedItems = ['Entrevista agendada'];
+  const rejectedItems = ['Rechazado por falta de experiencia'];
+  const acceptedItems = ['Oferta aceptada'];
 
-  const [doneList, dones] = useDragAndDrop(
-    ["Pickup new mix-tape from Beth", "Remind VHS tapes"],
-    { group: "tasks" }
-  );
+  // Hook para cada estado
+  const [pendingRef, pending] = useDragAndDrop(pendingItems, { group: 'kanban' });
+  const [reviewedRef, reviewed] = useDragAndDrop(reviewedItems, { group: 'kanban' });
+  const [interviewedRef, interviewed] = useDragAndDrop(interviewedItems, { group: 'kanban' });
+  const [rejectedRef, rejected] = useDragAndDrop(rejectedItems, { group: 'kanban' });
+  const [acceptedRef, accepted] = useDragAndDrop(acceptedItems, { group: 'kanban' });
 
-  return (
-    <div className="flex gap-6 p-6 bg-gray-900 min-h-screen">
-      <div className="flex-1 border-2 border-purple-500 rounded-lg p-4 flex flex-col">
-        <h2 className="font-mono text-xl text-white text-center mb-4">ToDos</h2>
-        <ul ref={todoList} className="space-y-2 flex-1">
-          {todos.map((todo) => (
-            <li
-              key={todo}
-              data-label={todo} // ¡IMPORTANTE!
-              className="bg-gray-800 text-white p-3 rounded cursor-move font-mono"
-            >
-              {todo}
-            </li>
-          ))}
-        </ul>
+  const renderColumn = (title, items, ref, color) => (
+    <div
+      className={`w-72 bg-base-200 rounded-box flex flex-col border-t-4 ${color}`}
+    >
+      <div className="p-4 border-b border-base-300">
+        <div className="flex justify-between items-center">
+          <h2 className="text-white font-semibold">{title}</h2>
+        </div>
       </div>
-
-      <div className="flex-1 border-2 border-purple-500 rounded-lg p-4 flex flex-col">
-        <h2 className="font-mono text-xl text-white text-center mb-4">Complete</h2>
-        <ul ref={doneList} className="space-y-2 flex-1">
-          {dones.map((done) => (
-            <li
-              key={done}
-              data-label={done} // ¡IMPORTANTE!
-              className="bg-gray-800 text-gray-400 line-through p-3 rounded cursor-move font-mono"
+      <div
+        ref={ref}
+        className="flex-1 p-4 space-y-2 overflow-y-auto text-sm text-center text-gray-400"
+      >
+        {items.length > 0 ? (
+          items.map((item) => (
+            <div
+              key={item}
+              data-label={item}
+              className="bg-gray-800 text-white p-3 rounded cursor-move font-mono text-left"
             >
-              {done}
-            </li>
-          ))}
-        </ul>
+              {item}
+            </div>
+          ))
+        ) : (
+          <p>No hay candidatos en esta columna</p>
+        )}
       </div>
     </div>
   );
-}
+
+  return (
+    <div className="flex flex-col md:flex-row gap-4 p-4 bg-base-100 min-h-screen overflow-x-auto">
+      {renderColumn('Pending', pending, pendingRef, 'border-blue-500')}
+      {renderColumn('Reviewed', reviewed, reviewedRef, 'border-purple-500')}
+      {renderColumn('Interviewed', interviewed, interviewedRef, 'border-yellow-500')}
+      {renderColumn('Accepted', accepted, acceptedRef, 'border-green-500')}
+      {renderColumn('Rejected', rejected, rejectedRef, 'border-red-500')}
+    </div>
+  );
+};

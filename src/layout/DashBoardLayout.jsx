@@ -5,7 +5,7 @@ export const DashBoardLayout = () => {
     return (
         <>
             <div>
-                <SectionContainer>
+                <SectionContainer classProps={"max-vh-screen"}>
                     <DashBoardHeader/>
                     {<Outlet />}
                 </SectionContainer>
