@@ -1,12 +1,13 @@
 import { PiBuildingOffice, PiEnvelope, PiGlobe, PiMapPinArea, PiPhone } from 'react-icons/pi';
 import { capitalize, getInitials } from '../../../utils/utils';
+import { useNavigate } from "react-router";
 
-export const RecProfileCard = ({ recruiter }) => {
-
+export const RecProfileCard = ({ recruiter, profile, id }) => {
+  const navigate = useNavigate();
   const name = capitalize(recruiter?.name || '');
   const surname = capitalize(recruiter?.surname || '');
   const completeName = `${name} ${surname}`.trim() || 'Unknown Recruiter';
-
+  const isOwner = profile?._id === id;
   return (
     <div className="card bg-neutral-80 shadow-xl border border-neutral-70 flex-col text-sm md:text-lg w-full md:max-w-100">
 
@@ -84,6 +85,11 @@ export const RecProfileCard = ({ recruiter }) => {
           <p className="text-sm text-gray-400">
             {recruiter?.description}
           </p>
+        </div>
+        <div className='flex justify-center mt-4'>
+          {(isOwner && profile?.role?.type === 'recruiter') && (<button onClick={() => navigate('/private-rec/dashboard')} className="bg-green-600 text-black px-4 py-2 rounded hover:bg-green-700 transition cursor-pointer text-sm">
+            dashboard
+          </button>)}
         </div>
       </div>
 

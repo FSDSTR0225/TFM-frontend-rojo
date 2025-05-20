@@ -62,7 +62,7 @@ export const RecProfile = () => {
     <SectionContainer >
 
       <div className='flex flex-col md:flex-row md:justify-between gap-8 items-start'>
-        <RecProfileCard recruiter={recruiter} />
+        <RecProfileCard recruiter={recruiter} profile={profile} id={id}/>
 
         <div className="w-full">
           <div className="flex justify-between items-center mb-4">

@@ -1,11 +1,8 @@
-import React from "react";
 import { CiEdit } from "react-icons/ci";
 import { GrFormView } from "react-icons/gr";
 import { MdOutlineDeleteSweep } from "react-icons/md";
-import { TiThMenuOutline } from "react-icons/ti";
 import { Link } from "react-router";
-import { ModalDelete } from "./ModalDelete";
-import { PiDotsThree, PiDotsThreeBold } from "react-icons/pi";
+import { PiDotsThreeBold } from "react-icons/pi";
 
 export const MenuCard = ({ onClick, id, openModal, openModalEdit }) => {
 
