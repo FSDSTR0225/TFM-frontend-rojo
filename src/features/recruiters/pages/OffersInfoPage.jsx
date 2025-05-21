@@ -1,4 +1,4 @@
-import React from 'react'
+
 import { useState } from 'react'
 import { getOffers } from '../../../services/offersServices'
 import { useEffect } from 'react'

@@ -1,6 +1,6 @@
 
 import { EditButton } from '../../../components/EditButton';
-import { TfiLocationPin } from 'react-icons/tfi';
+
 import { MainRecButton } from '../../../components/MainRecButton';
 import { PiMapPinArea } from 'react-icons/pi';
 import { useContext } from 'react';
@@ -25,7 +25,7 @@ export const OfferInfo = ({offer, isOpen, setIsOpen}) => {
                 {offer.location}
                 <span className='badge badge-soft badge-info'>{offer.contractType}</span>
               </div>
-              <p className=''>{offer.description}</p>
+              <p className="whitespace-pre-line break-words">{offer.description}</p>
               <h3>Necessary Skills:</h3>
               <div className='flex gap-5 flex-wrap'>
                 {offer.skills.map((skill, index) => {

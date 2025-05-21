@@ -17,6 +17,7 @@ export const OfferModal = ({ token, reloadPage, idOffer, isOpen, setIsOpen, oper
     console.log("isOpen", isOpen);
     console.log("idOffer", idOffer);
     const fetchOffer = async () => {
+      if (!idOffer) return;
       const resp = await getOffersById(idOffer);
       if (resp) {
         setValue('position', resp.position);
@@ -102,14 +103,15 @@ export const OfferModal = ({ token, reloadPage, idOffer, isOpen, setIsOpen, oper
                 <label className="block text-sm text-neutral-20 mb-1">Contract Type</label>
                 <select
                   {...register("contractType")}
+                  defaultValue=''
                   className="select select-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full"
                 >
-                  <option disabled selected>Select one</option>
-                  <option>Full-time</option>
-                  <option>Part-time</option>
-                  <option>Freelance</option>
-                  <option>Temporary</option>
-                  <option>Internship</option>
+                  <option value="" disabled>Select one</option>
+  <option value="Full-time">Full-time</option>
+  <option value="Part-time">Part-time</option>
+  <option value="Freelance">Freelance</option>
+  <option value="Temporary">Temporary</option>
+  <option value="Internship">Internship</option>
                 </select>
               </div>
 
