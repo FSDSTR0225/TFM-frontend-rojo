@@ -2,6 +2,7 @@
 import { CiEdit } from "react-icons/ci";
 
 import { MdOutlineDeleteSweep } from "react-icons/md";
+import { PiDotsThreeBold } from "react-icons/pi";
 
 
 export const MenuCard = ({ onClick, id, openModal }) => {
