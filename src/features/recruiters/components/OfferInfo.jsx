@@ -3,13 +3,18 @@ import { EditButton } from '../../../components/EditButton';
 import { TfiLocationPin } from 'react-icons/tfi';
 import { MainRecButton } from '../../../components/MainRecButton';
 import { PiMapPinArea } from 'react-icons/pi';
+import { useContext } from 'react';
+import { AuthContext } from '../../../context/authContext';
 
-export const OfferInfo = ({offer}) => {
+export const OfferInfo = ({offer, isOpen, setIsOpen}) => {
 
+  const { profile } = useContext(AuthContext);
+  const isOwner = offer.owner?._id === profile?._id;
+  
   return (
     <article  className=' card bg-neutral-80 shadow-xl border border-neutral-70 flex-col  w-full '>
             <div className='card-body gap-6'>
-              <EditButton classProps={"self-end"} />
+              {isOwner && <EditButton classProps={"self-end"} onClick={() => setIsOpen(!isOpen)} />}
               <div className='space-y-4'>
               <h2 className='text-xl md:text-2xl  font-bold m'>{offer.position}</h2>
               <p className='text-neutral-10'>{offer.role}</p>
