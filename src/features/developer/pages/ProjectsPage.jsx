@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ProjectCard from "../components/ProjectCard";
-import { Pagination } from '../../../components/Pagination';
+import { Pagination } from "../../../components/Pagination";
 import { getAllProjects } from "../../../services/projectService";
 
 const categories = [
@@ -50,7 +50,10 @@ export const ProjectsPage = () => {
 
   const totalPages = Math.ceil(filteredProjects.length / projectsPerPage);
   const startIndex = (currentPage - 1) * projectsPerPage;
-  const currentProjects = filteredProjects.slice(startIndex, startIndex + projectsPerPage);
+  const currentProjects = filteredProjects.slice(
+    startIndex,
+    startIndex + projectsPerPage
+  );
 
   const handlePageChange = (pageNum) => {
     if (pageNum === currentPage) return;
@@ -63,17 +66,22 @@ export const ProjectsPage = () => {
 
   return (
     <div className="p-4 max-w-screen-xl mx-auto">
-      <h1 className="text-3xl font-bold mb-2 mt-10 text-neutral-0">Developer Projects</h1>
-      <p className="text-md font-normal mb-4 text-neutral-30">Discover talented developers for your next project</p>
+      <h1 className="text-3xl font-bold mb-2 mt-10 text-neutral-0">
+        Developer Projects
+      </h1>
+      <p className="text-md font-normal mb-4 text-neutral-30">
+        Discover talented developers for your next project
+      </p>
 
       <div className="flex flex-wrap justify-center gap-2 mb-6 px-4 py-0.5 bg-[#262626] rounded-md">
         {categories.map((category) => (
           <button
             key={category}
             className={`px-3 py-1.5 rounded-md font-medium text-sm transition-colors duration-200 cursor-pointer
-              ${activeTab === category
-                ? "bg-[#171717] text-white"
-                : "bg-transparent text-[#A1A1AA] hover:bg-[#32B441] hover:text-white focus:text-white"
+              ${
+                activeTab === category
+                  ? "bg-[#171717] text-white"
+                  : "bg-transparent text-[#A1A1AA] hover:bg-[#32B441] hover:text-white focus:text-white"
               }`}
             onClick={() => setActiveTab(category)}
           >
@@ -93,38 +101,30 @@ export const ProjectsPage = () => {
               No projects available in this category.
             </p>
           ) : (
-            <div
-  className="grid gap-x-6 gap-y-6 justify-center"
-  style={{
-    gridTemplateRows: 'repeat(3, minmax(0, 1fr))', // 3 filas iguales en altura
-    gridAutoFlow: 'column', // fluye en columnas para llenar filas primero
-    gridAutoColumns: 'minmax(250px, 1fr)', // columnas con ancho mínimo, máximo flexible
-  }}
->
-  {currentProjects.map((project) => (
-    <div
-      key={project._id}
-      className="mx-auto w-full max-w-[394px]"
-      style={{ aspectRatio: '394 / 256' }}
-    >
-      <ProjectCard
-        developerId={project.owner?._id}
-        name={project.owner?.name}
-        surname={project.owner?.surname}
-        avatar={project.owner?.avatar}
-        title={project.title}
-        category={activeTab === "All" ? project.category : null}
-        gallery={project.gallery}
-        projectid={project._id}
-        badgeText={project.badgeText}
-      />
-    </div>
-  ))}
-</div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {currentProjects.map((project) => (
+                <div
+                  key={project._id}
+                  className="w-full aspect-[394/256]"
+                >
+                  <ProjectCard
+                    developerId={project.owner?._id}
+                    name={project.owner?.name}
+                    surname={project.owner?.surname}
+                    avatar={project.owner?.avatar}
+                    title={project.title}
+                    category={activeTab === "All" ? project.category : null}
+                    gallery={project.gallery}
+                    projectid={project._id}
+                    badgeText={project.badgeText}
+                  />
+                </div>
+              ))}
+            </div>
           )}
         </div>
       )}
-
+      
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}
