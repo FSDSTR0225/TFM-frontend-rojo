@@ -4,24 +4,22 @@ import { getOffers } from '../../../services/offersServices'
 import { useEffect } from 'react'
 import { OfferCard } from '../components/OfferCard';
 import { SectionContainer } from '../../../components/SectionContainer';
-import {OfferList} from '../components/OfferList'
+import { OfferList } from '../components/OfferList'
 import { Pagination } from '../../../components/Pagination';
 import { ModalDelete } from '../components/ModalDelete';
-
+import { OfferModal } from '../components/OfferModal'
 import { FilterOffers } from '../components/FilterOffers';
-
-
-
-
-
-
 
 export const OffersInfoPage = () => {
   const [offers, setOffers] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-const [currentPage, setCurrentPage] = useState(1);
-const [isOpenModalDelete, setIsOpenModalDelete] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isOpenModalDelete, setIsOpenModalDelete] = useState(false)
+
+  const [operacion, setOperacion] = useState('crear');
+  const [selectedOfferId, setSelectedOfferId] = useState(null);
+  const [isOpenModalEdit, setIsOpenModalEdit] = useState(false);
 
 const [filtersOpen, setFiltersOpen] = useState(false);
 const [contractTypeFilter, setContractTypeFilter] = useState('')
@@ -58,28 +56,30 @@ const getFilteredOffers = () => {
   const filteredOffers = getFilteredOffers()
   const totalPages = Math.ceil(filteredOffers.length / 6);
   const startIndex = (currentPage - 1) * 6;
+
+  const token = localStorage.getItem('token');
   const currentOffers= filteredOffers.slice(startIndex, startIndex + 6);
 
   const handlePageChange = (pageNum) => {
     if (pageNum === currentPage) return;
     setCurrentPage(pageNum); // Primero actualizamos la página
- 
+
   };
 
-
-  useEffect(()=>{
-    const fetchOffers = async () => {
-      try {
-        const offerData = await getOffers()
-        setOffers(offerData)
-        setLoading(false)
-      } catch (error) {
-        setError(error.message)
-        setLoading(false)
-      }
+  const fetchOffers = async () => {
+    try {
+      const offerData = await getOffers()
+      setOffers(offerData)
+      setLoading(false)
+    } catch (error) {
+      setError(error.message)
+      setLoading(false)
     }
+  }
+
+  useEffect(() => {
     fetchOffers()
-  },[])
+  }, [])
 
   useEffect(() => {
   setCurrentPage(1);
@@ -106,9 +106,9 @@ const getFilteredOffers = () => {
           ))}
         </div>
       </SectionContainer>
-          );
-        }
-      if (error) return <p>Error al cargar las ofertas: {error}</p>;
+    );
+  }
+  if (error) return <p>Error al cargar las ofertas: {error}</p>;
 
 // const contractsTypes = [...new Set(offers.flatMap(offer =>offer.contractType.map(type => type.trim())))]
 
@@ -152,19 +152,34 @@ const getFilteredOffers = () => {
               
               return (
 
-              <OfferCard offer={offer} owner={offer.owner} key={offer._id} setIsOpenModalDelete={setIsOpenModalDelete} isOpenModalDelete={isOpenModalDelete}   />
+            <OfferCard offer={offer}
+              owner={offer.owner}
+              setIsOpenModalDelete={setIsOpenModalDelete}
+              isOpenModalDelete={isOpenModalDelete}
+              setSelectedOfferId={setSelectedOfferId}
+              isOpenModalEdit={isOpenModalEdit}
+              setIsOpenModalEdit={setIsOpenModalEdit}
+              key={offer._id} />
 
-            )})}
-            
-            
-         </OfferList>
-         {isOpenModalDelete &&<ModalDelete isOpen={isOpenModalDelete} setIsOpen={setIsOpenModalDelete} />}
-            <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    handlePageChange={handlePageChange}
-                    filteredProjects={offers}
-                  />
+          )
+        })}
+
+
+      </OfferList>
+      {isOpenModalDelete && <ModalDelete isOpen={isOpenModalDelete} setIsOpen={setIsOpenModalDelete} reloadPage={fetchOffers} />}
+      {isOpenModalEdit && <OfferModal
+        idOffer={selectedOfferId}
+        isOpen={isOpenModalEdit}
+        setIsOpen={setIsOpenModalEdit}
+        token={token}
+        reloadPage={fetchOffers} />
+      }
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        handlePageChange={handlePageChange}
+        filteredProjects={offers}
+      />
     </SectionContainer>
   )
 }

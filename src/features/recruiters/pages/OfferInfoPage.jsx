@@ -6,17 +6,18 @@ import { SectionContainer } from "../../../components/SectionContainer";
 import { OfferInfo } from "../components/OfferInfo";
 import { getOffersById } from "../../../services/offersServices";
 import { RecContactCard } from "../components/RecContactCard";
+import { OfferModal } from "../components/OfferModal";
 
 
 export const OfferInfoPage = () => {
   const [offer, setOffer] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+const [isOpenModalEdit, setIsOpenModalEdit] = useState(false);
+  
+const { id } = useParams();
 
-  const { id } = useParams();
-
-  useEffect(() => {
-    const fetchOffer = async () => {
+  const fetchOffer = async () => {
       try {
         const offerData = await getOffersById(id);
         setOffer(offerData);
@@ -26,6 +27,9 @@ export const OfferInfoPage = () => {
         setIsLoading(false)
       }
     };
+
+  useEffect(() => {
+    
     fetchOffer();
   }, [id]);
 
@@ -48,8 +52,19 @@ export const OfferInfoPage = () => {
   if (error) return <p>Error al cargar las ofertas: {error}</p>;
   return (
     <SectionContainer classProps={"lg:flex-row flex-col-reverse gap-4 lg:items-start"}>
-    <OfferInfo offer={offer} />
+    <OfferInfo offer={offer}
+    isOpen={isOpenModalEdit}
+    setIsOpen={setIsOpenModalEdit}
+    token={localStorage.getItem('token')} />
     <RecContactCard  owner={offer?.owner}  />
+    {isOpenModalEdit && <OfferModal
+            idOffer={id}
+            isOpen={isOpenModalEdit}
+            setIsOpen={setIsOpenModalEdit}
+            token={localStorage.getItem('token')}
+             reloadPage={fetchOffer}
+             />
+          }
     </SectionContainer>
   );
 };

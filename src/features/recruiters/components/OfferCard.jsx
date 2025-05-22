@@ -10,11 +10,16 @@ import { AuthContext } from "../../../context/authContext";
 import { PiMapPinArea } from "react-icons/pi";
 
 
-export const OfferCard = ({ classProps, offer, id, setIsOpenModalDelete, isOpenModalDelete, setSelectedOfferId }) => {
+export const OfferCard = ({ classProps, offer, id, setIsOpenModalDelete, isOpenModalDelete, setSelectedOfferId, isOpenModalEdit, setIsOpenModalEdit }) => {
   const navigate = useNavigate();
   const { profile } = useContext(AuthContext);
 
   const isOwner = profile?._id === offer?.owner?._id;
+
+  
+  const isRecruiter = profile?.role.type === 'recruiter';
+
+  
   const name = capitalize(offer.owner?.name || "");
   const surname = capitalize(offer.owner?.surname || "");
   const completeName = `${name} ${surname}`.trim() || "Unknown Recruiter";
@@ -25,6 +30,14 @@ export const OfferCard = ({ classProps, offer, id, setIsOpenModalDelete, isOpenM
     setSelectedOfferId(offer._id);
     console.log("🚀 ~ handleOnModal ~ isOpenModalDelete:", isOpenModalDelete)
   };
+
+  const handleOnModalEdit = (e) => {
+    e.stopPropagation();
+    setIsOpenModalEdit(true);
+    setSelectedOfferId(offer._id);
+    console.log("🚀 ~ handleOnModal ~ isOpenModalEdit:", isOpenModalEdit)
+  };
+
 
   const handleOnClick = (e) => {
     e.stopPropagation();
@@ -46,7 +59,7 @@ export const OfferCard = ({ classProps, offer, id, setIsOpenModalDelete, isOpenM
       className={`${classProps && classProps
         } card border bg-neutral-80 border-neutral-70 cursor-pointer max-h-80 shadow-xl hover:bg-neutral-90 transition-transform transform hover:scale-105 `}
     >
-      <div className='card-body'>
+      <div className='card-body justify-between'>
         <div className='flex justify-between items-center'>
           <Link to={`../recruiter/${offer.owner._id}`} className='avatar gap-2 items-center' onClick={handleOnClick}>
             {offer.owner?.role?.recruiter?.logo ? (
@@ -67,10 +80,11 @@ export const OfferCard = ({ classProps, offer, id, setIsOpenModalDelete, isOpenM
             )}
             <p>{completeName}</p>
           </Link>
-          {isOwner && profile?.role?.type === "recruiter" && (
+          {isOwner && isRecruiter && (
             <MenuCard
               isOpen={isOpenModalDelete}
               openModal={handleOnModal}
+              openModalEdit={handleOnModalEdit}
               onClick={handleOnClick}
               id={offer._id}
             />
@@ -88,8 +102,12 @@ export const OfferCard = ({ classProps, offer, id, setIsOpenModalDelete, isOpenM
           </div>
           <div className='badge text-neutral-0 bg-neutral-60'>{offer?.contractType}</div>
         </div>
-        <p className='line-clamp-3'>{offer.description}</p>
-        <div className='flex items-center justify-end gap-4 m-2'>
+        <div>
+          <p className='line-clamp-3'>{offer.description}</p>
+        </div>
+        
+
+        {(!isOwner && !isRecruiter) && (<div className='flex items-center justify-end gap-4 m-2'>
           <MainRecButton
             onClick={handleOnClick}
             classProps='rounded-full w-18'
@@ -102,7 +120,7 @@ export const OfferCard = ({ classProps, offer, id, setIsOpenModalDelete, isOpenM
           >
             Contact
           </MainRecButton>
-        </div>
+        </div>)}
 
         <div className=' flex  items-center text-neutral-20 text-xs'>
           <p className='flex items-center gap-2 '>
