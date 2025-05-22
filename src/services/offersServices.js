@@ -122,4 +122,25 @@ export const updateOffert = async (id, offert, token) => {
         throw error;
     }
 }
-
+export const getRecruitersStats = async (recId) => {
+    try {
+        const token = localStorage.getItem('token');
+        const resp = await fetch(`${API_URL}/stats/${recId}`, {
+            method: 'GET',
+            headers: {
+                authorization: "Bearer " + token,
+                'content-type': 'application/json'
+            }
+        });
+        if (!resp.ok) {
+            throw new Error("Error getting stats")
+        }
+        const data = await resp.json();
+        console.log("🚀 ~ getRecruitersStats ~ data:", data)
+        
+        return data;
+    } catch (error) {
+        console.error("OffersService Error:", error);
+        throw error;
+    }
+}
