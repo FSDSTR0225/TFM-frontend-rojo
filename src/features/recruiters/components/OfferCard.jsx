@@ -8,11 +8,12 @@ import { MenuCard } from "./MenuCard";
 import { useContext } from "react";
 import { AuthContext } from "../../../context/authContext";
 import { PiMapPinArea } from "react-icons/pi";
+import { applyToOffer } from "../../../services/offersServices";
 
 
 export const OfferCard = ({ classProps, offer, id, setIsOpenModalDelete, isOpenModalDelete, setSelectedOfferId, isOpenModalEdit, setIsOpenModalEdit }) => {
   const navigate = useNavigate();
-  const { profile } = useContext(AuthContext);
+  const { profile, token } = useContext(AuthContext);
 
   const isOwner = profile?._id === offer?.owner?._id;
 
@@ -23,6 +24,20 @@ export const OfferCard = ({ classProps, offer, id, setIsOpenModalDelete, isOpenM
   const name = capitalize(offer.owner?.name || "");
   const surname = capitalize(offer.owner?.surname || "");
   const completeName = `${name} ${surname}`.trim() || "Unknown Recruiter";
+
+  const handleApply = async (e) => {
+    e.stopPropagation()
+    if(!token) {
+      console.log('por aqui no pasaras')
+    }
+
+  try {
+    const response = await applyToOffer(offer._id, token)
+    console.log(response.msg || 'se envio')
+  } catch (error) {
+    console.log(error.message || 'Error al aplicar a la oferta');
+  }
+  }
 
   const handleOnModal = (e) => {
     e.stopPropagation();
@@ -109,7 +124,7 @@ export const OfferCard = ({ classProps, offer, id, setIsOpenModalDelete, isOpenM
 
         {(!isOwner && !isRecruiter) && (<div className='flex items-center justify-end gap-4 m-2'>
           <MainRecButton
-            onClick={handleOnClick}
+            onClick={handleApply}
             classProps='rounded-full w-18'
           >
             Apply
