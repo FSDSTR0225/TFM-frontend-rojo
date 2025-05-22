@@ -8,7 +8,7 @@ import { OfferList } from '../components/OfferList'
 import { Pagination } from '../../../components/Pagination';
 import { ModalDelete } from '../components/ModalDelete';
 import { OfferModal } from '../components/OfferModal'
-
+import { FilterOffers } from '../components/FilterOffers';
 
 export const OffersInfoPage = () => {
   const [offers, setOffers] = useState([])
@@ -21,10 +21,45 @@ export const OffersInfoPage = () => {
   const [selectedOfferId, setSelectedOfferId] = useState(null);
   const [isOpenModalEdit, setIsOpenModalEdit] = useState(false);
 
-  const totalPages = Math.ceil(offers.length / 6);
+const [filtersOpen, setFiltersOpen] = useState(false);
+const [contractTypeFilter, setContractTypeFilter] = useState('')
+const [skillsFilter, setSkillsFilter] =useState([])
+const [sortOrder, setSortOrder] = useState('desc')
+
+const resetFilters = () => {
+  setContractTypeFilter('');
+  setSkillsFilter([]);
+};
+
+const getFilteredOffers = () => {
+  let filtered = [...offers]
+
+  if (contractTypeFilter) {
+    filtered = filtered.filter((offer)=> offer.contractType.includes(contractTypeFilter))
+  }
+  
+  if (skillsFilter.length > 0) {
+    filtered = filtered.filter((offer) =>
+    skillsFilter.every((skill) => offer.skills.includes(skill))
+  )
+  }
+
+  filtered.sort((a, b) => {
+    const dateA = new Date(a.createdAt)
+    const dateB = new Date(b.createdAt)
+    return sortOrder === 'asc' ? dateA - dateB : dateB - dateA
+  })
+  return filtered
+}
+
+
+  const filteredOffers = getFilteredOffers()
+  const totalPages = Math.ceil(filteredOffers.length / 6);
   const startIndex = (currentPage - 1) * 6;
-  const currentOffers = offers.slice(startIndex, startIndex + 6);
+
   const token = localStorage.getItem('token');
+  const currentOffers= filteredOffers.slice(startIndex, startIndex + 6);
+
   const handlePageChange = (pageNum) => {
     if (pageNum === currentPage) return;
     setCurrentPage(pageNum); // Primero actualizamos la página
@@ -45,6 +80,10 @@ export const OffersInfoPage = () => {
   useEffect(() => {
     fetchOffers()
   }, [])
+
+  useEffect(() => {
+  setCurrentPage(1);
+}, [contractTypeFilter, skillsFilter, sortOrder]);
 
   if (loading) {
     return (
@@ -71,16 +110,47 @@ export const OffersInfoPage = () => {
   }
   if (error) return <p>Error al cargar las ofertas: {error}</p>;
 
+// const contractsTypes = [...new Set(offers.flatMap(offer =>offer.contractType.map(type => type.trim())))]
+
+// const hardSkills = [
+//   ...new Set(
+//     offers.flatMap(offer =>
+//       offer.skills
+//         .flatMap(s => s.split(","))
+//         .map(s => s.trim())
+//         .filter(Boolean) // Elimina vacíos
+//     )
+//   )
+// ];
+
+
+
 
 
   return (
-    <SectionContainer>
-      <h2 className='text-3xl font-bold text-neutral-0'>Your Next Tech Career Starts Here</h2>
-      <p className='text-neutral-10 text-lg '>Discover job opportunities for developers, designers, and engineers in fast-growing tech fields.</p>
-      <OfferList view={true}>
-        {currentOffers?.map((offer) => {
 
-          return (
+    <SectionContainer>
+        <h2 className='text-3xl font-bold text-neutral-0'>Your Next Tech Career Starts Here</h2>
+        <p className='text-neutral-10 text-lg '>Discover job opportunities for developers, designers, and engineers in fast-growing tech fields.</p>
+
+      <FilterOffers         offers={offers}
+        filtersOpen={filtersOpen}
+        setFiltersOpen={setFiltersOpen}
+        contractTypeFilter={contractTypeFilter}
+        setContractTypeFilter={setContractTypeFilter}
+        skillsFilter={skillsFilter}
+        setSkillsFilter={setSkillsFilter}
+        sortOrder={sortOrder}
+        setSortOrder={setSortOrder}
+        resetFilters={resetFilters}/>
+     
+
+
+
+         <OfferList view={true}>
+            {currentOffers?.map((offer)=>{ 
+              
+              return (
 
             <OfferCard offer={offer}
               owner={offer.owner}

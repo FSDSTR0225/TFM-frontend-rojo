@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
-import { Link, useParams } from "react-router";
+import {useParams } from "react-router";
 import { SectionContainer } from "../../../components/SectionContainer";
 import { OfferInfo } from "../components/OfferInfo";
 import { getOffersById } from "../../../services/offersServices";
