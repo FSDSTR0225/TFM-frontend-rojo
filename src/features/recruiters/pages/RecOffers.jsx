@@ -9,6 +9,7 @@ import { OfferModal } from "../components/OfferModal";
 import { AuthContext } from "../../../context/authContext";
 import { useContext } from "react";
 import { StatsAside } from "../components/StatsAside";
+import { FilterOffers } from "../components/FilterOffers";
 
 
 export const RecOffers = () => {
@@ -24,9 +25,43 @@ export const RecOffers = () => {
   const [selectedOfferId, setSelectedOfferId] = useState(null);
   const [isOpenModalEdit, setIsOpenModalEdit] = useState(false);
 
-  const totalPages = Math.ceil(offers.length / 6);
+  const [filtersOpen, setFiltersOpen] = useState(false);
+const [contractTypeFilter, setContractTypeFilter] = useState('')
+const [skillsFilter, setSkillsFilter] =useState([])
+const [sortOrder, setSortOrder] = useState('desc')
+
+const resetFilters = () => {
+  setContractTypeFilter('');
+  setSkillsFilter([]);
+};
+
+const getFilteredOffers = () => {
+  let filtered = [...offers]
+
+  if (contractTypeFilter) {
+    filtered = filtered.filter((offer)=> offer.contractType.includes(contractTypeFilter))
+  }
+  
+  if (skillsFilter.length > 0) {
+    filtered = filtered.filter((offer) =>
+    skillsFilter.every((skill) => offer.skills.includes(skill))
+  )
+  }
+
+  filtered.sort((a, b) => {
+    const dateA = new Date(a.createdAt)
+    const dateB = new Date(b.createdAt)
+    return sortOrder === 'asc' ? dateA - dateB : dateB - dateA
+  })
+  return filtered
+}
+
+
+  const filteredOffers = getFilteredOffers()
+
+  const totalPages = Math.ceil(filteredOffers.length / 6);
   const startIndex = (currentPage - 1) * 6;
-  const currentOffers = offers.slice(startIndex, startIndex + 6);
+  const currentOffers = filteredOffers.slice(startIndex, startIndex + 6);
   const token = localStorage.getItem('token');
   const handlePageChange = (pageNum) => {
     if (pageNum === currentPage) return;
@@ -91,6 +126,17 @@ export const RecOffers = () => {
       <h2 className='text-3xl font-bold text-neutral-0'>My Offers</h2>
       {/* Stats */}
       <StatsAside stats={stats} loading={loading} />
+
+      <FilterOffers         offers={offers}
+              filtersOpen={filtersOpen}
+              setFiltersOpen={setFiltersOpen}
+              contractTypeFilter={contractTypeFilter}
+              setContractTypeFilter={setContractTypeFilter}
+              skillsFilter={skillsFilter}
+              setSkillsFilter={setSkillsFilter}
+              sortOrder={sortOrder}
+              setSortOrder={setSortOrder}
+              resetFilters={resetFilters}/>
       <OfferList view={true}>
         {currentOffers?.map((offer) => {
 
