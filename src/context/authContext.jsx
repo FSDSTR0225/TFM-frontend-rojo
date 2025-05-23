@@ -1,11 +1,13 @@
 import { useState, createContext, useEffect } from "react";
 import { getUserLogged } from "../services/authService";
 
+
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [profile, setProfile] = useState(null);
-    const [token, setToken] = useState(null);
+    const [token, setToken] = useState(() => localStorage.getItem("token") || null);
+   
 
     const infoUserLogged = async () => {
         try {
@@ -34,7 +36,9 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         if (token && !profile) {
+            console.log("🚀 ~ useEffect ~ token:", token)
             infoUserLogged();
+            
         }
     }, [token]);
 

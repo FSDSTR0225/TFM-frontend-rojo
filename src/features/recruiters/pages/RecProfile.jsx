@@ -1,121 +1,123 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { OfferCard } from '../components/OfferCard'
 import { OfferModal } from '../components/OfferModal'
 import { AuthContext } from '../../../context/authContext';
-import { useNavigate } from "react-router";
+import { useParams } from "react-router";
 import { getOffersbyOwner } from '../../../services/offersServices';
 import { SectionContainer } from '../../../components/SectionContainer';
 import { Pagination } from '../../../components/Pagination';
+import { getRecruiterById } from '../../../services/profileService';
+
+import { RecProfileCard } from '../components/RecProfileCard';
+import { ModalDelete } from '../components/ModalDelete';
 
 export const RecProfile = () => {
-  const [offers, setOffers] = useState([])
+  const [offers, setOffers] = useState([]);
+  const [isOpenModalDelete, setIsOpenModalDelete] = useState(false);
+  const [isOpenModalCreate, setTsOpenModalCreate] = useState(false);
+  const [isOpenModalEdit, setIsOpenModalEdit] = useState(false);
+  const [recruiter, setRecruiter] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [selectedOfferId, setSelectedOfferId] = useState(null);
+  const { profile, token } = useContext(AuthContext) || {};
+  const [operacion, setOperacion] = useState('crear');
+
+  const { id } = useParams(); // ID del reclutador desde la URL
 
 
-  const { profile, token } = useContext(AuthContext);
-  const navigate = useNavigate();
+  const isOwner = profile?._id === id;
 
-const [currentPage, setCurrentPage] = useState(1);
 
 
   const totalPages = Math.ceil(offers.length / 4);
   const startIndex = (currentPage - 1) * 4;
-  const currentOffers= offers.slice(startIndex, startIndex + 4);
+  const currentOffers = offers.slice(startIndex, startIndex + 4);
 
   const handlePageChange = (pageNum) => {
     if (pageNum === currentPage) return;
-    setCurrentPage(pageNum); // Primero actualizamos la página     // Luego activamos el loading
-    setTimeout(() => {    // Después de un pequeño retraso, desactivamos el loading
-    }, 500);
+    setCurrentPage(pageNum); // Primero actualizamos la página 
+  };
+
+  const fetchData = async () => {
+    try {
+      // Obtener datos del reclutador
+      const recruiterData = await getRecruiterById(id);
+      setRecruiter(recruiterData);
+      // Obtener ofertas según si el usuario es el dueño
+      const offersData = await getOffersbyOwner(id)
+      setOffers(offersData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
 
 
   useEffect(() => {
-    if (!token) {
-      navigate('/login');
-    }
-  }, [token]);
-
-  useEffect(()=>{
-      const fetchOffers = async () => {
-        try {
-          const offerData = await getOffersbyOwner(profile._id)
-          setOffers(offerData)
-        } catch (error) {
-          return (error.message)
-        }
-      }
-      fetchOffers()
-    },[])
+    console.log("isOpenModalEdit:", isOpenModalEdit)
+    fetchData();
+  }, [id, isOwner, isOpenModalEdit]);
 
 
   return (
     <SectionContainer >
-      {!profile ? (
-        <p className="text-white text-center mt-10">Cargando perfil...</p>
-      ):(
-        <div className='flex flex-col md:flex-row md:justify-between gap-8 items-start'>
-        <div className="card bg-base-200 shadow-xl border border-base-100 flex-col text-sm md:text-lg min-w-50">
-        {/* Card perfil */}
-        <div className="card-body bg-base-200">
-          <div className="flex  flex-col items-center">
-            <div className="w-20 h-20 bg-gray-600 rounded-full mb-4" />
-            <h2 className="text-lg font-semibold">{profile.name} {profile.surname}</h2>
-            <p className="text-sm text-gray-400 mb-4">{profile.role.type}</p>
-          </div>
-          <ul className="text-sm text-gray-300 space-y-1 mb-4">
-            <li>+ Nombre Empresa</li>
-            <li>+ Ubicación empresa</li>
-            <li>+ Email recruiter</li>
-            <li>+ Phone</li>
-            <li>+ Url empresa</li>
-          </ul>
-          <div>
-            <h3 className="text-white font-semibold mb-1">Sobre la empresa</h3>
-            <p className="text-sm text-gray-400">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce quis sapien sed quam dignissim efficitur...
-            </p>
-          </div>
-        </div>
 
-        {/* Sección ofertas */}
+      <div className='flex flex-col md:flex-row md:justify-between gap-8 items-start'>
+        <RecProfileCard recruiter={recruiter} profile={profile} id={id}/>
 
-      </div>
-      <div className="w-full">
+        <div className="w-full">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-semibold">Mis ofertas de empleo</h2>
-            <button onClick={() => document.getElementById('my_modal_1').showModal()} className="bg-green-600 text-black px-4 py-2 rounded hover:bg-green-700 transition cursor-pointer text-sm">
+            {(isOwner && profile?.role?.type === 'recruiter') && (<><button onClick={() => setTsOpenModalCreate(true)} className="bg-green-600 text-black px-4 py-2 rounded hover:bg-green-700 transition cursor-pointer text-sm">
               + Create new offer
             </button>
-            <dialog id="my_modal_1" className="modal">
-              <OfferModal token={token} />
-            </dialog>
+              <OfferModal
+                isOpen={isOpenModalCreate}
+                setIsOpen={setTsOpenModalCreate}
+                token={token}
+                operacion={operacion}
+                reloadPage={fetchData} />
+            </>)}
           </div>
-        <div>
-        <div className=" grid lg:grid-cols-2 gap-8 py-10">
-                        {offers?.map((offer)=>{ 
-                          
-                          return (
-            
-                          <OfferCard offer={offer} owner={offer.owner} key={offer._id}  />
-            
-                        )})}
-                        
-                        
-            
+          <div>
+            <div className=" grid lg:grid-cols-2 gap-8 py-10">
+              {currentOffers?.map((offer) => {
+                return (
+                  <OfferCard
+                    offer={offer}
+                    owner={offer.owner}
+                    setIsOpenModalDelete={setIsOpenModalDelete}
+                    isOpenModalDelete={isOpenModalDelete}
+                    setSelectedOfferId={setSelectedOfferId}
+                    isOpenModalEdit={isOpenModalEdit}
+                    setIsOpenModalEdit={setIsOpenModalEdit}
+                    key={offer._id} />
+                )
+              })}
+            </div>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              handlePageChange={handlePageChange}
+              filteredProjects={offers}
+            />
           </div>
-          <Pagination
-                              currentPage={currentPage}
-                              totalPages={totalPages}
-                              handlePageChange={handlePageChange}
-                              filteredProjects={currentOffers}
-                            />
-          </div>
-          
+
         </div>
-        </div>
-              
-      )
-      }
+        {isOpenModalDelete && <ModalDelete
+          isOpen={isOpenModalDelete}
+          setIsOpen={setIsOpenModalDelete}
+          idOffer={selectedOfferId}
+          reloadPage={fetchData} />}
+
+        {isOpenModalEdit && <OfferModal
+          idOffer={selectedOfferId}
+          isOpen={isOpenModalEdit}
+          setIsOpen={setIsOpenModalEdit}
+          token={token}
+          reloadPage={fetchData} />
+        }
+      </div>
+
     </SectionContainer>
   );
 };

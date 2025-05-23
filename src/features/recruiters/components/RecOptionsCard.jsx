@@ -12,8 +12,8 @@ const surname = capitalize(owner?.surname || '');
 const completeName = `${name} ${surname}`.trim() || 'Unknown Recruiter';
 
   return (
-    <aside className='card bg-neutral-80 shadow-xl border border-neutral-70 flex-col text-sm md:text-lg lg:min-w-80'>
-            <div className='card-body flex-row lg:flex-col  gap-4 items-center '>
+    <aside className='card bg-neutral-80 shadow-xl border border-neutral-70 flex-col text-sm md:text-lg lg:min-w-60'>
+            <div className='card-body flex-row lg:flex-col  gap-4 items-center'>
               <Link to={`../recruiter/${owner._id}`} className='avatar'>
                 {owner?.role?.recruiter?.logo ? (
                   <div className='avatar'>
@@ -53,9 +53,8 @@ const completeName = `${name} ${surname}`.trim() || 'Unknown Recruiter';
                   <MdOutlineMailOutline />
                   {owner?.role?.recruiter?.contact[0].email}
                 </a>)}
-                <MainRecButton classProps="sm:hidden w-25 mt-4 text-secondary-40 bg-transparent hover:bg-transparent hover:text-neutral-0 hover:border-neutral-0">Contact</MainRecButton>
+                <MainRecButton classProps="w-full mt-4 text-secondary-40 bg-transparent hover:bg-transparent hover:text-neutral-0 hover:border-neutral-0">Contact</MainRecButton>
               </div>
-              <MainRecButton classProps=" hidden sm:flex w-25 mt-4 text-secondary-40 bg-transparent hover:bg-transparent hover:text-neutral-0 hover:border-neutral-0">Contact</MainRecButton>
             </div>
           </aside>
   )
