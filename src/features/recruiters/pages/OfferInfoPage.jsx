@@ -7,6 +7,8 @@ import { OfferInfo } from "../components/OfferInfo";
 import { getOffersById } from "../../../services/offersServices";
 import { RecContactCard } from "../components/RecContactCard";
 import { OfferModal } from "../components/OfferModal";
+import { useContext } from "react";
+import { AuthContext } from "../../../context/authContext";
 
 
 export const OfferInfoPage = () => {
@@ -14,8 +16,11 @@ export const OfferInfoPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 const [isOpenModalEdit, setIsOpenModalEdit] = useState(false);
+const { profile } = useContext(AuthContext);
   
 const { id } = useParams();
+
+const isOwnerRecruiter = offer?.owner?._id === profile?._id && profile?.role.type === 'recruiter'; 
 
   const fetchOffer = async () => {
       try {
@@ -56,7 +61,14 @@ const { id } = useParams();
     isOpen={isOpenModalEdit}
     setIsOpen={setIsOpenModalEdit}
     token={localStorage.getItem('token')} />
-    <RecContactCard  owner={offer?.owner}  />
+   {isOwnerRecruiter && ( <aside className="min-w-90 card bg-neutral-80 shadow-xl border border-neutral-70">
+    <ul className="card-body">
+      <li className="list-row">hola</li>
+
+    </ul>
+    </aside>)}
+    {!isOwnerRecruiter && <RecContactCard  owner={offer?.owner}  />}
+
     {isOpenModalEdit && <OfferModal
             idOffer={id}
             isOpen={isOpenModalEdit}
