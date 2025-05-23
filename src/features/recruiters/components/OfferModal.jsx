@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { createdOffert, getOffersById,updateOffert } from '../../../services/offersServices';
 import { TagsInputRecruiter } from './TagsInputRecruiter';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 export const OfferModal = ({ token, reloadPage, idOffer, isOpen, setIsOpen, operacion }) => {
   const { register,
@@ -35,15 +35,33 @@ export const OfferModal = ({ token, reloadPage, idOffer, isOpen, setIsOpen, oper
   }, [idOffer, isOpen]);
 
   const onSubmit = async (formDatos) => {
-    if (operacion !== 'crear') {
-      const resp = await updateOffert(idOffer, formDatos, token);
-      console.log("oferta actualizada:", resp);
-    } else {
-      const resp = await createdOffert(formDatos, token);
+  if (operacion !== 'crear') {
+    // Verificamos que tengamos un idOffer válido
+    if (!idOffer) {
+      console.error("No se puede actualizar: falta el ID de la oferta");
+      return;
     }
-    reloadPage();
-    handleClose();
-  };
+
+    try {
+      const resp = await updateOffert(idOffer, formDatos, token);
+      console.log("Oferta actualizada:", resp);
+    } catch (error) {
+      console.error("Error al actualizar la oferta:", error.message || error);
+      alert("Hubo un error al actualizar la oferta.");
+    }
+  } else {
+    try {
+      const resp = await createdOffert(formDatos, token);
+      console.log("Oferta creada:", resp);
+    } catch (error) {
+      console.error("Error al crear la oferta:", error.message || error);
+      alert("Hubo un error al crear la oferta.");
+    }
+  }
+
+  reloadPage();     // Recargar página o datos si es necesario
+  handleClose();    // Cerrar el modal
+};
 
   const handleClose = () => {
     reset(); // Limpiar formulario sin enviar

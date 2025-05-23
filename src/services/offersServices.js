@@ -160,7 +160,10 @@ export const applyToOffer = async (id, token) =>{
             throw Error(data.msg || 'Error applying to the offer')
         }
 
-        return data
+        return {
+      msg: data.msg || 'Application successful',
+      offer: data.offer // Debe incluir la oferta actualizada con el nuevo applicants array
+    };
     } catch (error) {
         throw new Error(error.message);
         
