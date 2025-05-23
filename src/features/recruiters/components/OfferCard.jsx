@@ -1,6 +1,5 @@
 import { Link, useNavigate } from "react-router";
 import { capitalize, getDaysSince, getInitials } from "../../../utils/utils";
-import { TfiLocationPin } from "react-icons/tfi";
 import { MdOutlineAccessTime } from "react-icons/md";
 
 import { MainRecButton } from "../../../components/MainRecButton";
@@ -9,9 +8,11 @@ import { useContext } from "react";
 import { AuthContext } from "../../../context/authContext";
 import { PiMapPinArea } from "react-icons/pi";
 import { applyToOffer } from "../../../services/offersServices";
+import Badge from "../../../components/badge";
 
 
-export const OfferCard = ({ classProps, offer, id, setIsOpenModalDelete, isOpenModalDelete, setSelectedOfferId, isOpenModalEdit, setIsOpenModalEdit }) => {
+
+export const OfferCard = ({ classProps, offer, id, setIsOpenModalDelete, isOpenModalDelete, setSelectedOfferId, isOpenModalEdit, setIsOpenModalEdit, onApplySuccess}) => {
   const navigate = useNavigate();
   const { profile, token } = useContext(AuthContext);
 
@@ -29,27 +30,34 @@ export const OfferCard = ({ classProps, offer, id, setIsOpenModalDelete, isOpenM
     e.stopPropagation()
     if(!token) {
       console.log('por aqui no pasaras')
+      navigate('/login')
     }
 
   try {
     const response = await applyToOffer(offer._id, token)
     console.log(response.msg || 'se envio')
+    onApplySuccess?.(response.offer)
   } catch (error) {
     console.log(error.message || 'Error al aplicar a la oferta');
   }
   }
-
+const hasApplied = Array.isArray(offer.applicants) &&
+  profile?._id &&
+  offer.applicants.some((applicant) =>
+    applicant?.user?._id === profile._id
+  );
   const handleOnModal = (e) => {
     e.stopPropagation();
+    
     setIsOpenModalDelete(true);
-    setSelectedOfferId(offer._id);
+    setSelectedOfferId(offer?._id);
     console.log("🚀 ~ handleOnModal ~ isOpenModalDelete:", isOpenModalDelete)
   };
 
   const handleOnModalEdit = (e) => {
     e.stopPropagation();
+    setSelectedOfferId(offer?._id);
     setIsOpenModalEdit(true);
-    setSelectedOfferId(offer._id);
     console.log("🚀 ~ handleOnModal ~ isOpenModalEdit:", isOpenModalEdit)
   };
 
@@ -76,7 +84,7 @@ export const OfferCard = ({ classProps, offer, id, setIsOpenModalDelete, isOpenM
     >
       <div className='card-body justify-between'>
         <div className='flex justify-between items-center'>
-          <Link to={`../recruiter/${offer.owner._id}`} className='avatar gap-2 items-center' onClick={handleOnClick}>
+          <Link to={`../recruiter/${offer?.owner?._id}`} className='avatar gap-2 items-center' onClick={handleOnClick}>
             {offer.owner?.role?.recruiter?.logo ? (
               <div className='avatar'>
                 <div className='size-8 sm:size-8 rounded-full'>
@@ -97,13 +105,14 @@ export const OfferCard = ({ classProps, offer, id, setIsOpenModalDelete, isOpenM
           </Link>
           {isOwner && isRecruiter && (
             <MenuCard
+              handleOnModalEdit={handleOnModalEdit}
               isOpen={isOpenModalDelete}
               openModal={handleOnModal}
-              openModalEdit={handleOnModalEdit}
               onClick={handleOnClick}
               id={offer._id}
             />
           )}
+          {hasApplied && <Badge text={'Applied'}/>}
         </div>
 
         <div className='flex flex-col justify-between'>
@@ -118,17 +127,18 @@ export const OfferCard = ({ classProps, offer, id, setIsOpenModalDelete, isOpenM
           <div className='badge text-neutral-0 bg-neutral-60'>{offer?.contractType}</div>
         </div>
         <div>
-          <p className='line-clamp-3'>{offer.description}</p>
+          <p className='line-clamp-3'>{offer?.description}</p>
         </div>
         
 
         {(!isOwner && !isRecruiter) && (<div className='flex items-center justify-end gap-4 m-2'>
           <MainRecButton
-            onClick={handleApply}
-            classProps='rounded-full w-18'
-          >
-            Apply
-          </MainRecButton>
+  onClick={handleApply}
+  classProps="rounded-full w-18"
+  disabled={hasApplied}
+>
+  {hasApplied ? 'Applied' : 'Apply'}
+</MainRecButton>
           <MainRecButton
             onClick={handleOnClick}
             classProps='rounded-full w-18 hover:border-neutral-0 hover:text-neutral-0 text-secondary-40 hover:bg-transparent bg-transparent'
@@ -142,7 +152,7 @@ export const OfferCard = ({ classProps, offer, id, setIsOpenModalDelete, isOpenM
             <MdOutlineAccessTime />
             Posted {daysAgo} day{daysAgo !== 1 ? "s" : ""} ago
           </p>
-          <span>{offer.applicants ? `${offer.applicants.length} Aplicants` : "0 Aplicants"}</span>
+          <span>{offer?.applicants ? `${offer?.applicants.length} Aplicants` : "0 Aplicants"}</span>
         </div>
       </div>
     </li>

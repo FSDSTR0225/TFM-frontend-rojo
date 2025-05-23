@@ -17,7 +17,7 @@ export const OffersInfoPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isOpenModalDelete, setIsOpenModalDelete] = useState(false)
 
-  const [operacion, setOperacion] = useState('crear');
+  //const [operacion, setOperacion] = useState('crear');
   const [selectedOfferId, setSelectedOfferId] = useState(null);
   const [isOpenModalEdit, setIsOpenModalEdit] = useState(false);
 
@@ -35,7 +35,7 @@ const getFilteredOffers = () => {
   let filtered = [...offers]
 
   if (contractTypeFilter) {
-    filtered = filtered.filter((offer)=> offer.contractType.includes(contractTypeFilter))
+    filtered = filtered.filter((offer)=> offer && offer.contractType.includes(contractTypeFilter))
   }
   
   if (skillsFilter.length > 0) {
@@ -52,8 +52,10 @@ const getFilteredOffers = () => {
   return filtered
 }
 
+const filteredOffers = getFilteredOffers();
+console.log('Filtered offers:', filteredOffers);
 
-  const filteredOffers = getFilteredOffers()
+
   const totalPages = Math.ceil(filteredOffers.length / 6);
   const startIndex = (currentPage - 1) * 6;
 
@@ -70,11 +72,13 @@ const getFilteredOffers = () => {
     try {
       const offerData = await getOffers()
       setOffers(offerData)
+      console.log("🚀 ~ fetchOffers ~ offerData:", offerData)
       setLoading(false)
     } catch (error) {
       setError(error.message)
       setLoading(false)
     }
+      
   }
 
   useEffect(() => {
@@ -110,21 +114,13 @@ const getFilteredOffers = () => {
   }
   if (error) return <p>Error al cargar las ofertas: {error}</p>;
 
-// const contractsTypes = [...new Set(offers.flatMap(offer =>offer.contractType.map(type => type.trim())))]
-
-// const hardSkills = [
-//   ...new Set(
-//     offers.flatMap(offer =>
-//       offer.skills
-//         .flatMap(s => s.split(","))
-//         .map(s => s.trim())
-//         .filter(Boolean) // Elimina vacíos
-//     )
-//   )
-// ];
-
-
-
+const handleApplySuccess = (updatedOffer) => {
+  setOffers(prevOffers =>
+    prevOffers.map(offer =>
+      offer._id === updatedOffer._id ? updatedOffer : offer
+    )
+  );
+};
 
 
   return (
@@ -159,10 +155,11 @@ const getFilteredOffers = () => {
               setSelectedOfferId={setSelectedOfferId}
               isOpenModalEdit={isOpenModalEdit}
               setIsOpenModalEdit={setIsOpenModalEdit}
-              key={offer._id} />
-
-          )
-        })}
+              key={offer._id} 
+                onApplySuccess= {handleApplySuccess}
+              />
+              
+        )})}
 
 
       </OfferList>

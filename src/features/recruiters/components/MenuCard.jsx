@@ -3,7 +3,7 @@ import { CiEdit } from "react-icons/ci";
 import { MdOutlineDeleteSweep } from "react-icons/md";
 import { PiDotsThreeBold } from "react-icons/pi";
 
-export const MenuCard = ({ onClick, id, openModal, openModalEdit }) => {
+export const MenuCard = ({ onClick, openModal, handleOnModalEdit }) => {
 
   return (
     <details
@@ -16,10 +16,10 @@ export const MenuCard = ({ onClick, id, openModal, openModalEdit }) => {
       <ul className='menu p-0 dropdown-content rounded-box z-1 w-25 shadow-xl text-sm bg-secondary-40 text-neutral-90 left-[-200%]'>
         
         <li
-          onClick={openModalEdit}
+          onClick={handleOnModalEdit}
           className=' hover:bg-neutral-60 hover:text-neutral-0'
         >
-          <button>
+          <button >
             <CiEdit />
             Edit
           </button>
