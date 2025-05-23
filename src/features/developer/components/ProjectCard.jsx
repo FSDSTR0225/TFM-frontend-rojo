@@ -43,11 +43,12 @@ const ProjectCard = ({
       </div>
       <div className="relative flex-grow overflow-hidden group">
         {image ? (
+          <figure>
           <img
             src={image}
             alt={title}
-            className="w-full h-full object-cover object-center"
           />
+        </figure>
         ) : (
           <div className="flex items-center justify-center h-full text-neutral-40 italic">
             No image available
