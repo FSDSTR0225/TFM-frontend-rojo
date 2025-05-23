@@ -9,6 +9,7 @@ import { AuthContext } from "../../../context/authContext";
 import { PiMapPinArea } from "react-icons/pi";
 import { applyToOffer } from "../../../services/offersServices";
 import Badge from "../../../components/badge";
+import { AvatarCard } from "../../../components/AvatarCard";
 
 
 
@@ -84,7 +85,8 @@ const hasApplied = Array.isArray(offer.applicants) &&
     >
       <div className='card-body justify-between'>
         <div className='flex justify-between items-center'>
-          <Link to={`../recruiter/${offer?.owner?._id}`} className='avatar gap-2 items-center' onClick={handleOnClick}>
+        <AvatarCard owner={offer.owner}  />
+          {/* <Link to={`../recruiter/${offer?.owner?._id}`} className='avatar gap-2 items-center' onClick={handleOnClick}>
             {offer.owner?.role?.recruiter?.logo ? (
               <div className='avatar'>
                 <div className='size-8 sm:size-8 rounded-full'>
@@ -102,7 +104,7 @@ const hasApplied = Array.isArray(offer.applicants) &&
               </div>
             )}
             <p>{completeName}</p>
-          </Link>
+          </Link> */}
           {isOwner && isRecruiter && (
             <MenuCard
               handleOnModalEdit={handleOnModalEdit}

@@ -2,13 +2,14 @@ import { Link } from "react-router";
 import { AuthContext } from "../context/authContext";
 import { useContext } from "react";
 import { capitalize, getInitials } from "../utils/utils";
+import { AvatarCard } from "../components/AvatarCard";
 
 export const Header = () => {
   const { profile, logout } = useContext(AuthContext);
 
-  const name = capitalize(profile?.name || "");
-  const surname = capitalize(profile?.surname || "");
-  const completeName = `${name} ${surname}`.trim() || "Unknown Recruiter";
+  // const name = capitalize(profile?.name || "");
+  // const surname = capitalize(profile?.surname || "");
+  // const completeName = `${name} ${surname}`.trim() || "Unknown Recruiter";
 
   return (
     <header className='bg-neutral-80 p-2 drawer border-b-1 border-neutral-70'>
@@ -148,7 +149,8 @@ export const Header = () => {
           ) : (
             <div className='flex items-center gap-4  pr-6  text-white'>
             <div className="hidden  lg:flex items-center gap-4 min-w-40">
-              {profile?.avatar ? (
+            <AvatarCard profile={profile} />
+            {/* {profile?.avatar ? (
                 <div className='avatar'>
                   <div className='size-10 rounded-full'>
                     <img
@@ -167,7 +169,7 @@ export const Header = () => {
               <div className="felx flex-col -space-y-1">
                 <p className='text-sm'>{completeName}</p>
                 <p className="text-xs text-neutral-10 ">{profile.role.type}</p>
-              </div>
+              </div> */}
               </div>
 
               {/* Botones */}
