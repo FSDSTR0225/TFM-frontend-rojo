@@ -45,7 +45,7 @@ export const RecDashBoar = () => {
   );
 
   return (
-    <div className="flex flex-col md:flex-row gap-4 p-4 bg-base-100 min-h-screen overflow-x-auto">
+    <div className="flex flex-col md:flex-row gap-4 p-4 min-h-screen overflow-x-auto">
       {renderColumn('Pending', pending, pendingRef, 'border-blue-500')}
       {renderColumn('Reviewed', reviewed, reviewedRef, 'border-purple-500')}
       {renderColumn('Interviewed', interviewed, interviewedRef, 'border-yellow-500')}
