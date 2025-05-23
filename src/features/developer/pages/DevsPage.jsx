@@ -99,7 +99,7 @@ export const DevsPage = () => {
               {currentProjects.map((developer) => (
               <DevsCard
                   key={developer._id}
-                  id={developer._id}
+                  developerId={developer._id}
                   name={developer.name}
                   surname={developer.surname}
                   avatar={developer.avatar}
