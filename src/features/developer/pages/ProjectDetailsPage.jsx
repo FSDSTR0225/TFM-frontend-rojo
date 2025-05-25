@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { getProjectById } from "../../../services/projectService";
+import ProjectInfoCard from "../components/ProjectInfoCard";
 
 export const ProjectDetailsPage = () => {
   const { id } = useParams();
-  const [project, setProject] = useState(null); // guardamos el proyecto completo
+  const [project, setProject] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     const fetchProject = async () => {
       const data = await getProjectById(id);
+      console.log("🚀 project data:", data);
       if (data && !data.error) {
         setProject(data);
         setCurrentIndex(0);
@@ -19,6 +21,7 @@ export const ProjectDetailsPage = () => {
   }, [id]);
 
   if (!project) return null;
+
   const gallery = project.gallery || [];
   const length = gallery.length;
 
@@ -31,8 +34,8 @@ export const ProjectDetailsPage = () => {
   };
 
   return (
-    <div className="w-screen overflow-x-hidden">
-      {/* Cabecera con imagen de fondo y título */}
+    <div className="w-screen overflow-x-hidden flex flex-col items-center gap-6">
+      {/* Cabecera */}
       <div className="relative w-full h-[256px] overflow-hidden">
         {gallery[0] && (
           <img
@@ -46,9 +49,11 @@ export const ProjectDetailsPage = () => {
         </div>
       </div>
 
-      {/* Carousel */}
-      {length > 0 && (
-        <div className="w-full max-w-5xl mx-auto -mt-20 relative z-20 aspect-video rounded-lg overflow-hidden">
+      {/* Contenido: Carrusel + Info */}
+      <div className="flex flex-col md:flex-row gap-4 w-full p-4 max-w-screen-xl mx-auto px-4 -mt-30 relative z-20">
+        
+        {/* Carrusel */}
+        <div className="relative w-full md:w-4/5 aspect-video rounded-lg overflow-hidden">
           <div className="relative w-full h-full">
             {gallery.map((url, index) => (
               <img
@@ -60,25 +65,16 @@ export const ProjectDetailsPage = () => {
                 }`}
               />
             ))}
-
-            {/* Botones */}
-            <button
-              onClick={prevSlide}
-              className="btn btn-circle btn-sm absolute left-4 top-1/2 z-20 active:scale-90 transition-transform duration-150 focus:outline-none"
-              aria-label="Previous Slide"
-            >
-              ❮
-            </button>
-            <button
-              onClick={nextSlide}
-              className="btn btn-circle btn-sm absolute right-4 top-1/2 z-20 active:scale-90 transition-transform duration-150 focus:outline-none"
-              aria-label="Next Slide"
-            >
-              ❯
-            </button>
+            <button onClick={prevSlide} className="btn btn-circle btn-sm absolute left-4 top-1/2 z-20">❮</button>
+            <button onClick={nextSlide} className="btn btn-circle btn-sm absolute right-4 top-1/2 z-20">❯</button>
           </div>
         </div>
-      )}
+
+        {/* Info Card */}
+        <div className="w-full md:w-1/3">
+          <ProjectInfoCard project={project} />
+        </div>
+      </div>
     </div>
   );
 };

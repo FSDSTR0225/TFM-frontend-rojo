@@ -11,7 +11,7 @@ const ProjectCard = ({
   title,
   badgeText,
   category,
-  developerid,
+  developerId,
 }) => {
   const image = gallery.length > 0 ? gallery[0] : null;
 
@@ -21,7 +21,7 @@ const ProjectCard = ({
         <img src={avatar} alt="Avatar" className="w-6 h-6 rounded-full" />
 
         <Link
-          to={`/profile/${developerid}`}
+          to={`/profile/${developerId}`}
           className="text-neutral-0 font-semibold leading-tight hover:text-primary-40"
         >
           {name} {surname}
