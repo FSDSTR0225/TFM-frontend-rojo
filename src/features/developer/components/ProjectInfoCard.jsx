@@ -1,6 +1,7 @@
 // src/components/ProjectInfoCard.js
 import React, { useState } from "react";
-import { PiUser, PiCalendar, PiClock, PiGithubLogo } from "react-icons/pi";
+import { Link } from "react-router";
+import { PiUser, PiCalendar, PiClock, PiGithubLogo, PiHeartStraight, PiEye, PiArrowSquareOut, PiChatText  } from "react-icons/pi";
 
 const ProjectInfoCard = ({ project }) => {
   const [showAllSkills, setShowAllSkills] = useState(false);
@@ -21,26 +22,44 @@ const ProjectInfoCard = ({ project }) => {
   const skillsToShow = showAllSkills ? projectSkills : projectSkills?.slice(0, 5) || [];
 
   return (
-    <div className="relative bg-neutral-80 flex flex-col rounded-lg shadow-md overflow-hidden border border-neutral-70 p-8 text-inherit no-underline w-full max-w-xs">
-      {/* Badge opcional arriba a la derecha */}
+    <div className="relative bg-neutral-80 flex flex-col rounded-lg shadow-md overflow-hidden border border-neutral-70 p-8 text-inherit no-underline w-full max-w-full">
+
       {category && (
-        <div className="absolute top-0 right-2 mt-2">
-          <span className="border border-primary-50 text-primary-50 px-2 py-0.5 rounded-full text-sm">
-            {category}
-          </span>
+        <div className="absolute top-0 left-8 right-8 mt-8 flex justify-between items-center">
+            <span className="bg-primary-60/20 text-primary-50 px-2 py-0.5 rounded-md text-sm">
+                {category}
+            </span>
+            <div className="flex items-center gap-4 text-neutral-0">
+                <div className="flex items-center gap-1">
+                <PiHeartStraight className="text-primary-80" />
+                <span>{project.likes || 0}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                <PiEye className="text-primary-80" />
+                <span>{project.views || 0}</span>
+                </div>
+            </div>
         </div>
       )}
 
       <div className="flex flex-col justify-between flex-1">
         <div>
-          {/* Owner Avatar */}
           {owner && (
-            <div className="flex justify-center mt-1 mb-2 relative">
-              <img
-                src={owner.avatar}
-                alt={`${owner.name} ${owner.surname}`}
-                className="w-16 h-16 rounded-full border-2 border-neutral-60"
-              />
+            <div className="flex flex-col justify-center items-center mt-4 mb-2 relative">
+              <Link to={`/profile/${owner._id}`} className="relative group">
+                <img
+                  src={owner.avatar}
+                  alt={`${owner.name} ${owner.surname}`}
+                  className="w-16 h-16 rounded-full border-2 border-neutral-60 hover:border-primary-50 transition-colors duration-300"
+                />
+              </Link>
+
+              <Link
+                to={`/profile/${owner._id}`}
+                className="mt-2 text-neutral-0 text-lg font-semibold hover:text-primary-50 transition-colors duration-300"
+              >
+                {owner.name} {owner.surname}
+              </Link>
             </div>
           )}
 
@@ -82,15 +101,24 @@ const ProjectInfoCard = ({ project }) => {
             )}
 
             {liveLink && (
-                <a
-                  href={liveLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn w-full bg-neutral-90 text-neutral-0 hover:bg-primary-60 focus:bg-primary-70 text-center mt-2"
-                >
-                  Live Project
-                </a>
-            )}
+                <div className="flex gap-2 mt-2">
+                    <a
+                    href={liveLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn flex-1 bg-neutral-90 border-neutral-80 text-neutral-0 hover:bg-neutral-60 focus:bg-neutral-100 text-center flex items-center justify-center gap-2"
+                    >
+                    <PiArrowSquareOut size={18} /> Live Project 
+                    </a>
+                    <button
+                    type="button"
+                    onClick={() => alert("Chat not created yet")} // Aquí pones la acción real
+                    className="btn flex-1 bg-primary-60 text-neutral-0 hover:bg-primary-70 focus:bg-primary-80 flex items-center justify-center gap-2"
+                    >
+                    <PiChatText size={18} /> Contact 
+                    </button>
+                </div>
+                )}
 
             <hr className="border-t border-neutral-60 my-4" />
 
