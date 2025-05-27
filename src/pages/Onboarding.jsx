@@ -1,11 +1,29 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
 import { defineStepper } from "@stepperize/react";
 import { motion, AnimatePresence } from 'framer-motion';
-export const Home = () => {
+import { useNavigate } from 'react-router';  // Importa useNavigate
+
+function parseJwt(token) {
+  try {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split('')
+        .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+        .join('')
+    );
+    return JSON.parse(jsonPayload);
+  } catch (e) {
+    return null;
+  }
+}
+
+export const Onboarding = () => {
   const { useStepper, steps, utils } = defineStepper(
-    { id: 'shipping', title: 'Shipping', description: 'Enter your shipping details' },
-    { id: 'payment', title: 'Payment', description: 'Enter your payment details' },
-    { id: 'complete', title: 'Complete', description: 'Checkout complete' }
+    { id: 'shipping', title: 'Personal Info', description: 'Enter your personal details' },
+    { id: 'payment', title: 'Profile Details', description: 'Enter your profile details' },
+    { id: 'complete', title: 'Complete', description: 'Registration complete' }
   );
 
   const variants = {
@@ -14,19 +32,36 @@ export const Home = () => {
     exit: { opacity: 0, x: -50 }
   };
 
- const stepper = useStepper();
+  const stepper = useStepper();
   const currentIndex = utils.getIndex(stepper.current.id);
+
+  const [role, setRole] = useState('');
+  const navigate = useNavigate();  // Hook para redirección
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const payload = parseJwt(token);
+      if (payload && payload.role) {
+        setRole(payload.role);
+      } else {
+        navigate('/login', { replace: true });  // Redirige si no hay payload válido
+      }
+    } else {
+      navigate('/login', { replace: true });  // Redirige si no hay token
+    }
+  }, [navigate]);
 
   return (
     <div className="space-y-6 p-6 border rounded-lg w-96 mx-auto mt-10">
       <div className="flex justify-between">
-        <h2 className="text-lg font-medium">Checkout</h2>
+        <h2 className="text-lg font-medium">User Onboarding</h2>
         <div className="flex items-center gap-2 text-sm text-gray-500">
           Step {currentIndex + 1} of {steps.length}
         </div>
       </div>
 
-      <nav aria-label="Checkout Steps" className="my-4">
+      <nav aria-label="Steps" className="my-4">
         <ol className="flex items-center justify-between gap-2" aria-orientation="horizontal">
           {stepper.all.map((step, index, array) => (
             <React.Fragment key={step.id}>
@@ -38,9 +73,9 @@ export const Home = () => {
                   aria-posinset={index + 1}
                   aria-setsize={steps.length}
                   aria-selected={stepper.current.id === step.id}
-                  className={`flex items-center justify-center w-10 h-10 rounded-full font-bold transition-colors duration-300 $
+                  className={`flex items-center justify-center w-10 h-10 rounded-full font-bold transition-colors duration-300 ${
                     index <= currentIndex ? 'bg-blue-600 text-white' : 'bg-gray-300 text-gray-600'
-                  `}
+                  }`}
                   onClick={() => stepper.goTo(step.id)}
                 >
                   {index + 1}
@@ -48,16 +83,16 @@ export const Home = () => {
                 <span className="text-sm font-medium">{step.title}</span>
               </li>
               {index < array.length - 1 && (
-                <div className={`flex-1 h-1 rounded transition-colors duration-300 $
+                <div className={`flex-1 h-1 rounded transition-colors duration-300 ${
                   index < currentIndex ? 'bg-blue-600' : 'bg-gray-300'
-                `} />
+                }`} />
               )}
             </React.Fragment>
           ))}
         </ol>
       </nav>
 
-      <div className="relative h-64">
+      <div className="relative h-96">
         <AnimatePresence exitBeforeEnter>
           <motion.div
             key={stepper.current.id}
@@ -66,11 +101,11 @@ export const Home = () => {
             animate="center"
             exit="exit"
             transition={{ duration: 0.5 }}
-            className="absolute inset-0"
+            className="absolute inset-0 overflow-y-auto"
           >
             {stepper.switch({
-              shipping: () => <ShippingComponent />, 
-              payment: () => <PaymentComponent />, 
+              shipping: () => <ShippingComponent />,
+              payment: () => <PaymentComponent role={role} />,
               complete: () => <CompleteComponent />
             })}
           </motion.div>
@@ -107,40 +142,132 @@ export const Home = () => {
   );
 }
 
+// 🚀 STEP 1: Datos personales básicos
 const ShippingComponent = () => (
   <div className="grid gap-4">
     <div className="grid gap-2">
-      <label htmlFor="name" className="text-sm font-medium">Name</label>
-      <input id="name" placeholder="John Doe" className="w-full px-3 py-2 border rounded" />
+      <label htmlFor="email" className="text-sm font-medium">Email</label>
+      <input id="email" placeholder="email@example.com" className="w-full px-3 py-2 border rounded" />
     </div>
     <div className="grid gap-2">
-      <label htmlFor="address" className="text-sm font-medium">Address</label>
-      <textarea id="address" placeholder="123 Main St, Anytown USA" className="w-full px-3 py-2 border rounded" />
+      <label htmlFor="password" className="text-sm font-medium">Password</label>
+      <input type="password" id="password" placeholder="******" className="w-full px-3 py-2 border rounded" />
+    </div>
+    <div className="grid gap-2">
+      <label htmlFor="name" className="text-sm font-medium">Name</label>
+      <input id="name" placeholder="John" className="w-full px-3 py-2 border rounded" />
+    </div>
+    <div className="grid gap-2">
+      <label htmlFor="surname" className="text-sm font-medium">Surname</label>
+      <input id="surname" placeholder="Doe" className="w-full px-3 py-2 border rounded" />
+    </div>
+    <div className="grid gap-2">
+      <label htmlFor="birthDate" className="text-sm font-medium">Birth Date</label>
+      <input id="birthDate" placeholder="YYYY-MM-DD" className="w-full px-3 py-2 border rounded" />
+    </div>
+    <div className="grid gap-2">
+      <label htmlFor="phone" className="text-sm font-medium">Phone</label>
+      <input id="phone" placeholder="+1234567890" className="w-full px-3 py-2 border rounded" />
+    </div>
+    <div className="grid gap-2">
+      <label htmlFor="avatar" className="text-sm font-medium">Avatar URL</label>
+      <input id="avatar" placeholder="https://..." className="w-full px-3 py-2 border rounded" />
+    </div>
+    <div className="grid gap-2">
+      <label htmlFor="description" className="text-sm font-medium">Description</label>
+      <textarea id="description" placeholder="Tell us about yourself" className="w-full px-3 py-2 border rounded" />
     </div>
   </div>
 );
 
-const PaymentComponent = () => (
+// 🚀 STEP 2: Detalles por rol
+const PaymentComponent = ({ role }) => (
   <div className="grid gap-4">
     <div className="grid gap-2">
-      <label htmlFor="card-number" className="text-sm font-medium">Card Number</label>
-      <input id="card-number" placeholder="4111 1111 1111 1111" className="w-full px-3 py-2 border rounded" />
+      <label htmlFor="role" className="text-sm font-medium">Role</label>
+      <select id="role" className="w-full px-3 py-2 border rounded" value={role} disabled>
+        <option value="developer">Developer</option>
+        <option value="recruiter">Recruiter</option>
+      </select>
     </div>
-    <div className="grid grid-cols-2 gap-4">
-      <div className="grid gap-2">
-        <label htmlFor="expiry-date" className="text-sm font-medium">Expiry Date</label>
-        <input id="expiry-date" placeholder="MM/YY" className="w-full px-3 py-2 border rounded" />
-      </div>
-      <div className="grid gap-2">
-        <label htmlFor="cvc" className="text-sm font-medium">CVC</label>
-        <input id="cvc" placeholder="123" className="w-full px-3 py-2 border rounded" />
-      </div>
-    </div>
+
+    {role === 'developer' && (
+      <>
+        <div className="grid gap-2">
+          <label htmlFor="position" className="text-sm font-medium">Professional Position</label>
+          <input id="position" placeholder="Frontend, Backend..." className="w-full px-3 py-2 border rounded" />
+        </div>
+        <div className="grid gap-2">
+          <label htmlFor="experience" className="text-sm font-medium">Experience Years</label>
+          <input id="experience" placeholder="3" className="w-full px-3 py-2 border rounded" />
+        </div>
+        <div className="grid gap-2">
+          <label htmlFor="location" className="text-sm font-medium">Location</label>
+          <input id="location" placeholder="City, Country" className="w-full px-3 py-2 border rounded" />
+        </div>
+        <div className="grid gap-2">
+          <label htmlFor="skills" className="text-sm font-medium">Skills (comma-separated)</label>
+          <input id="skills" placeholder="React, Node.js, MongoDB" className="w-full px-3 py-2 border rounded" />
+        </div>
+        <div className="grid gap-2">
+          <label htmlFor="languages" className="text-sm font-medium">Languages (comma-separated)</label>
+          <input id="languages" placeholder="English:C1,Spanish:B2" className="w-full px-3 py-2 border rounded" />
+        </div>
+        <div className="grid gap-2">
+          <label htmlFor="linkedin" className="text-sm font-medium">LinkedIn</label>
+          <input id="linkedin" placeholder="https://linkedin.com/in/..." className="w-full px-3 py-2 border rounded" />
+        </div>
+        <div className="grid gap-2">
+          <label htmlFor="github" className="text-sm font-medium">GitHub</label>
+          <input id="github" placeholder="https://github.com/..." className="w-full px-3 py-2 border rounded" />
+        </div>
+        <div className="grid gap-2">
+          <label htmlFor="instagram" className="text-sm font-medium">Instagram</label>
+          <input id="instagram" placeholder="https://instagram.com/..." className="w-full px-3 py-2 border rounded" />
+        </div>
+      </>
+    )}
+
+    {role === 'recruiter' && (
+      <>
+        <div className="grid gap-2">
+          <label htmlFor="companyName" className="text-sm font-medium">Company Name</label>
+          <input id="companyName" placeholder="Your Company" className="w-full px-3 py-2 border rounded" />
+        </div>
+        <div className="grid gap-2">
+          <label htmlFor="companyDescription" className="text-sm font-medium">Company Description</label>
+          <textarea id="companyDescription" placeholder="Company details..." className="w-full px-3 py-2 border rounded" />
+        </div>
+        <div className="grid gap-2">
+          <label htmlFor="companyLocation" className="text-sm font-medium">Company Location</label>
+          <input id="companyLocation" placeholder="City, Country" className="w-full px-3 py-2 border rounded" />
+        </div>
+        <div className="grid gap-2">
+          <label htmlFor="sector" className="text-sm font-medium">Sector</label>
+          <input id="sector" placeholder="Tech, Marketing..." className="w-full px-3 py-2 border rounded" />
+        </div>
+        <div className="grid gap-2">
+          <label htmlFor="website" className="text-sm font-medium">Website</label>
+          <input id="website" placeholder="https://..." className="w-full px-3 py-2 border rounded" />
+        </div>
+        <div className="grid gap-2">
+          <label htmlFor="contactEmail" className="text-sm font-medium">Contact Email</label>
+          <input id="contactEmail" placeholder="contact@example.com" className="w-full px-3 py-2 border rounded" />
+        </div>
+        <div className="grid gap-2">
+          <label htmlFor="contactPhone" className="text-sm font-medium">Contact Phone</label>
+          <input id="contactPhone" placeholder="+1234567890" className="w-full px-3 py-2 border rounded" />
+        </div>
+        <div className="grid gap-2">
+          <label htmlFor="multimedia" className="text-sm font-medium">Multimedia Link</label>
+          <input id="multimedia" placeholder="https://..." className="w-full px-3 py-2 border rounded" />
+        </div>
+      </>
+    )}
   </div>
 );
 
+// 🚀 STEP 3: Confirmación
 const CompleteComponent = () => (
-  <h3 className="text-lg py-4 font-medium">Stepper complete 🔥</h3>
+  <h3 className="text-lg py-4 font-medium">All steps complete 🔥</h3>
 );
-
-
