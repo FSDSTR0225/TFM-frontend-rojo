@@ -10,6 +10,7 @@ export const getAllProjects = async () => {
     });
 
     const data = await resp.json();
+    console.log('data: ', data);
     return data;
   } catch (error) {
     console.error('Failed to fetch projects:', error);
@@ -39,32 +40,19 @@ export const createProject = async (payload, token) => {
   }
 };
 
-
-
-export const getProjectsByDeveloper = async (developerId, token) => {
+export const getProjectById = async (_id) => {
   try {
-    const resp = await fetch(
-      `${urlBackEnd}/projects`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-      }
-    );
-
-    if (!resp.ok) {
-      const errorData = await resp.json();
-      throw new Error(errorData.message || 'Error en el fetch');
-    }
+    const resp = await fetch(`${urlBackEnd}/projects/${_id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
     const data = await resp.json();
-    const projectsArray = Array.isArray(data) ? data : (data.projects || []);
-    const filtered = projectsArray.filter(p => p.owner?._id === developerId);
-    return { projects: filtered };
+    return data;
   } catch (error) {
-    console.error('Failed to fetch projects by developer:', error);
+    console.error('Failed to fetch project:', error);
     return { error: true, message: error.message };
   }
 };
