@@ -49,7 +49,7 @@ function tokenize(code) {
   return tokens;
 }
 
-export default function CodeBlock({ code }) {
+export function CodeBlock({ code }) {
   const tokens = tokenize(code);
 
   return (

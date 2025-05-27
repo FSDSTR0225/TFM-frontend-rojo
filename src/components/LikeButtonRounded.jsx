@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { PiHeartStraight, PiHeartStraightFill } from "react-icons/pi";
 import "../animations/LikeButtonRounded.css";
 
-export default function LikeButton() {
+export function LikeButtonRounded() {
   const [liked, setLiked] = useState(false);
   const [animating, setAnimating] = useState(false);
 

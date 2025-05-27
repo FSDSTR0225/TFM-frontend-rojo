@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Link } from "react-router";
 import { PiUser, PiCalendar, PiClock, PiGithubLogo, PiHeartStraight, PiEye, PiArrowSquareOut, PiChatText  } from "react-icons/pi";
 
-const ProjectInfoCard = ({ project }) => {
+export const ProjectInfoCard = ({ project }) => {
   const [showAllSkills, setShowAllSkills] = useState(false);
 
   if (!project) return null;
@@ -155,4 +155,4 @@ const ProjectInfoCard = ({ project }) => {
   );
 };
 
-export default ProjectInfoCard;
+

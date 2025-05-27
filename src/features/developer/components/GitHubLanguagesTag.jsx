@@ -32,7 +32,7 @@ function parseRepoUrl(repoUrl) {
   }
 }
 
-export default function GitHubLanguagesTag({ repoUrl }) {
+export function GitHubLanguagesTag({ repoUrl }) {
   const [languages, setLanguages] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { getProjectById } from "../../../services/projectService";
-import ProjectInfoCard from "../components/ProjectInfoCard";
-import GitHubFileTree from "../components/GitHubFileTree";
-import GitHubLanguagesTag from "../components/GitHubLanguagesTag"; // <-- Importa aquí
-import ReactParser from "../../../styles/ReactParser";
-import LikeButtonRounded from "../../../components/LikeButtonRounded";
+import { ProjectInfoCard } from "../components/ProjectInfoCard";
+import { GitHubFileTree } from "../components/GitHubFileTree";
+import { GitHubLanguagesTag } from "../components/GitHubLanguagesTag"; // <-- Importa aquí
+import { CodeBlock } from "../../../styles/ReactParser";
+import { LikeButtonRounded } from "../../../components/LikeButtonRounded";
 
 function useWindowWidth() {
   const [width, setWidth] = useState(window.innerWidth);
@@ -148,7 +148,7 @@ export const ProjectDetailsPage = () => {
                     Code Sections
                   </h2>
                   {project.codeSections.map((code, index) => (
-                    <ReactParser key={index} code={code} />
+                    <CodeBlock key={index} code={code} />
                   ))}
                 </section>
               )}
@@ -251,7 +251,7 @@ export const ProjectDetailsPage = () => {
                         Code Sections
                       </h2>
                       {project.codeSections.map((code, index) => (
-                        <ReactParser key={index} code={code} />
+                        <CodeBlock key={index} code={code} />
                       ))}
                     </section>
                   ) : null;

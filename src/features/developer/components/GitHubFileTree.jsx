@@ -185,7 +185,7 @@ const TreeNode = ({ node, level = 0, isLast }) => {
   );
 };
 
-const GitHubFileTree = ({ repoUrl }) => {
+export const GitHubFileTree = ({ repoUrl }) => {
   const [tree, setTree] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -247,5 +247,3 @@ const GitHubFileTree = ({ repoUrl }) => {
     </div>
   );
 };
-
-export default GitHubFileTree;
