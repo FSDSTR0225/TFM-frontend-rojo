@@ -23,6 +23,7 @@ import { Login } from '../features/auth/login';
 import { OffersInfoPage } from '../features/recruiters/pages/OffersInfoPage';
 import { OfferInfoPage } from '../features/recruiters/pages/OfferInfoPage';
 import { DashBoardLayout } from '../layout/DashBoardLayout';
+import { Onboarding } from '../pages/Onboarding';
 
 
 
@@ -42,6 +43,8 @@ const router = createBrowserRouter([
       { path: 'profile/:developerid', element: <ProfileDevPage /> },
       { path: 'developers', element: <DevsPage /> },
       {path: 'recruiter/:id', element: <RecProfile />},
+
+      {path: 'onboarding', element: <Onboarding />},
 
       { path: 'login', element: <Login /> },
       { path: 'register', element: <Register /> },
