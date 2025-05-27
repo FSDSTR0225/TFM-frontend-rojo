@@ -25,8 +25,8 @@ export const NewProjectModal = ({ onClose }) => {
   const currentYear = new Date().getFullYear();
 
   const isValidImageUrl = (url) => {
-  if (!url) return false;
-  return /\.(jpg|jpeg|png|gif|webp)$/i.test(url) || /format=auto/.test(url);
+    if (!url) return false;
+    return /\.(jpg|jpeg|png|gif|webp)(\?.*)?$/i.test(url) || url.includes("format=auto");
   };
 
   const handleGalleryChange = (index, value) => {
@@ -63,7 +63,7 @@ export const NewProjectModal = ({ onClose }) => {
 
     const filteredGallery = galleryUrls
       .map((url) => url.trim())
-      .filter((url) => url && /\.(jpg|jpeg|png|gif|webp)$/i.test(url));
+      .filter((url) => isValidImageUrl(url));
 
     const cleanVideoUrl =
       showVideo && /\.(mp4|webm|ogg)$/i.test(videoUrl.trim())
@@ -79,29 +79,29 @@ export const NewProjectModal = ({ onClose }) => {
 
     const token = localStorage.getItem("token");
     if (!token) {
-        setError("No authentication token found, please login");
-        setLoading(false);
-        return;
+      setError("No authentication token found, please login");
+      setLoading(false);
+      return;
     }
 
     try {
-        const project = await createProject(payload, token);
-        console.log('ID del proyecto creado:', project.project._id);
+      const project = await createProject(payload, token);
+      console.log('ID del proyecto creado:', project.project._id);
 
-    reset();
-    setCodeSections([""]);
-    setGalleryUrls([""]);
-    setVideoUrl("");
-    setShowVideo(false);
-    onClose();
+      reset();
+      setCodeSections([""]);
+      setGalleryUrls([""]);
+      setVideoUrl("");
+      setShowVideo(false);
+      onClose();
 
-    navigate(`/projects/${project.project._id}`);
-  } catch (err) {
-    setError(err.message || "Unknown error");
-  } finally {
-    setLoading(false);
-  }
-};
+      navigate(`/projects/${project.project._id}`);
+    } catch (err) {
+      setError(err.message || "Unknown error");
+    } finally {
+      setLoading(false);
+    }
+  };
 
 
   

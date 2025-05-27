@@ -6,5 +6,5 @@ export const EditButton = ({onClick, classProps}) => {
     <button onClick={onClick} className={`btn btn-sm btn-soft btn-outline w-20 ${
           classProps && classProps
         }`}><FiEdit />Edit</button>
-  )
+  );
 }

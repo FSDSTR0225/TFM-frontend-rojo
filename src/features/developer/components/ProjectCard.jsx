@@ -1,17 +1,29 @@
-import React from 'react';
-import Badge from '../../../components/Badge';
-import { Link } from 'react-router';
+import React from "react";
+import Badge from "../../../components/Badge";
+import { Link } from "react-router";
 
-const ProjectCard = ({ name, surname, avatar, gallery = [], projectid, title, badgeText, category, developerid }) => {
+const ProjectCard = ({
+  name,
+  surname,
+  avatar,
+  gallery = [],
+  projectid,
+  title,
+  badgeText,
+  category,
+  developerId,
+}) => {
   const image = gallery.length > 0 ? gallery[0] : null;
-  
+
   return (
-    <div className="h-[256px] bg-neutral-80 flex flex-col rounded-lg shadow-md relative overflow-hidden transition-transform transform hover:scale-105 border border-neutral-70">
-      
+    <div className="w-full h-full bg-neutral-80 flex flex-col rounded-lg shadow-md relative overflow-hidden transition-transform transform hover:scale-105 border border-neutral-70">
       <div className="flex items-center gap-2 mb-2 px-2 pt-2 z-10 relative">
         <img src={avatar} alt="Avatar" className="w-6 h-6 rounded-full" />
 
-        <Link to={`/profile/${developerid}`} className="text-neutral-0 font-semibold leading-tight hover:text-primary-40">
+        <Link
+          to={`/profile/${developerId}`}
+          className="text-neutral-0 font-semibold leading-tight hover:text-primary-40"
+        >
           {name} {surname}
         </Link>
 
@@ -21,19 +33,22 @@ const ProjectCard = ({ name, surname, avatar, gallery = [], projectid, title, ba
 
         {badgeText && (
           <div className="absolute top-1/2 transform -translate-y-1/2 right-2">
-            <Badge text={badgeText} color="border-primary-50" textColor="text-primary-50" />
+            <Badge
+              text={badgeText}
+              color="border-primary-50"
+              textColor="text-primary-50"
+            />
           </div>
         )}
       </div>
-
       <div className="relative flex-grow overflow-hidden group">
         {image ? (
+          <figure>
           <img
             src={image}
             alt={title}
-            className="w-full h-full object-cover object-center"
-            style={{ imageRendering: 'auto' }}
           />
+        </figure>
         ) : (
           <div className="flex items-center justify-center h-full text-neutral-40 italic">
             No image available

@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import DevsCard from "../components/DevsCard";  // Asegúrate de que DevsCard esté correctamente importado
+import { getAllDevelopers } from "../../../services/devService";
 import { Pagination } from '../../../components/Pagination';
-
-import Avatar1 from "../../../assets/avatar-1.png";
-import Avatar2 from "../../../assets/avatar-2.png";
 
 const categories = [
   "All",
@@ -24,28 +22,22 @@ export const DevsPage = () => {
   const projectsPerPage = 12;
 
   useEffect(() => {
-    const fetchProjects = async () => {
-      const data = [
-        { id: 1, name: "Beli", surname: "Ochando", title: "Landing Page", category: "UX/UI", avatar: Avatar1, profession: "UI/UX Designer", experienceYears: 3, location: "Barcelona, Spain", skills: ["Figma", "Sketch", "Adobe XD"], badgeText: "new" },
-        { id: 2, name: "Toni", surname: "Arce", title: "App de Recetas", category: "Frontend", avatar: Avatar2, profession: "Frontend Developer", experienceYears: 4, location: "Madrid, Spain", skills: ["React", "JavaScript", "CSS"], badgeText: "new" },
-        { id: 3, name: "Carlos", surname: "Daymond", title: "Clasificador de Imágenes", category: "DevOps", avatar: Avatar2, profession: "DevOps Engineer", experienceYears: 5, location: "London, UK", skills: ["Docker", "Kubernetes", "AWS"], badgeText: "new" },
-        { id: 4, name: "Jeremie", surname: "Klose", title: "Dashboard Admin", category: "Full Stack", avatar: Avatar2, profession: "Full Stack Developer", experienceYears: 6, location: "Paris, France", skills: ["Node.js", "React", "MongoDB"], },
-        { id: 5, name: "Luisa", surname: "Pérez", title: "App de Viajes", category: "Mobile", avatar: Avatar1, profession: "Mobile Developer", experienceYears: 3, location: "Buenos Aires, Argentina", skills: ["React Native", "Java", "Swift"], },
-        { id: 6, name: "Luisa", surname: "Pérez", title: "App de Viajes", category: "Mobile", avatar: Avatar1, profession: "Mobile Developer", experienceYears: 3, location: "Buenos Aires, Argentina", skills: ["React Native", "Java", "Swift"], },
-        { id: 7, name: "Luisa", surname: "Pérez", title: "App de Viajes", category: "Mobile", avatar: Avatar1, profession: "Mobile Developer", experienceYears: 3, location: "Buenos Aires, Argentina", skills: ["React Native", "Java", "Swift"], },
-        { id: 8, name: "Luisa", surname: "Pérez", title: "App de Viajes", category: "Mobile", avatar: Avatar1, profession: "Mobile Developer", experienceYears: 3, location: "Buenos Aires, Argentina", skills: ["React Native", "Java", "Swift"],  },
-        { id: 9, name: "Luisa", surname: "Pérez", title: "App de Viajes", category: "Mobile", avatar: Avatar1, profession: "Mobile Developer", experienceYears: 3, location: "Buenos Aires, Argentina", skills: ["React Native", "Java", "Swift"], },
-        { id: 10, name: "Luisa", surname: "Pérez", title: "App de Viajes", category: "Mobile", avatar: Avatar1, profession: "Mobile Developer", experienceYears: 3, location: "Buenos Aires, Argentina", skills: ["React Native", "Java", "Swift"],  },
-        { id: 11, name: "Luisa", surname: "Pérez", title: "App de Viajes", category: "Mobile", avatar: Avatar1, profession: "Mobile Developer", experienceYears: 3, location: "Buenos Aires, Argentina", skills: ["React Native", "Java", "Swift"], },
-        { id: 12, name: "Luisa", surname: "Pérez", title: "App de Viajes", category: "Mobile", avatar: Avatar1, profession: "Mobile Developer", experienceYears: 3, location: "Buenos Aires, Argentina", skills: ["React Native", "Java", "Swift"],  },
-        { id: 13, name: "Luisa", surname: "Pérez", title: "App de Viajes", category: "Mobile", avatar: Avatar1, profession: "Mobile Developer", experienceYears: 3, location: "Buenos Aires, Argentina", skills: ["React Native", "Java", "Swift"], },
-        { id: 14, name: "Luisa", surname: "Pérez", title: "App de Viajes", category: "Mobile", avatar: Avatar1, profession: "Mobile Developer", experienceYears: 3, location: "Buenos Aires, Argentina", skills: ["React Native", "Java", "Swift"],  }
-      ];
-      setProjects(data);
-    };
+  const fetchDevelopers = async () => {
+    setLoading(true);
+    const response = await getAllDevelopers();
 
-    fetchProjects();
-  }, []);
+    if (response?.error) {
+      console.error("Error fetching developers:", response.message);
+      setProjects([]);
+    } else {
+      setProjects(response);
+    }
+
+    setLoading(false);
+  };
+
+  fetchDevelopers();
+}, []);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -75,14 +67,15 @@ export const DevsPage = () => {
       <p className="text-md font-normal mb-4 text-neutral-30">Discover the diverse talents and skills of our expert developers</p>
 
       {/* Tabs */}
-      <div className="flex justify-center gap-2 mb-6 px-4 py-0.5 bg-neutral-60 rounded-md">
+      <div className="flex flex-wrap justify-center gap-2 mb-6 px-4 py-0.5 bg-[#262626] rounded-md">
         {categories.map((category) => (
           <button
             key={category}
             className={`px-3 py-1.5 rounded-md font-medium text-sm transition-colors duration-200 cursor-pointer
-              ${activeTab === category
-                ? "bg-neutral-90 text-neutral-0"
-                : "bg-transparent text-neutral-20 hover:bg-primary-60 hover:text-neutral-0  focus:text-neutral-0"
+              ${
+                activeTab === category
+                  ? "bg-[#171717] text-white"
+                  : "bg-transparent text-[#A1A1AA] hover:bg-[#32B441] hover:text-white focus:text-white"
               }`}
             onClick={() => setActiveTab(category)}
           >
@@ -103,23 +96,20 @@ export const DevsPage = () => {
             </p>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-            {currentProjects.map((developer) => (
-                <DevsCard
-                key={developer.id}
-                id={developer.id}
-                name={developer.name}
-                surname={developer.surname}
-                title={developer.title}
-                category={developer.category}
-                avatar={developer.avatar}
-                profession={developer.profession}
-                experienceYears={developer.experienceYears}
-                location={developer.location}
-                skills={developer.skills}
-                badgeText={developer.badgeText}
+              {currentProjects.map((developer) => (
+              <DevsCard
+                  key={developer._id}
+                  developerId={developer._id}
+                  name={developer.name}
+                  surname={developer.surname}
+                  avatar={developer.avatar}
+                  profession={developer.role?.developer?.professionalPosition}
+                  experienceYears={developer.role?.developer?.experienceYears}
+                  location={developer.role?.developer?.location}
+                  skills={developer.role?.developer?.skills}
                 />
-            ))}
-            </div>
+              ))}            
+              </div>
           )}
         </div>
       )}

@@ -1,13 +1,10 @@
-import React from "react";
 import { CiEdit } from "react-icons/ci";
-import { GrFormView } from "react-icons/gr";
-import { MdOutlineDeleteSweep } from "react-icons/md";
-import { TiThMenuOutline } from "react-icons/ti";
-import { Link } from "react-router";
-import { ModalDelete } from "./ModalDelete";
-import { PiDotsThree, PiDotsThreeBold } from "react-icons/pi";
 
-export const MenuCard = ({ onClick, id, openModal }) => {
+import { MdOutlineDeleteSweep } from "react-icons/md";
+import { PiDotsThreeBold } from "react-icons/pi";
+
+export const MenuCard = ({ onClick, openModal, handleOnModalEdit }) => {
+
   return (
     <details
       onClick={onClick}
@@ -17,20 +14,12 @@ export const MenuCard = ({ onClick, id, openModal }) => {
         <PiDotsThreeBold className="text-3xl font-black p-0 " />
       </summary>
       <ul className='menu p-0 dropdown-content rounded-box z-1 w-25 shadow-xl text-sm bg-secondary-40 text-neutral-90 left-[-200%]'>
+        
         <li
-          onClick={onClick}
-          className=' rounded-t-box hover:bg-neutral-60 hover:text-neutral-0'
-        >
-          <Link to={`/offers/${id}`}>
-            <GrFormView className='text-md' />
-            View
-          </Link>
-        </li>
-        <li
-          onClick={onClick}
+          onClick={handleOnModalEdit}
           className=' hover:bg-neutral-60 hover:text-neutral-0'
         >
-          <button>
+          <button >
             <CiEdit />
             Edit
           </button>

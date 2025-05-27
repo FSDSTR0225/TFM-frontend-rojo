@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ProjectCard from "../components/ProjectCard";
-import { Pagination } from '../../../components/Pagination';
+import { Pagination } from "../../../components/Pagination";
 import { getAllProjects } from "../../../services/projectService";
 
 const categories = [
@@ -50,7 +50,10 @@ export const ProjectsPage = () => {
 
   const totalPages = Math.ceil(filteredProjects.length / projectsPerPage);
   const startIndex = (currentPage - 1) * projectsPerPage;
-  const currentProjects = filteredProjects.slice(startIndex, startIndex + projectsPerPage);
+  const currentProjects = filteredProjects.slice(
+    startIndex,
+    startIndex + projectsPerPage
+  );
 
   const handlePageChange = (pageNum) => {
     if (pageNum === currentPage) return;
@@ -63,17 +66,22 @@ export const ProjectsPage = () => {
 
   return (
     <div className="p-4 max-w-screen-xl mx-auto">
-      <h1 className="text-3xl font-bold mb-2 mt-10 text-neutral-0">Developer Projects</h1>
-      <p className="text-md font-normal mb-4 text-neutral-30">Discover talented developers for your next project</p>
+      <h1 className="text-3xl font-bold mb-2 mt-10 text-neutral-0">
+        Developer Projects
+      </h1>
+      <p className="text-md font-normal mb-4 text-neutral-30">
+        Discover talented developers for your next project
+      </p>
 
       <div className="flex flex-wrap justify-center gap-2 mb-6 px-4 py-0.5 bg-[#262626] rounded-md">
         {categories.map((category) => (
           <button
             key={category}
             className={`px-3 py-1.5 rounded-md font-medium text-sm transition-colors duration-200 cursor-pointer
-              ${activeTab === category
-                ? "bg-[#171717] text-white"
-                : "bg-transparent text-[#A1A1AA] hover:bg-[#32B441] hover:text-white focus:text-white"
+              ${
+                activeTab === category
+                  ? "bg-[#171717] text-white"
+                  : "bg-transparent text-[#A1A1AA] hover:bg-[#32B441] hover:text-white focus:text-white"
               }`}
             onClick={() => setActiveTab(category)}
           >
@@ -93,17 +101,11 @@ export const ProjectsPage = () => {
               No projects available in this category.
             </p>
           ) : (
-            <div
-              className="grid gap-8 justify-center"
-              style={{
-                gridTemplateColumns: 'repeat(auto-fit, minmax(394px, 1fr))',
-              }}
-            >
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {currentProjects.map((project) => (
                 <div
                   key={project._id}
-                  className="mx-auto w-[394px]"
-                  style={{ aspectRatio: '394 / 256' }}
+                  className="w-full aspect-[394/256]"
                 >
                   <ProjectCard
                     developerId={project.owner?._id}
@@ -122,7 +124,7 @@ export const ProjectsPage = () => {
           )}
         </div>
       )}
-
+      
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}

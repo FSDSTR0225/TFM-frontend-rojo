@@ -17,6 +17,32 @@ export const getProfileDev = async (_id) => {
     }
 }
 
+export const updateProfile = async (devProfile,token) => {
+    console.log('Dev Profile:', devProfile);
+    console.log('Dev token:', token);
+
+    try {
+        const resp = await fetch(urlBackEnd + '/devs/profile', {
+            method:"PUT",
+            headers:{
+                 authorization: "Bearer " + token,
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify(devProfile)
+        });
+        if(!resp.ok){
+            throw new Error("Error editing the devProfile")
+        }
+        const data = await resp.json();
+        return data;
+    } catch (error) {
+        console.log("Error: ", error);
+        throw error;
+    }
+    };
+
+
+
 export const getRecruiterById = async (_id) =>{
     try {
         const response = await fetch(`${urlBackEnd}/recruiters/${_id}`)
@@ -31,4 +57,4 @@ export const getRecruiterById = async (_id) =>{
         console.error("profileService Error:", error);
         throw error;
     }        
-}
+};

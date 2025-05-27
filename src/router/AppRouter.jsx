@@ -22,7 +22,7 @@ import { Register } from '../features/auth/register';
 import { Login } from '../features/auth/login';
 import { OffersInfoPage } from '../features/recruiters/pages/OffersInfoPage';
 import { OfferInfoPage } from '../features/recruiters/pages/OfferInfoPage';
-import { Onboarding } from '../pages/Onboarding';
+import { DashBoardLayout } from '../layout/DashBoardLayout';
 
 
 
@@ -42,9 +42,6 @@ const router = createBrowserRouter([
       { path: 'profile/:developerid', element: <ProfileDevPage /> },
       { path: 'developers', element: <DevsPage /> },
       {path: 'recruiter/:id', element: <RecProfile />},
-      
-      {path: 'onboarding', element: <Onboarding />},
-      
 
       { path: 'login', element: <Login /> },
       { path: 'register', element: <Register /> },
@@ -69,6 +66,7 @@ const router = createBrowserRouter([
       // --- Private Rec (recruiters) ---
       {
         path: 'private-rec',
+        element: <DashBoardLayout />,
         //element: <ProtectedRoute allowedRoles={['recruiter']} />,
         //loader: authLoader,  // Verifica token y rol antes de cualquiera de sus hijos
         children: [
