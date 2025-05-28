@@ -18,7 +18,7 @@ const completeName = `${name} ${surname}`.trim() || 'Unknown Recruiter';
     < >
      {( user?.avatar) ? (      
                     <div className='avatar'>
-                      <div className={`rounded-full w-${width || 10} `}>
+                      <div className={`rounded-full size-${width || 10} `}>
                         <img
                           src={ user?.avatar}
                           alt='Logo'
@@ -27,7 +27,7 @@ const completeName = `${name} ${surname}`.trim() || 'Unknown Recruiter';
                     </div>
                   ) : (
                     <div className='avatar avatar-placeholder'>
-                      <div className={`bg-neutral text-neutral-content rounded-full w-${width || 10}`}>
+                      <div className={`bg-neutral text-neutral-content rounded-full size-${width || 10}`}>
                         <span className=' font-bold'>{getInitials(completeName)}</span>
                       </div>
                     </div>
