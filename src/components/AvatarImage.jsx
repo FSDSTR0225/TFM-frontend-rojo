@@ -10,15 +10,36 @@ export const AvatarImage = ({user, width}) => {
 {/* <AvatarImage user={offer.owner} width={8} />
  <AvatarImage user={profile} /> */}
 
+   const sizeClasses = {
+    4: 'size-4',
+    5: 'size-5',
+    6: 'size-6',
+    7: 'size-7',
+    8: 'size-8',
+    9: 'size-9',
+    10: 'size-10',
+    11: 'size-11',
+    12: 'size-12',
+    14: 'size-14',
+    16: 'size-16',
+    20: 'size-20',
+    24: 'size-24',
+    32: 'size-32',
+  };
+
+  const sizeClass = sizeClasses[width] || sizeClasses[10];
+
     const name = capitalize(user?.name || '');
 const surname = capitalize(user?.surname || '');
 const completeName = `${name} ${surname}`.trim() || 'Unknown Recruiter';
+
+
 
   return (
     < >
      {( user?.avatar) ? (      
                     <div className='avatar'>
-                      <div className={`rounded-full w-${width || 10} `}>
+                      <div className={`rounded-full ${sizeClass} `}>
                         <img
                           src={ user?.avatar}
                           alt='Logo'
@@ -27,7 +48,7 @@ const completeName = `${name} ${surname}`.trim() || 'Unknown Recruiter';
                     </div>
                   ) : (
                     <div className='avatar avatar-placeholder'>
-                      <div className={`bg-neutral text-neutral-content rounded-full w-${width || 10}`}>
+                      <div className={`bg-neutral text-neutral-content rounded-full size-${sizeClass}`}>
                         <span className=' font-bold'>{getInitials(completeName)}</span>
                       </div>
                     </div>

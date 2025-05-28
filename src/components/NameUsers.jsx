@@ -18,7 +18,7 @@ export const NameUsers = ({user, classProps, children}) => {
   return (
     <div className="flex flex-col items-center">
     <span className={`font-bold ${classProps}`}>{completeName}</span>
-    <span className={`text-xs text-neutral-10` }>{children}</span>
+    <span className={`text-xs text-neutral-10` }>{capitalize(children)}</span>
     </div>
   )
 }
