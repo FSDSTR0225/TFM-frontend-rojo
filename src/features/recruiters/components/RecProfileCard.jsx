@@ -1,36 +1,21 @@
 import { PiBuildingOffice, PiEnvelope, PiGlobe, PiMapPinArea, PiPhone } from 'react-icons/pi';
-import { capitalize, getInitials } from '../../../utils/utils';
-import { useNavigate } from "react-router";
 
+import { useNavigate } from "react-router";
+import { AvatarImage} from '../../../components/AvatarImage';
+import {NameUsers} from '../../../components/NameUsers' 
 export const RecProfileCard = ({ recruiter, profile, id }) => {
   const navigate = useNavigate();
-  const name = capitalize(recruiter?.name || '');
-  const surname = capitalize(recruiter?.surname || '');
-  const completeName = `${name} ${surname}`.trim() || 'Unknown Recruiter';
+  
   const isOwner = profile?._id === id;
   return (
     <div className="card bg-neutral-80 shadow-xl border border-neutral-70 flex-col text-sm md:text-lg w-full md:max-w-100">
 
-      <div className="card-body">
-        <div className="flex  flex-col items-center">
-          {recruiter?.role?.recruiter?.logo ? (
-            <div className='avatar'>
-              <div className='size-20 rounded-full'>
-                <img
-                  src={recruiter?.role.recruiter.logo}
-                  alt='Logo'
-                />
-              </div>
-            </div>
-          ) : (
-            <div className='avatar avatar-placeholder'>
-              <div className='bg-neutral text-neutral-content rounded-full size-20'>
-                <span className=' font-bold'>{getInitials(completeName)}</span>
-              </div>
-            </div>
-          )}
-          <h2 className="text-lg font-semibold">{completeName}</h2>
-          <p className="text-sm text-gray-400 mb-4">{recruiter?.role.type}</p>
+      <div className="card-body gap-6 items-center">
+        <div className="flex flex-col items-center">
+          <AvatarImage user={recruiter} width={20} />
+          <NameUsers user={recruiter} classProps="text-lg font-semibold">
+          {recruiter?.role.type}
+          </NameUsers>
         </div>
         <ul className="text-gray-300 space-y-1 mb-4">
           {/* Solo muestra si companyName está disponible */}
