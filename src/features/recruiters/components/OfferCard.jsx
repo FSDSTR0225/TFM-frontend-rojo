@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate, useLocation } from "react-router";
 import { capitalize, getDaysSince, getInitials } from "../../../utils/utils";
 import { MdOutlineAccessTime } from "react-icons/md";
 
@@ -12,43 +12,47 @@ import Badge from "../../../components/badge";
 
 
 
-export const OfferCard = ({ classProps, offer, id, setIsOpenModalDelete, isOpenModalDelete, setSelectedOfferId, isOpenModalEdit, setIsOpenModalEdit, onApplySuccess}) => {
+export const OfferCard = ({ classProps, offer, id, setIsOpenModalDelete, isOpenModalDelete, setSelectedOfferId, isOpenModalEdit, setIsOpenModalEdit, onApplySuccess }) => {
   const navigate = useNavigate();
   const { profile, token } = useContext(AuthContext);
 
   const isOwner = profile?._id === offer?.owner?._id;
 
-  
+
   const isRecruiter = profile?.role.type === 'recruiter';
 
-  
+
   const name = capitalize(offer.owner?.name || "");
   const surname = capitalize(offer.owner?.surname || "");
   const completeName = `${name} ${surname}`.trim() || "Unknown Recruiter";
 
+
+  //Determinando en donde este redirije a un lado o al otro dependiendo de la ruta actual
+  const location = useLocation();
+
   const handleApply = async (e) => {
     e.stopPropagation()
-    if(!token) {
+    if (!token) {
       console.log('por aqui no pasaras')
       navigate('/login')
     }
 
-  try {
-    const response = await applyToOffer(offer._id, token)
-    console.log(response.msg || 'se envio')
-    onApplySuccess?.(response.offer)
-  } catch (error) {
-    console.log(error.message || 'Error al aplicar a la oferta');
+    try {
+      const response = await applyToOffer(offer._id, token)
+      console.log(response.msg || 'se envio')
+      onApplySuccess?.(response.offer)
+    } catch (error) {
+      console.log(error.message || 'Error al aplicar a la oferta');
+    }
   }
-  }
-const hasApplied = Array.isArray(offer.applicants) &&
-  profile?._id &&
-  offer.applicants.some((applicant) =>
-    applicant?.user?._id === profile._id
-  );
+  const hasApplied = Array.isArray(offer.applicants) &&
+    profile?._id &&
+    offer.applicants.some((applicant) =>
+      applicant?.user?._id === profile._id
+    );
   const handleOnModal = (e) => {
     e.stopPropagation();
-    
+
     setIsOpenModalDelete(true);
     setSelectedOfferId(offer?._id);
     console.log("🚀 ~ handleOnModal ~ isOpenModalDelete:", isOpenModalDelete)
@@ -66,7 +70,11 @@ const hasApplied = Array.isArray(offer.applicants) &&
     e.stopPropagation();
   };
   const handleCardClick = () => {
-    navigate(`/offers/${offer._id}`);
+    if (location.pathname.startsWith('/private-rec/offers')) {
+      navigate(`/private-rec/dashboard/${offer._id}`);
+    } else {
+      navigate(`/offers/${offer._id}`);
+    }
   };
 
   //  const handleOwnerClick = (e) => {
@@ -84,7 +92,7 @@ const hasApplied = Array.isArray(offer.applicants) &&
     >
       <div className='card-body justify-between'>
         <div className='flex justify-between items-center'>
-          <Link to={`../recruiter/${offer?.owner?._id}`} className='avatar gap-2 items-center' onClick={handleOnClick}>
+          <Link className='avatar gap-2 items-center' onClick={handleOnClick}>
             {offer.owner?.role?.recruiter?.logo ? (
               <div className='avatar'>
                 <div className='size-8 sm:size-8 rounded-full'>
@@ -112,7 +120,7 @@ const hasApplied = Array.isArray(offer.applicants) &&
               id={offer._id}
             />
           )}
-          {hasApplied && <Badge text={'Applied'}/>}
+          {hasApplied && <Badge text={'Applied'} />}
         </div>
 
         <div className='flex flex-col justify-between'>
@@ -129,16 +137,16 @@ const hasApplied = Array.isArray(offer.applicants) &&
         <div>
           <p className='line-clamp-3'>{offer?.description}</p>
         </div>
-        
+
 
         {(!isOwner && !isRecruiter) && (<div className='flex items-center justify-end gap-4 m-2'>
           <MainRecButton
-  onClick={handleApply}
-  classProps="rounded-full w-18"
-  disabled={hasApplied}
->
-  {hasApplied ? 'Applied' : 'Apply'}
-</MainRecButton>
+            onClick={handleApply}
+            classProps="rounded-full w-18"
+            disabled={hasApplied}
+          >
+            {hasApplied ? 'Applied' : 'Apply'}
+          </MainRecButton>
           <MainRecButton
             onClick={handleOnClick}
             classProps='rounded-full w-18 hover:border-neutral-0 hover:text-neutral-0 text-secondary-40 hover:bg-transparent bg-transparent'
