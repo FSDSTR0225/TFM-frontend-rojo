@@ -169,3 +169,42 @@ export const applyToOffer = async (id, token) =>{
         
     }
 }
+
+
+export const getCandidatesByOfferId = async (offerId,token) => {
+        try{
+            const response = await fetch(`${API_URL}/${offerId}/candidates`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    authorization: "Bearer " + token,
+                }
+            }); 
+            const data = await response.json();
+            return data
+        }catch(error){
+            console.log("Error: ", error);
+            throw error;
+        }
+}
+
+export const updateCandidateStatus = async (offerId, candidateId, status, token) => {
+    try {
+        const response = await fetch(`${API_URL}/${offerId}/candidates/${candidateId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                authorization: "Bearer " + token,
+            },
+            body: JSON.stringify({ status })
+        });
+        if (!response.ok) {
+            throw new Error("Error updating candidate status");
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("OffersService Error:", error);
+        throw error;
+    }
+}

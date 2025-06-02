@@ -71,7 +71,7 @@ const router = createBrowserRouter([
         //loader: authLoader,  // Verifica token y rol antes de cualquiera de sus hijos
         children: [
           // 1. Dashboard principal
-          { path: 'dashboard', element: <RecDashBoar />},
+          { path: 'dashboard/:offerId', element: <RecDashBoar />},
       
           // 2. Perfil de recruiter (ver y editar)
           {path: 'profile', element: <RecProfile />},
