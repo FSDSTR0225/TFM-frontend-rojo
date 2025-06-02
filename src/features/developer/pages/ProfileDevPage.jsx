@@ -6,27 +6,27 @@ import { AuthContext } from '../../../context/authContext'; // Asegúrate de ten
 
 export function ProfileDevPage() {
   const { developerid } = useParams();
-  const { profile: authProfile } = useContext(AuthContext);
-
+  const { profile: authProfile, token } = useContext(AuthContext);
+ 
   const [profileToShow, setProfileToShow] = useState(null);
 
   useEffect(() => {
     const fetchProfile = async () => {
-      try {
-        // Si hay developerid en la URL, vista pública
-        if (developerid) {
-          const response = await getProfileDev(developerid);
-          setProfileToShow(response);
-        } else {
-          // Si no hay developerid, es perfil privado → usamos el del contexto
-          setProfileToShow(authProfile);
+        try {
+          // Si hay developerid en la URL, vista pública
+          if (developerid) {
+            const response = await getProfileDev(developerid);
+            setProfileToShow(response);
+          } else {
+            // Si no hay developerid, es perfil privado → usamos el del contexto
+            setProfileToShow(authProfile);
+          }
+        } catch (error) {
+          console.error("Error al cargar el perfil", error);
         }
-      } catch (error) {
-        console.error("Error al cargar el perfil", error);
-      }
     };
 
-    fetchProfile();
+    fetchProfile(); 
   }, [developerid, authProfile]);
 
   if (!profileToShow) return <p>Cargando perfil...</p>;
@@ -36,6 +36,7 @@ export function ProfileDevPage() {
       <InfoDeveloper 
         profileInfo={profileToShow}
         isOwner={!developerid} // si no hay id, estás viendo tu propio perfil
+        token={token}
       />
     </div>
   );

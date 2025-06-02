@@ -1,5 +1,5 @@
-import { Link, useNavigate, useLocation } from "react-router";
-import { capitalize, getDaysSince, getInitials } from "../../../utils/utils";
+import { useLocation, useNavigate } from "react-router";
+import { getDaysSince } from "../../../utils/utils";
 import { MdOutlineAccessTime } from "react-icons/md";
 
 import { MainRecButton } from "../../../components/MainRecButton";
@@ -8,63 +8,66 @@ import { useContext } from "react";
 import { AuthContext } from "../../../context/authContext";
 import { PiMapPinArea } from "react-icons/pi";
 import { applyToOffer } from "../../../services/offersServices";
-import Badge from "../../../components/badge";
+import Badge from "../../../components/Badge";
+import { AvatarImage } from "../../../components/AvatarImage";
+import { NameUsers } from "../../../components/NameUsers";
 
-
-
-export const OfferCard = ({ classProps, offer, id, setIsOpenModalDelete, isOpenModalDelete, setSelectedOfferId, isOpenModalEdit, setIsOpenModalEdit, onApplySuccess }) => {
+export const OfferCard = ({
+  classProps,
+  offer,
+  id,
+  setIsOpenModalDelete,
+  isOpenModalDelete,
+  setSelectedOfferId,
+  isOpenModalEdit,
+  setIsOpenModalEdit,
+  onApplySuccess,
+}) => {
   const navigate = useNavigate();
   const { profile, token } = useContext(AuthContext);
 
   const isOwner = profile?._id === offer?.owner?._id;
 
+  const isRecruiter = profile?.role.type === "recruiter";
 
-  const isRecruiter = profile?.role.type === 'recruiter';
-
-
-  const name = capitalize(offer.owner?.name || "");
-  const surname = capitalize(offer.owner?.surname || "");
-  const completeName = `${name} ${surname}`.trim() || "Unknown Recruiter";
 
 
   //Determinando en donde este redirije a un lado o al otro dependiendo de la ruta actual
   const location = useLocation();
 
   const handleApply = async (e) => {
-    e.stopPropagation()
+    e.stopPropagation();
     if (!token) {
-      console.log('por aqui no pasaras')
-      navigate('/login')
+      console.log("por aqui no pasaras");
+      navigate("/login");
     }
 
     try {
-      const response = await applyToOffer(offer._id, token)
-      console.log(response.msg || 'se envio')
-      onApplySuccess?.(response.offer)
+      const response = await applyToOffer(offer._id, token);
+      console.log(response.msg || "se envio");
+      onApplySuccess?.(response.offer);
     } catch (error) {
-      console.log(error.message || 'Error al aplicar a la oferta');
+      console.log(error.message || "Error al aplicar a la oferta");
     }
-  }
-  const hasApplied = Array.isArray(offer.applicants) &&
+  };
+  const hasApplied =
+    Array.isArray(offer.applicants) &&
     profile?._id &&
-    offer.applicants.some((applicant) =>
-      applicant?.user?._id === profile._id
-    );
+    offer.applicants.some((applicant) => applicant?.user?._id === profile._id);
   const handleOnModal = (e) => {
     e.stopPropagation();
 
     setIsOpenModalDelete(true);
     setSelectedOfferId(offer?._id);
-    console.log("🚀 ~ handleOnModal ~ isOpenModalDelete:", isOpenModalDelete)
+    console.log("🚀 ~ handleOnModal ~ isOpenModalDelete:", isOpenModalDelete);
   };
 
   const handleOnModalEdit = (e) => {
     e.stopPropagation();
     setSelectedOfferId(offer?._id);
     setIsOpenModalEdit(true);
-    console.log("🚀 ~ handleOnModal ~ isOpenModalEdit:", isOpenModalEdit)
+    console.log("🚀 ~ handleOnModal ~ isOpenModalEdit:", isOpenModalEdit);
   };
-
 
   const handleOnClick = (e) => {
     e.stopPropagation();
@@ -77,40 +80,26 @@ export const OfferCard = ({ classProps, offer, id, setIsOpenModalDelete, isOpenM
     }
   };
 
-  //  const handleOwnerClick = (e) => {
-  //   e.stopPropagation();
-  //   navigate(`profile/recruiter/${offer.owner._id}`)
-  //  }
+   const handleOwnerClick = (e) => {
+    e.stopPropagation();
+    navigate(`../../recruiter/${offer.owner._id}`)
+   }
 
   const daysAgo = offer?.createdAt ? getDaysSince(offer?.createdAt) : 0;
   return (
     <li
       key={id}
       onClick={handleCardClick}
-      className={`${classProps && classProps
-        } card border bg-neutral-80 border-neutral-70 cursor-pointer max-h-80 shadow-xl hover:bg-neutral-90 transition-transform transform hover:scale-105 `}
+      className={`${
+        classProps && classProps
+      } card border bg-neutral-80 border-neutral-70 cursor-pointer max-h-80 shadow-xl hover:bg-neutral-90 transition-transform transform hover:scale-105 `}
     >
       <div className='card-body justify-between'>
         <div className='flex justify-between items-center'>
-          <Link className='avatar gap-2 items-center' onClick={handleOnClick}>
-            {offer.owner?.role?.recruiter?.logo ? (
-              <div className='avatar'>
-                <div className='size-8 sm:size-8 rounded-full'>
-                  <img
-                    src={offer.owner.role.recruiter.logo}
-                    alt='Logo'
-                  />
-                </div>
-              </div>
-            ) : (
-              <div className='avatar avatar-placeholder'>
-                <div className='bg-neutral text-neutral-content rounded-full size-8 sm:size-'>
-                  <span className=' font-bold'>{getInitials(completeName)}</span>
-                </div>
-              </div>
-            )}
-            <p>{completeName}</p>
-          </Link>
+          <div className="flex items-center gap-2 " onClick={handleOwnerClick}>
+          <AvatarImage user={offer.owner} width={8} />
+          <NameUsers user={offer.owner} classProps={"text-xs"}/>
+          </div>
           {isOwner && isRecruiter && (
             <MenuCard
               handleOnModalEdit={handleOnModalEdit}
@@ -120,7 +109,7 @@ export const OfferCard = ({ classProps, offer, id, setIsOpenModalDelete, isOpenM
               id={offer._id}
             />
           )}
-          {hasApplied && <Badge text={'Applied'} />}
+          {hasApplied && <Badge text={"Applied"} />}
         </div>
 
         <div className='flex flex-col justify-between'>
@@ -129,7 +118,7 @@ export const OfferCard = ({ classProps, offer, id, setIsOpenModalDelete, isOpenM
         </div>
         <div className='flex gap-4'>
           <div className='flex items-center gap-2'>
-            <PiMapPinArea className="size-4" />
+            <PiMapPinArea className='size-4' />
             {offer.location}
           </div>
           <div className='badge text-neutral-0 bg-neutral-60'>{offer?.contractType}</div>
@@ -138,22 +127,23 @@ export const OfferCard = ({ classProps, offer, id, setIsOpenModalDelete, isOpenM
           <p className='line-clamp-3'>{offer?.description}</p>
         </div>
 
-
-        {(!isOwner && !isRecruiter) && (<div className='flex items-center justify-end gap-4 m-2'>
-          <MainRecButton
-            onClick={handleApply}
-            classProps="rounded-full w-18"
-            disabled={hasApplied}
-          >
-            {hasApplied ? 'Applied' : 'Apply'}
-          </MainRecButton>
-          <MainRecButton
-            onClick={handleOnClick}
-            classProps='rounded-full w-18 hover:border-neutral-0 hover:text-neutral-0 text-secondary-40 hover:bg-transparent bg-transparent'
-          >
-            Contact
-          </MainRecButton>
-        </div>)}
+        {!isOwner && !isRecruiter && (
+          <div className='flex items-center justify-end gap-4 m-2'>
+            <MainRecButton
+              onClick={handleApply}
+              classProps='rounded-full w-18'
+              disabled={hasApplied}
+            >
+              {hasApplied ? "Applied" : "Apply"}
+            </MainRecButton>
+            <MainRecButton
+              onClick={handleOnClick}
+              classProps='rounded-full w-18 hover:border-neutral-0 hover:text-neutral-0 text-secondary-40 hover:bg-transparent bg-transparent'
+            >
+              Contact
+            </MainRecButton>
+          </div>
+        )}
 
         <div className=' flex  items-center text-neutral-20 text-xs'>
           <p className='flex items-center gap-2 '>

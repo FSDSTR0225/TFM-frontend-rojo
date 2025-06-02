@@ -1,86 +1,137 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { NewProjectModal } from '../components/NewProjectModal';
-import { PiGithubLogo, PiEye, PiArrowSquareOut } from "react-icons/pi";
+import { PiPlus, PiArrowSquareOut, PiGithubLogo, PiEye } from 'react-icons/pi';
 import { Link } from 'react-router';
+import { AuthContext } from '../../../context/authContext';
+import { createProject, getProjectsByDeveloper } from '../../../services/projectService';
 
 function OwnProjectCard({ profileInfo }) {
-
+  const { token, profile: currentUserProfile } = useContext(AuthContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const isCurrentUserProfile = profileInfo?._id === currentUserProfile?._id;
+  const developerId = profileInfo?._id;
+
+  useEffect(() => {
+    if (!developerId) {
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+    getProjectsByDeveloper(developerId, token)
+      .then(res => {
+        if (res.error) {
+          setError(res.message);
+          setProjects([]);
+        } else if (Array.isArray(res.projects)) {
+          setProjects(res.projects);
+        } else {
+          setProjects(res);
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        setError('Error al cargar los proyectos');
+      })
+      .finally(() => setLoading(false));
+  }, [developerId, token]);
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
-  const handleSubmitProject = (projectData) => {
-    console.log("Proyecto enviado al backend:", projectData);
-    // Aquí puedes llamar a tu API con fetch o axios si lo deseas
+  const handleSubmitProject = async (data) => {
+    setLoading(true);
+    try {
+      const result = await createProject(data, token);
+      if (result.error) {
+        setError(result.message);
+      } else {
+        setProjects(prev => [...prev, result.project || result]);
+        handleCloseModal();
+      }
+    } catch {
+      setError('Error al crear el proyecto');
+    } finally {
+      setLoading(false);
+    }
   };
-    
-    if (!profileInfo) return <p>Error al cargar los proyectos</p>;
-    return (
-        <div>
-<div className="flex justify-end mb-2">
-        <button
-          onClick={handleOpenModal}
-          className="flex flex-row w-28 mb-2 justify-center bg-primary-60 hover:bg-primary-70 rounded-full hover:shadow-lg text-sm"
-          aria-label="Create project"
-        >
-          Create project
-        </button>
-      </div>
+
+  if (loading) return <div className="flex justify-center p-8"><span className="loading loading-spinner loading-lg" /></div>;
+  if (error) return <div className="alert alert-error">{error}</div>;
+
+  return (
+    <div>
+      {isCurrentUserProfile && (
+        <div className="flex justify-end mb-2">
+          <button
+            onClick={handleOpenModal}
+            className="btn bg-primary-60 hover:bg-primary-70 rounded-md shadow hover:shadow-lg text-sm flex items-center gap-2"
+          >
+            <PiPlus className="text-xl" /> Create project
+          </button>
+        </div>
+      )}
 
       {isModalOpen && (
-        <NewProjectModal
-          onSubmitProject={handleSubmitProject}
-          onClose={handleCloseModal}
-        />
+        <NewProjectModal onSubmitProject={handleSubmitProject} onClose={handleCloseModal} />
       )}
-            <div className="grid grid-cols-3 gap-4 bg-neutral-80 border border-neutral-60 p-8 rounded-md">
-                <div className="ml-4">
-                    <img
-                    src="https://www.codedonostia.com/wp-content/uploads/2022/12/Diseno-web-de-un-negocio-1.jpg"
-                    className=" w-80 h-60 rounded-md"
-                    alt="projectImages"
-                    />
-                </div>
-                <div className="col-span-2">
-                    <div className="grid grid-cols-3 gap-4 rounded-md">
-                        <h3 className="col-span-2 text-xl uppercase font-bold">E-commerce Platform</h3>
-                        <span className="flex flex-row justify-center w-24 bg-primary-60 p-1 rounded-full text-sm ">Website</span>
-                        <span className="col-span-2  ">2018</span>
-                        <span className="col-span-3 ">Full-featured online store with cart, payment integration, and admin dashboard.</span>
-                        <div className="flex flex-wrap col-span-3 gap-2 mt-4">
-                            {profileInfo.role.developer.skills.map((skill, index) => (
-                            <span key={index} className="bg-primary-60 px-3 py-1 rounded-full text-sm">
-                            {skill}
-                            </span>
-                            ))}
-                        </div>
-                        <div className="flex space-x-2 col-span-2">
-                            <Link 
-                                to={profileInfo.role.developer.github} 
-                                className="flex flex-row p-2 m-2 bg-neutral-90 hover:bg-neutral-60 border border-neutral-60 rounded-md "
-                                aria-label="GitHub Profile">
-                                <PiGithubLogo className="text-xl" />Github
-                            </Link>
-                            <Link 
-                                to={profileInfo.role.developer.github} 
-                                className="flex flex-row h-8 px-3 py-1 m-2 bg-transparent border-2 border-primary-50 text-primary-50  hover:bg-neutral-0 hover:text-neutral-90 hover:border-neutral-0 rounded-full hover:shadow-lg"
-                                aria-label="View Profile">
-                                <PiEye className="text-xl" />View Project
-                            </Link>
-                            <Link 
-                                to={profileInfo.role.developer.github} 
-                                className="flex flex-row p-2 m-2 bg-primary-60 hover:bg-primary-70 text-neutral-90 rounded-full"
-                                aria-label="View Profile">
-                                <PiArrowSquareOut className="text-xl" />Project Details
-                            </Link>
-                        </div>
-                    </div>
-                </div>
 
+      {projects.length === 0 ? (
+        <div className="text-center py-8">
+          <p className="text-lg text-neutral-40">No hay proyectos disponibles</p>
+          {isCurrentUserProfile && <p className="mt-2">Añade tu primer proyecto</p>}
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 gap-6">
+          {projects.map(project => (
+            <div key={project._id} className="card lg:card-side bg-base-100 shadow-sm">
+              <figure>
+                {project.gallery?.length > 0
+                  ? <img src={project.gallery[0]} alt={project.title} className="h-48 w-full object-cover" />
+                  : <div className="bg-neutral-90 h-48 w-64 flex items-center justify-center text-neutral-40">Sin imagen</div>
+                }
+              </figure>
+              <div className="card-body">
+                <div className="grid grid-cols-2">
+                  <h2 className="card-title">{project.title}</h2>
+                  <span className="justify-self-end bg-primary-60 text-neutral-90 rounded-md px-2 py-0.5">
+                    {project.category || 'Proyecto'}
+                  </span>
+                </div>
+                <p className="mt-2">{project.description || 'Sin descripción'}</p>
+                <p>{project.year || ''}</p>
+                <div className="flex flex-wrap gap-2 mt-4">
+                  {project.projectSkills?.map((s, i) => (
+                    <span key={i} className="bg-primary-60 rounded-md px-2 py-0.5 text-sm">{s}</span>
+                  ))}
+                </div>
+                <div className="card-actions justify-end mt-4">
+                  {project.githubProjectLink && (
+                    <a href={project.githubProjectLink} target="_blank" rel="noreferrer" className="btn bg-neutral-90 hover:bg-neutral-60 border border-neutral-60 rounded-md flex items-center gap-1">
+                      <PiGithubLogo className="text-xl" /> Github
+                    </a>
+                  )}
+                  {project.liveLink && (
+                    <a href={project.liveLink} target="_blank" rel="noreferrer" className="btn bg-transparent border-2 border-primary-50 text-primary-50 hover:bg-neutral-0 hover:text-neutral-90 hover:border-neutral-0 rounded-md hover:shadow-lg flex items-center gap-1">
+                      <PiEye className="text-xl" /> View
+                    </a>
+                  )}
+                  <Link to={`/projects/${project._id}`} className="btn bg-primary-60 hover:bg-primary-70 text-neutral-90 rounded-md flex items-center gap-1">
+                    <PiArrowSquareOut className="text-xl" /> Details
+                  </Link>
+                </div>
+              </div>
             </div>
-        </div>  
-    )
-};
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default OwnProjectCard;
+

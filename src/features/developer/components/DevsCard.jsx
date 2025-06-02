@@ -18,14 +18,12 @@ const DevsCard = ({
       to={`/profile/${developerId}`}
       className="group relative bg-neutral-80 flex flex-col rounded-lg shadow-md overflow-hidden border border-neutral-70 p-4 transition-transform transform hover:scale-105 hover:shadow-xl hover:bg-neutral-90 text-inherit no-underline" // ajusta min-h según tu diseño
     >
-      {/* Badge positioned to the right */}
-      {badgeText && (
+          {badgeText && (
         <div className="absolute top-0 right-2 mt-2">
           <Badge text={badgeText} color="border-primary-50" textColor="text-primary-50" />
         </div>
       )}
 
-      {/* Main content with spacing between skills and location */}
       <div className="flex flex-col justify-between flex-1">
         <div>
           {/* Avatar */}
