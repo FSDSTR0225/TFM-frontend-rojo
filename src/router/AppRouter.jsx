@@ -23,7 +23,7 @@ import { Login } from '../features/auth/login';
 import { OffersInfoPage } from '../features/recruiters/pages/OffersInfoPage';
 import { OfferInfoPage } from '../features/recruiters/pages/OfferInfoPage';
 import { DashBoardLayout } from '../layout/DashBoardLayout';
-import { Onboarding } from '../pages/Onboarding';
+import { Onboarding } from '../pages/Onboarding/Onboarding';
 
 
 
