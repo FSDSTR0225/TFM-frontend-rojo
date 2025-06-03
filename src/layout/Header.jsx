@@ -8,9 +8,6 @@ import { NameUsers } from "../components/NameUsers";
 export const Header = () => {
   const { profile, logout } = useContext(AuthContext);
 
-  // const name = capitalize(profile?.name || "");
-  // const surname = capitalize(profile?.surname || "");
-  // const completeName = `${name} ${surname}`.trim() || "Unknown Recruiter";
 
   return (
     <header className='bg-neutral-80 p-2 drawer border-b-1 border-neutral-70'>
@@ -149,8 +146,8 @@ export const Header = () => {
             </div>
           ) : (
             <div className='flex items-center gap-4  pr-6  text-white'>
-              <div className='hidden lg:flex items-center gap-2 min-w-40'>
-                <NameUsers user={profile} classProps={"text-xs"}>
+              <div className='hidden lg:flex items-center justify-end gap-2 min-w-46'>
+                <NameUsers user={profile} classProps={"text-xs items-end"} align={"items-end"}>
                 {profile.role.type === "recruiter" ? "Recruiter" : "Developer"}
                 </NameUsers>
                 <AvatarImage user={profile} />

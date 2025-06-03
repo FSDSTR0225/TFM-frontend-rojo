@@ -27,6 +27,7 @@ export const AvatarImage = ({user, width}) => {
     32: 'size-32',
   };
 
+
   const sizeClass = sizeClasses[width] || sizeClasses[10];
 
     const name = capitalize(user?.name || '');
@@ -48,7 +49,7 @@ const completeName = `${name} ${surname}`.trim() || 'Unknown Recruiter';
                     </div>
                   ) : (
                     <div className='avatar avatar-placeholder'>
-                      <div className={`bg-neutral text-neutral-content rounded-full size-${sizeClass}`}>
+                      <div className={`bg-neutral text-neutral-content rounded-full ${sizeClass}`}>
                         <span className=' font-bold'>{getInitials(completeName)}</span>
                       </div>
                     </div>

@@ -6,10 +6,11 @@ import { PiMapPinArea } from 'react-icons/pi';
 import { useContext } from 'react';
 import { AuthContext } from '../../../context/authContext';
 
-export const OfferInfo = ({offer, isOpen, setIsOpen}) => {
+export const OfferInfo = ({offer, isOpen, setIsOpen, handleApply}) => {
 
   const { profile } = useContext(AuthContext);
   const isOwner = offer.owner?._id === profile?._id;
+  const isRecruiter = profile?.role.type === "recruiter";
   
   return (
     <article  className=' card bg-neutral-80 shadow-xl border border-neutral-70 flex-col  w-full '>
@@ -42,9 +43,9 @@ export const OfferInfo = ({offer, isOpen, setIsOpen}) => {
                   <p>Salary: {offer.salary}</p>
                 </>
               )}
-              <MainRecButton classProps='w-25 self-end'> 
+              {!isRecruiter && <MainRecButton classProps='w-25 self-end' onClick={handleApply}> 
                 Apply Now
-              </MainRecButton>
+              </MainRecButton>}
             </div>
           </article>
   )
