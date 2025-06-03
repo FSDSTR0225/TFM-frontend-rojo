@@ -40,4 +40,38 @@
   --color-neutral-80: #1C1C1C;
   --color-neutral-90: #171717;
   --color-neutral-100: #000000;
+
+  --color-gradient: linear-gradient(90deg, #37C848 0%, #60AAFF 100%);
+}
+
+
+/*Usar gradient*/
+.bg-gradient {
+  background-image: var(--color-gradient);
+}
+
+.text-gradient {
+  background-image: var(--color-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+
+
+
+/* 3️⃣ Importación de Google Fonts */
+
+body {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+}
+
+h1, h2, h3 {
+  font-weight: 700;
+}
+
+p {
+  font-weight: 400;
 }
