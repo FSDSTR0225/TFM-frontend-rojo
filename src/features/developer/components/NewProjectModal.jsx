@@ -107,9 +107,9 @@ export const NewProjectModal = ({ onClose }) => {
   
   return (
   <dialog id="project_modal" className="modal modal-open">
-    <div className="modal-box max-w-3xl bg-neutral-80 border border-neutral-70 text-neutral-0 shadow-md rounded-lg">
+    <div className="modal-box max-w-3xl bg-neutral-70 border border-neutral-60 text-neutral-0 shadow-md rounded-lg">
       <h2 className="space-y-4 pt-2 text-2xl font-bold mb-4">Create New Project</h2>
-      <hr className="border-t border-neutral-60 pt-4 mt-3" />
+      <hr className="border-t border-neutral-55 pt-4 mt-3" />
 
       {error && <p className="text-red-400 mb-2">{error}</p>}
 
@@ -222,7 +222,7 @@ export const NewProjectModal = ({ onClose }) => {
                 {...register("description")}
             />
 
-          <hr className="border-t border-neutral-60 mt-3" />
+          <hr className="border-t border-neutral-55 mt-3" />
         </section>
 
         {/* Image Gallery Section */}
@@ -239,7 +239,7 @@ export const NewProjectModal = ({ onClose }) => {
               {galleryUrls.map((url, index) => (
                 <div
                   key={index}
-                  className="relative flex-shrink-0 w-28 h-28 rounded overflow-hidden border border-neutral-60 bg-neutral-70"
+                  className="relative flex-shrink-0 w-28 h-28 rounded overflow-hidden border border-neutral-60 bg-neutral-60"
                 >
                   {url && isValidImageUrl(url) ? (
                     <img
@@ -287,7 +287,7 @@ export const NewProjectModal = ({ onClose }) => {
               + Add more
             </button>
           )}
-          <hr className="border-t border-neutral-60" />
+          <hr className="border-t border-neutral-55" />
         </div>
 
         {/* Video Section with toggle */}
@@ -333,7 +333,7 @@ export const NewProjectModal = ({ onClose }) => {
               )}
             </div>
           )}
-          <hr className="border-t border-neutral-60" />
+          <hr className="border-t border-neutral-55" />
         </div>
 
         {/* Code Snippets */}

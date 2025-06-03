@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { getDaysSince } from "../../../utils/utils";
 import { MdOutlineAccessTime } from "react-icons/md";
 
@@ -30,6 +30,10 @@ export const OfferCard = ({
 
   const isRecruiter = profile?.role.type === "recruiter";
 
+
+
+  //Determinando en donde este redirije a un lado o al otro dependiendo de la ruta actual
+  const location = useLocation();
 
   const handleApply = async (e) => {
     e.stopPropagation();
@@ -69,7 +73,11 @@ export const OfferCard = ({
     e.stopPropagation();
   };
   const handleCardClick = () => {
-    navigate(`/offers/${offer._id}`);
+    if (location.pathname.startsWith('/private-rec/offers')) {
+      navigate(`/private-rec/dashboard/${offer._id}`);
+    } else {
+      navigate(`/offers/${offer._id}`);
+    }
   };
 
    const handleOwnerClick = (e) => {
