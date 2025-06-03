@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from "react-router";
 import { getCandidatesByOfferId,updateCandidateStatus } from '../../../services/offersServices';
 export const RecDashBoar = () => {
-  const { offerId } = useParams();
+ const { offerId } = useParams();
 
   //objeto con cinco arrays, uno por cada columna del Kanban.
   const [lists, setLists] = useState({

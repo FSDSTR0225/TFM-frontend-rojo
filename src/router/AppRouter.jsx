@@ -23,6 +23,7 @@ import { Login } from '../features/auth/login';
 import { OffersInfoPage } from '../features/recruiters/pages/OffersInfoPage';
 import { OfferInfoPage } from '../features/recruiters/pages/OfferInfoPage';
 import { DashBoardLayout } from '../layout/DashBoardLayout';
+import { DashBoarPage } from '../features/recruiters/pages/DashBoarPage';
 
 
 
@@ -71,7 +72,7 @@ const router = createBrowserRouter([
         //loader: authLoader,  // Verifica token y rol antes de cualquiera de sus hijos
         children: [
           // 1. Dashboard principal
-          { path: 'dashboard/:offerId', element: <RecDashBoar />},
+          { path: 'dashboard/:offerId', element: <DashBoarPage />},
       
           // 2. Perfil de recruiter (ver y editar)
           {path: 'profile', element: <RecProfile />},
