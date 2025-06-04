@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useParams } from "react-router";
-import { getCandidatesByOfferId,updateCandidateStatus } from '../../../services/offersServices';
-export const RecDashBoar = () => {
- const { offerId } = useParams();
+import { getCandidatesByOfferId, updateCandidateStatus } from '../../../services/offersServices';
+import { AvatarImage } from '../../../components/AvatarImage';
+import { NameUsers } from '../../../components/NameUsers';
+import { getDaysSince } from '../../../utils/utils';
+export const RecDashBoar = ({setNameOffer}) => {
+  const { offerId } = useParams();
 
   //objeto con cinco arrays, uno por cada columna del Kanban.
   const [lists, setLists] = useState({
@@ -21,11 +24,12 @@ export const RecDashBoar = () => {
   useEffect(() => {
     (async () => {
       const data = await getCandidatesByOfferId(offerId, localStorage.getItem('token'));
-      console.log('Candidatos obtenidos:', data);
+      setNameOffer(data.nameOffer);
+      const candidates = data.applicants;
       //Crea grouped, un objeto vacío con las cinco claves.
       const grouped = { pending: [], reviewed: [], interviewed: [], accepted: [], rejected: [] };
       //Recorre cada candidato (data.forEach) y, según su status, lo añade al array correspondiente.
-      data.forEach(c => grouped[c.status]?.push(c));
+      candidates.forEach(c => grouped[c.status]?.push(c));
       //Llama a setLists(grouped), que actualiza el estado con los candidatos ya clasificados.
       setLists(grouped);
     })();
@@ -44,7 +48,7 @@ export const RecDashBoar = () => {
   //Esto permiter que el elemento se pueda soltar en la columna de destino.
   const handleDragOver = e => {
     e.preventDefault(); // necesario para permitir el drop
-  }; 
+  };
 
   //Esto se dispara al soltar el elemento en la columna de destino.
   const handleDrop = async (e, toList) => {
@@ -55,15 +59,16 @@ export const RecDashBoar = () => {
 
     // 3. Mueve en el estado
     setLists(prev => {
-       // 1) Quitar de lista origen
+      // 1) Quitar de lista origen
       const src = [...prev[fromList]].filter(c => c._id !== candidate._id);
-        // 2) Añadir a lista destino (con nuevo status)
+      // 2) Añadir a lista destino (con nuevo status)
       const dst = [...prev[toList], { ...candidate, status: toList }];
       return { ...prev, [fromList]: src, [toList]: dst };
     });
     // 4. Actualiza en backend
     console.log(`Actualizando candidato ${candidate._id} de ${fromList} a ${toList}`);
-    await updateCandidateStatus(offerId,candidate._id, toList, localStorage.getItem('token'));
+    const daysAgo = getDaysSince(candidate.appliedDate);
+    await updateCandidateStatus(offerId, candidate._id, toList, localStorage.getItem('token'));
     setDragInfo({ fromList: null, candidate: null });
   };
 
@@ -77,31 +82,35 @@ export const RecDashBoar = () => {
 
   // 5. Render
   return (
-    <div className="flex flex-col md:flex-row gap-4 p-4 min-h-screen overflow-x-auto">
+    <div className="flex flex-col md:flex-row gap-4 p-4 min-h-screen w-auto overflow-x-auto">
       {Object.entries(lists).map(([key, items]) => (
         <div
           key={key}
-          className={`w-72 bg-base-200 rounded-box flex flex-col border-t-4 ${colors[key]}`}
+          className={`w-72 bg-neutral-80 rounded-box flex flex-col border-t-4 ${colors[key]}`}
           onDragOver={handleDragOver}
           onDrop={e => handleDrop(e, key)}
         >
-          <div className="p-4 border-b border-base-300">
-            <h2 className="text-white font-semibold capitalize">{key}</h2>
+          <div className="p-4 border-b border-neutral-60">
+            <h2 className="font-semibold capitalize">{key}</h2>
           </div>
-          <div className="flex-1 p-4 space-y-2 overflow-y-auto text-sm text-left text-gray-400">
+          <div className="flex-1 p-4 space-y-2 text-sm text-left">
             {items.length > 0 ? (
               items.map(c => (
                 <div
                   key={c._id}
-                  className="candidate-card bg-gray-800 text-white p-3 rounded cursor-grab active:cursor-grabbing"
+                  className="candidate-card bg-neutral-60 p-4 rounded-md flex items-start gap-2 mb-4 cursor-grab active:cursor-grabbing"
                   draggable
                   onDragStart={e => handleDragStart(e, c, key)}
                 >
-                  <p className="font-bold">{c.user.name}</p>
-                  <p className="font-bold">{c.user.email}</p>
-                  <p className="text-sm">
-                    {new Date(c.appliedDate).toLocaleDateString()}
-                  </p>
+                  <AvatarImage user={c.user}/>
+                  <div className="flex flex-col">
+                    <NameUsers user={c.user} align='items-start' classProps={'line-clamp-1'}/>
+                    {/* <p className="font-semibold text-base leading-tight">{c.user.name} {c.user.surname}</p> */}
+                    <p className="text-xs line-clamp-1 w-full">{c.user.email}</p>
+                    <p className="text-[10px] text-neutral-30 mt-1">
+                      Last {getDaysSince(c.appliedDate)} days ago
+                    </p>
+                  </div>
                 </div>
               ))
             ) : (
