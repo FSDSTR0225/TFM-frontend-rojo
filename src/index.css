@@ -6,6 +6,8 @@
   themes: dark --default, cupcake;
 }
 
+
+
 @theme {
   --color-primary-10: #D7F4DA;
   --color-primary-20: #AFE9B6;
@@ -35,6 +37,7 @@
   --color-neutral-30: #797979;
   --color-neutral-40: #595959;
   --color-neutral-50: #404040;
+  --color-neutral-55: #303030;
   --color-neutral-60: #262626;
   --color-neutral-70: #222222;
   --color-neutral-80: #1C1C1C;
