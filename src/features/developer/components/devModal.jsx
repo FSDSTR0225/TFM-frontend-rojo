@@ -61,7 +61,6 @@ export const DevModal = ({token, profileData}) => { // Añadido profileData como
 
   const editDevProfile = async (formData) => {
     const editProfile = await updateProfile({...profileData, ...formData}, token);
-    console.log('Datos del perfil actualizados: ', editProfile);
     
     if (editProfile?.user) {
       reset();
@@ -79,9 +78,9 @@ export const DevModal = ({token, profileData}) => { // Añadido profileData como
   };
 
   return (
-    <div className="modal-box">
-      <div className="modal-action">
-        <form method="dialog" onSubmit={handleSubmit(editDevProfile)} className="max-w-3xl mx-auto p-6 bg-base-200 rounded-xl shadow-lg">
+    <div className="modal-box ">
+      <div className="modal-action rounded-lg">
+        <form method="dialog" onSubmit={handleSubmit(editDevProfile)} className=" mx-auto p-6 rounded-xl">
           <h2 className="text-3xl font-bold text-center mb-8">Edit a dev profile</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -118,7 +117,7 @@ export const DevModal = ({token, profileData}) => { // Añadido profileData como
               />
             </div>
 
-                      {/* professionalPosition */}
+          {/* professionalPosition */}
           <div className="form-control">
             <label className="label"><span className="label-text font-semibold my-2">Professional Position</span></label>
             <textarea 
@@ -184,14 +183,20 @@ export const DevModal = ({token, profileData}) => { // Añadido profileData como
                     type="text"
                     placeholder="Language (e.g. English)"
                     className="input input-bordered w-1/2"
-                    {...register(`role.developer.languages.${index}.language`)}
+                    {...register(`role.developer.languages.${index}.language`,
+                      { required: "Este campo es obligatorio", 
+                        validate: value => value.trim() !== "" || "El idioma no puede estar vacío o contener solo espacios"
+                      })}
                     defaultValue={field.language}
                   />
                   <input
                     type="text"
                     placeholder="Level (e.g. Intermediate)"
                     className="input input-bordered w-1/2"
-                    {...register(`role.developer.languages.${index}.languageLevel`)}
+                    {...register(`role.developer.languages.${index}.languageLevel`, 
+                      { required: "Este campo es obligatorio", 
+                        validate: value => value.trim() !== "" || "El idioma no puede estar vacío o contener solo espacios"
+                      })}
                     defaultValue={field.languageLevel}
                   />
                   <button
@@ -225,7 +230,10 @@ export const DevModal = ({token, profileData}) => { // Añadido profileData como
                     type="text"
                     placeholder="Skill (e.g. React)"
                     className="input input-bordered w-1/2"
-                    {...register(`role.developer.skills.${index}`)}
+                    {...register(`role.developer.skills.${index}`,
+                      { required: "Este campo es obligatorio",
+                        validate: value => value.trim() !== "" || "Skill no puede estar vacío o contener solo espacios"
+                      })}
                     defaultValue={field}
                   />
                   <button
@@ -252,7 +260,7 @@ export const DevModal = ({token, profileData}) => { // Añadido profileData como
           {/* Buttons */}
           <div className="form-control mt-8 flex justify-between">
             <button 
-              className="btn w-full md:w-auto text-lg" 
+              className="btn bg-transparent border-2 border-primary-50 text-primary-50  hover:bg-neutral-0 hover:text-neutral-90 hover:border-neutral-0"
               onClick={handleClose} 
               type="button"
             >
@@ -260,7 +268,7 @@ export const DevModal = ({token, profileData}) => { // Añadido profileData como
             </button>
             <button 
               type="submit" 
-              className="btn w-full md:w-auto text-lg bg-green-600 text-black hover:bg-green-700 transition-colors"
+              className="btn bg-primary-60 text-neutral-0 hover:bg-primary-50 border border-primary-50"
             >
               Edit Profile
             </button>

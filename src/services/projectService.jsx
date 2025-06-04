@@ -81,3 +81,35 @@ export const getProjectsByDeveloper = async (developerId) => {
   return { error: true, message: error.message };
   }
 };
+
+export async function softDeleteProject(id, token) {
+  try {
+    const res = await fetch(`${urlBackEnd}/projects/${id}/soft-delete`, {
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.error('Failed to soft delete project:', error);
+    return { error: true, message: 'Fallo en la solicitud' };
+  }
+};
+
+export const updateProject = async (id, data, token) => {
+  try {
+    const res = await fetch(`${urlBackEnd}/projects/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify(data)
+    });
+    return await res.json();
+  } catch (error) {
+    return { error: true, message: error.message };
+  }
+};

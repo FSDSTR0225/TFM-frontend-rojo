@@ -1,14 +1,16 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { AuthContext } from '../../../context/authContext';
-import { getExperiencesByDeveloper } from '../../../services/experienceService';
+import { createExperience, updateExperience, getExperiencesByDeveloper, softDeleteExperience } from '../../../services/experienceService';
 import { PiPlus } from 'react-icons/pi';
-import NewExperienceModal from '../components/newExperienceModal';
+import NewExperienceModal from './newExperienceModal';
+import DotsComponent from './DotsComponent';
 
 function ExperienceCard({ profileInfo }) {
   const { profile: currentUser, token } = useContext(AuthContext);
   const [experiences, setExperiences] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedExperience, setSelectedExperience] = useState(null);
   const [error, setError] = useState(null);
 
   const isCurrentUser = currentUser?._id === profileInfo?._id;
@@ -24,34 +26,78 @@ function ExperienceCard({ profileInfo }) {
         } else {
           setExperiences(res.experiences || []);
         }
+        setLoading(false);
       })
       .catch(() => {
         setError('Error al obtener las experiencias');
-      })
-      .finally(() => setLoading(false));
+        setLoading(false);
+      });
   }, [profileInfo?._id, token]);
 
-  const handleOpenModal = () => setIsModalOpen(true);
-  const handleCloseModal = () => setIsModalOpen(false);
+  const openCreateModal = () => {
+    setSelectedExperience(null);
+    setIsModalOpen(true);
+  };
+
+  const openEditModal = (exp) => {
+    setSelectedExperience(exp);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setSelectedExperience(null);
+    setIsModalOpen(false);
+  };
+
+  const handleExperience = async (data, id) => {
+    try {
+      if (id) {
+        await updateExperience(id, data, token);
+      } else {
+        await createExperience(data, token);
+      }
+
+      const res = await getExperiencesByDeveloper(profileInfo._id, token);
+      if (!res.error) {
+        setExperiences(res.experiences || []);
+      }
+    } catch (error) {
+      console.error('Error guardando experiencia:', error);
+    }
+
+    closeModal();
+  };
+
+  const handleDelete = async (id) => {
+    const confirmed = confirm('¿Seguro que quieres eliminar esta experiencia?');
+    if (!confirmed) return;
+
+    const res = await softDeleteExperience(id, token);
+    if (!res.error) {
+      setExperiences(prev => prev.filter(e => e._id !== id));
+    }
+  };
 
   return (
-    <div className="w-full px-4 py-6">
+    <div className="w-full">
       <div className="flex justify-end mb-2">
-        
         {isCurrentUser && (
           <button
-            onClick={handleOpenModal}
-            className="btn bg-primary-60 hover:bg-primary-70 rounded-md hover:shadow-lg text-sm"
+            onClick={openCreateModal}
+            className="btn bg-primary-60 hover:bg-primary-70 rounded-md hover:shadow-lg text-sm flex items-center gap-1"
           >
             <PiPlus className="text-xl" />
-            Añadir experiencia
+            Create Experience
           </button>
         )}
       </div>
 
-      {isModalOpen && (
-        <NewExperienceModal onClose={handleCloseModal} />
-      )}
+      <NewExperienceModal
+        open={isModalOpen}
+        setOpen={setIsModalOpen}
+        experience={selectedExperience}
+        handleExperience={handleExperience}
+      />
 
       {loading ? (
         <div className="flex justify-center py-4">
@@ -63,14 +109,30 @@ function ExperienceCard({ profileInfo }) {
         <div className="text-gray-500 text-sm">Este usuario no ha añadido ninguna experiencia todavía.</div>
       ) : (
         <ul className="space-y-4">
-          {experiences.map(exp => (
-            <li key={exp._id} className="grid grid-cols-3 gap-4 bg-neutral-80 border border-neutral-60 p-8 mb-4 rounded-md">
+          {experiences
+          .sort((a, b) => new Date(b.endDate) - new Date(a.endDate))
+          .map(exp => (
+            <li
+              key={exp._id}
+              className="relative grid grid-cols-3 gap-4 bg-neutral-80 border border-neutral-60 p-8 mb-4 rounded-md"
+            >
               <h3 className="col-span-2 text-xl uppercase font-bold">{exp.position}</h3>
               <p className="col-span-2">{exp.company}</p>
               <p className="grid justify-items-end pr-4">
-                {new Date(exp.startDate).toLocaleDateString()} -{' '}
-                {exp.endDate ? new Date(exp.endDate).toLocaleDateString() : 'Actualidad'}
+                {new Date(exp.startDate).toLocaleDateString('es-ES', { month: 'numeric', year: 'numeric' })} -{' '}
+                {exp.endDate
+                  ? new Date(exp.endDate).toLocaleDateString('es-ES', { month: 'numeric', year: 'numeric' })
+                  : 'Actualidad'}
               </p>
+
+              {isCurrentUser && (
+                <div className="absolute top-4 right-4 flex gap-2">
+                  <DotsComponent
+                    onEdit={() => openEditModal(exp)}
+                    onDelete={() => handleDelete(exp._id)}
+                  />
+                </div>
+              )}
             </li>
           ))}
         </ul>
