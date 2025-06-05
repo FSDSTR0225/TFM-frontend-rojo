@@ -82,7 +82,7 @@ export const RecDashBoar = ({setNameOffer}) => {
 
   // 5. Render
   return (
-    <div className="flex flex-col md:flex-row gap-4 p-4 min-h-screen w-auto overflow-x-auto">
+    <div className="hidden  lg:flex flex-col md:flex-row gap-4 p-4 min-h-screen w-auto overflow-x-auto">
       {Object.entries(lists).map(([key, items]) => (
         <div
           key={key}
