@@ -78,7 +78,7 @@ export const StartingComponent = ({ role, onStart, colorSet }) => {
         </p>
       </div>
 
-      <div className="absolute bottom-6 right-10 py-2">
+      <div className="absolute bottom-6 right-10 px-5 py-2">
         <button
           onClick={onStart}
           className={`px-4 py-2 rounded ${colorSet.bg} text-neutral-0 ${colorSet.hoverBg} transition`}

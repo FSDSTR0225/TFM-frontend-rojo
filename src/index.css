@@ -65,6 +65,7 @@
 /* 3️⃣ Importación de Google Fonts */
 
 body {
+  @apply text-neutral-0;
   font-family: 'Inter', sans-serif;
   font-weight: 400;
 }
