@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { AuthContext } from '../../../context/authContext';
 import { getStudiesByDeveloper, softDeleteStudy, createStudy, updateStudy } from '../../../services/studyService';
-import { PiPlus } from 'react-icons/pi';
+import { PiPlusBold } from 'react-icons/pi';
 import StudyModal from '../components/studyModal';
 import DotsComponent from '../components/DotsComponent';
 
@@ -85,7 +85,7 @@ function StudyCard({ profileInfo }) {
             onClick={openCreateModal}
             className="btn bg-primary-60 hover:bg-primary-70 rounded-md hover:shadow-lg text-sm flex items-center gap-1"
           >
-            <PiPlus className="text-xl" />
+            <PiPlusBold className="text-xl" />
             Create Study
           </button>
         )}

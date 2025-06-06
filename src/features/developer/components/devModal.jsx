@@ -1,39 +1,22 @@
-import { useForm, useFieldArray  } from 'react-hook-form';
-import { updateProfile } from '../../../services/profileService';
-import { useEffect } from 'react';
+import { useForm, useFieldArray } from "react-hook-form";
+import { useEffect } from "react";
+import { updateProfile } from "../../../services/profileService";
 
-export const DevModal = ({token, profileData}) => { // Añadido profileData como prop
+export default function DevModal({ open, setOpen, token, profileData, onProfileUpdate }) {
   const {
     register,
     handleSubmit,
-    reset,
     control,
-    formState: { errors }
-  } = useForm({
-  defaultValues: {
-    avatar: '',
-    name: '',
-    surname: '',
-    description: '',
-    role: {
-      developer: {
-        location: '',
-        professionalPosition : '',
-        languages: [],
-        skills: [{ skill: '' }],
-        linkedin: '',
-        github: '',
-      }
-    }
-  }
-});
+    reset,
+    formState: { errors, isSubmitting }
+  } = useForm();
 
-  const { fields: languageFields, append: languageAppend, remove: languageRemove } = useFieldArray({
+  const { fields: languageFields, append: appendLanguage, remove: removeLanguage } = useFieldArray({
     control,
     name: "role.developer.languages"
   });
 
-    const { fields: skillFields, append: skillAppend, remove: skillRemove } = useFieldArray({
+  const { fields: skillFields, append: appendSkill, remove: removeSkill } = useFieldArray({
     control,
     name: "role.developer.skills"
   });
@@ -41,236 +24,263 @@ export const DevModal = ({token, profileData}) => { // Añadido profileData como
   useEffect(() => {
     if (profileData) {
       reset({
-        avatar: profileData.avatar || '',
-        name: profileData.name || '',
-        surname: profileData.surname || '',
-        description: profileData.description || '',
+        avatar: profileData.avatar || "",
+        name: profileData.name || "",
+        surname: profileData.surname || "",
+        description: profileData.description || "",
         role: {
           developer: {
-            languages: profileData.role?.developer?.languages || [],
-            skills: profileData.role?.developer?.skills || [],
-            location: profileData.role?.developer?.location || '',
-            github: profileData.role?.developer?.github || '',
-            linkedin: profileData.role?.developer?.linkedin || '',
-            professionalPosition: profileData.role?.developer?.professionalPosition || ''
+            professionalPosition: profileData.role?.developer?.professionalPosition || "",
+            location: profileData.role?.developer?.location || "",
+            github: profileData.role?.developer?.github || "",
+            linkedin: profileData.role?.developer?.linkedin || "",
+            languages: profileData.role?.developer?.languages || [{ language: "", languageLevel: "" }],
+            skills: profileData.role?.developer?.skills?.map(skill => ({ skill })) || [{ skill: "" }]
+          }
+        }
+      });
+    } else {
+      reset({
+        avatar: "",
+        name: "",
+        surname: "",
+        description: "",
+        role: {
+          developer: {
+            professionalPosition: "",
+            location: "",
+            github: "",
+            linkedin: "",
+            languages: [{ language: "", languageLevel: "" }],
+            skills: [{ skill: "" }]
           }
         }
       });
     }
-  }, [profileData, reset]); 
+  }, [profileData, reset]);
 
-  const editDevProfile = async (formData) => {
-    const editProfile = await updateProfile({...profileData, ...formData}, token);
-    
-    if (editProfile?.user) {
-      reset();
-      document.getElementById("my_modal_1")?.close();
-      window.location.reload();
+  const onSubmit = async (data) => {
+    try {
+      const formattedData = {
+        ...profileData,
+        ...data,
+        role: {
+          developer: {
+            ...data.role.developer,
+            languages: data.role.developer.languages.filter(lang =>
+              lang.language.trim() !== "" && lang.languageLevel.trim() !== ""
+            ),
+            skills: data.role.developer.skills
+              .map(s => s.skill.trim())
+              .filter(skill => skill !== "")
+          }
+        }
+      };
+      const updated = await updateProfile(formattedData, token);
+      if (updated?.user) {
+        onProfileUpdate?.(updated.user);
+        reset();
+        setOpen(false);
+      }
+    } catch (error) {
+      console.error("Error al actualizar el perfil:", error);
     }
-
-    reset();
-    document.getElementById("my_modal_1")?.close();
-  }
-
-  const handleClose = () => {
-    reset(); // Limpiar formulario sin enviar
-    document.getElementById("my_modal_1")?.close();
   };
 
+  const handleClose = () => {
+    reset();
+    setOpen(false);
+  };
+
+  if (!open) return null;
+
   return (
-    <div className="modal-box ">
-      <div className="modal-action rounded-lg">
-        <form method="dialog" onSubmit={handleSubmit(editDevProfile)} className=" mx-auto p-6 rounded-xl">
-          <h2 className="text-3xl font-bold text-center mb-8">Edit a dev profile</h2>
+    <div className="modal modal-open fixed inset-0 flex justify-center items-center z-50">
+      <div className="modal-box max-w-3xl bg-neutral-80 border border-neutral-70 rounded-lg p-6 relative">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+          <h2 className="text-2xl font-bold text-center">Edit Dev Profile</h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Avatar */}
-            <div className="form-control">
-              <label className="label"><span className="label-text font-semibold">Avatar</span></label>
-              <input 
-                type="text" 
-                className="input input-bordered" 
-                {...register('avatar')} 
-                placeholder="e.g. https://mir-s3-cdn-cf.behance.net/user/115/5713a176531403.591bf1cc1bc28.png" 
-              />
-            </div>
-
-            {/* Name */}
-            <div className="form-control">
-              <label className="label"><span className="label-text font-semibold">Name</span></label>
-              <input 
-                type="text" 
-                className="input input-bordered" 
-                {...register('name')} 
-                placeholder="e.g. Juan" 
-              />
-            </div>
-
-            {/* Surname */}
-            <div className="form-control">
-              <label className="label"><span className="label-text font-semibold">Surname</span></label>
-              <input 
-                type="text" 
-                className="input input-bordered" 
-                {...register('surname')} 
-                placeholder="e.g. Martinez" 
-              />
-            </div>
-
-          {/* professionalPosition */}
+          {/* Avatar */}
           <div className="form-control">
-            <label className="label"><span className="label-text font-semibold my-2">Professional Position</span></label>
-            <textarea 
-              type="text" 
-              className="input input-bordered flex gap-2 w-full" 
-              {...register('role.developer.professionalPosition')} 
-              placeholder="e.g. FrontEnd Developer"
+            <label className="block text-sm text-neutral-20 mb-1">
+              <span className="label-text font-semibold">Avatar</span>
+            </label>
+            <input 
+              {...register("avatar")} 
+              placeholder="Avatar URL" 
+              className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic" 
             />
           </div>
 
-            {/* Location */}
+          {/* Name y Surname */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="form-control">
-              <label className="label"><span className="label-text font-semibold">Location</span></label>
+              <label className="block text-sm text-neutral-20 mb-1">
+                <span className="label-text font-semibold">Name</span>
+              </label>
               <input 
-                type="text" 
-                className="input input-bordered" 
-                {...register('role.developer.location')} 
-                placeholder="e.g. Madrid" 
+                {...register("name")} 
+                placeholder="Name" 
+                className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic" 
+              />
+            </div>
+            <div className="form-control">
+              <label className="block text-sm text-neutral-20 mb-1">
+                <span className="label-text font-semibold">Surname</span>
+              </label>
+              <input 
+                {...register("surname")} 
+                placeholder="Surname" 
+                className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic" 
               />
             </div>
           </div>
 
-          {/* Description */}
+          {/* Professional Position */}
           <div className="form-control">
-            <label className="label"><span className="label-text font-semibold my-2">Description</span></label>
-            <textarea 
-              type="text" 
-              className="input input-bordered flex gap-2 w-full" 
-              {...register('description')} 
-              placeholder="e.g. En un lugar de la mancha de cuyo nombre no quiero acordarme..." 
+            <label className="block text-sm text-neutral-20 mb-1">
+              <span className="label-text font-semibold">Professional Position</span>
+            </label>
+            <input 
+              {...register("role.developer.professionalPosition")} 
+              placeholder="Puesto profesional" 
+              className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic" 
             />
           </div>
 
-          {/* GitHub */}
+          {/* Location */}
           <div className="form-control">
-            <label className="label"><span className="label-text font-semibold my-2">GitHub</span></label>
-            <textarea 
-              type="text" 
-              className="input input-bordered flex gap-2 w-full" 
-              {...register('role.developer.github')} 
-              placeholder="e.g. https://github.com/example" 
+            <label className="block text-sm text-neutral-20 mb-1">
+              <span className="label-text font-semibold">Location</span>
+            </label>
+            <input 
+              {...register("role.developer.location")} 
+              placeholder="Ubication" 
+              className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic" 
             />
           </div>
 
-          {/* LinkedIn */}
+          {/* Languages */}
           <div className="form-control">
-            <label className="label"><span className="label-text font-semibold my-2">LinkedIn</span></label>
-            <textarea 
-              type="text" 
-              className="input input-bordered flex gap-2 w-full" 
-              {...register('role.developer.linkedin')}
-              placeholder="e.g. https://www.linkedin.com/in/example"
-            />
-          </div>
-
-          {/* LANGUAGES */}
-            <div className="w-full mt-4">
-              <label className="label"><span className="label-text font-semibold mb-1">Languages</span></label>
-
+            <label className="block text-sm text-neutral-20 mb-1">
+              <span className="label-text font-semibold">Idiomas</span>
+            </label>
+            <div className="space-y-2">
               {languageFields.map((field, index) => (
-                <div key={field.id} className="flex gap-2 items-center mb-2">
-                  <input
-                    type="text"
-                    placeholder="Language (e.g. English)"
-                    className="input input-bordered w-1/2"
-                    {...register(`role.developer.languages.${index}.language`,
-                      { required: "Este campo es obligatorio", 
-                        validate: value => value.trim() !== "" || "El idioma no puede estar vacío o contener solo espacios"
-                      })}
-                    defaultValue={field.language}
+                <div key={field.id} className="flex gap-2">
+                  <input 
+                    {...register(`role.developer.languages.${index}.language`)} 
+                    placeholder="Language" 
+                    className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 flex-1 placeholder-neutral-40 placeholder:italic" 
                   />
-                  <input
-                    type="text"
-                    placeholder="Level (e.g. Intermediate)"
-                    className="input input-bordered w-1/2"
-                    {...register(`role.developer.languages.${index}.languageLevel`, 
-                      { required: "Este campo es obligatorio", 
-                        validate: value => value.trim() !== "" || "El idioma no puede estar vacío o contener solo espacios"
-                      })}
-                    defaultValue={field.languageLevel}
+                  <input 
+                    {...register(`role.developer.languages.${index}.languageLevel`)} 
+                    placeholder="Language Level" 
+                    className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 flex-1 placeholder-neutral-40 placeholder:italic" 
                   />
-                  <button
-                    type="button"
-                    onClick={() => languageRemove(index)}
-                    className="btn btn-error btn-sm"
+                  <button 
+                    type="button" 
+                    onClick={() => removeLanguage(index)} 
+                    className="btn btn-sm bg-neutral-90 border border-neutral-60 text-red-400 hover:text-red-300"
                   >
-                    Remove
+                    Eliminar
                   </button>
                 </div>
               ))}
-
-              <button
-                type="button"
-                onClick={() => languageAppend({ language: "", languageLevel: "" })}
-                className="btn btn-primary btn-sm mt-2"
+              <button 
+                type="button" 
+                onClick={() => appendLanguage({ language: "", languageLevel: "" })} 
+                className="btn btn-sm bg-neutral-70 text-neutral-0 hover:bg-neutral-60 border-neutral-60"
               >
-                Add Language
+                + Añadir idioma
               </button>
-
-              <span hidden = {languageFields.length !== 0} className="flex gap-2 items-center mb-2">No hay Idiomas</span>
             </div>
+          </div>
 
-            {/* SKILLS */}
-            <div className="w-full mt-4">
-              <label className="label"><span className="label-text font-semibold mb-1">Skills</span></label>
-
+          {/* Skills */}
+          <div className="form-control">
+            <label className="block text-sm text-neutral-20 mb-1">
+              <span className="label-text font-semibold">Habilidades</span>
+            </label>
+            <div className="space-y-2">
               {skillFields.map((field, index) => (
-                <div key={field.id} className="flex gap-2 items-center mb-2">
-                  <input
-                    type="text"
-                    placeholder="Skill (e.g. React)"
-                    className="input input-bordered w-1/2"
-                    {...register(`role.developer.skills.${index}`,
-                      { required: "Este campo es obligatorio",
-                        validate: value => value.trim() !== "" || "Skill no puede estar vacío o contener solo espacios"
-                      })}
-                    defaultValue={field}
+                <div key={field.id} className="flex gap-2">
+                  <input 
+                    {...register(`role.developer.skills.${index}.skill`)} 
+                    placeholder="Skill" 
+                    className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 flex-1 placeholder-neutral-40 placeholder:italic" 
                   />
-                  <button
-                    type="button"
-                    onClick={() => skillRemove(index)}
-                    className="btn btn-error btn-sm"
+                  <button 
+                    type="button" 
+                    onClick={() => removeSkill(index)} 
+                    className="btn btn-sm bg-neutral-90 border border-neutral-60 text-red-400 hover:text-red-300"
                   >
-                    Remove
+                    Eliminar
                   </button>
                 </div>
               ))}
-
-              <button
-                type="button"
-                onClick={() => skillAppend({ skill: "" })}
-                className="btn btn-primary btn-sm mt-2"
+              <button 
+                type="button" 
+                onClick={() => appendSkill({ skill: "" })} 
+                className="btn btn-sm bg-neutral-70 text-neutral-0 hover:bg-neutral-60 border-neutral-60"
               >
-                Add Skill
+                + Añadir habilidad
               </button>
-
-              <span hidden = {skillFields.length !== 0} className="flex gap-2 items-center mb-2">No hay Skills</span>
             </div>
-          
+          </div>
+
+          {/* GitHub & LinkedIn */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="form-control">
+              <label className="block text-sm text-neutral-20 mb-1">
+                <span className="label-text font-semibold">Github</span>
+              </label>
+              <input 
+                {...register("role.developer.github")} 
+                placeholder="GitHub URL" 
+                className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic" 
+              />
+            </div>
+            <div className="form-control">
+              <label className="block text-sm text-neutral-20 mb-1">
+                <span className="label-text font-semibold">Linkedin</span>
+              </label>
+              <input 
+                {...register("role.developer.linkedin")} 
+                placeholder="LinkedIn URL" 
+                className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic" 
+              />
+            </div>
+          </div>
+
+          {/* About Me */}
+          <div className="form-control">
+            <label className="block text-sm text-neutral-20 mb-1">
+              <span className="label-text font-semibold">About Me</span>
+            </label>
+            <textarea 
+              {...register("description")} 
+              placeholder="Text a description about you..." 
+              className="textarea textarea-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic" 
+              rows={3}
+            />
+          </div>
+
           {/* Buttons */}
-          <div className="form-control mt-8 flex justify-between">
-            <button 
-              className="btn bg-transparent border-2 border-primary-50 text-primary-50  hover:bg-neutral-0 hover:text-neutral-90 hover:border-neutral-0"
-              onClick={handleClose} 
-              type="button"
-            >
-              Close
-            </button>
+          <div className="flex justify-end gap-4 pt-4">
             <button 
               type="submit" 
+              disabled={isSubmitting} 
               className="btn bg-primary-60 text-neutral-0 hover:bg-primary-50 border border-primary-50"
             >
-              Edit Profile
+              {isSubmitting ? "Guardando..." : "Edit Dev Profile"}
+            </button>
+            <button 
+              type="button" 
+              onClick={handleClose} 
+              className="btn bg-neutral-90 border border-neutral-70 text-neutral-0 hover:text-primary-40"
+            >
+              Cancel
             </button>
           </div>
         </form>

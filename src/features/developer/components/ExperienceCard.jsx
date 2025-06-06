@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { AuthContext } from '../../../context/authContext';
 import { createExperience, updateExperience, getExperiencesByDeveloper, softDeleteExperience } from '../../../services/experienceService';
-import { PiPlus } from 'react-icons/pi';
+import { PiPlusBold } from 'react-icons/pi';
 import NewExperienceModal from './newExperienceModal';
 import DotsComponent from './DotsComponent';
 
@@ -86,7 +86,7 @@ function ExperienceCard({ profileInfo }) {
             onClick={openCreateModal}
             className="btn bg-primary-60 hover:bg-primary-70 rounded-md hover:shadow-lg text-sm flex items-center gap-1"
           >
-            <PiPlus className="text-xl" />
+            <PiPlusBold className="text-xl" />
             Create Experience
           </button>
         )}

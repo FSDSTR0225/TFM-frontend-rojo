@@ -2,8 +2,8 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router';
 import RightPanel from "./RightPanel";
 import { EditButton } from '../../../components/EditButton';
-import { PiGithubLogo, PiLinkedinLogo, PiChatCenteredDots, PiTranslate, PiCodeSimple, PiCodeBlock, PiEnvelope  } from 'react-icons/pi';
-import { DevModal } from './devModal';
+import { PiGithubLogo, PiLinkedinLogo, PiChatCenteredDots, PiTranslate, PiCodeSimple, PiCodeBlock, PiEnvelope, PiReadCvLogo, PiChatText  } from 'react-icons/pi';
+import DevModal  from './devModal';
 import { SectionContainer } from "../../../components/SectionContainer";
 import { getProjectsByDeveloper } from '../../../services/projectService';
 import { AuthContext } from '../../../context/authContext';
@@ -12,12 +12,14 @@ function InfoDeveloper({ profileInfo, token, setProfileData, onProfileUpdated })
   const { profile: currentUser } = useContext(AuthContext);
   const isCurrentUser = currentUser?._id === profileInfo?._id;
 
-  const handleOpenModal = () => {
-    document.getElementById("my_modal_1").showModal();
-  };
+  const [isDevModalOpen, setIsDevModalOpen] = useState(false);
 
   const [lastProjects, setLastProjects] = useState([]);
   const [loadingProjects, setLoadingProjects] = useState(true);
+
+    const handleOpenModal = () => {
+      setIsDevModalOpen(true);
+    };
 
     useEffect(() => {
     if (!profileInfo?._id) {
@@ -55,7 +57,7 @@ function InfoDeveloper({ profileInfo, token, setProfileData, onProfileUpdated })
 
           {isCurrentUser && (
             <div className="w-full flex justify-end mb-2">
-              <EditButton onClick={handleOpenModal} />
+              <EditButton onClick={handleOpenModal}  />
             </div>
           )}
 
@@ -71,14 +73,14 @@ function InfoDeveloper({ profileInfo, token, setProfileData, onProfileUpdated })
             <h3 className="text-lg mb-2 text-center">
               {profileInfo.role.developer.professionalPosition}
             </h3>
-            <span className="mb-4 text-center">
+            <span className="text-center">
               {profileInfo.role.developer.location}
             </span>
           </div>
 
           {/* MEDIA */}
-          <div className="flex justify-center gap-2 my-4 w-full">
-                        <div className="flex justify-center gap-2 my-4 w-full">
+          <div className="flex justify-center w-full">
+              <div className="flex justify-center gap-2 my-4 w-full">
                 <Link 
                 to={"#"}
                 onClick={async (e) => {
@@ -106,7 +108,7 @@ function InfoDeveloper({ profileInfo, token, setProfileData, onProfileUpdated })
                 aria-label="GitHub">
                 <PiGithubLogo className="text-xl" />
                 </Link>
-            </div>
+              </div>
           </div>
 
           {/* CONTACT Y DOWNLOAD CV */}
@@ -115,12 +117,14 @@ function InfoDeveloper({ profileInfo, token, setProfileData, onProfileUpdated })
               to={profileInfo.role.developer.github}
               className="btn w-full bg-neutral-90 hover:bg-neutral-60 border border-neutral-60 rounded-md"
             >
+              <PiChatText className="text-xl"/>
               Contact
             </Link>
             <Link
               to={profileInfo.role.developer.github}
               className="btn w-full bg-neutral-90 hover:bg-neutral-60 border border-neutral-60 rounded-md"
             >
+              <PiReadCvLogo className="text-xl" />
               Download CV
             </Link>
           </div>
@@ -181,7 +185,7 @@ function InfoDeveloper({ profileInfo, token, setProfileData, onProfileUpdated })
             </h2>
             <div className="flex flex-wrap gap-2">
               {profileInfo.role.developer.skills.map((skill, index) => (
-                <span key={index} className=" bg-neutral-60 rounded-md px-2 py-0.5">
+                <span key={index} className=" bg-primary-70 text-neutral-0 rounded-full px-2 py-0.5 text-sm">
                 {skill}
                 </span>
                 ))}
@@ -195,14 +199,18 @@ function InfoDeveloper({ profileInfo, token, setProfileData, onProfileUpdated })
         </div>
 
         {/* Modal para editar perfil */}
-        <dialog id="my_modal_1" className="modal">
+        {isDevModalOpen && (
           <DevModal
+            open={isDevModalOpen}
+            setOpen={setIsDevModalOpen}
             token={token}
             profileData={{ ...profileInfo }}
-            setProfileData={setProfileData}
-            onProfileUpdated={onProfileUpdated}
+            onProfileUpdate={updatedProfile => {
+              setProfileData(updatedProfile);
+              onProfileUpdated?.(updatedProfile);
+            }}
           />
-        </dialog>
+        )}
       </div>
     </SectionContainer>
   );

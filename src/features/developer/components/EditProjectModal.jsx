@@ -215,7 +215,7 @@ export function EditProjectModal({ project, onSubmitProject, onClose }) {
               disabled={isSubmitting}
               className="btn bg-primary-60 text-neutral-0 hover:bg-primary-50 border border-primary-50"
             >
-              {isSubmitting ? "Guardando..." : "Guardar cambios"}
+              {isSubmitting ? "Saving..." : "Edit Project"}
             </button>
             <button
               type="button"
@@ -223,7 +223,7 @@ export function EditProjectModal({ project, onSubmitProject, onClose }) {
               onClick={onClose}
               disabled={isSubmitting}
             >
-              Cancelar
+              Cancel
             </button>
           </div>
         </form>

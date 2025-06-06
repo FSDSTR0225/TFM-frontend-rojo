@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { NewProjectModal } from '../components/NewProjectModal';
 import DotsComponent from './DotsComponent';
 import { EditProjectModal } from '../components/EditProjectModal';
-import { PiPlus, PiArrowSquareOut, PiGithubLogo, PiEye } from 'react-icons/pi';
+import { PiPlusBold, PiArrowSquareOut, PiGithubLogo, PiEye } from 'react-icons/pi';
 import { Link } from 'react-router';
 import { AuthContext } from '../../../context/authContext';
 import { createProject, getProjectsByDeveloper, softDeleteProject, updateProject  } from '../../../services/projectService';
@@ -89,7 +89,7 @@ function OwnProjectCard({ profileInfo }) {
       if (result.error) {
         setError(result.message);
       } else {
-        setProjects(prev => prev.map(p => p._id === projectToEdit._id ? (result.project || result) : p));
+        setProjects(prev => prev.map(p => p._id === projectToEdit._id ? result.updatedProject : p));
         handleCloseEditModal();
       }
     } catch {
@@ -116,7 +116,7 @@ function OwnProjectCard({ profileInfo }) {
             onClick={handleOpenNewModal}
             className="btn bg-primary-60 hover:bg-primary-70 rounded-md shadow hover:shadow-lg text-sm flex items-center gap-2"
           >
-            <PiPlus className="text-xl" /> Create project
+            <PiPlusBold className="text-xl" /> Create project
           </button>
         </div>
       )}
@@ -137,7 +137,7 @@ function OwnProjectCard({ profileInfo }) {
       ) : (
         <div className="grid grid-cols-1 gap-6">
           {sortedProjects.map(project => (
-            <div key={project._id} className="relative card lg:card-side bg-neutral-80 border border-neutral-60 shadow-sm h-68 md:h-76 flex flex-col lg:flex-row">
+            <div key={project._id + Math.random()} className="relative card lg:card-side bg-neutral-80 border border-neutral-60 shadow-sm h-68 md:h-76 flex flex-col lg:flex-row">
               <figure className="flex-shrink-0 w-full lg:w-80 h-40 lg:h-full overflow-hidden">
                 {project.gallery?.length > 0
                   ? <img src={project.gallery[0]} alt={project.title} className="object-cover w-full h-full" />
@@ -158,7 +158,7 @@ function OwnProjectCard({ profileInfo }) {
                     </div>
                   )}
                 </div>
-                <span className="bg-primary-60 text-neutral-90 rounded-md px-2 py-0.5 w-fit h-fit truncate">
+                <span className="bg-primary-60/20 text-primary-50 rounded-md px-2 py-0.5 w-fit h-fit truncate">
                   {project.category || 'No se especifica el tipo de proyecto'}
                 </span>
                 <p className="mt-2 text-sm overflow-hidden line-clamp-3">
@@ -167,7 +167,7 @@ function OwnProjectCard({ profileInfo }) {
                 <p>{project.year || ''}</p>
                 <div className="flex flex-wrap gap-2 mt-4">
                   {project.projectSkills?.map((s, i) => (
-                    <span key={i} className="bg-primary-60 rounded-md px-2 py-0.5 text-sm truncate">{s}</span>
+                    <span key={i} className="bg-primary-70 text-neutral-0 rounded-full px-2 py-0.5 text-sm truncate">{s}</span>
                   ))}
                 </div>
                 <div className="card-actions justify-end pt-8 ">

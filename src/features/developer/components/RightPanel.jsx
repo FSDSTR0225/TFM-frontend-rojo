@@ -55,7 +55,7 @@ function RightPanel({ profileInfo, token, onProfileUpdated }) {
         {/* MIS OFERTAS */}
         <input type="radio" name="my_tabs_2" className="tab" aria-label="My Offers"  />
         <div className="tab-content border border-neutral-60 p-6 rounded-md">
-          <MyOffersCard />
+            <MyOffersCard />
         </div>
       </div>
     </div>
