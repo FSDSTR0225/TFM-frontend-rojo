@@ -1,40 +1,11 @@
-import { useEffect, useState } from 'react';
-import { useParams } from "react-router";
-import { getCandidatesByOfferId, updateCandidateStatus } from '../../../services/offersServices';
+import { useState } from 'react';
+import { updateCandidateStatus } from '../../../services/offersServices';
 import { AvatarImage } from '../../../components/AvatarImage';
 import { NameUsers } from '../../../components/NameUsers';
 import { getDaysSince } from '../../../utils/utils';
-export const RecDashBoar = ({setNameOffer}) => {
-  const { offerId } = useParams();
-
-  //objeto con cinco arrays, uno por cada columna del Kanban.
-  const [lists, setLists] = useState({
-    pending: [],
-    reviewed: [],
-    interviewed: [],
-    accepted: [],
-    rejected: [],
-  });
-
+export const RecDashBoar = ({ offerId, lists, setLists }) => {
   //guarda temporalmente de dónde (qué columna) y qué candidato estamos arrastrando.
   const [dragInfo, setDragInfo] = useState({ fromList: null, candidate: null });
-
-
-  // 1. Carga candidatos
-  useEffect(() => {
-    (async () => {
-      const data = await getCandidatesByOfferId(offerId, localStorage.getItem('token'));
-      setNameOffer(data.nameOffer);
-      const candidates = data.applicants;
-      //Crea grouped, un objeto vacío con las cinco claves.
-      const grouped = { pending: [], reviewed: [], interviewed: [], accepted: [], rejected: [] };
-      //Recorre cada candidato (data.forEach) y, según su status, lo añade al array correspondiente.
-      candidates.forEach(c => grouped[c.status]?.push(c));
-      //Llama a setLists(grouped), que actualiza el estado con los candidatos ya clasificados.
-      setLists(grouped);
-    })();
-  }, [offerId]);
-
   // Esto es para iniciar el arrastre del drag-and-drop.
   const handleDragStart = (e, candidate, fromList) => {
     //e.dataTransfer.effectAllowed = 'move' indica que vamos a mover este elemento.
@@ -82,7 +53,7 @@ export const RecDashBoar = ({setNameOffer}) => {
 
   // 5. Render
   return (
-    <div className="hidden  lg:flex flex-col md:flex-row gap-4 p-4 min-h-screen w-auto overflow-x-auto">
+    <div className="hidden lg:flex flex-col md:flex-row gap-4 py-4  min-h-screen w-auto overflow-x-auto">
       {Object.entries(lists).map(([key, items]) => (
         <div
           key={key}
@@ -102,9 +73,9 @@ export const RecDashBoar = ({setNameOffer}) => {
                   draggable
                   onDragStart={e => handleDragStart(e, c, key)}
                 >
-                  <AvatarImage user={c.user}/>
+                  <AvatarImage user={c.user} />
                   <div className="flex flex-col">
-                    <NameUsers user={c.user} align='items-start' classProps={'line-clamp-1'}/>
+                    <NameUsers user={c.user} align='items-start' classProps={'line-clamp-1'} />
                     {/* <p className="font-semibold text-base leading-tight">{c.user.name} {c.user.surname}</p> */}
                     <p className="text-xs line-clamp-1 w-full">{c.user.email}</p>
                     <p className="text-[10px] text-neutral-30 mt-1">
