@@ -169,7 +169,7 @@ export const ProjectDetailsPage = () => {
                   <div key="githubFileTree" className="-mt-6">
                     <GitHubFileTree repoUrl={project.githubProjectLink} />
                   </div>
-                  <div key="githubFileTree" className="relative bg-neutral-80 flex flex-col rounded-lg shadow-md overflow-hidden border border-neutral-70 p-6 text-inherit no-underline w-full-mt-6">
+                  <div key="githubLanguages" className="relative bg-neutral-80 flex flex-col rounded-lg shadow-md overflow-hidden border border-neutral-70 p-6 text-inherit no-underline w-full-mt-6">
                     <GitHubLanguagesTag repoUrl={project.githubProjectLink} />
                   </div>
                   
