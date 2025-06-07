@@ -1,16 +1,39 @@
-import { getDaysSince } from '../../../utils/utils';
 import { AvatarImage } from '../../../components/AvatarImage';
 import { PiMapPinArea } from "react-icons/pi";
+import { GoChevronDown } from "react-icons/go";
 import { NameUsers } from '../../../components/NameUsers';
 import { useState } from 'react';
-export const ListDashBoard = ({ classProps, offerId, lists, setLists }) => {
+import { updateCandidateStatus } from '../../../services/offersServices';
+export const ListDashBoard = ({ classProps, offerId, lists, setLists, getCandidates }) => {
   const [activeTab, setActiveTab] = useState(Object.keys(lists)[0]);
+
+  const changeStatusCandidate = async (status, idCandidato) => {
+    console.log(`Cambiando estado del candidato a: ${status}`);
+    await updateCandidateStatus(offerId, idCandidato, status, localStorage.getItem('token'));
+    setActiveTab(status);
+    getCandidates(); // Actualiza la lista de candidatos
+  }
+
   const colors = {
     pending: 'bg-blue-500',
     reviewed: 'bg-purple-500',
     interviewed: 'bg-yellow-500',
     accepted: 'bg-green-500',
     rejected: 'bg-red-500',
+  };
+  const fadedColors = {
+    pending: 'bg-blue-500/20',
+    reviewed: 'bg-purple-500/20',
+    interviewed: 'bg-yellow-500/20',
+    accepted: 'bg-green-500/20',
+    rejected: 'bg-red-500/20',
+  };
+  const textColors = {
+    pending: 'text-blue-500',
+    reviewed: 'text-purple-500',
+    interviewed: 'text-yellow-500',
+    accepted: 'text-green-500',
+    rejected: 'text-red-500',
   };
 
   return (
@@ -70,13 +93,27 @@ export const ListDashBoard = ({ classProps, offerId, lists, setLists }) => {
 
               {/* Derecha: ubicación + acciones */}
               <div className="flex items-center gap-4">
-                <span className={`px-4 py-1 rounded-md text-md capitalize
-                ${activeTab
-                  ? `${colors[activeTab] || 'bg-black'} text-white`
-                  : 'text-neutral-400'
-                  }`}>
-                  {activeTab}
-                </span>
+                <div className="relative">
+                  <select
+                    value={activeTab}
+                    onChange={(e) => changeStatusCandidate(e.target.value, candidato._id)}
+                    className={`px-3 py-1 pr-4 rounded-md text-md capitalize appearance-none
+                    ${activeTab
+                        ? `${fadedColors[activeTab] || 'bg-black/20'} ${textColors[activeTab] || 'text-white'}`
+                        : 'text-neutral-400'
+                      }`}
+                  >
+                    {Object.entries(lists).map(([key]) => (
+                      <option key={key} value={key}>
+                        {key}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="pointer-events-none absolute right-2 top-1/2 transform -translate-y-1/2">
+                    <GoChevronDown />
+                  </div>
+                </div>
+
                 <button className="bg-neutral-50 text-white px-4 py-1 rounded-md text-md">
                   Contact
                 </button>

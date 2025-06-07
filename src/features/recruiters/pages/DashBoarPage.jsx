@@ -19,20 +19,22 @@ export const DashBoarPage = () => {
     rejected: [],
   });
 
+  const getCandidates = async()=>{
+    const data = await getCandidatesByOfferId(offerId, localStorage.getItem('token'));
+    setNameOffer(data.nameOffer);
+    const candidates = data.applicants;
+    //Crea grouped, un objeto vacío con las cinco claves.
+    const grouped = { pending: [], reviewed: [], interviewed: [], accepted: [], rejected: [] };
+    //Recorre cada candidato (data.forEach) y, según su status, lo añade al array correspondiente.
+    candidates.forEach(c => grouped[c.status]?.push(c));
+    //Llama a setLists(grouped), que actualiza el estado con los candidatos ya clasificados.
+    console.log(grouped);
+    setLists(grouped);
+  } 
+
   // 1. Carga candidatos
   useEffect(() => {
-    (async () => {
-      const data = await getCandidatesByOfferId(offerId, localStorage.getItem('token'));
-      setNameOffer(data.nameOffer);
-      const candidates = data.applicants;
-      //Crea grouped, un objeto vacío con las cinco claves.
-      const grouped = { pending: [], reviewed: [], interviewed: [], accepted: [], rejected: [] };
-      //Recorre cada candidato (data.forEach) y, según su status, lo añade al array correspondiente.
-      candidates.forEach(c => grouped[c.status]?.push(c));
-      //Llama a setLists(grouped), que actualiza el estado con los candidatos ya clasificados.
-      console.log(grouped);
-      setLists(grouped);
-    })();
+    getCandidates();
   }, [offerId]);
 
 
@@ -54,13 +56,15 @@ export const DashBoarPage = () => {
       <div className="lg:hidden">
         <ListDashBoard offerId={offerId}
           lists={lists}
-          setLists={setLists} />
+          setLists={setLists}
+          getCandidates={getCandidates} />
       </div>
 
       <div className="hidden lg:block">
         {viewList ? <ListDashBoard offerId={offerId}
           lists={lists}
-          setLists={setLists} /> : <RecDashBoar offerId={offerId}
+          setLists={setLists}
+          getCandidates={getCandidates} /> : <RecDashBoar offerId={offerId}
             lists={lists}
             setLists={setLists} />}
       </div>
