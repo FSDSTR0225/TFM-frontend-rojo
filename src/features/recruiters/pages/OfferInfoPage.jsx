@@ -13,6 +13,7 @@ import { AuthContext } from "../../../context/authContext";
 
 export const OfferInfoPage = () => {
   const [offer, setOffer] = useState(null);
+  
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 const [isOpenModalEdit, setIsOpenModalEdit] = useState(false);
@@ -23,9 +24,10 @@ const { id } = useParams();
 
 const isOwnerRecruiter = offer?.owner?._id === profile?._id && profile?.role.type === 'recruiter'; 
 
-  const fetchOffer = async () => {
+
+const fetchOffer = async () => {
       try {
-        const offerData = await getOffersById(id);
+      const offerData = await getOffersById(id);
         setOffer(offerData);
       } catch (error) {
         setError(error.message);
@@ -33,7 +35,7 @@ const isOwnerRecruiter = offer?.owner?._id === profile?._id && profile?.role.typ
         setIsLoading(false)
       }
     };
-
+  
   useEffect(() => {
     
     fetchOffer();

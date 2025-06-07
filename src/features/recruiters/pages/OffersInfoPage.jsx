@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { getOffers } from "../../../services/offersServices";
+import { getOffers, getOffersAppliedByDeveloper, getOffersByDeveloper } from "../../../services/offersServices";
 import { useEffect } from "react";
 import { OfferCard } from "../components/OfferCard";
 import { SectionContainer } from "../../../components/SectionContainer";
@@ -8,9 +8,13 @@ import { Pagination } from "../../../components/Pagination";
 import { ModalDelete } from "../components/ModalDelete";
 import { OfferModal } from "../components/OfferModal";
 import { FilterOffers } from "../components/FilterOffers";
+import { useContext } from "react";
+import { AuthContext } from "../../../context/authContext";
+
 
 export const OffersInfoPage = () => {
   const [offers, setOffers] = useState([]);
+  const [offersAplied, setOffersApplied] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -25,13 +29,20 @@ export const OffersInfoPage = () => {
   const [skillsFilter, setSkillsFilter] = useState([]);
   const [sortOrder, setSortOrder] = useState("desc");
 
+  const { profile } = useContext(AuthContext);
+
+  const isDeveloper = profile?.role.type === "developer";
+
+
+
+
   const resetFilters = () => {
     setContractTypeFilter("");
     setSkillsFilter([]);
   };
 
   const getFilteredOffers = () => {
-    let filtered = [...offers];
+    let filtered = [ ...offers];
 
     if (contractTypeFilter) {
       filtered = filtered.filter(
@@ -53,15 +64,46 @@ export const OffersInfoPage = () => {
     return filtered;
   };
 
+  const getFilteredAppliedOffers = () => {
+  if (!offersAplied || !Array.isArray(offersAplied)) {
+    return [];
+  }
+  
+  let filtered = [...offersAplied];
+
+  if (contractTypeFilter) {
+    filtered = filtered.filter(
+      (offer) => offer && offer.contractType.includes(contractTypeFilter)
+    );
+  }
+
+  if (skillsFilter.length > 0) {
+    filtered = filtered.filter((offer) =>
+      skillsFilter.every((skill) => offer.skills.includes(skill))
+    );
+  }
+
+  filtered.sort((a, b) => {
+    const dateA = new Date(a.createdAt);
+    const dateB = new Date(b.createdAt);
+    return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
+  });
+  
+  return filtered;
+};
+
   const filteredOffers = getFilteredOffers();
+  const filteredAppliedOffers = getFilteredAppliedOffers();
   console.log("Filtered offers:", filteredOffers);
 
   const totalPages = Math.ceil(filteredOffers.length / 6);
+  const totalPagesApplied = Math.ceil(filteredAppliedOffers.length / 6);
+  
   const startIndex = (currentPage - 1) * 6;
 
   const token = localStorage.getItem("token");
   const currentOffers = filteredOffers.slice(startIndex, startIndex + 6);
-
+const currentAppliedOffers = filteredAppliedOffers.slice(startIndex, startIndex + 6);
   const handlePageChange = (pageNum) => {
     if (pageNum === currentPage) return;
     setCurrentPage(pageNum); // Primero actualizamos la página
@@ -69,9 +111,11 @@ export const OffersInfoPage = () => {
 
   const fetchOffers = async () => {
     try {
-      const offerData = await getOffers();
-      setOffers(offerData);
-      console.log("🚀 ~ fetchOffers ~ offerData:", offerData);
+       if(isDeveloper) {const offerData = await getOffersAppliedByDeveloper(profile._id, token);
+      setOffersApplied(offerData) }
+      if(!isDeveloper) {const offerData = await getOffers();
+      setOffers(offerData);}
+     
       setLoading(false);
     } catch (error) {
       setError(error.message);
@@ -124,14 +168,19 @@ export const OffersInfoPage = () => {
   return (
     <SectionContainer>
       <div>
-        <h2 className='text-3xl font-bold text-neutral-0'>Your Next Tech Career Starts Here</h2>
+        <h2 className='text-3xl font-bold'>Your Next Tech Career Starts Here</h2>
         <p className='text-neutral-10 text-lg '>
           Discover job opportunities for developers, designers, and engineers in fast-growing tech
           fields.
         </p>
       </div>
 
-      <FilterOffers
+      <div>
+        {isDeveloper && (
+        <div className="tabs tabs-border">
+  <input type="radio" name="my_tabs_2" className="tab" aria-label="Job offers" />
+  <div className="tab-content  ">
+    <FilterOffers
         offers={offers}
         filtersOpen={filtersOpen}
         setFiltersOpen={setFiltersOpen}
@@ -161,6 +210,96 @@ export const OffersInfoPage = () => {
           );
         })}
       </OfferList>
+      
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        handlePageChange={handlePageChange}
+        filteredProjects={filteredOffers}
+      />
+  </div>
+
+  <input type="radio" name="my_tabs_2" className="tab" aria-label="Applied Offers" defaultChecked />
+  <div className="tab-content"> <FilterOffers
+        offers={offersAplied}
+        filtersOpen={filtersOpen}
+        setFiltersOpen={setFiltersOpen}
+        contractTypeFilter={contractTypeFilter}
+        setContractTypeFilter={setContractTypeFilter}
+        skillsFilter={skillsFilter}
+        setSkillsFilter={setSkillsFilter}
+        sortOrder={sortOrder}
+        setSortOrder={setSortOrder}
+        resetFilters={resetFilters}
+      />
+
+      <OfferList view={true}>
+        {currentAppliedOffers?.map((offer) => {
+          return (
+            <OfferCard
+              offer={offer}
+              owner={offer.owner}
+              setIsOpenModalDelete={setIsOpenModalDelete}
+              isOpenModalDelete={isOpenModalDelete}
+              setSelectedOfferId={setSelectedOfferId}
+              isOpenModalEdit={isOpenModalEdit}
+              setIsOpenModalEdit={setIsOpenModalEdit}
+              key={offer._id}
+              onApplySuccess={handleApplySuccess}
+            />
+          );
+        })}
+      </OfferList>
+      
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPagesApplied}
+        handlePageChange={handlePageChange}
+        filteredProjects={filteredAppliedOffers}
+      /></div>
+
+  
+</div>
+        )}
+      </div>
+        
+      {!isDeveloper && ( <><FilterOffers
+        offers={offers}
+        filtersOpen={filtersOpen}
+        setFiltersOpen={setFiltersOpen}
+        contractTypeFilter={contractTypeFilter}
+        setContractTypeFilter={setContractTypeFilter}
+        skillsFilter={skillsFilter}
+        setSkillsFilter={setSkillsFilter}
+        sortOrder={sortOrder}
+        setSortOrder={setSortOrder}
+        resetFilters={resetFilters}
+      />
+
+      <OfferList view={true}>
+        {currentOffers?.map((offer) => {
+          return (
+            <OfferCard
+              offer={offer}
+              owner={offer.owner}
+              setIsOpenModalDelete={setIsOpenModalDelete}
+              isOpenModalDelete={isOpenModalDelete}
+              setSelectedOfferId={setSelectedOfferId}
+              isOpenModalEdit={isOpenModalEdit}
+              setIsOpenModalEdit={setIsOpenModalEdit}
+              key={offer._id}
+              onApplySuccess={handleApplySuccess}
+            />
+          );
+        })}
+      </OfferList>
+      
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        handlePageChange={handlePageChange}
+        filteredProjects={offers}
+      /> </>)}
       {isOpenModalDelete && (
         <ModalDelete
           isOpen={isOpenModalDelete}
@@ -177,12 +316,6 @@ export const OffersInfoPage = () => {
           reloadPage={fetchOffers}
         />
       )}
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        handlePageChange={handlePageChange}
-        filteredProjects={offers}
-      />
     </SectionContainer>
   );
 };
