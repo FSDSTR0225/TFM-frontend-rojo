@@ -101,24 +101,26 @@ export const ProjectInfoCard = ({ project }) => {
             )}
 
             {liveLink && (
-                <div className="flex gap-2 mt-2">
-                    <a
-                    href={liveLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn flex-1 bg-neutral-90 border-neutral-80 text-neutral-0 hover:bg-neutral-60 focus:bg-neutral-100 text-center flex items-center justify-center gap-2"
-                    >
-                    <PiArrowSquareOut size={18} /> Live Project 
-                    </a>
-                    <button
-                    type="button"
-                    onClick={() => alert("Chat not created yet")} // Aquí pones la acción real
-                    className="btn flex-1 bg-primary-60 text-neutral-0 hover:bg-primary-70 focus:bg-primary-80 flex items-center justify-center gap-2"
-                    >
-                    <PiChatText size={18} /> Contact 
-                    </button>
-                </div>
-                )}
+              <div className="flex gap-2 mt-2">
+                <a
+                  href={liveLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn flex-1 bg-neutral-90 border-neutral-80 text-neutral-0 hover:bg-neutral-60 focus:bg-neutral-100 flex items-center justify-center gap-2 whitespace-nowrap"
+                >
+                  <PiArrowSquareOut size={18} />
+                  Live Project
+                </a>
+                <button
+                  type="button"
+                  onClick={() => alert("Chat not created yet")}
+                  className="btn flex-1 bg-primary-60 text-neutral-0 hover:bg-primary-70 focus:bg-primary-80 flex items-center justify-center gap-2 whitespace-nowrap"
+                >
+                  <PiChatText size={18} />
+                  Contact
+                </button>
+              </div>
+            )}
 
             <hr className="border-t border-neutral-60 my-4" />
 
