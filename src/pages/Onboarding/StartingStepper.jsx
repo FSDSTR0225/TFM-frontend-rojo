@@ -12,22 +12,22 @@ export const StartingComponent = ({ role, onStart, colorSet }) => {
 
   const desktopImages = role === 'recruiter'
     ? [
-        'https://res.cloudinary.com/dsrnd7wr9/image/upload/v1748912368/image-1_7_ynuddd.png',
-        'https://res.cloudinary.com/dsrnd7wr9/image/upload/v1748920815/image-1_2_ugjczy.png'
+        'https://res.cloudinary.com/djxyqh8fx/image/upload/v1749263808/image-1_7_ft2j6f.png',
+        'https://res.cloudinary.com/djxyqh8fx/image/upload/v1749263810/image-1_2_b2dza4.png'
       ]
     : [
-        'https://res.cloudinary.com/dsrnd7wr9/image/upload/v1748912367/image-1_6_stfujf.png',
-        'https://res.cloudinary.com/dsrnd7wr9/image/upload/v1748912367/image-1_5_vyp256.png'
+        'https://res.cloudinary.com/djxyqh8fx/image/upload/v1749263808/image-1_6_wu809o.png',
+        'https://res.cloudinary.com/djxyqh8fx/image/upload/v1749263808/image-1_5_grmkus.png'
       ];
 
   const mobileImages = role === 'recruiter'
     ? [
-        'https://res.cloudinary.com/dsrnd7wr9/image/upload/v1748920815/recruiter1-mobile_yqdvq1.png',
-        'https://res.cloudinary.com/dsrnd7wr9/image/upload/v1748920815/recruiter2-mobile_wv31ct.png'
+        'https://res.cloudinary.com/djxyqh8fx/image/upload/v1749263808/recruiter1-mobile_wmvmqb.png',
+        'https://res.cloudinary.com/djxyqh8fx/image/upload/v1749263811/recruiter2-mobile_vukgk3.png'
       ]
     : [
-        'https://res.cloudinary.com/dsrnd7wr9/image/upload/v1748920816/developer1-mobile_xgheeq.png',
-        'https://res.cloudinary.com/dsrnd7wr9/image/upload/v1748920816/developer2-mobile_s3kand.png'
+        'https://res.cloudinary.com/djxyqh8fx/image/upload/v1749263810/developer1-mobile_abxirq.png',
+        'https://res.cloudinary.com/djxyqh8fx/image/upload/v1749263809/developer2-mobile_uvufmm.png'
       ];
 
   useEffect(() => {
