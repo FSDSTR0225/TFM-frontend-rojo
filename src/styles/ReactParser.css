@@ -1,0 +1,139 @@
+.code-container {
+  background-color: var(--color-neutral-60);
+  border: 1px solid var(--color-neutral-60);
+  border-radius: 10px;
+  padding: 0.9rem 1.3rem;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.93rem;
+  line-height: 1.45;
+  color: var(--color-neutral-10);
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+  user-select: text;
+  margin-bottom: 2rem;
+  transition: background-color 0.3s ease;
+}
+
+.code-container:focus-within {
+  outline: 2px solid var(--color-primary-50);
+  outline-offset: 2px;
+}
+
+.code-controls {
+  display: flex;
+  gap: 0.55rem;
+  margin-bottom: 0.9rem;
+  user-select: none;
+}
+
+.code-controls span {
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+}
+
+.code-controls .red {
+  background-color: #D94B4B;
+}
+
+.code-controls .yellow {
+  background-color: #E2C44A;
+}
+
+.code-controls .green {
+  background-color: #54B358;
+}
+
+/* Tokens destacados jerarquizados acorde a tu paleta */
+
+.token.keyword {
+  color: var(--color-primary-50);
+  font-weight: 700;
+  font-size: 0.93rem;
+}
+
+.token.function-name {
+  color: var(--color-primary-40);
+  font-weight: 600;
+  font-size: 0.93rem;
+}
+
+.token.import {
+  color: var(--color-primary-60);
+  font-weight: 700;
+  font-size: 0.93rem;
+}
+
+.token.classname {
+  color: var(--color-primary-30);
+  font-weight: 600;
+  font-size: 0.93rem;
+}
+
+.token.string {
+  color: var(--color-neutral-30);
+  font-style: normal;
+  font-size: 0.93rem;
+}
+
+.token.number {
+  color: var(--color-neutral-40);
+  font-size: 0.93rem;
+}
+
+.token.comment {
+  color: var(--color-neutral-40);
+  font-style: italic;
+  font-size: 0.88rem;
+}
+
+.token.operator {
+  color: var(--color-neutral-20);
+  font-size: 0.93rem;
+}
+
+.token.variable {
+  color: var(--color-neutral-10);
+  font-size: 0.93rem;
+}
+
+.token.boolean,
+.token.null {
+  color: var(--color-neutral-30);
+  font-weight: 600;
+  font-size: 0.93rem;
+}
+
+.token.backend-call {
+  color: var(--color-primary-40);
+  font-weight: 700;
+  text-decoration: underline;
+  cursor: help;
+  font-size: 0.93rem;
+}
+
+/* Scrollbar minimalista */
+
+.code-container::-webkit-scrollbar {
+  height: 6px;
+}
+
+.code-container::-webkit-scrollbar-track {
+  background: var(--color-neutral-70);
+  border-radius: 3px;
+}
+
+.code-container::-webkit-scrollbar-thumb {
+  background-color: var(--color-primary-50);
+  border-radius: 3px;
+}
+
+pre {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-size: 0.93rem;
+}

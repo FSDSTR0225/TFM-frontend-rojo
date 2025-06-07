@@ -1,35 +1,25 @@
-import React from "react";
 import { CiEdit } from "react-icons/ci";
-import { GrFormView } from "react-icons/gr";
-import { MdOutlineDeleteSweep } from "react-icons/md";
-import { TiThMenuOutline } from "react-icons/ti";
-import { Link } from "react-router";
-import { ModalDelete } from "./ModalDelete";
 
-export const MenuCard = ({ onClick, id, openModal, isOpen }) => {
+import { MdOutlineDeleteSweep } from "react-icons/md";
+import { PiDotsThreeBold } from "react-icons/pi";
+
+export const MenuCard = ({ onClick, openModal, handleOnModalEdit }) => {
+
   return (
     <details
       onClick={onClick}
-      className='dropdown self-end'
+      className='dropdown self-center'
     >
-      <summary className='btn btn-outline btn-square text-lg btn-sm bg-secondary-40 text-neutral-90  hover:bg-neutral-60 hover:text-neutral-0'>
-        <TiThMenuOutline />
+      <summary className='btn h-4 btn-outline rounded-full btn-square btn-sm bg-neutral-70 text-secondary-40  hover:bg-transparent hover:text-neutral-0 hover:border-neutral-0 '>
+        <PiDotsThreeBold className="text-3xl font-black p-0 " />
       </summary>
       <ul className='menu p-0 dropdown-content rounded-box z-1 w-25 shadow-xl text-sm bg-secondary-40 text-neutral-90 left-[-200%]'>
+        
         <li
-          onClick={onClick}
-          className=' rounded-t-box hover:bg-neutral-60 hover:text-neutral-0'
-        >
-          <Link to={`/offers/${id}`}>
-            <GrFormView className='text-md' />
-            View
-          </Link>
-        </li>
-        <li
-          onClick={onClick}
+          onClick={handleOnModalEdit}
           className=' hover:bg-neutral-60 hover:text-neutral-0'
         >
-          <button>
+          <button >
             <CiEdit />
             Edit
           </button>
@@ -38,7 +28,7 @@ export const MenuCard = ({ onClick, id, openModal, isOpen }) => {
           onClick={openModal}
           className=' rounded-b-box hover:bg-red-600 hover:text-neutral-0 '
         ><div><MdOutlineDeleteSweep />
-          Delete</div>
+            Delete</div>
         </li>
       </ul>
     </details>
