@@ -13,6 +13,12 @@ const navigate = useNavigate();
   const isOwner = offer.owner?._id === profile?._id;
   const isRecruiter = profile?.role.type === "recruiter";
   
+ const hasApplied = Array.isArray(offer?.applicants) && profile?._id
+  ? offer.applicants.some(applicant => applicant.user && applicant.user._id === profile._id)
+  : false;
+
+    const canApply = !hasApplied && !isRecruiter;
+
 const handleDashboard = () => {
    navigate(`/private-rec/dashboard/${offer._id}`);
 }
@@ -48,9 +54,18 @@ const handleDashboard = () => {
                   <p>Salary: {offer.salary}</p>
                 </>
               )}
-              {!isRecruiter && <MainRecButton classProps='w-25 self-end' onClick={handleApply}> 
-                Apply Now
-              </MainRecButton>}
+             {canApply ? (
+  <MainRecButton classProps='w-25 self-end' onClick={handleApply}>
+    Apply Now
+  </MainRecButton>
+) : (
+  !isRecruiter && (
+    <MainRecButton classProps='w-25 self-end opacity-50 cursor-not-allowed' disabled >
+      Already applied
+    </MainRecButton>
+  )
+)}
+
               {isOwner && <MainRecButton classProps='w-30 self-end' onClick={handleDashboard} > 
                 Dashboar offer
               </MainRecButton>}

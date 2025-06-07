@@ -24,7 +24,6 @@ const { id } = useParams();
 
 const isOwnerRecruiter = offer?.owner?._id === profile?._id && profile?.role.type === 'recruiter'; 
 
-
 const fetchOffer = async () => {
       try {
       const offerData = await getOffersById(id);
@@ -56,6 +55,8 @@ const fetchOffer = async () => {
         console.log(error.message || "Error al aplicar a la oferta");
       }
     };
+
+    
 
   if (isLoading) {
     return (
