@@ -1,4 +1,5 @@
 import React from "react";
+import { PiCaretDoubleLeft, PiCaretDoubleRight, PiCaretLeft, PiCaretRight } from "react-icons/pi";
 
 export const Pagination = ({ currentPage, totalPages, handlePageChange, filteredProjects }) => {
   return (
@@ -18,14 +19,17 @@ export const Pagination = ({ currentPage, totalPages, handlePageChange, filtered
               <button
                 className="join-item btn bg-[#171717] text-white border-none hover:bg-[#111]"
                 onClick={() => handlePageChange(1)}
+                aria-label="First page"
               >
-                ⇤
+                <PiCaretDoubleLeft />
               </button>
+
               <button
                 className="join-item btn bg-[#171717] text-white border-none hover:bg-[#111]"
                 onClick={() => handlePageChange(currentPage - 1)}
+                aria-label="Previous page"
               >
-                «
+                <PiCaretLeft />
               </button>
             </>
           )}
@@ -42,14 +46,17 @@ export const Pagination = ({ currentPage, totalPages, handlePageChange, filtered
               <button
                 className="join-item btn bg-[#171717] text-white border-none hover:bg-[#111]"
                 onClick={() => handlePageChange(currentPage + 1)}
+                aria-label="Next page"
               >
-                »
+                <PiCaretRight />
               </button>
+
               <button
                 className="join-item btn bg-[#171717] text-white border-none hover:bg-[#111]"
                 onClick={() => handlePageChange(totalPages)}
+                aria-label="Last page"
               >
-                ⇥
+                <PiCaretDoubleRight />
               </button>
             </>
           )}
