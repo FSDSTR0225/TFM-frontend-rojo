@@ -64,7 +64,7 @@ export const UserComponent = ({ onValidChange, data, onDataChange }) => {
             </label>
             <input
               id="phone"
-              placeholder="+12 34567890"
+              placeholder="+34 600600600"
               className={inputClasses}
               value={data.phone || ""}
               onChange={handlePhoneChange}

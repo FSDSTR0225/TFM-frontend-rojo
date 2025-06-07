@@ -1,78 +1,169 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 const inputClasses = "w-full px-3 py-2 text-sm bg-neutral-90 text-neutral-0 border border-neutral-60 rounded placeholder-neutral-40 placeholder:italic";
 const labelClasses = "text-base text-neutral-20 mb-1";
+const errorClasses = "text-xs text-red-500 mt-1";
 
 export const RecruiterComponent = ({ data, onDataChange, onValidChange }) => {
-  const role = 'recruiter'; // fijo para este componente
+  const [errors, setErrors] = useState({});
+  const [touched, setTouched] = useState({});
 
-  const handleChange = (e) => {
-    const { id, value } = e.target;
-    onDataChange({ ...data, [role]: { ...data[role], [id]: value } });
+  const validateField = (id, value) => {
+    switch (id) {
+      case "contactEmail":
+        return value && (!value.includes("@") || !value.includes(".")) ? "Invalid email format" : "";
+      case "website":
+        return value.trim() === "" ? "Website is required" : "";
+      case "companyName":
+      case "companyLocation":
+      case "sector":
+        return value.trim() === "" ? "This field is required" : "";
+      case "contactPhone":
+        return value.trim().length < 8 ? "Invalid phone number" : "";
+      default:
+        return "";
+    }
+  };
+
+  const validateAll = () => {
+    const newErrors = {};
+    const fields = ["companyName", "companyLocation", "contactEmail", "contactPhone", "sector", "website"];
+
+    fields.forEach((field) => {
+      const value = data?.[field] || "";
+      const error = validateField(field, value);
+      if (error) newErrors[field] = error;
+    });
+
+    setErrors(newErrors);
+    onValidChange?.(Object.keys(newErrors).length === 0);
   };
 
   useEffect(() => {
-    const fields = data[role] || {};
-    const allFilled = Object.values(fields).every(val => val.trim?.() !== "");
-    onValidChange?.(allFilled);
-  }, [data, onValidChange]);
+    validateAll();
+  }, [data]);
 
-  const get = (id) => data?.[role]?.[id] || "";
+  const handlePhoneChange = (e) => {
+    let value = e.target.value.replace(/[^\d+ ]/g, "");
+    if (!value.startsWith("+")) {
+      value = "+" + value.replace(/\+/g, "");
+    }
+    if (value.length > 3) {
+      const prefix = value.slice(0, 3);
+      let rest = value.slice(3).replace(/\s+/g, "");
+      value = prefix + " " + rest;
+    }
+    setTouched((prev) => ({ ...prev, contactPhone: true }));
+    onDataChange({ ...data, contactPhone: value });
+  };
+
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setTouched((prev) => ({ ...prev, [id]: true }));
+    onDataChange({ ...data, [id]: value });
+  };
+
+  const get = (id) => data?.[id] || "";
 
   return (
-    <div className="h-full w-full flex items-start justify-center px-4 max-h-[430px] overflow-y-auto m-4 md:mt-10">
-      <div className="w-full max-w-2xl space-y-4">
-        <div className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="grid">
-              <label htmlFor="companyName" className={labelClasses}>Name</label>
-              <input id="companyName" placeholder="Your Company" className={inputClasses} value={get("companyName")} onChange={handleChange} />
-            </div>
-            <div className="grid">
-              <label htmlFor="companyLocation" className={labelClasses}>Location</label>
-              <input id="companyLocation" placeholder="City, Country" className={inputClasses} value={get("companyLocation")} onChange={handleChange} />
-            </div>
-          </div>
+  <div className="flex justify-center items-start md:items-center w-full h-full px-4 max-h-[430px] overflow-y-auto m-4">
+    <div className="w-full max-w-2xl space-y-6">
+      {/* Grupo 1 */}
+      <div className="flex flex-col md:flex-row md:space-x-4">
+        <div className="flex flex-col flex-1">
+          <label htmlFor="companyName" className={labelClasses}>Name</label>
+          <input
+            id="companyName"
+            placeholder="Your Company"
+            className={inputClasses}
+            value={get("companyName")}
+            onChange={handleChange}
+          />
+          {touched.companyName && errors.companyName && (
+            <p className={errorClasses}>{errors.companyName}</p>
+          )}
+        </div>
+        <div className="flex flex-col flex-1 mt-4 md:mt-0">
+          <label htmlFor="companyLocation" className={labelClasses}>Location</label>
+          <input
+            id="companyLocation"
+            placeholder="City, Country"
+            className={inputClasses}
+            value={get("companyLocation")}
+            onChange={handleChange}
+          />
+          {touched.companyLocation && errors.companyLocation && (
+            <p className={errorClasses}>{errors.companyLocation}</p>
+          )}
+        </div>
+      </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="grid">
-              <label htmlFor="contactEmail" className={labelClasses}>Email</label>
-              <input id="contactEmail" placeholder="contact@example.com" className={inputClasses} value={get("contactEmail")} onChange={handleChange} />
-            </div>
-            <div className="grid">
-              <label htmlFor="contactPhone" className={labelClasses}>Phone</label>
-              <input id="contactPhone" placeholder="+1234567890" className={inputClasses} value={get("contactPhone")} onChange={handleChange} />
-            </div>
-          </div>
+      {/* Grupo 2 */}
+      <div className="flex flex-col md:flex-row md:space-x-4">
+        <div className="flex flex-col flex-1">
+          <label htmlFor="contactEmail" className={labelClasses}>Email</label>
+          <input
+            id="contactEmail"
+            placeholder="contact@example.com"
+            className={inputClasses}
+            value={get("contactEmail")}
+            onChange={handleChange}
+          />
+          {touched.contactEmail && errors.contactEmail && (
+            <p className={errorClasses}>{errors.contactEmail}</p>
+          )}
+        </div>
+        <div className="flex flex-col flex-1 mt-4 md:mt-0">
+          <label htmlFor="contactPhone" className={labelClasses}>Phone</label>
+          <input
+            id="contactPhone"
+            placeholder="+34 600600600"
+            className={inputClasses}
+            value={get("contactPhone")}
+            onChange={handlePhoneChange}
+          />
+          {touched.contactPhone && errors.contactPhone && (
+            <p className={errorClasses}>{errors.contactPhone}</p>
+          )}
+        </div>
+      </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="grid">
-              <label htmlFor="sector" className={labelClasses}>Sector</label>
-              <input id="sector" placeholder="Tech, Marketing..." className={inputClasses} value={get("sector")} onChange={handleChange} />
-            </div>
-            <div className="grid">
-              <label htmlFor="website" className={labelClasses}>Website</label>
-              <input id="website" placeholder="https://..." className={inputClasses} value={get("website")} onChange={handleChange} />
-            </div>
-          </div>
-
-          <div className="grid">
-            <label htmlFor="companyDescription" className={labelClasses}>About the company</label>
-            <textarea
-              id="companyDescription"
-              placeholder="Company details..."
-              className={inputClasses + " resize-none"}
-              style={{ height: "10vh" }}
-              value={get("companyDescription")}
+      {/* Grupo 3 */}
+      <div className="flex flex-col md:flex-row md:space-x-4">
+        <div className="flex flex-col flex-1">
+          <label htmlFor="sector" className={labelClasses}>Sector</label>
+          <input
+            id="sector"
+            placeholder="Tech, Marketing..."
+            className={inputClasses}
+            value={get("sector")}
+            onChange={handleChange}
+          />
+          {touched.sector && errors.sector && (
+            <p className={errorClasses}>{errors.sector}</p>
+          )}
+        </div>
+        <div className="flex flex-col flex-1 mt-4 md:mt-0">
+          <label htmlFor="website" className={labelClasses}>Website</label>
+          <div className="flex">
+            <span className="bg-neutral-70 text-neutral-30 text-sm px-2 py-2 rounded-l border border-r-0 border-neutral-60">
+              https://
+            </span>
+            <input
+              id="website"
+              className={inputClasses + " rounded-l-none"}
+              placeholder="yourcompany.com"
+              value={get("website")}
               onChange={handleChange}
-              maxLength={500}
             />
-            <p className="text-xs text-neutral-40 text-right">
-              {get("companyDescription")?.length || 0} / 250
-            </p>
           </div>
+          {touched.website && errors.website && (
+            <p className={errorClasses}>{errors.website}</p>
+          )}
         </div>
       </div>
     </div>
-  );
+  </div>
+);
+
 };

@@ -13,7 +13,7 @@ export const UserComponent2 = ({ onValidChange, data, onDataChange, role }) => {
   const handleFile = (file) => {
     if (file && file.type.startsWith("image/")) {
       if (file.size > MAX_FILE_SIZE) {
-        setError("La imagen no puede pesar más de 5MB.");
+        setError("The image must be smaller than 5MB.");
         onDataChange({ ...data, imageFile: null });
         onValidChange?.(false);
         return;
@@ -22,7 +22,7 @@ export const UserComponent2 = ({ onValidChange, data, onDataChange, role }) => {
       onDataChange({ ...data, imageFile: file });
       onValidChange?.(true);
     } else {
-      setError("Archivo no válido. Solo imágenes.");
+      setError("Invalid file. Only images are allowed.");
       onDataChange({ ...data, imageFile: null });
       onValidChange?.(false);
     }
@@ -87,14 +87,15 @@ export const UserComponent2 = ({ onValidChange, data, onDataChange, role }) => {
               <span>Drag and drop an image here, or click to select</span>
             </div>
           )}
+          {error && <p className="mt-2 text-sm text-red-600 text-center">{error}</p>}
+            {imageFile && !error && (
+            <p className="mt-2 text-sm text-neutral-40 text-center truncate" title={imageFile.name}>
+                {truncateFileName(imageFile.name)}
+            </p>
+            )}
         </div>
 
-        {error && <p className="mt-2 text-sm text-red-600 text-center">{error}</p>}
-        {imageFile && !error && (
-          <p className="mt-2 text-sm text-neutral-80 text-center truncate" title={imageFile.name}>
-            {truncateFileName(imageFile.name)}
-          </p>
-        )}
+
 
         <input type="file" accept="image/*" className="hidden" ref={fileInputRef} onChange={handleFileChange} />
       </div>

@@ -1,6 +1,5 @@
 // Conservamos tu estructura original con tu animación y componentes
 import React, { useState, useEffect } from "react";
-import { defineStepper } from "@stepperize/react";
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router';
 import { StartingComponent } from '../Onboarding/StartingStepper';

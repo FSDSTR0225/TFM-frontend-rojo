@@ -14,12 +14,20 @@ export const Pagination = ({ currentPage, totalPages, handlePageChange, filtered
         <div className="join flex justify-center mt-4">
 
           {currentPage > 1 && (
-            <button
-              className="join-item btn bg-[#171717] text-white border-none hover:bg-[#111]"
-              onClick={() => handlePageChange(currentPage - 1)}
-            >
-              «
-            </button>
+            <>
+              <button
+                className="join-item btn bg-[#171717] text-white border-none hover:bg-[#111]"
+                onClick={() => handlePageChange(1)}
+              >
+                ⇤
+              </button>
+              <button
+                className="join-item btn bg-[#171717] text-white border-none hover:bg-[#111]"
+                onClick={() => handlePageChange(currentPage - 1)}
+              >
+                «
+              </button>
+            </>
           )}
 
           <button
@@ -30,16 +38,23 @@ export const Pagination = ({ currentPage, totalPages, handlePageChange, filtered
           </button>
 
           {currentPage < totalPages && (
-            <button
-              className="join-item btn bg-[#171717] text-white border-none hover:bg-[#111]"
-              onClick={() => handlePageChange(currentPage + 1)}
-            >
-              »
-            </button>
+            <>
+              <button
+                className="join-item btn bg-[#171717] text-white border-none hover:bg-[#111]"
+                onClick={() => handlePageChange(currentPage + 1)}
+              >
+                »
+              </button>
+              <button
+                className="join-item btn bg-[#171717] text-white border-none hover:bg-[#111]"
+                onClick={() => handlePageChange(totalPages)}
+              >
+                ⇥
+              </button>
+            </>
           )}
         </div>
       )}
     </div>
   );
 };
-

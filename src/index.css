@@ -59,6 +59,14 @@
   color: transparent;
 }
 
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #171717 inset !important; /* cambia bg al tuyo */
+  -webkit-text-fill-color: #ffffff !important; /* cambia el color del texto */
+  caret-color: #ffffff !important; /* caret color */
+}
 
 
 
