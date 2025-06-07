@@ -3,7 +3,7 @@ import { useParams } from "react-router";
 import { getProjectById } from "../../../services/projectService";
 import { ProjectInfoCard } from "../components/ProjectInfoCard";
 import { GitHubFileTree } from "../components/GitHubFileTree";
-import { GitHubLanguagesTag } from "../components/GitHubLanguagesTag"; // <-- Importa aquí
+import { GitHubLanguagesTag } from "../components/GitHubLanguagesTag";
 import { CodeBlock } from "../../../styles/ReactParser";
 import { LikeButtonRounded } from "../../../components/LikeButtonRounded";
 
@@ -17,7 +17,6 @@ function useWindowWidth() {
   return width;
 }
 
-// Función para validar y parsear la URL del repo GitHub
 function parseRepoUrl(repoUrl) {
   try {
     const url = new URL(repoUrl);
@@ -36,6 +35,9 @@ export const ProjectDetailsPage = () => {
   const width = useWindowWidth();
   const isDesktop = width >= 1200;
 
+  // Supongo que tienes el token almacenado (localStorage o context)
+  const token = localStorage.getItem("token") || "";
+
   useEffect(() => {
     const fetchProject = async () => {
       const data = await getProjectById(id);
@@ -46,6 +48,16 @@ export const ProjectDetailsPage = () => {
     };
     fetchProject();
   }, [id]);
+
+  // Esta función actualiza el proyecto con la data que devuelve toggleProjectLike
+const handleLike = (likeData) => {
+  console.log("handleLike data:", likeData);
+  setProject((prevProject) => ({
+    ...prevProject,
+    liked: likeData.liked,
+    likes: likeData.likes,  // <-- aquí estaba el error
+  }));
+};
 
   if (!project) return null;
 
@@ -60,7 +72,6 @@ export const ProjectDetailsPage = () => {
     setCurrentIndex((prev) => (prev + 1) % length);
   };
 
-  // Orden para móvil
   const mobileOrder = [
     "Gallery",
     "ProjectInfoCard",
@@ -70,14 +81,12 @@ export const ProjectDetailsPage = () => {
     "LikeButton",
   ];
 
-  // Validación URL GitHub para mostrar o no componentes GitHub
   const githubRepoInfo = project.githubProjectLink
     ? parseRepoUrl(project.githubProjectLink)
     : null;
 
   return (
     <div className="w-full flex flex-col items-center gap-6">
-      {/* Cabecera */}
       <div className="relative w-full h-[256px] overflow-hidden">
         {gallery[0] && (
           <img
@@ -93,15 +102,12 @@ export const ProjectDetailsPage = () => {
           {project.title}
         </h1>
 
-        {/* Desktop: dos columnas independientes */}
         {isDesktop ? (
           <div
             className="grid grid-cols-[5fr_2fr] gap-4"
             style={{ alignItems: "start" }}
           >
-            {/* Columna Izquierda */}
             <div className="flex flex-col gap-6">
-              {/* Galería */}
               <div className="relative w-full aspect-video rounded-lg overflow-hidden">
                 <div className="relative w-full h-full">
                   {gallery.map((url, index) => (
@@ -129,7 +135,6 @@ export const ProjectDetailsPage = () => {
                 </div>
               </div>
 
-              {/* Description */}
               {project.description && (
                 <div className="relative bg-neutral-80 flex flex-col rounded-lg shadow-md overflow-hidden border border-neutral-70 p-6 text-inherit no-underline w-full">
                   <h2 className="text-white text-2xl font-semibold mb-4">
@@ -141,7 +146,6 @@ export const ProjectDetailsPage = () => {
                 </div>
               )}
 
-              {/* Code Sections */}
               {project.codeSections && project.codeSections.length > 0 && (
                 <section className="relative bg-neutral-80 flex flex-col rounded-lg shadow-md overflow-hidden border border-neutral-70 p-6 text-inherit no-underline w-full">
                   <h2 className="text-white text-2xl font-semibold mb-6">
@@ -154,31 +158,36 @@ export const ProjectDetailsPage = () => {
               )}
             </div>
 
-            {/* Columna Derecha */}
             <div className="flex flex-col">
               <ProjectInfoCard project={project} />
 
               <div className="flex justify-center items-center rounded-full p-6">
-                <LikeButtonRounded />
+                {/* Pasamos projectId, liked inicial, token y función onLike */}
+                <LikeButtonRounded
+                  projectId={project._id}
+                  initialLiked={project.liked}
+                  token={token}
+                  onLike={handleLike}
+                />
               </div>
 
-              {/* Mostrar GitHub solo si URL válida */}
               {githubRepoInfo && (
                 <>
                   <h1 className="text-white text-2xl font-semibold p-4">GitHub</h1>
                   <div key="githubFileTree" className="-mt-6">
                     <GitHubFileTree repoUrl={project.githubProjectLink} />
                   </div>
-                  <div key="githubLanguages" className="relative bg-neutral-80 flex flex-col rounded-lg shadow-md overflow-hidden border border-neutral-70 p-6 text-inherit no-underline w-full-mt-6">
+                  <div
+                    key="githubLanguages"
+                    className="relative bg-neutral-80 flex flex-col rounded-lg shadow-md overflow-hidden border border-neutral-70 p-6 text-inherit no-underline w-full-mt-6"
+                  >
                     <GitHubLanguagesTag repoUrl={project.githubProjectLink} />
                   </div>
-                  
                 </>
               )}
             </div>
           </div>
         ) : (
-          // Móvil: UNA sola columna con las secciones en el orden que defines
           <div className="flex flex-col gap-6">
             {mobileOrder.map((section) => {
               switch (section) {
@@ -262,7 +271,12 @@ export const ProjectDetailsPage = () => {
                       key="likeButton"
                       className="flex justify-center items-center rounded-full"
                     >
-                      <LikeButtonRounded />
+                      <LikeButtonRounded
+                        projectId={project._id}
+                        initialLiked={project.liked}
+                        token={token}
+                        onLike={handleLike}
+                      />
                     </div>
                   );
 

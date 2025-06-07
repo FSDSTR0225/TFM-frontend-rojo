@@ -1,24 +1,44 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { PiHeartStraight, PiHeartStraightFill } from "react-icons/pi";
+import { toggleProjectLike } from "../services/projectService";
 import "../animations/LikeButtonRounded.css";
 
-export function LikeButtonRounded() {
-  const [liked, setLiked] = useState(false);
+export function LikeButtonRounded({ projectId, initialLiked, token, onLike }) {
+  const [liked, setLiked] = useState(initialLiked);
   const [animating, setAnimating] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleClick = () => {
-    if (animating) return;
+  useEffect(() => {
+    setLiked(initialLiked);
+  }, [initialLiked]);
+
+  const handleClick = async () => {
+    if (animating || loading) return;
     setAnimating(true);
-    setLiked(!liked);
-    // Animación dura 600ms (encogimiento + rebote + partículas)
-    setTimeout(() => setAnimating(false), 600);
+    setLoading(true);
+
+    try {
+      // toggleProjectLike retorna { liked, likesCount, ... }
+      const data = await toggleProjectLike(projectId, token);
+
+      setLiked(data.liked);
+
+      // Avisamos al padre que actualice el proyecto completo
+      if (onLike) {
+        onLike(data);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setAnimating(false);
+      setLoading(false);
+    }
   };
 
   return (
     <button
       onClick={handleClick}
-      className={`like-button rounded-full flex items-center justify-center relative
-        ${liked ? "liked" : ""} ${animating ? "animating" : ""}`}
+      className={`like-button rounded-full flex items-center justify-center relative ${liked ? "liked" : ""} ${animating ? "animating" : ""}`}
       aria-label={liked ? "Unlike project" : "Like project"}
       type="button"
     >
@@ -28,7 +48,6 @@ export function LikeButtonRounded() {
         <PiHeartStraight size={32} weight="regular" className="icon" />
       )}
 
-      {/* Partículas que salen alrededor cuando animating */}
       {animating && liked && (
         <div className="particles">
           {[...Array(8)].map((_, i) => (

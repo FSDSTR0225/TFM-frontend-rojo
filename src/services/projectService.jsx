@@ -113,3 +113,28 @@ export const updateProject = async (id, data, token) => {
     return { error: true, message: error.message };
   }
 };
+
+
+export const toggleProjectLike = async (projectId, token) => {
+  try {
+    const resp = await fetch(`${urlBackEnd}/projects/${projectId}/like`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!resp.ok) {
+      const err = await resp.json();
+      throw new Error(err.message || 'Failed to toggle like');
+    }
+
+    const data = await resp.json();
+    // data debería tener liked, likesCount o incluso el proyecto completo actualizado
+    return data;
+  } catch (error) {
+    console.error('Failed to toggle like:', error);
+    throw error;
+  }
+};
