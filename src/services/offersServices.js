@@ -208,3 +208,23 @@ export const updateCandidateStatus = async (offerId, candidateId, status, token)
         throw error;
     }
 }
+
+export const getOffersAppliedByDev = async (devId, token) => {
+  try {
+    const response = await fetch(`${API_URL}/applied/${devId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${token}`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error("Error al obtener las ofertas aplicadas");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("OffersService Error:", error);
+    throw error;
+  }
+};

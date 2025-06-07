@@ -1,16 +1,20 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { NewProjectModal } from '../components/NewProjectModal';
-import { PiPlus, PiArrowSquareOut, PiGithubLogo, PiEye } from 'react-icons/pi';
+import DotsComponent from './DotsComponent';
+import { EditProjectModal } from '../components/EditProjectModal';
+import { PiPlusBold, PiArrowSquareOut, PiGithubLogo, PiEye } from 'react-icons/pi';
 import { Link } from 'react-router';
 import { AuthContext } from '../../../context/authContext';
-import { createProject, getProjectsByDeveloper } from '../../../services/projectService';
+import { createProject, getProjectsByDeveloper, softDeleteProject, updateProject  } from '../../../services/projectService';
 
 function OwnProjectCard({ profileInfo }) {
   const { token, profile: currentUserProfile } = useContext(AuthContext);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isNewModalOpen, setIsNewModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [projectToEdit, setProjectToEdit] = useState(null);
 
   const isCurrentUserProfile = profileInfo?._id === currentUserProfile?._id;
   const developerId = profileInfo?._id;
@@ -40,10 +44,28 @@ function OwnProjectCard({ profileInfo }) {
       .finally(() => setLoading(false));
   }, [developerId, token]);
 
-  const handleOpenModal = () => setIsModalOpen(true);
-  const handleCloseModal = () => setIsModalOpen(false);
+  const handleOpenNewModal = () => setIsNewModalOpen(true);
+  const handleCloseNewModal = () => setIsNewModalOpen(false);
 
-  const handleSubmitProject = async (data) => {
+  const handleOpenEditModal = (project) => {
+    setProjectToEdit(project);
+    setIsEditModalOpen(true);
+  };
+  const handleCloseEditModal = () => {
+    setProjectToEdit(null);
+    setIsEditModalOpen(false);
+  };
+
+  const handleDelete = async (id) => {
+  if (!confirm("¿Seguro que quieres eliminar este proyecto?")) return;
+
+  const res = await softDeleteProject(id, token);
+  if (!res.error) {
+    setProjects(prev => prev.filter(e => e._id !== id));
+  }
+  };
+
+  const handleSubmitNewProject = async (data) => {
     setLoading(true);
     try {
       const result = await createProject(data, token);
@@ -51,7 +73,7 @@ function OwnProjectCard({ profileInfo }) {
         setError(result.message);
       } else {
         setProjects(prev => [...prev, result.project || result]);
-        handleCloseModal();
+        handleCloseNewModal();
       }
     } catch {
       setError('Error al crear el proyecto');
@@ -60,56 +82,95 @@ function OwnProjectCard({ profileInfo }) {
     }
   };
 
+  const handleSubmitEditProject = async (data) => {
+    setLoading(true);
+    try {
+      const result = await updateProject(projectToEdit._id, data, token);
+      if (result.error) {
+        setError(result.message);
+      } else {
+        setProjects(prev => prev.map(p => p._id === projectToEdit._id ? result.updatedProject : p));
+        handleCloseEditModal();
+      }
+    } catch {
+      setError('Error al actualizar el proyecto');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   if (loading) return <div className="flex justify-center p-8"><span className="loading loading-spinner loading-lg" /></div>;
   if (error) return <div className="alert alert-error">{error}</div>;
 
-  return (
+  const sortedProjects = [...projects].sort((a, b) => {
+  const yearA = Number(a.year) || 0;
+  const yearB = Number(b.year) || 0;
+  return yearB - yearA;
+});
+
+   return (
     <div>
       {isCurrentUserProfile && (
         <div className="flex justify-end mb-2">
           <button
-            onClick={handleOpenModal}
+            onClick={handleOpenNewModal}
             className="btn bg-primary-60 hover:bg-primary-70 rounded-md shadow hover:shadow-lg text-sm flex items-center gap-2"
           >
-            <PiPlus className="text-xl" /> Create project
+            <PiPlusBold className="text-xl" /> Create project
           </button>
         </div>
       )}
 
-      {isModalOpen && (
-        <NewProjectModal onSubmitProject={handleSubmitProject} onClose={handleCloseModal} />
+      {isNewModalOpen && (
+        <NewProjectModal onSubmitProject={handleSubmitNewProject} onClose={handleCloseNewModal} />
       )}
 
-      {projects.length === 0 ? (
+      {isEditModalOpen && projectToEdit && (
+        <EditProjectModal project={projectToEdit} onSubmitProject={handleSubmitEditProject} onClose={handleCloseEditModal} />
+      )}
+
+      {sortedProjects.length === 0 ? (
         <div className="text-center py-8">
-          <p className="text-lg text-neutral-40">No hay proyectos disponibles</p>
+          <p className="text-lg bg-neutral-80">No hay proyectos disponibles</p>
           {isCurrentUserProfile && <p className="mt-2">Añade tu primer proyecto</p>}
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-6">
-          {projects.map(project => (
-            <div key={project._id} className="card lg:card-side bg-base-100 shadow-sm">
-              <figure>
+          {sortedProjects.map(project => (
+            <div key={project._id + Math.random()} className="relative card lg:card-side bg-neutral-80 border border-neutral-60 shadow-sm h-68 md:h-76 flex flex-col lg:flex-row">
+              <figure className="flex-shrink-0 w-full lg:w-80 h-40 lg:h-full overflow-hidden">
                 {project.gallery?.length > 0
-                  ? <img src={project.gallery[0]} alt={project.title} className="h-48 w-full object-cover" />
-                  : <div className="bg-neutral-90 h-48 w-64 flex items-center justify-center text-neutral-40">Sin imagen</div>
+                  ? <img src={project.gallery[0]} alt={project.title} className="object-cover w-full h-full" />
+                  : <div className="bg-neutral-90 h-48 w-full flex items-center justify-center text-neutral-40">
+                      {project.title}
+                    </div>
                 }
               </figure>
-              <div className="card-body">
+              <div className="card-body flex flex-col flex-grow overflow-hidden">
                 <div className="grid grid-cols-2">
-                  <h2 className="card-title">{project.title}</h2>
-                  <span className="justify-self-end bg-primary-60 text-neutral-90 rounded-md px-2 py-0.5">
-                    {project.category || 'Proyecto'}
-                  </span>
+                  <h2 className="card-title truncate">{project.title}</h2>
+                  {isCurrentUserProfile && (
+                    <div className="justify-self-end top-4 right-4 flex gap-2">
+                      <DotsComponent
+                        onEdit={() => handleOpenEditModal(project)}
+                        onDelete={() => handleDelete(project._id)}
+                      />
+                    </div>
+                  )}
                 </div>
-                <p className="mt-2">{project.description || 'Sin descripción'}</p>
+                <span className="bg-primary-60/20 text-primary-50 rounded-md px-2 py-0.5 w-fit h-fit truncate">
+                  {project.category || 'No se especifica el tipo de proyecto'}
+                </span>
+                <p className="mt-2 text-sm overflow-hidden line-clamp-3">
+                  {project.description || 'Sin descripción'}
+                </p>
                 <p>{project.year || ''}</p>
                 <div className="flex flex-wrap gap-2 mt-4">
                   {project.projectSkills?.map((s, i) => (
-                    <span key={i} className="bg-primary-60 rounded-md px-2 py-0.5 text-sm">{s}</span>
+                    <span key={i} className="bg-primary-70 text-neutral-0 rounded-full px-2 py-0.5 text-sm truncate">{s}</span>
                   ))}
                 </div>
-                <div className="card-actions justify-end mt-4">
+                <div className="card-actions justify-end pt-8 ">
                   {project.githubProjectLink && (
                     <a href={project.githubProjectLink} target="_blank" rel="noreferrer" className="btn bg-neutral-90 hover:bg-neutral-60 border border-neutral-60 rounded-md flex items-center gap-1">
                       <PiGithubLogo className="text-xl" /> Github
@@ -134,4 +195,3 @@ function OwnProjectCard({ profileInfo }) {
 }
 
 export default OwnProjectCard;
-
