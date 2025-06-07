@@ -1,10 +1,10 @@
-import React from "react";
+
 import { useEffect } from "react";
 import { useState } from "react";
-import {useParams } from "react-router";
+import {useNavigate, useParams } from "react-router";
 import { SectionContainer } from "../../../components/SectionContainer";
 import { OfferInfo } from "../components/OfferInfo";
-import { getOffersById } from "../../../services/offersServices";
+import { applyToOffer, getOffersById } from "../../../services/offersServices";
 import { RecContactCard } from "../components/RecContactCard";
 import { OfferModal } from "../components/OfferModal";
 import { useContext } from "react";
@@ -13,18 +13,20 @@ import { AuthContext } from "../../../context/authContext";
 
 export const OfferInfoPage = () => {
   const [offer, setOffer] = useState(null);
+  
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 const [isOpenModalEdit, setIsOpenModalEdit] = useState(false);
-const { profile } = useContext(AuthContext);
+const { profile, token } = useContext(AuthContext);
+const navigate = useNavigate();
   
 const { id } = useParams();
 
 const isOwnerRecruiter = offer?.owner?._id === profile?._id && profile?.role.type === 'recruiter'; 
 
-  const fetchOffer = async () => {
+const fetchOffer = async () => {
       try {
-        const offerData = await getOffersById(id);
+      const offerData = await getOffersById(id);
         setOffer(offerData);
       } catch (error) {
         setError(error.message);
@@ -32,11 +34,29 @@ const isOwnerRecruiter = offer?.owner?._id === profile?._id && profile?.role.typ
         setIsLoading(false)
       }
     };
-
+  
   useEffect(() => {
     
     fetchOffer();
   }, [id]);
+
+  const handleApply = async (e) => {
+      e.stopPropagation();
+      if (!token) {
+        console.log("por aqui no pasaras");
+        navigate("/login");
+      }
+  
+      try {
+        const response = await applyToOffer(offer._id, token);
+        console.log(response.msg || "se envio");
+        // onApplySuccess?.(response.offer);
+      } catch (error) {
+        console.log(error.message || "Error al aplicar a la oferta");
+      }
+    };
+
+    
 
   if (isLoading) {
     return (
@@ -60,7 +80,9 @@ const isOwnerRecruiter = offer?.owner?._id === profile?._id && profile?.role.typ
     <OfferInfo offer={offer}
     isOpen={isOpenModalEdit}
     setIsOpen={setIsOpenModalEdit}
-    token={localStorage.getItem('token')} />
+    token={localStorage.getItem('token')} 
+    handleApply={handleApply}
+    />
    {isOwnerRecruiter && ( <aside className="min-w-90 card bg-neutral-80 shadow-xl border border-neutral-70">
     <ul className="card-body">
       <li className="list-row">hola</li>

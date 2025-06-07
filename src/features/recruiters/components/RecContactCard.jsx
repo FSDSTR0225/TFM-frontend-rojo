@@ -13,7 +13,7 @@ export const RecContactCard = ({owner}) => {
   return (
     <aside className='card bg-neutral-80 shadow-xl border border-neutral-70 flex-col xs:text-lg lg:min-w-80 items-center'>
             <div className='card-body sm:flex-row  lg:flex-col  gap-4 md:gap-8 lg:gap-4 items-center'>
-               <div className='flex lg:flex-col gap-4 items-center'>
+               <div className='flex flex-col sm:flex-row lg:flex-col gap-4 items-center'>
                 <AvatarImage user={owner} width={20} />
                   <NameUsers user={owner}>{owner?.role.type}</NameUsers>
                </div>

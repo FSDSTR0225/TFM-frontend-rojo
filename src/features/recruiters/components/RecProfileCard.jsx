@@ -72,8 +72,8 @@ export const RecProfileCard = ({ recruiter, profile, id }) => {
           </p>
         </div>
         <div className='flex justify-center mt-4'>
-          {(isOwner && profile?.role?.type === 'recruiter') && (<button onClick={() => navigate('/private-rec/offers')} className="bg-green-600 text-black px-4 py-2 rounded hover:bg-green-700 transition cursor-pointer text-sm">
-            dashboard
+          {(isOwner && profile?.role?.type === 'recruiter') && (<button onClick={() => navigate('/private-rec/offers')} className="bg-green-600 px-4 py-2 rounded hover:bg-green-700 transition cursor-pointer text-sm">
+            Dashboard offers
           </button>)}
         </div>
       </div>
