@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 
-export default function NewExperienceModal({ open, setOpen, handleExperience, experience = null }) {
+export default function StudyModal({ open, setOpen, handleStudy, study = null }) {
   const {
     register,
     handleSubmit,
@@ -9,26 +9,31 @@ export default function NewExperienceModal({ open, setOpen, handleExperience, ex
     formState: { errors },
   } = useForm();
 
-  useEffect(() => {
-    if (experience) {
+useEffect(() => {
+  if (open) {
+    if (study) {
       reset({
-        company: experience.company || "",
-        position: experience.position || "",
-        startDate: experience.startDate ? experience.startDate.split("T")[0] : "",
-        endDate: experience.endDate ? experience.endDate.split("T")[0] : "",
+        degree: study.degree || "",
+        instituteName: study.instituteName || "",
+        description: study.description || "",
+        startDate: study.startDate ? study.startDate.split("T")[0] : "",
+        endDate: study.endDate ? study.endDate.split("T")[0] : "",
       });
     } else {
       reset({
-        company: "",
-        position: "",
+        degree: "",
+        instituteName: "",
+        description: "",
         startDate: "",
         endDate: "",
       });
     }
-  }, [experience, reset]);
+  }
+}, [study, open, reset]);
+
 
   const onSubmit = (data) => {
-    handleExperience(data, experience?._id);
+    handleStudy(data, study?._id);
     reset();
     setOpen(false);
   };
@@ -38,48 +43,61 @@ export default function NewExperienceModal({ open, setOpen, handleExperience, ex
     setOpen(false);
   };
 
-  if (!open) return null; // No renderizamos nada si no está abierto
+  if (!open) return null;
 
   return (
     <div className="modal modal-open fixed inset-0 flex justify-center items-center z-50">
       <div className="modal-box max-w-xl bg-neutral-80 border border-neutral-70 rounded-lg p-6 relative">
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <h2 className="text-2xl font-bold text-center">
-            {experience ? "Editar experiencia" : "Nueva experiencia"}
+            {study ? "Editar estudio" : "Nuevo estudio"}
           </h2>
 
-          {/* Company */}
+          {/* Degree */}
           <div className="form-control">
             <label className="block text-sm text-neutral-20 mb-1">
-              <span className="label-text font-semibold">Compañía</span>
+              <span className="label-text font-semibold">Título o Grado</span>
             </label>
             <input
-              {...register("company", { required: true })}
-              placeholder="e.g Google"
+              {...register("degree", { required: true })}
+              placeholder="Ej. Ingeniería Informática"
               className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
             />
-            {errors.company && (
+            {errors.degree && (
               <span className="text-red-500 text-sm">Este campo es requerido</span>
             )}
           </div>
 
-          {/* Position */}
+          {/* Institute */}
           <div className="form-control">
             <label className="block text-sm text-neutral-20 mb-1">
-              <span className="label-text font-semibold">Puesto</span>
+              <span className="label-text font-semibold">Institución</span>
             </label>
             <input
-              {...register("position", { required: true })}
-              placeholder="E.g Lead Developer"
+              {...register("instituteName", { required: true })}
+              placeholder="Nombre de la universidad o centro"
               className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
             />
-            {errors.position && (
+            {errors.instituteName && (
               <span className="text-red-500 text-sm">Este campo es requerido</span>
             )}
           </div>
 
-           {/* Dates */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4"> 
+          {/* Description */}
+          <div className="form-control">
+            <label className="block text-sm text-neutral-20 mb-1">
+              <span className="label-text font-semibold">Descripción</span>
+            </label>
+            <textarea
+              {...register("description")}
+              placeholder="Breve descripción del estudio realizado"
+              className="textarea textarea-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
+              rows={3}
+            />
+          </div>
+
+          {/* Dates */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Start Date */}
             <div className="form-control">
               <label className="block text-sm text-neutral-20 mb-1">
@@ -108,13 +126,13 @@ export default function NewExperienceModal({ open, setOpen, handleExperience, ex
             </div>
           </div>
 
-          {/* Buttons */}
+          {/* Botones */}
         <div className="flex justify-end gap-4 pt-4">
           <button
             type="submit"
             className="btn bg-primary-60 text-neutral-0 hover:bg-primary-50 border border-primary-50"
           >
-            {experience ? "Save Experience" : "Publish Experience"}
+            {study ? "Save Study" : "Publish Study"}
           </button>
           <button
             type="button"
@@ -124,6 +142,7 @@ export default function NewExperienceModal({ open, setOpen, handleExperience, ex
             Cancel
           </button>
         </div>
+
         </form>
       </div>
     </div>

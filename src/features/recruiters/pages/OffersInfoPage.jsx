@@ -227,7 +227,7 @@ const fetchOffers= async () => {
 
       <div>
         {isDeveloper && (
-        <div className="tabs tabs-border">
+        <div className="tabs tabs-border mt-4">
   <input type="radio" name="my_tabs_2" className="tab" aria-label="Job offers" defaultChecked />
   <div className="tab-content  ">
     <FilterOffers
@@ -269,7 +269,7 @@ const fetchOffers= async () => {
       />
   </div>
 
-  <input type="radio" name="my_tabs_2" className="tab" aria-label="Applied Offers"  />
+  <input type="radio" name="my_tabs_2" className="tab " aria-label="Applied Offers"  />
   <div className="tab-content"> <FilterOffers
         offers={offersAplied}
         filtersOpen={filtersOpen}

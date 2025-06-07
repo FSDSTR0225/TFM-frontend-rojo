@@ -61,7 +61,10 @@ const ProjectCard = ({
             {title}
           </div>
           <Link
-            to={`/projects/${projectid}`}
+            to={{
+              pathname: `/projects/${projectid}`,
+              search: location.search, // aquí mantenemos los query params actuales
+            }}
             className="z-40 border border-neutral-0 text-neutral-0 font-semibold py-2 px-4 rounded pointer-events-auto bg-transparent transition-colors duration-300 hover:border-neutral-90 hover:text-neutral-90"
           >
             View project

@@ -12,7 +12,7 @@
   "dependencies": {
     "@stepperize/react": "^5.1.5",
     "@tailwindcss/vite": "^4.1.3",
-    "framer-motion": "^12.12.1",
+    "framer-motion": "^12.15.0",
     "pnpm": "^10.8.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
