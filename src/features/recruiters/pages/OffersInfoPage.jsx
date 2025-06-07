@@ -15,6 +15,7 @@ import { AuthContext } from "../../../context/authContext";
 export const OffersInfoPage = () => {
   const [offers, setOffers] = useState([]);
   const [offersAplied, setOffersApplied] = useState([]);
+  const [offersByDev, setOffersByDev] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -92,40 +93,89 @@ export const OffersInfoPage = () => {
   return filtered;
 };
 
+const getFilteredOffersByDev = () => {
+  if (!offersAplied || !Array.isArray(offersAplied)) {
+    return [];
+  }
+  
+  let filtered = [...offersByDev];
+
+  if (contractTypeFilter) {
+    filtered = filtered.filter(
+      (offer) => offer && offer.contractType.includes(contractTypeFilter)
+    );
+  }
+
+  if (skillsFilter.length > 0) {
+    filtered = filtered.filter((offer) =>
+      skillsFilter.every((skill) => offer.skills.includes(skill))
+    );
+  }
+
+  filtered.sort((a, b) => {
+    const dateA = new Date(a.createdAt);
+    const dateB = new Date(b.createdAt);
+    return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
+  });
+  
+  return filtered;
+};
+
   const filteredOffers = getFilteredOffers();
   const filteredAppliedOffers = getFilteredAppliedOffers();
+  const filteredOffersByDev = getFilteredOffersByDev();
   console.log("Filtered offers:", filteredOffers);
 
   const totalPages = Math.ceil(filteredOffers.length / 6);
   const totalPagesApplied = Math.ceil(filteredAppliedOffers.length / 6);
+  const totalPagesByDev = Math.ceil(filteredOffersByDev.length / 6);
   
   const startIndex = (currentPage - 1) * 6;
 
   const token = localStorage.getItem("token");
   const currentOffers = filteredOffers.slice(startIndex, startIndex + 6);
 const currentAppliedOffers = filteredAppliedOffers.slice(startIndex, startIndex + 6);
+const currentOffersByDev = filteredOffersByDev.slice(startIndex, startIndex + 6);
   const handlePageChange = (pageNum) => {
     if (pageNum === currentPage) return;
     setCurrentPage(pageNum); // Primero actualizamos la página
   };
 
-  const fetchOffers = async () => {
-    try {
-       if(isDeveloper) {const offerData = await getOffersAppliedByDeveloper(profile._id, token);
-      setOffersApplied(offerData) }
-      if(!isDeveloper) {const offerData = await getOffers();
-      setOffers(offerData);}
-     
-      setLoading(false);
-    } catch (error) {
-      setError(error.message);
-      setLoading(false);
-    }
-  };
+  const fetchOffersForDeveloper = async () => {
+  try {
+    const applied = await getOffersAppliedByDeveloper(profile._id, token);
+    const created = await getOffersByDeveloper(token);
+    setOffersApplied(applied);
+    setOffersByDev(created);
+  } catch (error) {
+    setError(error.message);
+  } finally {
+    setLoading(false);
+  }
+};
+
+const fetchOffers= async () => {
+  try {
+    const offers = await getOffers();
+    setOffers(offers);
+  } catch (error) {
+    setError(error.message);
+  } finally {
+    setLoading(false);
+  }
+};
 
   useEffect(() => {
+  
+  if (isDeveloper) {
+    console.log("Fetching offers for developer:", profile._id);
+    fetchOffersForDeveloper();
+  } else {
+    console.log("Fetching general offers");
     fetchOffers();
-  }, []);
+  }
+}, [isDeveloper, token]);
+
 
   useEffect(() => {
     setCurrentPage(1);
@@ -178,10 +228,10 @@ const currentAppliedOffers = filteredAppliedOffers.slice(startIndex, startIndex 
       <div>
         {isDeveloper && (
         <div className="tabs tabs-border">
-  <input type="radio" name="my_tabs_2" className="tab" aria-label="Job offers" />
+  <input type="radio" name="my_tabs_2" className="tab" aria-label="Job offers" defaultChecked />
   <div className="tab-content  ">
     <FilterOffers
-        offers={offers}
+        offers={offersByDev}
         filtersOpen={filtersOpen}
         setFiltersOpen={setFiltersOpen}
         contractTypeFilter={contractTypeFilter}
@@ -194,7 +244,7 @@ const currentAppliedOffers = filteredAppliedOffers.slice(startIndex, startIndex 
       />
 
       <OfferList view={true}>
-        {currentOffers?.map((offer) => {
+        {currentOffersByDev?.map((offer) => {
           return (
             <OfferCard
               offer={offer}
@@ -213,13 +263,13 @@ const currentAppliedOffers = filteredAppliedOffers.slice(startIndex, startIndex 
       
       <Pagination
         currentPage={currentPage}
-        totalPages={totalPages}
+        totalPages={totalPagesByDev}
         handlePageChange={handlePageChange}
-        filteredProjects={filteredOffers}
+        filteredProjects={filteredOffersByDev}
       />
   </div>
 
-  <input type="radio" name="my_tabs_2" className="tab" aria-label="Applied Offers" defaultChecked />
+  <input type="radio" name="my_tabs_2" className="tab" aria-label="Applied Offers"  />
   <div className="tab-content"> <FilterOffers
         offers={offersAplied}
         filtersOpen={filtersOpen}

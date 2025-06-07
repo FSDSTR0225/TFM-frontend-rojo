@@ -23,7 +23,7 @@ const hardSkills = [
   return (
     <div className='flex items-center gap-4 xl:-mb-8 mt-6'>
     <div className='relative'>
-    <label className="btn btn-md swap swap-rotate w-25">
+    <label className="btn btn-md swap swap-rotate w-25 bg-neutral-70">
       <input
         type="checkbox"
         checked={filtersOpen}
@@ -99,7 +99,7 @@ const hardSkills = [
             
             
     
-              <label className="btn btn-md swap swap-rotate w-25">
+              <label className="btn btn-md swap swap-rotate w-25 bg-neutral-70">
       <input  
         type="checkbox"
         checked={sortOrder === 'desc'} // ✅ Activa visualmente el swap

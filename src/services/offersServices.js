@@ -221,6 +221,7 @@ export const getOffersAppliedByDeveloper = async (developerId, token) => {
                 }
             })   
             if (!response.ok) {
+                
                 throw new Error("Error getting offers")
             }
             const offersData = await response.json()
@@ -242,7 +243,9 @@ export const getOffersByDeveloper = async ( token) => {
                 }
             })   
             if (!response.ok) {
-                throw new Error("Error getting offers")
+               const errorData = await response.text(); // Para ver el error específico
+            console.error("Error response:", errorData);
+            throw new Error(`Error getting offers: ${response.status} ${response.statusText}`)
             }
             const offersData = await response.json()
             console.log("🚀 ~ getOffers ~ offersData:", offersData)
