@@ -10,6 +10,7 @@ import { OfferModal } from "../components/OfferModal";
 import { FilterOffers } from "../components/FilterOffers";
 import { useContext } from "react";
 import { AuthContext } from "../../../context/authContext";
+import { ApplyModal } from "../components/ApplyModal";
 
 
 export const OffersInfoPage = () => {
@@ -20,6 +21,7 @@ export const OffersInfoPage = () => {
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [isOpenModalDelete, setIsOpenModalDelete] = useState(false);
+  const [isOpenApplyModal, setIsOpenApplyModal] = useState(false);
 
   //const [operacion, setOperacion] = useState('crear');
   const [selectedOfferId, setSelectedOfferId] = useState(null);
@@ -251,6 +253,8 @@ const fetchOffers= async () => {
               owner={offer.owner}
               setIsOpenModalDelete={setIsOpenModalDelete}
               isOpenModalDelete={isOpenModalDelete}
+              isOpenApplyModal={isOpenApplyModal}
+              setIsOpenApplyModal={setIsOpenApplyModal}
               setSelectedOfferId={setSelectedOfferId}
               isOpenModalEdit={isOpenModalEdit}
               setIsOpenModalEdit={setIsOpenModalEdit}
@@ -365,6 +369,14 @@ const fetchOffers= async () => {
           token={token}
           reloadPage={fetchOffers}
         />
+      )}
+      {isOpenApplyModal && (
+        <ApplyModal
+          idOffer={selectedOfferId}
+          isOpen={isOpenApplyModal}
+          setIsOpen={setIsOpenApplyModal}
+          token={token}
+          />
       )}
     </SectionContainer>
   );

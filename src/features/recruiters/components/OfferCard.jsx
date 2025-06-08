@@ -18,6 +18,8 @@ export const OfferCard = ({
   id,
   setIsOpenModalDelete,
   isOpenModalDelete,
+  isOpenApplyModal,
+  setIsOpenApplyModal,
   setSelectedOfferId,
   isOpenModalEdit,
   setIsOpenModalEdit,
@@ -35,6 +37,17 @@ export const OfferCard = ({
   //Determinando en donde este redirije a un lado o al otro dependiendo de la ruta actual
   const location = useLocation();
 
+  const handleApplyModal = (e) => {
+    e.stopPropagation();
+    if (!token) {
+      console.log("por aqui no pasaras");
+      navigate("/login");
+    }
+
+    setIsOpenApplyModal(!isOpenApplyModal);
+    setSelectedOfferId(offer?._id);
+  };
+  
   const handleApply = async (e) => {
     e.stopPropagation();
     if (!token) {
@@ -130,7 +143,7 @@ export const OfferCard = ({
         {!isOwner && !isRecruiter && (
           <div className='flex items-center justify-end gap-4 m-2'>
             <MainRecButton
-              onClick={handleApply}
+              onClick={handleApplyModal}
               classProps='rounded-full w-18'
               disabled={hasApplied}
             >
