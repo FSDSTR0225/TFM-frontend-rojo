@@ -1,0 +1,131 @@
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+
+export default function NewExperienceModal({ open, setOpen, handleExperience, experience = null }) {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
+
+  useEffect(() => {
+    if (experience) {
+      reset({
+        company: experience.company || "",
+        position: experience.position || "",
+        startDate: experience.startDate ? experience.startDate.split("T")[0] : "",
+        endDate: experience.endDate ? experience.endDate.split("T")[0] : "",
+      });
+    } else {
+      reset({
+        company: "",
+        position: "",
+        startDate: "",
+        endDate: "",
+      });
+    }
+  }, [experience, reset]);
+
+  const onSubmit = (data) => {
+    handleExperience(data, experience?._id);
+    reset();
+    setOpen(false);
+  };
+
+  const handleClose = () => {
+    reset();
+    setOpen(false);
+  };
+
+  if (!open) return null; // No renderizamos nada si no está abierto
+
+  return (
+    <div className="modal modal-open fixed inset-0 flex justify-center items-center z-50">
+      <div className="modal-box max-w-xl bg-neutral-80 border border-neutral-70 rounded-lg p-6 relative">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+          <h2 className="text-2xl font-bold text-center">
+            {experience ? "Editar experiencia" : "Nueva experiencia"}
+          </h2>
+
+          {/* Company */}
+          <div className="form-control">
+            <label className="block text-sm text-neutral-20 mb-1">
+              <span className="label-text font-semibold">Compañía</span>
+            </label>
+            <input
+              {...register("company", { required: true })}
+              placeholder="e.g Google"
+              className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
+            />
+            {errors.company && (
+              <span className="text-red-500 text-sm">Este campo es requerido</span>
+            )}
+          </div>
+
+          {/* Position */}
+          <div className="form-control">
+            <label className="block text-sm text-neutral-20 mb-1">
+              <span className="label-text font-semibold">Puesto</span>
+            </label>
+            <input
+              {...register("position", { required: true })}
+              placeholder="E.g Lead Developer"
+              className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
+            />
+            {errors.position && (
+              <span className="text-red-500 text-sm">Este campo es requerido</span>
+            )}
+          </div>
+
+           {/* Dates */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4"> 
+            {/* Start Date */}
+            <div className="form-control">
+              <label className="block text-sm text-neutral-20 mb-1">
+                <span className="label-text font-semibold">Fecha de inicio</span>
+              </label>
+              <input
+                {...register("startDate", { required: true })}
+                type="date"
+                className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
+              />
+              {errors.startDate && (
+                <span className="text-red-500 text-sm">Este campo es requerido</span>
+              )}
+            </div>
+
+            {/* End Date */}
+            <div className="form-control">
+              <label className="block text-sm text-neutral-20 mb-1">
+                <span className="label-text font-semibold">Fecha de finalización</span>
+              </label>
+              <input
+                {...register("endDate")}
+                type="date"
+                className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
+              />
+            </div>
+          </div>
+
+          {/* Buttons */}
+        <div className="flex justify-end gap-4 pt-4">
+          <button
+            type="submit"
+            className="btn bg-primary-60 text-neutral-0 hover:bg-primary-50 border border-primary-50"
+          >
+            {experience ? "Save Experience" : "Publish Experience"}
+          </button>
+          <button
+            type="button"
+            className="btn bg-neutral-90 border border-neutral-70 text-neutral-0 hover:text-primary-40"
+            onClick={handleClose}
+          >
+            Cancel
+          </button>
+        </div>
+        </form>
+      </div>
+    </div>
+  );
+}

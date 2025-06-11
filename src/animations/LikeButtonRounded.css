@@ -1,0 +1,205 @@
+:root {
+  --color-primary-50: #37C848;
+  --color-primary-30: #87DE91;
+  --color-neutral-80: #1C1C1C;
+}
+
+.like-button {
+  width: 56px;
+  height: 56px;
+  background-color: transparent;
+  border: 2px solid var(--color-primary-50);
+  cursor: pointer;
+  color: var(--color-primary-50);
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    transform 0.15s ease;
+  user-select: none;
+  outline-offset: 2px;
+  outline: none;
+  position: relative;
+  overflow: visible;
+  padding: 0;
+}
+
+.like-button .icon {
+  transition: color 0.3s ease, transform 0.6s ease;
+}
+
+/* Hover: fondo rojo y corazón blanco */
+.like-button:hover {
+  background-color: var(--color-primary-30);
+  border: var(--color-primary-30);
+  color: white;
+}
+
+.like-button:hover .icon {
+  color: white;
+}
+
+/* Cuando está likeado, el fondo es rojo y corazón blanco */
+.like-button.liked {
+  background-color: var(--color-primary-50);
+  color: white;
+}
+
+/* Animación de clic */
+.like-button.animating {
+  animation: clickShrink 150ms forwards;
+}
+
+.like-button.animating .icon {
+  animation: iconRotateBounce 600ms forwards;
+}
+
+/* Encogimiento rápido */
+@keyframes clickShrink {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.85);
+  }
+  100% {
+    transform: scale(1.15);
+  }
+}
+
+/* Giro y rebote del icono */
+@keyframes iconRotateBounce {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.2);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
+/* Partículas explosión */
+.particles {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80px;
+  height: 80px;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  overflow: visible;
+  z-index: 10;
+}
+
+.particle {
+  position: absolute;
+  background-color: var(--primary-color-light);
+  border-radius: 50%;
+  opacity: 0.8;
+  width: 8px;
+  height: 8px;
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+}
+
+/* Cada partícula con distinta animación de dirección y retraso */
+.particle-1 {
+  top: 40%;
+  left: 50%;
+  animation: particleMove1 600ms forwards;
+  animation-delay: 0ms;
+}
+
+.particle-2 {
+  top: 30%;
+  left: 30%;
+  animation: particleMove2 600ms forwards;
+  animation-delay: 50ms;
+}
+
+.particle-3 {
+  top: 50%;
+  left: 70%;
+  animation: particleMove3 600ms forwards;
+  animation-delay: 100ms;
+}
+
+.particle-4 {
+  top: 60%;
+  left: 40%;
+  animation: particleMove4 600ms forwards;
+  animation-delay: 150ms;
+}
+
+.particle-5 {
+  top: 50%;
+  left: 60%;
+  animation: particleMove5 600ms forwards;
+  animation-delay: 200ms;
+}
+
+.particle-6 {
+  top: 40%;
+  left: 70%;
+  animation: particleMove6 600ms forwards;
+  animation-delay: 250ms;
+}
+
+.particle-7 {
+  top: 30%;
+  left: 50%;
+  animation: particleMove7 600ms forwards;
+  animation-delay: 300ms;
+}
+
+.particle-8 {
+  top: 60%;
+  left: 30%;
+  animation: particleMove8 600ms forwards;
+  animation-delay: 350ms;
+}
+
+/* Movimiento de partículas (distintos vectores y opacidad) */
+@keyframes particleMove1 {
+  0% { transform: translate(0, 0) scale(1); opacity: 0.8; }
+  100% { transform: translate(-20px, -20px) scale(0.6); opacity: 0; }
+}
+
+@keyframes particleMove2 {
+  0% { transform: translate(0, 0) scale(1); opacity: 0.8; }
+  100% { transform: translate(-25px, 10px) scale(0.6); opacity: 0; }
+}
+
+@keyframes particleMove3 {
+  0% { transform: translate(0, 0) scale(1); opacity: 0.8; }
+  100% { transform: translate(25px, -10px) scale(0.6); opacity: 0; }
+}
+
+@keyframes particleMove4 {
+  0% { transform: translate(0, 0) scale(1); opacity: 0.8; }
+  100% { transform: translate(15px, 20px) scale(0.6); opacity: 0; }
+}
+
+@keyframes particleMove5 {
+  0% { transform: translate(0, 0) scale(1); opacity: 0.8; }
+  100% { transform: translate(30px, 15px) scale(0.6); opacity: 0; }
+}
+
+@keyframes particleMove6 {
+  0% { transform: translate(0, 0) scale(1); opacity: 0.8; }
+  100% { transform: translate(20px, 25px) scale(0.6); opacity: 0; }
+}
+
+@keyframes particleMove7 {
+  0% { transform: translate(0, 0) scale(1); opacity: 0.8; }
+  100% { transform: translate(-15px, 25px) scale(0.6); opacity: 0; }
+}
+
+@keyframes particleMove8 {
+  0% { transform: translate(0, 0) scale(1); opacity: 0.8; }
+  100% { transform: translate(10px, 30px) scale(0.6); opacity: 0; }
+}
+
+
+
