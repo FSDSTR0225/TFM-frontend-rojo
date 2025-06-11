@@ -40,12 +40,13 @@ export const createProject = async (payload, token) => {
   }
 };
 
-export const getProjectById = async (_id) => {
+export const getProjectById = async (_id, token) => {
   try {
     const resp = await fetch(`${urlBackEnd}/projects/${_id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
     });
 
@@ -56,6 +57,7 @@ export const getProjectById = async (_id) => {
     return { error: true, message: error.message };
   }
 };
+
 
 export const getProjectsByDeveloper = async (developerId) => {
   try {
@@ -135,6 +137,30 @@ export const toggleProjectLike = async (projectId, token) => {
     return data;
   } catch (error) {
     console.error('Failed to toggle like:', error);
+    throw error;
+  }
+};
+
+export const getProjectLikeStatus = async (projectId, token) => {
+  try {
+    const resp = await fetch(`${urlBackEnd}/projects/${projectId}/like-status`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!resp.ok) {
+      const err = await resp.json();
+      throw new Error(err.message || 'Failed to fetch like status');
+    }
+
+    const data = await resp.json();
+    // data debe incluir al menos { liked: true/false }
+    return data;
+  } catch (error) {
+    console.error('Failed to get like status:', error);
     throw error;
   }
 };

@@ -1,16 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { PiHeartStraight, PiHeartStraightFill } from "react-icons/pi";
-import { toggleProjectLike } from "../services/projectService";
+import { toggleProjectLike, getProjectLikeStatus } from "../services/projectService";
 import "../animations/LikeButtonRounded.css";
 
-export function LikeButtonRounded({ projectId, initialLiked, token, onLike }) {
-  const [liked, setLiked] = useState(initialLiked);
+export function LikeButtonRounded({ projectId, token, onLike }) {
+  const [liked, setLiked] = useState(false);
   const [animating, setAnimating] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true); // comienza cargando
 
+  // Al cargar el componente, consultamos si el proyecto ya fue likeado
   useEffect(() => {
-    setLiked(initialLiked);
-  }, [initialLiked]);
+    const fetchLikeStatus = async () => {
+      try {
+        const data = await getProjectLikeStatus(projectId, token); // 👈 nueva función
+        setLiked(data.liked);
+      } catch (error) {
+        console.error("Error al obtener el estado del like:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLikeStatus();
+  }, [projectId, token]);
 
   const handleClick = async () => {
     if (animating || loading) return;
@@ -18,15 +30,9 @@ export function LikeButtonRounded({ projectId, initialLiked, token, onLike }) {
     setLoading(true);
 
     try {
-      // toggleProjectLike retorna { liked, likesCount, ... }
       const data = await toggleProjectLike(projectId, token);
-
       setLiked(data.liked);
-
-      // Avisamos al padre que actualice el proyecto completo
-      if (onLike) {
-        onLike(data);
-      }
+      if (onLike) onLike(data);
     } catch (error) {
       console.error(error);
     } finally {
@@ -41,6 +47,7 @@ export function LikeButtonRounded({ projectId, initialLiked, token, onLike }) {
       className={`like-button rounded-full flex items-center justify-center relative ${liked ? "liked" : ""} ${animating ? "animating" : ""}`}
       aria-label={liked ? "Unlike project" : "Like project"}
       type="button"
+      disabled={loading}
     >
       {liked ? (
         <PiHeartStraightFill size={32} weight="fill" className="icon" />

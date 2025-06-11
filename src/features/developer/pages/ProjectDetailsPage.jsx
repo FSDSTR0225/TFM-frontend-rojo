@@ -36,28 +36,28 @@ export const ProjectDetailsPage = () => {
   const isDesktop = width >= 1200;
 
   // Supongo que tienes el token almacenado (localStorage o context)
-  const token = localStorage.getItem("token") || "";
+  const token = localStorage.getItem('token') || '';
 
   useEffect(() => {
     const fetchProject = async () => {
-      const data = await getProjectById(id);
+      const data = await getProjectById(id, token);
       if (data && !data.error) {
         setProject(data);
         setCurrentIndex(0);
       }
     };
     fetchProject();
-  }, [id]);
+  }, [id, token]);
 
-  // Esta función actualiza el proyecto con la data que devuelve toggleProjectLike
-const handleLike = (likeData) => {
-  console.log("handleLike data:", likeData);
-  setProject((prevProject) => ({
-    ...prevProject,
-    liked: likeData.liked,
-    likes: likeData.likes,  // <-- aquí estaba el error
-  }));
-};
+    // Esta función actualiza el proyecto con la data que devuelve toggleProjectLike
+  const handleLike = (likeData) => {
+    console.log("handleLike data:", likeData);
+    setProject((prevProject) => ({
+      ...prevProject,
+      liked: likeData.liked,
+      likes: likeData.likes,
+    }));
+  };
 
   if (!project) return null;
 
@@ -162,13 +162,15 @@ const handleLike = (likeData) => {
               <ProjectInfoCard project={project} />
 
               <div className="flex justify-center items-center rounded-full p-6">
-                {/* Pasamos projectId, liked inicial, token y función onLike */}
-                <LikeButtonRounded
-                  projectId={project._id}
-                  initialLiked={project.liked}
-                  token={token}
-                  onLike={handleLike}
-                />
+                {typeof project.liked === 'boolean' && (
+                  <LikeButtonRounded
+                    key={project._id} // Forzamos el render al cambiar de proyecto
+                    projectId={project._id}
+                    initialLiked={project.liked}
+                    token={token}
+                    onLike={handleLike}
+                  />
+                )}
               </div>
 
               {githubRepoInfo && (
