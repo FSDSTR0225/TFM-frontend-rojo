@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import { createdOffert, getOffersById,updateOffert } from '../../../services/offersServices';
+import { createdOffert, getOffersById, updateOffert } from '../../../services/offersServices';
 import { TagsInputRecruiter } from './TagsInputRecruiter';
 import { useEffect } from 'react';
 
@@ -35,33 +35,33 @@ export const OfferModal = ({ token, reloadPage, idOffer, isOpen, setIsOpen, oper
   }, [idOffer, isOpen]);
 
   const onSubmit = async (formDatos) => {
-  if (operacion !== 'crear') {
-    // Verificamos que tengamos un idOffer válido
-    if (!idOffer) {
-      console.error("No se puede actualizar: falta el ID de la oferta");
-      return;
+    if (operacion !== 'crear') {
+      // Verificamos que tengamos un idOffer válido
+      if (!idOffer) {
+        console.error("No se puede actualizar: falta el ID de la oferta");
+        return;
+      }
+
+      try {
+        const resp = await updateOffert(idOffer, formDatos, token);
+        console.log("Oferta actualizada:", resp);
+      } catch (error) {
+        console.error("Error al actualizar la oferta:", error.message || error);
+        alert("Hubo un error al actualizar la oferta.");
+      }
+    } else {
+      try {
+        const resp = await createdOffert(formDatos, token);
+        console.log("Oferta creada:", resp);
+      } catch (error) {
+        console.error("Error al crear la oferta:", error.message || error);
+        alert("Hubo un error al crear la oferta.");
+      }
     }
 
-    try {
-      const resp = await updateOffert(idOffer, formDatos, token);
-      console.log("Oferta actualizada:", resp);
-    } catch (error) {
-      console.error("Error al actualizar la oferta:", error.message || error);
-      alert("Hubo un error al actualizar la oferta.");
-    }
-  } else {
-    try {
-      const resp = await createdOffert(formDatos, token);
-      console.log("Oferta creada:", resp);
-    } catch (error) {
-      console.error("Error al crear la oferta:", error.message || error);
-      alert("Hubo un error al crear la oferta.");
-    }
-  }
-
-  reloadPage();     // Recargar página o datos si es necesario
-  handleClose();    // Cerrar el modal
-};
+    reloadPage();     // Recargar página o datos si es necesario
+    handleClose();    // Cerrar el modal
+  };
 
   const handleClose = () => {
     reset(); // Limpiar formulario sin enviar
@@ -125,11 +125,11 @@ export const OfferModal = ({ token, reloadPage, idOffer, isOpen, setIsOpen, oper
                   className="select select-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full"
                 >
                   <option value="" disabled>Select one</option>
-  <option value="Full-time">Full-time</option>
-  <option value="Part-time">Part-time</option>
-  <option value="Freelance">Freelance</option>
-  <option value="Temporary">Temporary</option>
-  <option value="Internship">Internship</option>
+                  <option value="Full-time">Full-time</option>
+                  <option value="Part-time">Part-time</option>
+                  <option value="Freelance">Freelance</option>
+                  <option value="Temporary">Temporary</option>
+                  <option value="Internship">Internship</option>
                 </select>
               </div>
 
@@ -188,7 +188,7 @@ export const OfferModal = ({ token, reloadPage, idOffer, isOpen, setIsOpen, oper
               </div>
             </div>
 
-            <div className="flex flex-col md:flex-row justify-between gap-4 pt-4">
+            <div className="flex flex-col md:flex-row justify-end gap-4 pt-4">
               <button type="submit" className="btn bg-primary-60 text-neutral-90 hover:bg-primary-70 w-full md:w-auto">
                 {operacion !== 'crear' ? "Edit Offer" : "Create Offer"}
               </button>

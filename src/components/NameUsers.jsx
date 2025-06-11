@@ -11,12 +11,12 @@ import { capitalize } from "../utils/utils";
 // <NameUsers user={offer.owner} classProps={"text-xs"}/>
 
 
-export const NameUsers = ({user, classProps, children}) => {
+export const NameUsers = ({user, classProps, children, align="items-center" }) => {
      const name = capitalize(user?.name || '');
     const surname = capitalize(user?.surname || '');
     const completeName = `${name} ${surname}`.trim() || 'Unknown Recruiter';
   return (
-    <div className="flex flex-col items-center">
+    <div className={`flex flex-col ${align}`}>
     <span className={`font-bold ${classProps}`}>{completeName}</span>
     <span className={`text-xs text-neutral-10` }>{capitalize(children)}</span>
     </div>
