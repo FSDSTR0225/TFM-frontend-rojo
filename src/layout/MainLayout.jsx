@@ -1,6 +1,7 @@
 import { Outlet } from "react-router"
 import { Header } from "./Header"
 import { Footer } from "./Footer"
+import { Widget } from "./chat/Widget"
 
 export const MainLayout= () => {
     return (
@@ -13,6 +14,8 @@ export const MainLayout= () => {
             <Footer />
             </div>
 
+            {/* Chat flotante en toda la web */}
+            <Widget />
         </>
     )
 }
