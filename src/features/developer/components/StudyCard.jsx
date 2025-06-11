@@ -77,7 +77,7 @@ function StudyCard({ profileInfo }) {
     }
   };
 
-  return (
+   return (
     <div className="w-full">
       <div className="flex justify-end mb-2">
         {isCurrentUser && (
@@ -113,19 +113,11 @@ function StudyCard({ profileInfo }) {
           .map(stu => (
             <li
               key={stu._id}
-              className="relative grid grid-cols-3 gap-4 bg-neutral-80 border border-neutral-60 p-8 mb-4 rounded-md"
+              className={`relative bg-neutral-80 border border-neutral-60 p-8 mb-4 rounded-md ${
+                stu.instituteLogo ? 'flex gap-4' : 'grid grid-cols-3 gap-4'
+              }`}
             >
-              {/* <img src={stu.instituteLogo} alt={stu.instituteName} className="border-primary-60 border-4 w-32 h-32" /> */}
-              <h3 className="col-span-2 text-xl uppercase font-bold">{stu.degree}</h3>
-              <p className="col-span-2">{stu.instituteName}</p>
-              <p className="col-span-2">{stu.description}</p>
-              <p className="grid justify-items-end pr-4">
-                {new Date(stu.startDate).toLocaleDateString('es-ES', { month: 'numeric', year: 'numeric' })} -{' '}
-                {stu.endDate
-                  ? new Date(stu.endDate).toLocaleDateString('es-ES', { month: 'numeric', year: 'numeric' })
-                  : 'Actualidad'}
-              </p>
-
+              {/* DotsComponent siempre en la misma posición */}
               {isCurrentUser && (
                 <div className="absolute top-4 right-4 flex gap-2">
                   <DotsComponent
@@ -133,6 +125,50 @@ function StudyCard({ profileInfo }) {
                     onDelete={() => handleDelete(stu._id)}
                   />
                 </div>
+              )}
+
+              {/* Layout con logo */}
+              {stu.instituteLogo ? (
+                <>
+                  {/* Logo a la izquierda */}
+                  <div className="flex-shrink-0">
+                    <img 
+                      src={stu.instituteLogo} 
+                      alt={stu.instituteName} 
+                      className="border-primary-60 border-4 w-32 h-32 object-cover" 
+                    />
+                  </div>
+                  
+                  {/* Contenido central con margen */}
+                  <div className="flex-1 ml-2">
+                    <h3 className="text-xl uppercase font-bold mb-2">{stu.degree}</h3>
+                    <p className="mb-2">{stu.instituteName}</p>
+                    <p>{stu.description}</p>
+                  </div>
+                  
+                  {/* Lado derecho con fechas */}
+                  <div className="flex-shrink-0 flex flex-col justify-end items-end">
+                    <p className="text-right">
+                      {new Date(stu.startDate).toLocaleDateString('es-ES', { month: 'numeric', year: 'numeric' })} -{' '}
+                      {stu.endDate
+                        ? new Date(stu.endDate).toLocaleDateString('es-ES', { month: 'numeric', year: 'numeric' })
+                        : 'Actualidad'}
+                    </p>
+                  </div>
+                </>
+              ) : (
+                <>
+                  {/* Layout sin logo (como estaba antes) */}
+                  <h3 className="col-span-2 text-xl uppercase font-bold">{stu.degree}</h3>
+                  <p className="col-span-2">{stu.instituteName}</p>
+                  <p className="col-span-2">{stu.description}</p>
+                  <p className="grid justify-items-end">
+                    {new Date(stu.startDate).toLocaleDateString('es-ES', { month: 'numeric', year: 'numeric' })} -{' '}
+                    {stu.endDate
+                      ? new Date(stu.endDate).toLocaleDateString('es-ES', { month: 'numeric', year: 'numeric' })
+                      : 'Actualidad'}
+                  </p>
+                </>
               )}
             </li>
           ))}

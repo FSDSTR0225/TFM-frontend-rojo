@@ -28,13 +28,13 @@ function RightPanel({ profileInfo, token, onProfileUpdated }) {
         {/* Navbar EXP, PRO Y STU */}
         <input type="radio" name="my_tabs_2" className="tab" aria-label="Portfolio" defaultChecked/>
         <div className="tab-content border border-neutral-60 p-6 rounded-md">
-          <div className="navbar rounded-md mb-4">
-            <ul className="menu menu-horizontal w-full">
+          <div className="navbar flex items-center rounded-md mb-4">
+            <ul className="menu menu-horizontal flex items-center w-full">
               {tabs.map(tab => (
-                <li key={tab.key} className={`flex-1 text-center mx-1`}>
+                <li key={tab.key} className="flex items-center justify-center flex-1 mx-1">
                   <button
                     onClick={() => setActiveTab(tab.key)}
-                    className="w-full flex justify-center items-center py-2 bg-neutral-60"
+                    className="w-full flex items-center justify-center py-2 bg-neutral-60"
                   >
                     {tab.icon}
                     {tab.label}

@@ -14,6 +14,7 @@ useEffect(() => {
     if (study) {
       reset({
         degree: study.degree || "",
+        instituteLogo: study.instituteLogo || "",
         instituteName: study.instituteName || "",
         description: study.description || "",
         startDate: study.startDate ? study.startDate.split("T")[0] : "",
@@ -22,6 +23,7 @@ useEffect(() => {
     } else {
       reset({
         degree: "",
+        instituteLogo: "",
         instituteName: "",
         description: "",
         startDate: "",
@@ -67,6 +69,19 @@ useEffect(() => {
               <span className="text-red-500 text-sm">Este campo es requerido</span>
             )}
           </div>
+
+          {/* instituteLogo */}
+          <div className="form-control">
+            <label className="block text-sm text-neutral-20 mb-1">
+              <span className="label-text font-semibold">Logo</span>
+            </label>
+            <input
+              {...register("instituteLogo")}
+              placeholder="Logo de la universidad o centro"
+              className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
+            />
+          </div>
+
 
           {/* Institute */}
           <div className="form-control">

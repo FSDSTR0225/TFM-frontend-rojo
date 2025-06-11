@@ -259,11 +259,21 @@ export default function DevModal({ open, setOpen, token, profileData, onProfileU
               <span className="label-text font-semibold">About Me</span>
             </label>
             <textarea 
-              {...register("description")} 
+              {...register("description", {
+                maxLength: {
+                value: 500,
+                message: "Máximo 500 caracteres"
+                }
+              })} 
               placeholder="Text a description about you..." 
               className="textarea textarea-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic" 
               rows={3}
             />
+            {errors.description && (
+              <span className="text-red-500 text-sm">
+                {errors.description.message}
+              </span>
+            )}
           </div>
 
           {/* Buttons */}

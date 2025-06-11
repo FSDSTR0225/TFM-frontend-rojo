@@ -415,7 +415,7 @@ export const NewProjectModal = ({ onClose }) => {
           </button>
           <button
             type="button"
-            className="btn bg-neutral-90 border border-neutral-70 text-neutral-0 hover:text-primary-40"
+            className="btn bg-neutral-90 text-neutral-0 hover:text-primary-40 border border-neutral-70"
             onClick={onClose}
             disabled={loading}
           >

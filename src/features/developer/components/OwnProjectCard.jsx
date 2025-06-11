@@ -5,6 +5,7 @@ import { EditProjectModal } from '../components/EditProjectModal';
 import { PiPlusBold, PiArrowSquareOut, PiGithubLogo, PiEye } from 'react-icons/pi';
 import { Link } from 'react-router';
 import { AuthContext } from '../../../context/authContext';
+import { Pagination } from "../../../components/Pagination";
 import { createProject, getProjectsByDeveloper, softDeleteProject, updateProject  } from '../../../services/projectService';
 
 function OwnProjectCard({ profileInfo }) {
@@ -15,6 +16,8 @@ function OwnProjectCard({ profileInfo }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [projectToEdit, setProjectToEdit] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+    const [projectsPerPage] = useState(4);
 
   const isCurrentUserProfile = profileInfo?._id === currentUserProfile?._id;
   const developerId = profileInfo?._id;
@@ -99,14 +102,27 @@ function OwnProjectCard({ profileInfo }) {
     }
   };
 
-  if (loading) return <div className="flex justify-center p-8"><span className="loading loading-spinner loading-lg" /></div>;
-  if (error) return <div className="alert alert-error">{error}</div>;
-
   const sortedProjects = [...projects].sort((a, b) => {
   const yearA = Number(a.year) || 0;
   const yearB = Number(b.year) || 0;
   return yearB - yearA;
-});
+  });
+
+
+   // Cálculos para la paginación
+  const totalPages = Math.ceil(sortedProjects.length / projectsPerPage);
+  const indexOfLastProject = currentPage * projectsPerPage;
+  const indexOfFirstProject = indexOfLastProject - projectsPerPage;
+  const currentProjects = sortedProjects.slice(indexOfFirstProject, indexOfLastProject);
+  
+  // Función para cambiar de página
+  const handlePageChange = (pageNumber) => {
+  setCurrentPage(pageNumber);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  if (loading) return <div className="flex justify-center p-8"><span className="loading loading-spinner loading-lg" /></div>;
+  if (error) return <div className="alert alert-error">{error}</div>;
 
    return (
     <div>
@@ -136,7 +152,7 @@ function OwnProjectCard({ profileInfo }) {
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-6">
-          {sortedProjects.map(project => (
+          {currentProjects.map(project => (
             <div key={project._id + Math.random()} className="relative card lg:card-side bg-neutral-80 border border-neutral-60 shadow-sm h-68 md:h-76 flex flex-col lg:flex-row">
               <figure className="flex-shrink-0 w-full lg:w-80 h-40 lg:h-full overflow-hidden">
                 {project.gallery?.length > 0
@@ -188,7 +204,14 @@ function OwnProjectCard({ profileInfo }) {
               </div>
             </div>
           ))}
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            handlePageChange={handlePageChange}
+            filteredProjects={sortedProjects}
+          />
         </div>
+
       )}
     </div>
   );

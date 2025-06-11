@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router';
 import RightPanel from "./RightPanel";
 import { EditButton } from '../../../components/EditButton';
+import { AvatarImage } from '../../../components/AvatarImage';
 import { PiGithubLogo, PiLinkedinLogo, PiChatCenteredDots, PiTranslate, PiCodeSimple, PiCodeBlock, PiEnvelope, PiReadCvLogo, PiChatText  } from 'react-icons/pi';
 import DevModal  from './devModal';
 import { SectionContainer } from "../../../components/SectionContainer";
@@ -62,11 +63,9 @@ function InfoDeveloper({ profileInfo, token, setProfileData, onProfileUpdated })
           )}
 
           <div className="flex flex-col items-center">
-            <img
-              src={profileInfo.avatar || 'https://cdn-icons-png.flaticon.com/512/3135/3135768.png'}
-              className="w-32 h-32 rounded-full border-4 border-primary-60"
-              alt="Perfil"
-            />
+            <div className="flex items-center justify-center rounded-full w-32 h-32 text-8xl">
+              <AvatarImage user={profileInfo} width={32} />
+            </div>
             <h1 className="text-xl font-bold mt-4 text-center">
               {profileInfo.name} {profileInfo.surname}
             </h1>
@@ -81,20 +80,26 @@ function InfoDeveloper({ profileInfo, token, setProfileData, onProfileUpdated })
           {/* MEDIA */}
           <div className="flex justify-center w-full">
               <div className="flex justify-center gap-2 my-4 w-full">
-                <Link 
-                to={"#"}
-                onClick={async (e) => {
-                    e.preventDefault();
+                {/* EMAIL */}
+                <Link
+                  to={`mailto:${profileInfo.email}`}
+                  onClick={async (e) => {
+                    e.preventDefault();  // evita la recarga o navegación inmediata
+                    const mailtoLink = `mailto:${profileInfo.email}`;
                     try {
                       await navigator.clipboard.writeText(profileInfo.email);
-                      alert('Email copiado al portapapeles');
+                      // abre el cliente de correo en una pestaña nueva
+                      window.location.href = mailtoLink;
                     } catch {
                       alert('No se pudo copiar el email');
+                      // aunque falle el copiado, permite al usuario abrir el mail
+                      window.location.href = mailtoLink;
                     }
-                }} 
-                className="btn btn-circle bg-transparent border-2 border-primary-50 text-primary-50  hover:bg-neutral-0 hover:text-neutral-90 hover:border-neutral-0 "
-                aria-label="Linkedin">
-                <PiEnvelope className="text-xl" />
+                  }}
+                  className="btn btn-circle bg-transparent border-2 border-primary-50 text-primary-50 hover:bg-neutral-0 hover:text-neutral-90 hover:border-neutral-0"
+                  aria-label="Enviar correo"
+                >
+                  <PiEnvelope className="text-xl" />
                 </Link>
                 <Link 
                 to={profileInfo.role.developer.linkedin} 
@@ -153,15 +158,6 @@ function InfoDeveloper({ profileInfo, token, setProfileData, onProfileUpdated })
             )}
           </div>
 
-          {/* ABOUT ME */}
-          <div className="w-full mt-2">
-            <h2 className="flex font-bold mb-3">
-              <PiChatCenteredDots className="text-xl mr-2 text-primary-50" />
-              About Me
-            </h2>
-            <span>{profileInfo.description}</span>
-          </div>
-
           {/* LANGUAGES */}
           <div className="w-full mt-4">
             <h2 className="flex font-bold mb-3">
@@ -191,10 +187,20 @@ function InfoDeveloper({ profileInfo, token, setProfileData, onProfileUpdated })
                 ))}
             </div>
           </div>
+
+          {/* ABOUT ME */}
+          <div className="w-full mt-6">
+            <h2 className="flex font-bold mb-3">
+              <PiChatCenteredDots className="text-xl mr-2 text-primary-50" />
+              About Me
+            </h2>
+            <span>{profileInfo.description}</span>
+          </div>
+
         </div>
 
         {/* PANEL DERECHO */}
-        <div className="col-span-1 lg:col-span-2">
+        <div className="col-span-1 lg:col-span-2 -mt-3.5">
           <RightPanel profileInfo={profileInfo} token={token} onProfileUpdated={onProfileUpdated} />
         </div>
 
