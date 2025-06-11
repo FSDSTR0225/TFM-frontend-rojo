@@ -164,3 +164,35 @@ export const getProjectLikeStatus = async (projectId, token) => {
     throw error;
   }
 };
+
+//Función para obtener los views de cada proyecto
+
+const VIEW_COOLDOWN_MS = 60 * 60 * 1000; // 1 hora
+
+export const incrementProjectView = async (projectId) => {
+  try {
+    // Revisar timestamp guardado en localStorage
+    const lastViewTimestamp = localStorage.getItem(`lastView_${projectId}`);
+    const now = Date.now();
+
+    if (lastViewTimestamp && now - Number(lastViewTimestamp) < VIEW_COOLDOWN_MS) {
+      // Ya se incrementó view recientemente, no hacer nada
+      return null;
+    }
+
+    // Si no hay registro o ya pasó el cooldown, hacemos la petición
+    const response = await fetch(`${urlBackEnd}/projects/${projectId}/view`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+    });
+    if (!response.ok) throw new Error('Error incrementando views');
+
+    // Guardar timestamp de esta vista para el cooldown
+    localStorage.setItem(`lastView_${projectId}`, now.toString());
+
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+  }
+};
+
