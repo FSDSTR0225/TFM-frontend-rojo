@@ -25,7 +25,7 @@ export default function ChatPanel({ onClose, user }) {
               {user?.name ? user.name.charAt(0).toUpperCase() : "U"}
             </div>
           )}
-          <h2 className="text-sm font-medium">Direct messages</h2>
+          <h2 className="text-md font-medium">Messages</h2>
         </div>
         <button onClick={onClose} className="text-sm">
           ✕

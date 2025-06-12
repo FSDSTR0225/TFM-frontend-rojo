@@ -19,7 +19,7 @@ export function Widget() {
             {/* Panel */}
             <div
               className={`
-                absolute bottom-16 right-0 w-[350px] h-[500px]
+                absolute bottom-16 right-8 w-[320px] h-[500px]
                 bg-neutral-70 rounded-2xl shadow-2xl border border-neutral-60 overflow-hidden
                 transform origin-bottom-right
                 transition duration-500 ease-in-out
