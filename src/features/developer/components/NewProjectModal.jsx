@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import { PiTrash, PiImages, PiFilmSlate, PiCodeBlock, PiFile } from "react-icons/pi";
 import { CategorySelect } from "../components/CategorySelect";
-import { TagsInput } from "../components/TagsInput";
+import { TagsInputDev } from "../components/TagsInputDev";
 import { createProject } from '../../../services/projectService';
 
 export const NewProjectModal = ({ onClose }) => {
@@ -189,12 +189,13 @@ export const NewProjectModal = ({ onClose }) => {
                 <label className="block text-sm text-neutral-20 mb-1" htmlFor="projectSkills">
                     Skills
                 </label>
-                <TagsInput
-                    value={skills}
-                    onChange={(tags) => setValue("projectSkills", tags, { shouldValidate: true })}
+                <TagsInputDev
+                  value={skills}
+                  onChange={(tags) => setValue("projectSkills", tags, { shouldValidate: true })}
+                  placeholder="Add skill and press enter"
                 />
                 {errors.projectSkills && (
-                    <p className="text-red-400 text-sm mt-1">{errors.projectSkills.message}</p>
+                  <p className="text-red-500 text-sm mt-1">{errors.projectSkills.message}</p>
                 )}
                 </div>
 

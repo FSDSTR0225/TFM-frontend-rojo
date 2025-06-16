@@ -180,6 +180,18 @@ function ExperienceCard({ profileInfo }) {
                     </h3>
                     <p className="col-span-2">{exp.company}</p>
                     <p className="col-span-2">{exp.description}</p>
+                    {exp.experienceSkills?.length > 0 && (
+                        <div className="col-span-2 flex flex-wrap gap-2 mb-2">
+                          {exp.experienceSkills.map((skill, i) => (
+                            <span
+                              key={i}
+                              className="bg-primary-70 text-neutral-0 rounded-full px-2 py-0.5 text-sm"
+                            >
+                              {skill}
+                            </span>
+                          ))}
+                        </div>
+                      )}
                     <p className="grid justify-items-end">
                       {new Date(exp.startDate).toLocaleDateString('es-ES', {
                         month: 'numeric',

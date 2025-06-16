@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
-import { useForm, useFieldArray  } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
+import { TagsInputDev } from './TagsInputDev';
 
 export default function NewExperienceModal({ open, setOpen, handleExperience, experience = null }) {
   const {
@@ -7,17 +8,12 @@ export default function NewExperienceModal({ open, setOpen, handleExperience, ex
     control,
     handleSubmit,
     reset,
+    watch,
+    setValue,
     formState: { errors },
   } = useForm();
 
-  const {
-    fields: skillFields,
-    append: appendSkill,
-    remove: removeSkill
-  } = useFieldArray({
-    control,
-    name: "experienceSkills"
-  });
+  const skills = watch("experienceSkills") || [];
 
   useEffect(() => {
     if (experience) {
@@ -29,8 +25,7 @@ export default function NewExperienceModal({ open, setOpen, handleExperience, ex
           ? experience.startDate.split("T")[0]
           : "",
         endDate: experience.endDate ? experience.endDate.split("T")[0] : "",
-        experienceSkills:
-          experience.experienceSkills?.map(skill => ({ skill })) || [{ skill: "" }]
+        experienceSkills: experience.experienceSkills || []
       });
     } else {
       reset({
@@ -39,21 +34,15 @@ export default function NewExperienceModal({ open, setOpen, handleExperience, ex
         position: "",
         startDate: "",
         endDate: "",
-        experienceSkills: [{ skill: "" }]
+        experienceSkills: []
       });
     }
   }, [experience, reset]);
 
   const onSubmit = (data) => {
     const formatted = {
-      company: data.company,
-      companyLogo: data.companyLogo,
-      position: data.position,
-      startDate: data.startDate,
-      endDate: data.endDate,
-      experienceSkills: data.experienceSkills
-        .map(s => s.skill.trim())
-        .filter(s => s)
+      ...data,
+      experienceSkills: data.experienceSkills.map(s => s.trim()).filter(Boolean),
     };
     handleExperience(formatted, experience?._id);
     reset();
@@ -122,27 +111,11 @@ export default function NewExperienceModal({ open, setOpen, handleExperience, ex
             <label className="block text-sm text-neutral-20 mb-1 font-semibold">
               Skills
             </label>
-            <div className="space-y-2">
-              {skillFields.map((field, index) => (
-                <div key={field.id} className="flex gap-2">
-                  <input
-                    {...register(`experienceSkills.${index}.skill`)}
-                    placeholder="Skill"
-                    className="input input-bordered flex-1 bg-neutral-90"
-                  />
-                  <button type="button" onClick={() => removeSkill(index)}
-                    className="btn btn-sm bg-neutral-90 border border-neutral-60 text-red-400 hover:text-red-300">
-                    Remove
-                  </button>
-                </div>
-              ))}
-              <button type="button" onClick={() => appendSkill({ skill: "" })}
-                className="btn btn-sm bg-primary-60 text-neutral-0">
-                + Add Skills
-              </button>
-            </div>
+            <TagsInputDev
+              value={skills}
+              onChange={(tags) => setValue("experienceSkills", tags, { shouldValidate: true })}
+            />
           </div>
-
            {/* Dates */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4"> 
             {/* Start Date */}
