@@ -1,5 +1,3 @@
-
-
 import { useState } from "react";
 
 import { applyToOffer } from "../../../services/offersServices";
@@ -9,12 +7,24 @@ export const ApplyModal = ({ isOpen, setIsOpen, idOffer, onApplySuccess }) => {
   const [phone, setPhone] = useState("");
   const [coverLetter, setCoverLetter] = useState("");
   const [gdprAccepted, setGdprAccepted] = useState(false);
+  const [phoneError, setPhoneError] = useState("");
   const token = localStorage.getItem("token");
  
 
+  // Simple phone validation: starts with + and at least 10 digits
+  const isValidPhone = (value) => {
+    const digits = value.replace(/\D/g, "");
+    return value.startsWith("+") && digits.length >= 10;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setPhoneError("");
     if (!gdprAccepted) return;
+    if (!isValidPhone(phone)) {
+      setPhoneError("Please enter a valid phone number (start with + and at least 10 digits).");
+      return;
+    }
     try {
       const response = await applyToOffer(idOffer, { phone, coverLetter, gdprAccepted }, token);
       console.log( "🚀 ~ handleSubmit ~ response:", response);
@@ -62,6 +72,9 @@ export const ApplyModal = ({ isOpen, setIsOpen, idOffer, onApplySuccess }) => {
                 className='input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40'
                 placeholder='e.g. +34 600 123 456'
               />
+              {phoneError && (
+                <span className="text-red-500 text-xs">{phoneError}</span>
+              )}
             </div>
 
             <div>
