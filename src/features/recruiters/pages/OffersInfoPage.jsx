@@ -212,9 +212,11 @@ const fetchOffers= async () => {
   if (error) return <p>Error al cargar las ofertas: {error}</p>;
 
   const handleApplySuccess = (updatedOffer) => {
-    setOffers((prevOffers) =>
-      prevOffers.map((offer) => (offer._id === updatedOffer._id ? updatedOffer : offer))
-    );
+    console.log("Offer applied successfully:", updatedOffer);
+    setOffersByDev((prevOffers) =>{
+      console.log( "🚀 ~ handleApplySuccess ~ prevOffers:", prevOffers);
+     return prevOffers.map((offer) => (offer._id === updatedOffer._id ? updatedOffer : offer))
+    });
   };
 
   return (
@@ -259,7 +261,6 @@ const fetchOffers= async () => {
               isOpenModalEdit={isOpenModalEdit}
               setIsOpenModalEdit={setIsOpenModalEdit}
               key={offer._id}
-              onApplySuccess={handleApplySuccess}
             />
           );
         })}
@@ -299,7 +300,6 @@ const fetchOffers= async () => {
               isOpenModalEdit={isOpenModalEdit}
               setIsOpenModalEdit={setIsOpenModalEdit}
               key={offer._id}
-              onApplySuccess={handleApplySuccess}
             />
           );
         })}
@@ -342,7 +342,6 @@ const fetchOffers= async () => {
               isOpenModalEdit={isOpenModalEdit}
               setIsOpenModalEdit={setIsOpenModalEdit}
               key={offer._id}
-              onApplySuccess={handleApplySuccess}
             />
           );
         })}
@@ -376,6 +375,7 @@ const fetchOffers= async () => {
           isOpen={isOpenApplyModal}
           setIsOpen={setIsOpenApplyModal}
           token={token}
+          onApplySuccess={handleApplySuccess}
           />
       )}
     </SectionContainer>

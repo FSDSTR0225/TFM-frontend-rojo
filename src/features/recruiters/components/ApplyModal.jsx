@@ -1,15 +1,28 @@
-import { s } from "framer-motion/client";
-import React, { useState } from "react";
 
-export const ApplyModal = ({ isOpen, setIsOpen, onSubmit }) => {
+
+import { useState } from "react";
+
+import { applyToOffer } from "../../../services/offersServices";
+
+
+export const ApplyModal = ({ isOpen, setIsOpen, idOffer, onApplySuccess }) => {
   const [phone, setPhone] = useState("");
   const [coverLetter, setCoverLetter] = useState("");
   const [gdprAccepted, setGdprAccepted] = useState(false);
+  const token = localStorage.getItem("token");
+ 
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!gdprAccepted) return;
-    onSubmit?.({ phone, coverLetter });
+    try {
+      const response = await applyToOffer(idOffer, { phone, coverLetter, gdprAccepted }, token);
+      console.log( "🚀 ~ handleSubmit ~ response:", response);
+      onApplySuccess?.(response.offer);
+      setIsOpen(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   if (!isOpen) return null;
@@ -80,14 +93,14 @@ export const ApplyModal = ({ isOpen, setIsOpen, onSubmit }) => {
             <div className='flex flex-col md:flex-row justify-end gap-4 pt-4'>
               <button
                 type='submit'
-                className='btn bg-primary-60 text-neutral-90 hover:bg-primary-70 w-full md:w-auto'
+                className='btn bg-secondary-60 text-neutral-90 hover:bg-secondary-70 w-full md:w-auto'
                 disabled={!gdprAccepted || !phone}
               >
                 Send Application
               </button>
               <button
                 type='button'
-                onClick={setIsOpen}
+                onClick={() => setIsOpen(false)}
                 className='btn bg-neutral-70 text-neutral-10 hover:bg-neutral-60 border border-neutral-60 w-full md:w-auto'
               >
                 Close

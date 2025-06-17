@@ -7,7 +7,6 @@ import { MenuCard } from "./MenuCard";
 import { useContext } from "react";
 import { AuthContext } from "../../../context/authContext";
 import { PiMapPinArea } from "react-icons/pi";
-import { applyToOffer } from "../../../services/offersServices";
 import Badge from "../../../components/Badge";
 import { AvatarImage } from "../../../components/AvatarImage";
 import { NameUsers } from "../../../components/NameUsers";
@@ -18,12 +17,11 @@ export const OfferCard = ({
   id,
   setIsOpenModalDelete,
   isOpenModalDelete,
-  isOpenApplyModal,
   setIsOpenApplyModal,
   setSelectedOfferId,
   isOpenModalEdit,
   setIsOpenModalEdit,
-  onApplySuccess,
+
 }) => {
   const navigate = useNavigate();
   const { profile, token } = useContext(AuthContext);
@@ -44,25 +42,25 @@ export const OfferCard = ({
       navigate("/login");
     }
 
-    setIsOpenApplyModal(!isOpenApplyModal);
+    setIsOpenApplyModal(true);
     setSelectedOfferId(offer?._id);
   };
   
-  const handleApply = async (e) => {
-    e.stopPropagation();
-    if (!token) {
-      console.log("por aqui no pasaras");
-      navigate("/login");
-    }
+  // const handleApply = async (e) => {
+  //   e.stopPropagation();
+  //   if (!token) {
+  //     console.log("por aqui no pasaras");
+  //     navigate("/login");
+  //   }
 
-    try {
-      const response = await applyToOffer(offer._id, token);
-      console.log(response.msg || "se envio");
-      onApplySuccess?.(response.offer);
-    } catch (error) {
-      console.log(error.message || "Error al aplicar a la oferta");
-    }
-  };
+  //   try {
+  //     const response = await applyToOffer(offer._id, token);
+  //     console.log(response.msg || "se envio");
+  //     onApplySuccess?.(response.offer);
+  //   } catch (error) {
+  //     console.log(error.message || "Error al aplicar a la oferta");
+  //   }
+  // };
   const hasApplied =
     Array.isArray(offer.applicants) &&
     profile?._id &&
