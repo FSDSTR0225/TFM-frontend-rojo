@@ -164,7 +164,13 @@ function OwnProjectCard({ profileInfo }) {
               </figure>
               <div className="card-body flex flex-col flex-grow overflow-hidden">
                 <div className="grid grid-cols-2">
-                  <h2 className="card-title truncate">{project.title}</h2>
+                  <div className="flex items-center gap-2">
+                    <h2 className="card-title truncate">{project.title}</h2>
+                    <div className="flex items-center gap-1 text-neutral-400">
+                      <PiEye className="text-primary-80" size={18} />
+                      <span>{Math.floor((project.views || 0) / 2)}</span>
+                    </div>
+                  </div>
                   {isCurrentUserProfile && (
                     <div className="justify-self-end top-4 right-4 flex gap-2">
                       <DotsComponent
