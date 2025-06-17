@@ -2,7 +2,7 @@
 import React from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router';
 import { ErrorPage } from '../pages/ErrorPage';
-import { Home } from '../pages/Home';
+// import { Home } from '../pages/Home';
 import { ProjectsPage } from '../features/developer/pages/ProjectsPage';
 import { NewProjectPage } from '../features/developer/pages/NewProjectPage';
 import { ProjectDetailsPage } from '../features/developer/pages/ProjectDetailsPage';
@@ -25,6 +25,7 @@ import { OfferInfoPage } from '../features/recruiters/pages/OfferInfoPage';
 import { DashBoardLayout } from '../layout/DashBoardLayout';
 import { DashBoarPage } from '../features/recruiters/pages/DashBoarPage';
 import { Onboarding } from '../pages/Onboarding/Onboarding';
+import { Home } from '../components/home/homepage';
 
 
 
