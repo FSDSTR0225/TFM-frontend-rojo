@@ -4,11 +4,12 @@ import { useState } from "react";
 import {useLocation, useNavigate, useParams } from "react-router";
 import { SectionContainer } from "../../../components/SectionContainer";
 import { OfferInfo } from "../components/OfferInfo";
-import { applyToOffer, getOffersById } from "../../../services/offersServices";
+import { getOffersById } from "../../../services/offersServices";
 import { RecContactCard } from "../components/RecContactCard";
 import { OfferModal } from "../components/OfferModal";
 import { useContext } from "react";
 import { AuthContext } from "../../../context/authContext";
+import { ApplyModal } from "../components/ApplyModal";
 
 
 export const OfferInfoPage = () => {
@@ -17,9 +18,11 @@ export const OfferInfoPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 const [isOpenModalEdit, setIsOpenModalEdit] = useState(false);
+const [isOpenApplyModal, setIsOpenApplyModal] = useState(false);
 const { profile, token } = useContext(AuthContext);
 const navigate = useNavigate();
 const location = useLocation();
+
   
 const { id } = useParams();
 
@@ -48,21 +51,31 @@ const fetchOffer = async () => {
     fetchOffer();
   }, [id]);
 
-  const handleApply = async (e) => {
-      e.stopPropagation();
-      if (!token) {
+    const handleApplyModal = (e) => {
+    e.stopPropagation();
+    if (!token) {
+      console.log("por aqui no pasaras");
+      navigate("/login", {state: {from: location.pathname}});
+    }
+
+    setIsOpenApplyModal(true);
+  };
+
+  // const handleApply = async (e) => {
+  //     e.stopPropagation();
+  //     if (!token) {
         
-        navigate("/login", {state: {from: location.pathname}});
-      }
+  //       navigate("/login", {state: {from: location.pathname}});
+  //     }
   
-      try {
-        const response = await applyToOffer(offer._id, token);
-        console.log(response.msg || "se envio");
-        // onApplySuccess?.(response.offer);
-      } catch (error) {
-        console.log(error.message || "Error al aplicar a la oferta");
-      }
-    };
+  //     try {
+  //       const response = await applyToOffer(offer._id, token);
+  //       console.log(response.msg || "se envio");
+  //       // onApplySuccess?.(response.offer);
+  //     } catch (error) {
+  //       console.log(error.message || "Error al aplicar a la oferta");
+  //     }
+  //   };
 
     
 
@@ -89,7 +102,7 @@ const fetchOffer = async () => {
     isOpen={isOpenModalEdit}
     setIsOpen={setIsOpenModalEdit}
     token={token} 
-    handleApply={handleApply}
+    handleApply={handleApplyModal}
     hasApplied={hasApplied}
     />
    {isOwnerRecruiter && ( <aside className="min-w-90 card bg-neutral-80 shadow-xl border border-neutral-70">
@@ -108,6 +121,16 @@ const fetchOffer = async () => {
              reloadPage={fetchOffer}
              />
           }
+          {isOpenApplyModal && (
+                  <ApplyModal
+                    idOffer={id}
+                    isOpen={isOpenApplyModal}
+                    setIsOpen={setIsOpenApplyModal}
+                    token={token}
+                    handleApply={handleApplyModal}
+
+                    />
+                )}
     </SectionContainer>
   );
 };
