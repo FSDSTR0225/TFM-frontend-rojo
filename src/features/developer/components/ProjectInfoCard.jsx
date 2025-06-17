@@ -36,7 +36,7 @@ export const ProjectInfoCard = ({ project }) => {
                 </div>
                 <div className="flex items-center gap-1">
                 <PiEye className="text-primary-80" />
-                <span>{project.views || 0}</span>
+                <span>{Math.floor((project.views || 0) / 2)}</span>
                 </div>
             </div>
         </div>

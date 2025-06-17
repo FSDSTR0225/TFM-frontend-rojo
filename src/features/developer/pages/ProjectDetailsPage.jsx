@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { getProjectById } from "../../../services/projectService";
+import { getProjectById, incrementProjectView, toggleProjectLike, getProjectLikeStatus } from "../../../services/projectService";
 import { ProjectInfoCard } from "../components/ProjectInfoCard";
 import { GitHubFileTree } from "../components/GitHubFileTree";
 import { GitHubLanguagesTag } from "../components/GitHubLanguagesTag";
@@ -35,29 +35,77 @@ export const ProjectDetailsPage = () => {
   const width = useWindowWidth();
   const isDesktop = width >= 1200;
 
-  // Supongo que tienes el token almacenado (localStorage o context)
-  const token = localStorage.getItem("token") || "";
+  const token = localStorage.getItem('token') || '';
+
+  // Estados del botón de like
+  const [liked, setLiked] = useState(false);
+  const [animating, setAnimating] = useState(false);
+  const [loadingLike, setLoadingLike] = useState(true);
 
   useEffect(() => {
-    const fetchProject = async () => {
+  const incrementViewWithCooldown = async () => {
+    if (typeof window === "undefined" || !window.localStorage) return;
+
+    const cooldownTime = 1000 * 60 * 60; // 1 hora en ms
+    const lastViewKey = `project_${id}_last_view`;
+    const lastView = localStorage.getItem(lastViewKey);
+    const now = Date.now();
+
+    if (!lastView || now - parseInt(lastView, 10) > cooldownTime) {
+      try {
+        await incrementProjectView(id);
+        localStorage.setItem(lastViewKey, now.toString());
+
+        // Actualizar localmente el contador de views para reflejar el cambio instantáneamente:
+        setProject(prev => prev ? { ...prev, views: (prev.views || 0) + 1 } : prev);
+      } catch (error) {
+        console.error("Error incrementando views:", error);
+      }
+    }
+  };
+
+  const fetchProjectAndLikeStatus = async () => {
+    try {
       const data = await getProjectById(id);
       if (data && !data.error) {
         setProject(data);
         setCurrentIndex(0);
       }
-    };
-    fetchProject();
-  }, [id]);
+      const likeStatus = await getProjectLikeStatus(id, token);
+      setLiked(likeStatus.liked);
+    } catch (error) {
+      console.error("Error fetching project or like status:", error);
+    } finally {
+      setLoadingLike(false);
+    }
+  };
 
-  // Esta función actualiza el proyecto con la data que devuelve toggleProjectLike
-const handleLike = (likeData) => {
-  console.log("handleLike data:", likeData);
-  setProject((prevProject) => ({
-    ...prevProject,
-    liked: likeData.liked,
-    likes: likeData.likes,  // <-- aquí estaba el error
-  }));
-};
+  fetchProjectAndLikeStatus();
+  incrementViewWithCooldown();
+}, [id, token]);
+
+
+  // Función para manejar el click del like
+  const handleLikeClick = async () => {
+    if (animating || loadingLike) return;
+    setAnimating(true);
+    setLoadingLike(true);
+    try {
+      const data = await toggleProjectLike(id, token);
+      setLiked(data.liked);
+      // Actualizamos el proyecto con la info de likes para que refleje contador, estado, etc.
+      setProject((prevProject) => ({
+        ...prevProject,
+        liked: data.liked,
+        likes: data.likes,
+      }));
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setAnimating(false);
+      setLoadingLike(false);
+    }
+  };
 
   if (!project) return null;
 
@@ -85,6 +133,7 @@ const handleLike = (likeData) => {
     ? parseRepoUrl(project.githubProjectLink)
     : null;
 
+  
   return (
     <div className="w-full flex flex-col items-center gap-6">
       <div className="relative w-full h-[256px] overflow-hidden">
@@ -162,12 +211,11 @@ const handleLike = (likeData) => {
               <ProjectInfoCard project={project} />
 
               <div className="flex justify-center items-center rounded-full p-6">
-                {/* Pasamos projectId, liked inicial, token y función onLike */}
                 <LikeButtonRounded
-                  projectId={project._id}
-                  initialLiked={project.liked}
-                  token={token}
-                  onLike={handleLike}
+                  liked={liked}
+                  animating={animating}
+                  loadingLike={loadingLike}
+                  onClick={handleLikeClick}
                 />
               </div>
 
@@ -267,15 +315,12 @@ const handleLike = (likeData) => {
 
                 case "LikeButton":
                   return (
-                    <div
-                      key="likeButton"
-                      className="flex justify-center items-center rounded-full"
-                    >
+                    <div className="flex justify-center items-center rounded-full p-6">
                       <LikeButtonRounded
-                        projectId={project._id}
-                        initialLiked={project.liked}
-                        token={token}
-                        onLike={handleLike}
+                        liked={liked}
+                        animating={animating}
+                        loadingLike={loadingLike}
+                        onClick={handleLikeClick}
                       />
                     </div>
                   );
