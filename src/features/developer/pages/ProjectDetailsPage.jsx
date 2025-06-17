@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { getProjectById } from "../../../services/projectService";
+import { getProjectById, incrementProjectView, toggleProjectLike, getProjectLikeStatus } from "../../../services/projectService";
 import { ProjectInfoCard } from "../components/ProjectInfoCard";
 import { GitHubFileTree } from "../components/GitHubFileTree";
-import { GitHubLanguagesTag } from "../components/GitHubLanguagesTag"; // <-- Importa aquí
+import { GitHubLanguagesTag } from "../components/GitHubLanguagesTag";
 import { CodeBlock } from "../../../styles/ReactParser";
 import { LikeButtonRounded } from "../../../components/LikeButtonRounded";
 
@@ -17,7 +17,6 @@ function useWindowWidth() {
   return width;
 }
 
-// Función para validar y parsear la URL del repo GitHub
 function parseRepoUrl(repoUrl) {
   try {
     const url = new URL(repoUrl);
@@ -36,16 +35,77 @@ export const ProjectDetailsPage = () => {
   const width = useWindowWidth();
   const isDesktop = width >= 1200;
 
+  const token = localStorage.getItem('token') || '';
+
+  // Estados del botón de like
+  const [liked, setLiked] = useState(false);
+  const [animating, setAnimating] = useState(false);
+  const [loadingLike, setLoadingLike] = useState(true);
+
   useEffect(() => {
-    const fetchProject = async () => {
+  const incrementViewWithCooldown = async () => {
+    if (typeof window === "undefined" || !window.localStorage) return;
+
+    const cooldownTime = 1000 * 60 * 60; // 1 hora en ms
+    const lastViewKey = `project_${id}_last_view`;
+    const lastView = localStorage.getItem(lastViewKey);
+    const now = Date.now();
+
+    if (!lastView || now - parseInt(lastView, 10) > cooldownTime) {
+      try {
+        await incrementProjectView(id);
+        localStorage.setItem(lastViewKey, now.toString());
+
+        // Actualizar localmente el contador de views para reflejar el cambio instantáneamente:
+        setProject(prev => prev ? { ...prev, views: (prev.views || 0) + 1 } : prev);
+      } catch (error) {
+        console.error("Error incrementando views:", error);
+      }
+    }
+  };
+
+  const fetchProjectAndLikeStatus = async () => {
+    try {
       const data = await getProjectById(id);
       if (data && !data.error) {
         setProject(data);
         setCurrentIndex(0);
       }
-    };
-    fetchProject();
-  }, [id]);
+      const likeStatus = await getProjectLikeStatus(id, token);
+      setLiked(likeStatus.liked);
+    } catch (error) {
+      console.error("Error fetching project or like status:", error);
+    } finally {
+      setLoadingLike(false);
+    }
+  };
+
+  fetchProjectAndLikeStatus();
+  incrementViewWithCooldown();
+}, [id, token]);
+
+
+  // Función para manejar el click del like
+  const handleLikeClick = async () => {
+    if (animating || loadingLike) return;
+    setAnimating(true);
+    setLoadingLike(true);
+    try {
+      const data = await toggleProjectLike(id, token);
+      setLiked(data.liked);
+      // Actualizamos el proyecto con la info de likes para que refleje contador, estado, etc.
+      setProject((prevProject) => ({
+        ...prevProject,
+        liked: data.liked,
+        likes: data.likes,
+      }));
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setAnimating(false);
+      setLoadingLike(false);
+    }
+  };
 
   if (!project) return null;
 
@@ -60,7 +120,6 @@ export const ProjectDetailsPage = () => {
     setCurrentIndex((prev) => (prev + 1) % length);
   };
 
-  // Orden para móvil
   const mobileOrder = [
     "Gallery",
     "ProjectInfoCard",
@@ -70,14 +129,13 @@ export const ProjectDetailsPage = () => {
     "LikeButton",
   ];
 
-  // Validación URL GitHub para mostrar o no componentes GitHub
   const githubRepoInfo = project.githubProjectLink
     ? parseRepoUrl(project.githubProjectLink)
     : null;
 
+  
   return (
     <div className="w-full flex flex-col items-center gap-6">
-      {/* Cabecera */}
       <div className="relative w-full h-[256px] overflow-hidden">
         {gallery[0] && (
           <img
@@ -93,15 +151,12 @@ export const ProjectDetailsPage = () => {
           {project.title}
         </h1>
 
-        {/* Desktop: dos columnas independientes */}
         {isDesktop ? (
           <div
             className="grid grid-cols-[5fr_2fr] gap-4"
             style={{ alignItems: "start" }}
           >
-            {/* Columna Izquierda */}
             <div className="flex flex-col gap-6">
-              {/* Galería */}
               <div className="relative w-full aspect-video rounded-lg overflow-hidden">
                 <div className="relative w-full h-full">
                   {gallery.map((url, index) => (
@@ -129,7 +184,6 @@ export const ProjectDetailsPage = () => {
                 </div>
               </div>
 
-              {/* Description */}
               {project.description && (
                 <div className="relative bg-neutral-80 flex flex-col rounded-lg shadow-md overflow-hidden border border-neutral-70 p-6 text-inherit no-underline w-full">
                   <h2 className="text-white text-2xl font-semibold mb-4">
@@ -141,7 +195,6 @@ export const ProjectDetailsPage = () => {
                 </div>
               )}
 
-              {/* Code Sections */}
               {project.codeSections && project.codeSections.length > 0 && (
                 <section className="relative bg-neutral-80 flex flex-col rounded-lg shadow-md overflow-hidden border border-neutral-70 p-6 text-inherit no-underline w-full">
                   <h2 className="text-white text-2xl font-semibold mb-6">
@@ -154,31 +207,35 @@ export const ProjectDetailsPage = () => {
               )}
             </div>
 
-            {/* Columna Derecha */}
             <div className="flex flex-col">
               <ProjectInfoCard project={project} />
 
               <div className="flex justify-center items-center rounded-full p-6">
-                <LikeButtonRounded />
+                <LikeButtonRounded
+                  liked={liked}
+                  animating={animating}
+                  loadingLike={loadingLike}
+                  onClick={handleLikeClick}
+                />
               </div>
 
-              {/* Mostrar GitHub solo si URL válida */}
               {githubRepoInfo && (
                 <>
                   <h1 className="text-white text-2xl font-semibold p-4">GitHub</h1>
                   <div key="githubFileTree" className="-mt-6">
                     <GitHubFileTree repoUrl={project.githubProjectLink} />
                   </div>
-                  <div key="githubFileTree" className="relative bg-neutral-80 flex flex-col rounded-lg shadow-md overflow-hidden border border-neutral-70 p-6 text-inherit no-underline w-full-mt-6">
+                  <div
+                    key="githubLanguages"
+                    className="relative bg-neutral-80 flex flex-col rounded-lg shadow-md overflow-hidden border border-neutral-70 p-6 text-inherit no-underline w-full-mt-6"
+                  >
                     <GitHubLanguagesTag repoUrl={project.githubProjectLink} />
                   </div>
-                  
                 </>
               )}
             </div>
           </div>
         ) : (
-          // Móvil: UNA sola columna con las secciones en el orden que defines
           <div className="flex flex-col gap-6">
             {mobileOrder.map((section) => {
               switch (section) {
@@ -258,11 +315,13 @@ export const ProjectDetailsPage = () => {
 
                 case "LikeButton":
                   return (
-                    <div
-                      key="likeButton"
-                      className="flex justify-center items-center rounded-full"
-                    >
-                      <LikeButtonRounded />
+                    <div className="flex justify-center items-center rounded-full p-6">
+                      <LikeButtonRounded
+                        liked={liked}
+                        animating={animating}
+                        loadingLike={loadingLike}
+                        onClick={handleLikeClick}
+                      />
                     </div>
                   );
 

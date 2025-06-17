@@ -127,7 +127,7 @@ const TreeNode = ({ node, level = 0, isLast }) => {
         </div>
       )}
 
-      <style jsx>{`
+      <style>{`
         .tree-node {
           position: relative;
           padding-left: 20px;

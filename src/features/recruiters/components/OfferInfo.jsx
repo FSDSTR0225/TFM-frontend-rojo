@@ -5,12 +5,24 @@ import { MainRecButton } from '../../../components/MainRecButton';
 import { PiMapPinArea } from 'react-icons/pi';
 import { useContext } from 'react';
 import { AuthContext } from '../../../context/authContext';
+import { useNavigate } from 'react-router';
 
-export const OfferInfo = ({offer, isOpen, setIsOpen}) => {
-
+export const OfferInfo = ({offer, isOpen, setIsOpen, handleApply}) => {
+const navigate = useNavigate();
   const { profile } = useContext(AuthContext);
   const isOwner = offer.owner?._id === profile?._id;
+  const isRecruiter = profile?.role.type === "recruiter";
   
+ const hasApplied = Array.isArray(offer?.applicants) && profile?._id
+  ? offer.applicants.some(applicant => applicant.user && applicant.user._id === profile._id)
+  : false;
+
+    const canApply = !hasApplied && !isRecruiter;
+
+const handleDashboard = () => {
+   navigate(`/private-rec/dashboard/${offer._id}`);
+}
+
   return (
     <article  className=' card bg-neutral-80 shadow-xl border border-neutral-70 flex-col  w-full '>
             <div className='card-body gap-6'>
@@ -42,9 +54,21 @@ export const OfferInfo = ({offer, isOpen, setIsOpen}) => {
                   <p>Salary: {offer.salary}</p>
                 </>
               )}
-              <MainRecButton classProps='w-25 self-end'> 
-                Apply Now
-              </MainRecButton>
+             {canApply ? (
+  <MainRecButton classProps='w-25 self-end' onClick={handleApply}>
+    Apply Now
+  </MainRecButton>
+) : (
+  !isRecruiter && (
+    <MainRecButton classProps='w-25 self-end opacity-50 cursor-not-allowed' disabled >
+      Already applied
+    </MainRecButton>
+  )
+)}
+
+              {isOwner && <MainRecButton classProps='w-30 self-end' onClick={handleDashboard} > 
+                Dashboar offer
+              </MainRecButton>}
             </div>
           </article>
   )

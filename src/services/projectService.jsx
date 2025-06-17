@@ -40,12 +40,13 @@ export const createProject = async (payload, token) => {
   }
 };
 
-export const getProjectById = async (_id) => {
+export const getProjectById = async (_id, token) => {
   try {
     const resp = await fetch(`${urlBackEnd}/projects/${_id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
     });
 
@@ -56,6 +57,7 @@ export const getProjectById = async (_id) => {
     return { error: true, message: error.message };
   }
 };
+
 
 export const getProjectsByDeveloper = async (developerId) => {
   try {
@@ -113,3 +115,84 @@ export const updateProject = async (id, data, token) => {
     return { error: true, message: error.message };
   }
 };
+
+
+export const toggleProjectLike = async (projectId, token) => {
+  try {
+    const resp = await fetch(`${urlBackEnd}/projects/${projectId}/like`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!resp.ok) {
+      const err = await resp.json();
+      throw new Error(err.message || 'Failed to toggle like');
+    }
+
+    const data = await resp.json();
+    // data debería tener liked, likesCount o incluso el proyecto completo actualizado
+    return data;
+  } catch (error) {
+    console.error('Failed to toggle like:', error);
+    throw error;
+  }
+};
+
+export const getProjectLikeStatus = async (projectId, token) => {
+  try {
+    const resp = await fetch(`${urlBackEnd}/projects/${projectId}/like-status`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!resp.ok) {
+      const err = await resp.json();
+      throw new Error(err.message || 'Failed to fetch like status');
+    }
+
+    const data = await resp.json();
+    // data debe incluir al menos { liked: true/false }
+    return data;
+  } catch (error) {
+    console.error('Failed to get like status:', error);
+    throw error;
+  }
+};
+
+//Función para obtener los views de cada proyecto
+
+const VIEW_COOLDOWN_MS = 60 * 60 * 1000; // 1 hora
+
+export const incrementProjectView = async (projectId) => {
+  try {
+    // Revisar timestamp guardado en localStorage
+    const lastViewTimestamp = localStorage.getItem(`lastView_${projectId}`);
+    const now = Date.now();
+
+    if (lastViewTimestamp && now - Number(lastViewTimestamp) < VIEW_COOLDOWN_MS) {
+      // Ya se incrementó view recientemente, no hacer nada
+      return null;
+    }
+
+    // Si no hay registro o ya pasó el cooldown, hacemos la petición
+    const response = await fetch(`${urlBackEnd}/projects/${projectId}/view`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+    });
+    if (!response.ok) throw new Error('Error incrementando views');
+
+    // Guardar timestamp de esta vista para el cooldown
+    localStorage.setItem(`lastView_${projectId}`, now.toString());
+
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+  }
+};
+
