@@ -15,7 +15,7 @@ function InfoDeveloper({ profileInfo, token, setProfileData, onProfileUpdated })
 
   const [isDevModalOpen, setIsDevModalOpen] = useState(false);
 
-  const [lastProjects, setLastProjects] = useState([]);
+  const [mostViewedProjects, setMostViewedProjects] = useState([]);
   const [loadingProjects, setLoadingProjects] = useState(true);
 
     const handleOpenModal = () => {
@@ -31,22 +31,24 @@ function InfoDeveloper({ profileInfo, token, setProfileData, onProfileUpdated })
     setLoadingProjects(true);
     getProjectsByDeveloper(profileInfo._id, token)
       .then(res => {
-        console.log('ultimos proyectos:', res);
-        if (res.error) {
-          setLastProjects([]);
-        } else {
-          const projects = Array.isArray(res.projects) ? res.projects : res;
-          const sorted = [...projects].sort((a, b) => (Number(b.year) || 0) - (Number(a.year) || 0));
-          setLastProjects(sorted.slice(0, 3));
-        }
-      })
+        const projects = res.error
+        ? []
+        : Array.isArray(res.projects) ? res.projects : res;
+
+      // Ordena por vistas descendentes
+      const sortedByViews = [...projects].sort(
+        (a, b) => (Number(b.views) || 0) - (Number(a.views) || 0)
+      );
+
+      setMostViewedProjects(sortedByViews.slice(0, 3));
+    })
     .catch(() => {
-      setLastProjects([]);
+      setMostViewedProjects([]);
     })
     .finally(() => {
       setLoadingProjects(false);
     });
-  }, [profileInfo?._id, token]);
+}, [profileInfo?._id, token]);
 
   if (!profileInfo) return <p>Error al cargar el profile</p>;
 
@@ -134,23 +136,24 @@ function InfoDeveloper({ profileInfo, token, setProfileData, onProfileUpdated })
             </Link>
           </div>
 
-          {/* LAST PROJECTS */}
+          {/* MOST VIEWED PROJECTS */}
           <div className="w-full my-2">
             <h2 className="flex font-bold mb-3">
               <PiCodeBlock  className="text-xl mr-2 text-primary-50" />
-              Last Projects
+               Most Viewed Projects
             </h2>
             {loadingProjects ? (
               <p>Cargando proyectos...</p>
-            ) : lastProjects.length === 0 ? (
+            ) : mostViewedProjects.length === 0 ? (
               <p>No hay proyectos para mostrar</p>
             ) : (
               <ol className="list-decimal list-inside">
-                {lastProjects.map(proj => (
-                  <li key={proj._id} className="truncate mb-1">
+                {mostViewedProjects.map(proj => (
+                  <li key={proj._id} className="truncate mb-1 flex justify-between items-center">
                     <Link to={`/projects/${proj._id}`} className="hover:underline">
                       {proj.title}
                     </Link>
+                    <span className="text-sm text-neutral-400">{proj.views || 0} views</span>
                   </li>
                 ))}
               </ol>
