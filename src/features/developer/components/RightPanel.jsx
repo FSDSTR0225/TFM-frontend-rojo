@@ -22,16 +22,16 @@ function RightPanel({ profileInfo, token, onProfileUpdated }) {
 
   if (isCurrentUser) {
   return (
-    <div className="ml-2">
+    <div className="ml-0 sm:ml-2">
       {/* TABS */}
       <div className="tabs tabs-border">
         {/* Navbar EXP, PRO Y STU */}
         <input type="radio" name="my_tabs_2" className="tab" aria-label="Portfolio" defaultChecked/>
         <div className="tab-content border border-neutral-60 p-6 rounded-md">
           <div className="navbar flex items-center rounded-md mb-4">
-            <ul className="menu menu-horizontal flex items-center w-full">
+            <ul className="menu menu-vertical sm:menu-horizontal flex flex-col sm:flex-row w-full gap-2 sm:gap-0">
               {tabs.map(tab => (
-                <li key={tab.key} className="flex items-center justify-center flex-1 mx-1">
+                <li key={tab.key} className="flex items-center justify-center w-full sm:flex-1 mx-0 sm:mx-1">
                   <button
                     onClick={() => setActiveTab(tab.key)}
                     className="w-full flex items-center justify-center py-2 bg-neutral-60"

@@ -105,7 +105,7 @@ function StudyCard({ profileInfo }) {
       ) : error ? (
         <div className="text-red-500 text-sm">{error}</div>
       ) : studies.length === 0 ? (
-        <div className="text-gray-500 text-sm">Este usuario no ha añadido ningún estudio todavía.</div>
+        <div className="text-neutral-50 text-sm"><span>No studies yet.</span></div>
       ) : (
         <ul className="space-y-4">
           {studies
@@ -113,11 +113,12 @@ function StudyCard({ profileInfo }) {
           .map(stu => (
             <li
               key={stu._id}
-              className={`relative bg-neutral-80 border border-neutral-60 p-8 mb-4 rounded-md ${
-                stu.instituteLogo ? 'flex gap-4' : 'grid grid-cols-3 gap-4'
-              }`}
+              className={`
+                relative
+                bg-neutral-80 border border-neutral-60 p-6 sm:p-8 mb-4 rounded-md
+                ${stu.instituteLogo ? 'flex flex-col sm:flex-row gap-4' : 'grid grid-cols-1 sm:grid-cols-3 gap-4'}
+              `}
             >
-              {/* DotsComponent siempre en la misma posición */}
               {isCurrentUser && (
                 <div className="absolute top-4 right-4 flex gap-2">
                   <DotsComponent
@@ -127,29 +128,25 @@ function StudyCard({ profileInfo }) {
                 </div>
               )}
 
-              {/* Layout con logo */}
               {stu.instituteLogo ? (
                 <>
-                  {/* Logo a la izquierda */}
-                  <div className="flex-shrink-0">
-                    <img 
-                      src={stu.instituteLogo} 
-                      alt={stu.instituteName} 
-                      className="border-primary-60 border-4 w-32 h-32 object-cover" 
+                  <div className="flex-shrink-0 mx-auto sm:mx-0">
+                    <img
+                      src={stu.instituteLogo}
+                      alt={stu.instituteName}
+                      className="border-primary-60 border-4 w-24 h-24 sm:w-32 sm:h-32 object-cover rounded"
                     />
                   </div>
-                  
-                  {/* Contenido central con margen */}
-                  <div className="flex-1 ml-2">
-                    <h3 className="text-xl uppercase font-bold mb-2">{stu.degree}</h3>
-                    <p className="mb-2">{stu.instituteName}</p>
-                    <p>{stu.description}</p>
+                  <div className="flex-1 ml-0 sm:ml-2 text-center sm:text-left">
+                    <h3 className="text-lg sm:text-xl uppercase font-bold mb-1 sm:mb-2">
+                      {stu.degree}
+                    </h3>
+                    <p className="mb-1 sm:mb-2">{stu.instituteName}</p>
+                    <p className="mb-2 sm:mb-4">{stu.description}</p>
                   </div>
-                  
-                  {/* Lado derecho con fechas */}
-                  <div className="flex-shrink-0 flex flex-col justify-end items-end">
-                    <p className="text-right">
-                      {new Date(stu.startDate).toLocaleDateString('es-ES', { month: 'numeric', year: 'numeric' })} -{' '}
+                  <div className="flex-shrink-0 flex flex-col justify-end items-center sm:items-end mt-4 sm:mt-0">
+                    <p className="text-sm sm:text-base text-center sm:text-right">
+                      {new Date(stu.startDate).toLocaleDateString('es-ES', { month: 'numeric', year: 'numeric' })} – 
                       {stu.endDate
                         ? new Date(stu.endDate).toLocaleDateString('es-ES', { month: 'numeric', year: 'numeric' })
                         : 'Actualidad'}
@@ -158,12 +155,13 @@ function StudyCard({ profileInfo }) {
                 </>
               ) : (
                 <>
-                  {/* Layout sin logo (como estaba antes) */}
-                  <h3 className="col-span-2 text-xl uppercase font-bold">{stu.degree}</h3>
-                  <p className="col-span-2">{stu.instituteName}</p>
-                  <p className="col-span-2">{stu.description}</p>
-                  <p className="grid justify-items-end">
-                    {new Date(stu.startDate).toLocaleDateString('es-ES', { month: 'numeric', year: 'numeric' })} -{' '}
+                  <h3 className="col-span-1 sm:col-span-2 text-lg sm:text-xl uppercase font-bold">
+                    {stu.degree}
+                  </h3>
+                  <p className="col-span-1 sm:col-span-2">{stu.instituteName}</p>
+                  <p className="col-span-1 sm:col-span-2">{stu.description}</p>
+                  <p className="grid justify-items-center sm:justify-items-end text-sm sm:text-base">
+                    {new Date(stu.startDate).toLocaleDateString('es-ES', { month: 'numeric', year: 'numeric' })} – 
                     {stu.endDate
                       ? new Date(stu.endDate).toLocaleDateString('es-ES', { month: 'numeric', year: 'numeric' })
                       : 'Actualidad'}

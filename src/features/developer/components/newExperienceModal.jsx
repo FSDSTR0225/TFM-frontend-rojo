@@ -13,18 +13,33 @@ export default function NewExperienceModal({ open, setOpen, handleExperience, ex
     formState: { errors },
   } = useForm();
 
+  const startDate = watch("startDate");
+  const endDate = watch("endDate");
+
+  useEffect(() => {
+    if (startDate && endDate && endDate < startDate) {
+      setValue("endDate", startDate);
+    }
+  }, [startDate, endDate, setValue]);
   const skills = watch("experienceSkills") || [];
 
   useEffect(() => {
     if (experience) {
+      // Función para convertir fecha a formato YYYY-MM
+      const formatDateForMonth = (dateString) => {
+        if (!dateString) return "";
+        // Si ya está en formato YYYY-MM, devolverlo tal como está
+        if (dateString.match(/^\d{4}-\d{2}$/)) return dateString;
+        // Si está en formato ISO o YYYY-MM-DD, extraer solo año y mes
+        return dateString.slice(0, 7);
+      };
+
       reset({
         company: experience.company || "",
         companyLogo: experience.companyLogo || "",
         position: experience.position || "",
-        startDate: experience.startDate
-          ? experience.startDate.split("T")[0]
-          : "",
-        endDate: experience.endDate ? experience.endDate.split("T")[0] : "",
+        startDate: formatDateForMonth(experience.startDate),
+        endDate: formatDateForMonth(experience.endDate),
         experienceSkills: experience.experienceSkills || []
       });
     } else {
@@ -116,7 +131,8 @@ export default function NewExperienceModal({ open, setOpen, handleExperience, ex
               onChange={(tags) => setValue("experienceSkills", tags, { shouldValidate: true })}
             />
           </div>
-           {/* Dates */}
+
+          {/* Dates */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4"> 
             {/* Start Date */}
             <div className="form-control">
@@ -124,12 +140,16 @@ export default function NewExperienceModal({ open, setOpen, handleExperience, ex
                 <span className="label-text font-semibold">Fecha de inicio</span>
               </label>
               <input
-                {...register("startDate", { required: true })}
-                type="date"
+                {...register("startDate", { 
+                  required: "Fecha de inicio requerida",
+                })}
+                type="month"
+                max={new Date().toISOString().slice(0, 7)}
+                min="1990-01"
                 className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
               />
               {errors.startDate && (
-                <span className="text-red-500 text-sm">Este campo es requerido</span>
+                <span className="text-red-500 text-sm">{errors.startDate.message}</span>
               )}
             </div>
 
@@ -139,10 +159,21 @@ export default function NewExperienceModal({ open, setOpen, handleExperience, ex
                 <span className="label-text font-semibold">Fecha de finalización</span>
               </label>
               <input
-                {...register("endDate")}
-                type="date"
+                {...register("endDate", {
+                  required: "Fecha de finalización requerida",
+                  validate: value => {
+                    if (!startDate) return true;
+                    return value >= startDate || "La fecha final debe ser igual o posterior a la de inicio";
+                  }
+                })}
+                type="month"
+                max={new Date().toISOString().slice(0, 7)}
+                min={startDate || "1990-01"}
                 className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
               />
+              {errors.endDate && (
+                <span className="text-red-500 text-sm">{errors.endDate.message}</span>
+              )}
             </div>
           </div>
 

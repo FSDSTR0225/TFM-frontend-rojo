@@ -56,7 +56,7 @@ function InfoDeveloper({ profileInfo, token, setProfileData, onProfileUpdated })
     <SectionContainer classProps="lg:flex-row flex-col-reverse gap-4 lg:items-start">
       <div className="grid grid-cols-1 lg:grid-cols-3">
         {/* PARTE IZQUIERDA INFO PERSONAL */}
-        <div className="flex flex-col items-center bg-neutral-80 border border-neutral-60 p-6 rounded-md h-fit">
+        <div className="flex flex-col items-center bg-neutral-80 border border-neutral-60 p-6 rounded-md h-fit mb-6 lg:mb-0">
 
           {isCurrentUser && (
             <div className="w-full flex justify-end mb-2">
@@ -149,11 +149,11 @@ function InfoDeveloper({ profileInfo, token, setProfileData, onProfileUpdated })
             ) : (
               <ol className="list-decimal list-inside">
                 {mostViewedProjects.map(proj => (
-                  <li key={proj._id} className="truncate mb-1 flex justify-between items-center">
-                    <Link to={`/projects/${proj._id}`} className="hover:underline">
+                  <li key={proj._id} className="truncate mb-1 flex justify-between items-center gap-2">
+                    <Link to={`/projects/${proj._id}`} className="hover:underline truncate mr-2">
                       {proj.title}
                     </Link>
-                    <span className="text-sm text-neutral-400">{proj.views || 0} views</span>
+                    <span className="text-sm text-neutral-400">{Math.floor((proj.views || 0) / 2)} views</span>
                   </li>
                 ))}
               </ol>

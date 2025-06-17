@@ -6,32 +6,56 @@ export default function StudyModal({ open, setOpen, handleStudy, study = null })
     register,
     handleSubmit,
     reset,
+    watch,
+    setValue,
     formState: { errors },
   } = useForm();
 
-useEffect(() => {
-  if (open) {
-    if (study) {
-      reset({
-        degree: study.degree || "",
-        instituteLogo: study.instituteLogo || "",
-        instituteName: study.instituteName || "",
-        description: study.description || "",
-        startDate: study.startDate ? study.startDate.split("T")[0] : "",
-        endDate: study.endDate ? study.endDate.split("T")[0] : "",
-      });
-    } else {
-      reset({
-        degree: "",
-        instituteLogo: "",
-        instituteName: "",
-        description: "",
-        startDate: "",
-        endDate: "",
-      });
+
+  const startDate = watch("startDate");
+  const endDate = watch("endDate");
+
+  useEffect(() => {
+    if (startDate && endDate && endDate < startDate) {
+      setValue("endDate", startDate);
     }
-  }
-}, [study, open, reset]);
+  }, [startDate, endDate, setValue]);
+
+  useEffect(() => {
+      if (study) {
+        // Función para convertir fecha a formato YYYY-MM
+        const formatDateForMonth = (dateString) => {
+          if (!dateString) return "";
+          
+          // Convertir a string si es un objeto Date
+          const dateStr = dateString.toString();
+          
+          // Si ya está en formato YYYY-MM, devolverlo tal como está
+          if (dateStr.match(/^\d{4}-\d{2}$/)) return dateStr;
+          
+          // Si está en formato ISO o YYYY-MM-DD, extraer solo año y mes
+          return dateStr.slice(0, 7);
+        };
+
+        reset({
+          degree: study.degree || "",
+          instituteLogo: study.instituteLogo || "",
+          instituteName: study.instituteName || "",
+          description: study.description || "",
+          startDate: formatDateForMonth(study.startDate),
+          endDate: formatDateForMonth(study.endDate),
+        });
+      } else {
+        reset({
+          degree: "",
+          instituteLogo: "",
+          instituteName: "",
+          description: "",
+          startDate: "",
+          endDate: "",
+        });
+      }
+  }, [study, reset]);
 
 
   const onSubmit = (data) => {
@@ -104,11 +128,16 @@ useEffect(() => {
               <span className="label-text font-semibold">Descripción</span>
             </label>
             <textarea
-              {...register("description")}
+              {...register("description", { maxLength: { value: 200, message: "Máximo 200 caracteres" } })}
               placeholder="Breve descripción del estudio realizado"
               className="textarea textarea-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
               rows={3}
             />
+            {errors.description && (
+              <span className="text-red-500 text-sm" role="alert">
+                {errors.description.message}
+              </span>
+            )}
           </div>
 
           {/* Dates */}
@@ -119,12 +148,16 @@ useEffect(() => {
                 <span className="label-text font-semibold">Fecha de inicio</span>
               </label>
               <input
-                {...register("startDate", { required: true })}
-                type="date"
+                {...register("startDate", { 
+                  required: "Fecha de inicio requerida",
+                })}
+                type="month"
+                max={new Date().toISOString().slice(0, 7)}
+                min="1990-01"
                 className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
               />
               {errors.startDate && (
-                <span className="text-red-500 text-sm">Este campo es requerido</span>
+                <span className="text-red-500 text-sm">{errors.startDate.message}</span>
               )}
             </div>
 
@@ -134,10 +167,21 @@ useEffect(() => {
                 <span className="label-text font-semibold">Fecha de finalización</span>
               </label>
               <input
-                {...register("endDate")}
-                type="date"
+                {...register("endDate", {
+                  required: "Fecha de finalización requerida",
+                  validate: value => {
+                    if (!startDate) return true;
+                    return value >= startDate || "La fecha final debe ser igual o posterior a la de inicio";
+                  }
+                })}
+                type="month"
+                max={new Date().toISOString().slice(0, 7)}
+                min={startDate || "1990-01"}
                 className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
               />
+              {errors.endDate && (
+                <span className="text-red-500 text-sm">{errors.endDate.message}</span>
+              )}
             </div>
           </div>
 
