@@ -145,20 +145,23 @@ export const getRecruitersStats = async (recId) => {
     }
 }
 
-export const applyToOffer = async (id, token) =>{
+export const applyToOffer = async (id, applicationData, token) =>{
     try {
         const response = await fetch(`${API_URL}/${id}/apply`, {
             method: 'post',
             headers: {
                 "Content-Type": "application/json",
     Authorization: `Bearer ${token}`,
-            }
+            },
+            body: JSON.stringify(applicationData),
         })
 
         const data = await response.json()
         if(!response.ok) {
             throw Error(data.msg || 'Error applying to the offer')
         }
+
+        console.log("🚀 ~ applyToOffer ~ data:", data)
 
         return {
       msg: data.msg || 'Application successful',
