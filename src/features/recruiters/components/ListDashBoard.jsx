@@ -4,11 +4,13 @@ import { GoChevronDown } from "react-icons/go";
 import { NameUsers } from '../../../components/NameUsers';
 import { useState } from 'react';
 import { updateCandidateStatus } from '../../../services/offersServices';
-export const ListDashBoard = ({ classProps, offerId, lists, setLists, getCandidates }) => {
+import { CandidateSkills } from './candidateSkills';
+
+
+export const ListDashBoard = ({ classProps, offerId, lists, setLists, getCandidates,skillsOffer }) => {
   const [activeTab, setActiveTab] = useState(Object.keys(lists)[0]);
 
   const changeStatusCandidate = async (status, idCandidato) => {
-    console.log(`Cambiando estado del candidato a: ${status}`);
     await updateCandidateStatus(offerId, idCandidato, status, localStorage.getItem('token'));
     setActiveTab(status);
     getCandidates(); // Actualiza la lista de candidatos
@@ -76,14 +78,7 @@ export const ListDashBoard = ({ classProps, offerId, lists, setLists, getCandida
                 </div>
                 {/* Tecnologías */}
                 <div className="flex flex-wrap gap-2 mt-2 text-md">
-                  {["React", "Javascript", "Vue", "Angular"].map((tech) => (
-                    <span
-                      key={tech}
-                      className="border px-2 py-0.5 rounded-full border-neutral-40"
-                    >
-                      {tech}
-                    </span>
-                  ))}
+                  <CandidateSkills skills={candidato.user.role.developer.skills} skillsOffer={skillsOffer}/>
                 </div>
                 <div className="flex items-center text-md gap-1">
                   <PiMapPinArea className='size-4' />
@@ -97,7 +92,7 @@ export const ListDashBoard = ({ classProps, offerId, lists, setLists, getCandida
                   <select
                     value={activeTab}
                     onChange={(e) => changeStatusCandidate(e.target.value, candidato._id)}
-                    className={`px-3 py-1 pr-4 rounded-md text-md capitalize appearance-none
+                    className={`px-3 py-1 pr-7 rounded-md text-md capitalize appearance-none
                     ${activeTab
                         ? `${fadedColors[activeTab] || 'bg-black/20'} ${textColors[activeTab] || 'text-white'}`
                         : 'text-neutral-400'

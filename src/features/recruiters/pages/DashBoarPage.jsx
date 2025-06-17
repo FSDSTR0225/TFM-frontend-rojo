@@ -9,6 +9,7 @@ export const DashBoarPage = () => {
   const { offerId } = useParams();
   const [viewList, setViewList] = useState(false);
   const [nameOffer, setNameOffer] = useState('');
+  const [skillsOffer, setSkillsOffer] = useState([]);
 
   //objeto con cinco arrays, uno por cada columna del Kanban.
   const [lists, setLists] = useState({
@@ -22,7 +23,9 @@ export const DashBoarPage = () => {
   const getCandidates = async()=>{
     const data = await getCandidatesByOfferId(offerId, localStorage.getItem('token'));
     setNameOffer(data.nameOffer);
+    setSkillsOffer(data.skills);
     const candidates = data.applicants;
+    console.log('candidatos',candidates);
     //Crea grouped, un objeto vacío con las cinco claves.
     const grouped = { pending: [], reviewed: [], interviewed: [], accepted: [], rejected: [] };
     //Recorre cada candidato (data.forEach) y, según su status, lo añade al array correspondiente.
@@ -55,6 +58,7 @@ export const DashBoarPage = () => {
       {/* En pantallas menores a lg: siempre muestra ListDashBoard */}
       <div className="lg:hidden">
         <ListDashBoard offerId={offerId}
+          skillsOffer={skillsOffer}
           lists={lists}
           setLists={setLists}
           getCandidates={getCandidates} />
@@ -62,6 +66,7 @@ export const DashBoarPage = () => {
 
       <div className="hidden lg:block">
         {viewList ? <ListDashBoard offerId={offerId}
+          skillsOffer={skillsOffer}
           lists={lists}
           setLists={setLists}
           getCandidates={getCandidates} /> : <RecDashBoar offerId={offerId}
