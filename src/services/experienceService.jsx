@@ -17,30 +17,62 @@ export async function getExperiencesByDeveloper(developerId, token) {
   }
 }
 
+export async function softDeleteExperience(id, token) {
+  try {
+    const res = await fetch(`${urlBackEnd}/experiences/${id}/soft-delete`, {
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.error('Failed to soft delete experience:', error);
+    return { error: true, message: 'Fallo en la solicitud' };
+  }
+}
 
+export const createExperience = async (payload, token) => {
+  try {
+    const resp = await fetch(urlBackEnd + '/experiences', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify(payload),
+    });
 
-// // Crear experiencia
-// export const createExperience = async (payload, token) => {
-//   try {
-//     const resp = await fetch(`${urlBackEnd}/experiences`, {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json',
-//         'Authorization': `Bearer ${token}`,
-//       },
-//       body: JSON.stringify(payload),
-//     });
+    if (!resp.ok) throw new Error('Error saving the experience');
 
-//     if (!resp.ok) {
-//       const errorData = await resp.json();
-//       throw new Error(errorData.msg || 'Error al crear la experiencia');
-//     }
+    const experience = await resp.json();
+    console.log('Respuesta del backend (createExperience):', experience)
+    return experience;
+  } catch (error) {
+    console.error('Failed to create experience:', error);
+    return { error: true, message: error.message };
+  }
+};
 
-//     const { experience } = await resp.json();
-//     return experience;
+export const updateExperience = async (id, payload, token) => {
+  try {
+    const resp = await fetch(`${urlBackEnd}/experiences/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify(payload),
+    });
 
-//   } catch (error) {
-//     console.error('Failed to create experience:', error);
-//     return { error: true, message: error.message };
-//   }
-// };
+    if (!resp.ok) throw new Error('Error updating the experience');
+
+    const experience = await resp.json();
+    console.log('Respuesta del backend (updateExperience):', experience);
+    return experience;
+  } catch (error) {
+    console.error('Failed to update experience:', error);
+    return { error: true, message: error.message };
+  }
+};

@@ -145,20 +145,23 @@ export const getRecruitersStats = async (recId) => {
     }
 }
 
-export const applyToOffer = async (id, token) =>{
+export const applyToOffer = async (id, applicationData, token) =>{
     try {
         const response = await fetch(`${API_URL}/${id}/apply`, {
             method: 'post',
             headers: {
                 "Content-Type": "application/json",
     Authorization: `Bearer ${token}`,
-            }
+            },
+            body: JSON.stringify(applicationData),
         })
 
         const data = await response.json()
         if(!response.ok) {
             throw Error(data.msg || 'Error applying to the offer')
         }
+
+        console.log("🚀 ~ applyToOffer ~ data:", data)
 
         return {
       msg: data.msg || 'Application successful',
@@ -168,6 +171,8 @@ export const applyToOffer = async (id, token) =>{
         throw new Error(error.message);
         
     }
+
+
 }
 
 
@@ -208,3 +213,67 @@ export const updateCandidateStatus = async (offerId, candidateId, status, token)
         throw error;
     }
 }
+
+export const getOffersAppliedByDeveloper = async (developerId, token) => {
+        try {
+            const response = await fetch(`${API_URL}/applied/${developerId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    authorization: "Bearer " + token,
+                }
+            })   
+            if (!response.ok) {
+                
+                throw new Error("Error getting offers")
+            }
+            const offersData = await response.json()
+            console.log("🚀 ~ getOffers ~ offersData:", offersData)
+            return offersData.offers || [];
+        } catch (error) {
+            console.error("OffersService Error:", error);
+            throw error;
+        }
+}
+
+export const getOffersByDeveloper = async ( token) => {
+        try {
+            const response = await fetch(`${API_URL}/bydev`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    authorization: "Bearer " + token,
+                }
+            })   
+            if (!response.ok) {
+               const errorData = await response.text(); // Para ver el error específico
+            console.error("Error response:", errorData);
+            throw new Error(`Error getting offers: ${response.status} ${response.statusText}`)
+            }
+            const offersData = await response.json()
+            console.log("🚀 ~ getOffers ~ offersData:", offersData)
+            return offersData.offers || [];
+        } catch (error) {
+            console.error("OffersService Error:", error);
+            throw error;
+        }
+}
+export const getOffersAppliedByDev = async (devId, token) => {
+  try {
+    const response = await fetch(`${API_URL}/applied/${devId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${token}`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error("Error al obtener las ofertas aplicadas");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("OffersService Error:", error);
+    throw error;
+  }
+};

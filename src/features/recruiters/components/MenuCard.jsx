@@ -17,12 +17,11 @@ export const MenuCard = ({ onClick, openModal, handleOnModalEdit }) => {
         
         <li
           onClick={handleOnModalEdit}
-          className=' hover:bg-secondary-60'
         >
-          <button >
+          <div className=' hover:bg-secondary-60 rounded-b-none'>
             <CiEdit />
             Edit
-          </button>
+          </div>
         </li>
         <li
           onClick={openModal}

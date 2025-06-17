@@ -1,26 +1,22 @@
-import React, { useState } from "react";
+import React from "react";
 import { PiHeartStraight, PiHeartStraightFill } from "react-icons/pi";
 import "../animations/LikeButtonRounded.css";
 
-export function LikeButtonRounded() {
-  const [liked, setLiked] = useState(false);
-  const [animating, setAnimating] = useState(false);
-
-  const handleClick = () => {
-    if (animating) return;
-    setAnimating(true);
-    setLiked(!liked);
-    // Animación dura 600ms (encogimiento + rebote + partículas)
-    setTimeout(() => setAnimating(false), 600);
-  };
-
+export const LikeButtonRounded = ({
+  liked,
+  animating,
+  loadingLike,
+  onClick,
+}) => {
   return (
     <button
-      onClick={handleClick}
-      className={`like-button rounded-full flex items-center justify-center relative
-        ${liked ? "liked" : ""} ${animating ? "animating" : ""}`}
+      onClick={onClick}
+      className={`like-button rounded-full flex items-center justify-center relative ${
+        liked ? "liked" : ""
+      } ${animating ? "animating" : ""}`}
       aria-label={liked ? "Unlike project" : "Like project"}
       type="button"
+      disabled={loadingLike}
     >
       {liked ? (
         <PiHeartStraightFill size={32} weight="fill" className="icon" />
@@ -28,7 +24,6 @@ export function LikeButtonRounded() {
         <PiHeartStraight size={32} weight="regular" className="icon" />
       )}
 
-      {/* Partículas que salen alrededor cuando animating */}
       {animating && liked && (
         <div className="particles">
           {[...Array(8)].map((_, i) => (
@@ -38,4 +33,4 @@ export function LikeButtonRounded() {
       )}
     </button>
   );
-}
+};

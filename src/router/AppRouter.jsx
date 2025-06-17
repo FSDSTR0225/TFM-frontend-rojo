@@ -24,6 +24,7 @@ import { OffersInfoPage } from '../features/recruiters/pages/OffersInfoPage';
 import { OfferInfoPage } from '../features/recruiters/pages/OfferInfoPage';
 import { DashBoardLayout } from '../layout/DashBoardLayout';
 import { DashBoarPage } from '../features/recruiters/pages/DashBoarPage';
+import { Onboarding } from '../pages/Onboarding/Onboarding';
 
 
 
@@ -44,6 +45,8 @@ const router = createBrowserRouter([
       { path: 'developers', element: <DevsPage /> },
       {path: 'recruiter/:id', element: <RecProfile />},
 
+      {path: 'onboarding', element: <Onboarding />},
+
       { path: 'login', element: <Login /> },
       { path: 'register', element: <Register /> },
 
@@ -60,7 +63,7 @@ const router = createBrowserRouter([
           { path: 'projects/new', element: <NewProjectPage /> },
           { path: 'projects/:projectId/edit', element: <EditProjectDetailsPage />},
           { path: 'developers/:developerid/edit', element: <InfoEditDevPage /> },
-          {path: 'profile', element: <RecProfile />}
+          {path: 'profile', element: <RecProfile />}          
         ]
       },
 
@@ -84,7 +87,7 @@ const router = createBrowserRouter([
           {path: 'offers/:offerId/edit', element: <RecOfferForm />},
       
           // 4. Ver candidaturas recibidas
-          {path: 'applications', element: <RecApplications />}
+          {path: 'applications', element: <RecApplications />},
         ]
       }
       

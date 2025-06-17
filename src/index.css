@@ -6,6 +6,8 @@
   themes: dark --default, cupcake;
 }
 
+
+
 @theme {
   --color-primary-10: #D7F4DA;
   --color-primary-20: #AFE9B6;
@@ -41,4 +43,47 @@
   --color-neutral-80: #1C1C1C;
   --color-neutral-90: #171717;
   --color-neutral-100: #000000;
+
+  --color-gradient: linear-gradient(90deg, #37C848 0%, #60AAFF 100%);
+}
+
+
+/*Usar gradient*/
+.bg-gradient {
+  background-image: var(--color-gradient);
+}
+
+.text-gradient {
+  background-image: var(--color-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #171717 inset !important; /* cambia bg al tuyo */
+  -webkit-text-fill-color: #ffffff !important; /* cambia el color del texto */
+  caret-color: #ffffff !important; /* caret color */
+}
+
+
+
+/* 3️⃣ Importación de Google Fonts */
+
+body {
+  @apply text-neutral-0;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+}
+
+h1, h2, h3 {
+  font-weight: 700;
+}
+
+p {
+  font-weight: 400;
 }
