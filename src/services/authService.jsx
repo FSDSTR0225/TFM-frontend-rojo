@@ -1,5 +1,6 @@
 const urlBackEnd = 'http://localhost:3000/users';
 
+
 export const registeredUser = async (user) => {
 
   const resp = await fetch(urlBackEnd + '/register', {
@@ -51,6 +52,6 @@ export const getUserLogged = async (token) => {
     console.log('data: ',data);
     return data;
   } catch (error) {
-    throw err;
+    throw error;
   }
 }
