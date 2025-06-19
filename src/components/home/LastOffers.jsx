@@ -79,7 +79,7 @@ export const LastOffers = () => {
                 <li
                     key={offer._id}
                     onClick={() => handleViewOffer(offer._id)}
-                    className="card border bg-neutral-80 border-neutral-70 cursor-pointer shadow-xl hover:bg-neutral-90"
+                    className="card border bg-neutral-80 border-neutral-70 rounded-lg shadow-md overflow-hidden transition-all duration-300 ease-in-out hover:-translate-y-1 hover:border-1 hover:border-secondary-90 hover:shadow-[0_0_30px_5px_rgba(0,127,247,0.2)] text-inherit no-underline"
                 >              
                     <div className='card-body p-4 sm:p-6 justify-between space-y-3 sm:space-y-4 relative rounded-lg'>
                     <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-secondary-50 to-primary-50 rounded-t-lg"></div>

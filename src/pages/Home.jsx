@@ -4,7 +4,7 @@ import { OutstandingTalents } from "../components/OutstandingTalents";
 import { PiCaretRight } from "react-icons/pi";
 import { Link } from "react-router";
 
-export const Home = () => {
+export const OutstandingTalentsSection = () => {
   const { developers, loading } = useDevelopers();
 
   if (loading) {
