@@ -49,7 +49,6 @@ export const getUserLogged = async (token) => {
     });
     if(!resp.ok) throw new Error('Token inválido');
     const data = await resp.json();
-    console.log('data: ',data);
     return data;
   } catch (error) {
     throw error;

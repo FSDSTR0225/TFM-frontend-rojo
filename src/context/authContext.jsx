@@ -3,7 +3,7 @@ import { getUserLogged } from "../services/authService";
 import { io } from "socket.io-client";
 
 export const AuthContext = createContext();
-
+const BASE_URL='http://localhost:3000';
 export const AuthProvider = ({ children }) => {
     const [profile, setProfile] = useState(null);
     const [token, setToken] = useState(() => localStorage.getItem("token") || null);
@@ -24,22 +24,19 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         if (profile && !socketRef.current) {
-            socketRef.current = io('http://localhost:3000', {
+            socketRef.current = io(BASE_URL, {
                 query: { userId: profile._id }
             });
-
             socketRef.current.on("connect", () => {
                 console.log("Socket conectado con id:", socketRef.current.id);
             });
-
             socketRef.current.on("disconnect", () => {
                 console.log("Socket desconectado");
             });
-
             socketRef.current.on("getOnlineUsers", (users) => {
+                console.log('getOnlineUsers',users);
                 setOnlineUsers(users);
             });
-
         }
 
         return () => {
@@ -80,7 +77,7 @@ export const AuthProvider = ({ children }) => {
 
 
     return (
-        <AuthContext.Provider value={{ profile, setProfile, token, setToken, logout,onlineUsers,socket:socketRef.current }}>
+        <AuthContext.Provider value={{ profile, setProfile, token, setToken, logout, onlineUsers, socket: socketRef.current }}>
             {children}
         </AuthContext.Provider>
     );

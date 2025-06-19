@@ -26,6 +26,8 @@ export default function ChatPanel({ onClose, user }) {
 
   const goTo = (next) => setScreen(next);
 
+  console.log('Hola mundo: ', onlineUsers);
+
   const getUsersConect = async () => {
     try {
       const users = await getUsers(token);
