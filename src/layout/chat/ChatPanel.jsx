@@ -156,22 +156,19 @@ export default function ChatPanel({ onClose, user }) {
               onClick={() => handleSelectedUser(usuario)}
               type="button"
             >
-              <div className="w-10 h-10 rounded-full bg-neutral-200 flex items-center justify-center text-neutral-700 font-bold mb-1">
+              <div className="w-10 h-10 rounded-full bg-neutral-200 flex items-center justify-center text-neutral-700 font-bold mb-1 relative">
                 {usuario.avatar ? (
                   <AvatarImage user={usuario} width={10} />
                 ) : (
                   usuario.name.charAt(0).toUpperCase()
                 )}
-                {
-                  onlineUsers.includes(usuario.id) && (
-                    <span className="absolute bottom-0 right-0 size-3 bg-green-500
-                  rounded-full ring-2 ring-zinc-900" />
-                  )
-                }
+                {onlineUsers.includes(usuario._id) && (
+                  <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full ring-2 ring-white" />
+                )}
               </div>
               <span className="text-xs">{usuario.name}</span>
               <div className="text-sm text-zinc-400">
-                {onlineUsers.includes(usuario.id) ? "online" : "offline"}
+                {onlineUsers.includes(usuario._id) ? "online" : "offline"}
               </div>
             </button>
           ))}
@@ -201,7 +198,7 @@ export default function ChatPanel({ onClose, user }) {
               <div>
                 <h2 className="text-white text-sm font-semibold">{userSelected?.name}</h2>
                 <span className="text-xs text-zinc-200">
-                  {onlineUsers.includes(userSelected?.id) ? "online" : "offline"}
+                  {onlineUsers.includes(userSelected?._id) ? "online" : "offline"}
                 </span>
               </div>
             </div>
