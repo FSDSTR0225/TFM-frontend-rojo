@@ -19,7 +19,6 @@ export const LastOffers = () => {
         setLoading(true);
         try {
             const response = await getOffers();
-            console.log("Raw response:", response);
 
             const data = response.data ?? response;
 
@@ -29,17 +28,18 @@ export const LastOffers = () => {
             } else if (Array.isArray(data)) {
             arr = data;
             } else {
-            console.warn("Formato inesperado de la API:", data);
+            console.log("Formato inesperado de la API:", data);
             }
 
-            setOffers(arr);
-        } catch (err) {
-            console.error("Error en fetchOffers:", err);
+            const sortedOffers = arr.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            setOffers(sortedOffers);
+
+        } catch (error) {
+            console.error("Error en fetchOffers:", error);
             setOffers([]);
         }
         setLoading(false);
     };
-
 
     fetchOffers();
   }, []);
@@ -63,7 +63,7 @@ export const LastOffers = () => {
         <div className="w-full px-2 sm:px-4">
             <div>
                 {/* <PiBag className="text-xl" /> */}
-                <h1 className="text-3xl font-bold mb-2 mt-10 text-neutral-0">Last Offers</h1>
+                <h1 className="text-3xl font-bold mb-2 mt-10">Last Offers</h1>
                 <div className='grid grid-cols-2'>
                     <span className='text-neutral-20'>Find your next professional challenge</span>
                     <Link to={`/offers`} className="justify-self-end bg-transparent text-secondary-50 rounded-md flex items-center gap-1 text-sm">
@@ -72,9 +72,10 @@ export const LastOffers = () => {
                 </div>
             </div>
         {offers.length > 0 ? (
-            <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 py-2 gap-3 sm:gap-4">
-            {offers.slice(0,3).map((offer) => {
+            <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 py-2 gap-3 sm:gap-4 w-full">
+            {offers.slice(0,4).map((offer) => {
                 const daysAgo = offer.createdAt ? getDaysSince(offer.createdAt) : 0;
+
                 return (
                 <li
                     key={offer._id}
@@ -121,7 +122,7 @@ export const LastOffers = () => {
                         {offer.applicants?.length ?? 0} Applicants
                         </span>
                     </div>
-                    <Link to={`/offers`} className="justify-self-center btn bg-gradient-to-r from-secondary-50 to-primary-50 rounded-md flex items-center gap-1">
+                    <Link to={`/offers/${offer._id}`} className="justify-self-center btn bg-gradient-to-r from-secondary-50 to-primary-50 rounded-md flex items-center gap-1">
                         View Offer
                     </Link>
                     </div>

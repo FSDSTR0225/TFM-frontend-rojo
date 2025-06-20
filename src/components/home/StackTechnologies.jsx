@@ -118,7 +118,7 @@ export const StackTechnologies = () => {
           </div>
         </div>
 
-        {/* Duplicado exacto para el bucle infinito */}
+        {/* Duplicado para el bucle infinito */}
         <div className="flex flex-row py-4 flex-shrink-0">
           <div className="card flex-shrink-0 w-48 bg-neutral-60 shadow-sm rounded-xl mr-4 snap-center">
               <figure className="px-10 pt-10">
