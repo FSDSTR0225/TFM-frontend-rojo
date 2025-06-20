@@ -33,9 +33,12 @@ export default function DevModal({ open, setOpen, token, profileData, onProfileU
         name: profileData.name || "",
         surname: profileData.surname || "",
         description: profileData.description || "",
+        email: profileData.email || "", // Asegurar que email existe
+        _id: profileData._id || "", 
         role: {
           developer: {
             professionalPosition: profileData.role?.developer?.professionalPosition || "",
+            experienceYears: profileData.role?.developer?.experienceYears || "",
             location: profileData.role?.developer?.location || "",
             github: profileData.role?.developer?.github || "",
             linkedin: profileData.role?.developer?.linkedin || "",
