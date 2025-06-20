@@ -63,7 +63,6 @@ export const RecProfile = () => {
 
       <div className='flex flex-col md:flex-row md:justify-between gap-8 items-start'>
         <RecProfileCard recruiter={recruiter} profile={profile} id={id}/>
-
         <div className="w-full">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-semibold">Mis ofertas de empleo</h2>

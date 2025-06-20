@@ -7,7 +7,6 @@ import { MenuCard } from "./MenuCard";
 import { useContext } from "react";
 import { AuthContext } from "../../../context/authContext";
 import { PiMapPinArea } from "react-icons/pi";
-import { applyToOffer } from "../../../services/offersServices";
 import Badge from "../../../components/Badge";
 import { AvatarImage } from "../../../components/AvatarImage";
 import { NameUsers } from "../../../components/NameUsers";
@@ -18,10 +17,11 @@ export const OfferCard = ({
   id,
   setIsOpenModalDelete,
   isOpenModalDelete,
+  setIsOpenApplyModal,
   setSelectedOfferId,
   isOpenModalEdit,
   setIsOpenModalEdit,
-  onApplySuccess,
+
 }) => {
   const navigate = useNavigate();
   const { profile, token } = useContext(AuthContext);
@@ -35,21 +35,32 @@ export const OfferCard = ({
   //Determinando en donde este redirije a un lado o al otro dependiendo de la ruta actual
   const location = useLocation();
 
-  const handleApply = async (e) => {
+  const handleApplyModal = (e) => {
     e.stopPropagation();
     if (!token) {
       console.log("por aqui no pasaras");
       navigate("/login");
     }
 
-    try {
-      const response = await applyToOffer(offer._id, token);
-      console.log(response.msg || "se envio");
-      onApplySuccess?.(response.offer);
-    } catch (error) {
-      console.log(error.message || "Error al aplicar a la oferta");
-    }
+    setIsOpenApplyModal(true);
+    setSelectedOfferId(offer?._id);
   };
+  
+  // const handleApply = async (e) => {
+  //   e.stopPropagation();
+  //   if (!token) {
+  //     console.log("por aqui no pasaras");
+  //     navigate("/login");
+  //   }
+
+  //   try {
+  //     const response = await applyToOffer(offer._id, token);
+  //     console.log(response.msg || "se envio");
+  //     onApplySuccess?.(response.offer);
+  //   } catch (error) {
+  //     console.log(error.message || "Error al aplicar a la oferta");
+  //   }
+  // };
   const hasApplied =
     Array.isArray(offer.applicants) &&
     profile?._id &&
@@ -130,7 +141,7 @@ export const OfferCard = ({
         {!isOwner && !isRecruiter && (
           <div className='flex items-center justify-end gap-4 m-2'>
             <MainRecButton
-              onClick={handleApply}
+              onClick={handleApplyModal}
               classProps='rounded-full w-18'
               disabled={hasApplied}
             >

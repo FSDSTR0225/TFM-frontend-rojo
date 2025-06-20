@@ -1,7 +1,7 @@
 
 import React, { useContext, useEffect } from 'react'
 import { useForm } from 'react-hook-form';
-import { Link, Navigate } from 'react-router';
+import { Link, Navigate, useLocation } from 'react-router';
 import { AuthContext } from '../../context/authContext';
 import { useNavigate } from "react-router";
 import { loginUser } from '../../services/authService';
@@ -11,6 +11,7 @@ export const Login = () => {
         handleSubmit,
         formState: { errors } } = useForm();
     const navigate = useNavigate();
+    const location = useLocation();
     const { token, setToken,profile } = useContext(AuthContext);
 
     const login = async () => {
@@ -20,15 +21,18 @@ export const Login = () => {
     };
 
     // Cuando el profile se carga, redirigimos
-    useEffect(() => {
-        if (profile) {
-            if (profile.role.type === 'developer') {
-                navigate(`../profile/${profile._id}`);
-            } else {
-                navigate(`../recruiter/${profile._id}`);
-            }
+   useEffect(() => {
+    if (profile) {
+        const from = location.state?.from;
+        if (from) {
+            navigate(from, { replace: true });
+        } else if (profile.role.type === 'developer') {
+            navigate(`/profile/${profile._id}`, { replace: true });
+        } else {
+            navigate(`/recruiter/${profile._id}`, { replace: true });
         }
-    }, [profile]);
+    }
+}, [profile]);
 
     return (
         <div className="flex items-center justify-center px-4 mt-32 mb-56">

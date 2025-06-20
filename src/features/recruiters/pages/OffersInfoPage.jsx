@@ -10,6 +10,7 @@ import { OfferModal } from "../components/OfferModal";
 import { FilterOffers } from "../components/FilterOffers";
 import { useContext } from "react";
 import { AuthContext } from "../../../context/authContext";
+import { ApplyModal } from "../components/ApplyModal";
 
 
 export const OffersInfoPage = () => {
@@ -20,6 +21,7 @@ export const OffersInfoPage = () => {
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [isOpenModalDelete, setIsOpenModalDelete] = useState(false);
+  const [isOpenApplyModal, setIsOpenApplyModal] = useState(false);
 
   //const [operacion, setOperacion] = useState('crear');
   const [selectedOfferId, setSelectedOfferId] = useState(null);
@@ -210,9 +212,11 @@ const fetchOffers= async () => {
   if (error) return <p>Error al cargar las ofertas: {error}</p>;
 
   const handleApplySuccess = (updatedOffer) => {
-    setOffers((prevOffers) =>
-      prevOffers.map((offer) => (offer._id === updatedOffer._id ? updatedOffer : offer))
-    );
+    console.log("Offer applied successfully:", updatedOffer);
+    setOffersByDev((prevOffers) =>{
+      console.log( "🚀 ~ handleApplySuccess ~ prevOffers:", prevOffers);
+     return prevOffers.map((offer) => (offer._id === updatedOffer._id ? updatedOffer : offer))
+    });
   };
 
   return (
@@ -251,11 +255,12 @@ const fetchOffers= async () => {
               owner={offer.owner}
               setIsOpenModalDelete={setIsOpenModalDelete}
               isOpenModalDelete={isOpenModalDelete}
+              isOpenApplyModal={isOpenApplyModal}
+              setIsOpenApplyModal={setIsOpenApplyModal}
               setSelectedOfferId={setSelectedOfferId}
               isOpenModalEdit={isOpenModalEdit}
               setIsOpenModalEdit={setIsOpenModalEdit}
               key={offer._id}
-              onApplySuccess={handleApplySuccess}
             />
           );
         })}
@@ -295,7 +300,6 @@ const fetchOffers= async () => {
               isOpenModalEdit={isOpenModalEdit}
               setIsOpenModalEdit={setIsOpenModalEdit}
               key={offer._id}
-              onApplySuccess={handleApplySuccess}
             />
           );
         })}
@@ -338,7 +342,6 @@ const fetchOffers= async () => {
               isOpenModalEdit={isOpenModalEdit}
               setIsOpenModalEdit={setIsOpenModalEdit}
               key={offer._id}
-              onApplySuccess={handleApplySuccess}
             />
           );
         })}
@@ -365,6 +368,15 @@ const fetchOffers= async () => {
           token={token}
           reloadPage={fetchOffers}
         />
+      )}
+      {isOpenApplyModal && (
+        <ApplyModal
+          idOffer={selectedOfferId}
+          isOpen={isOpenApplyModal}
+          setIsOpen={setIsOpenApplyModal}
+          token={token}
+          onApplySuccess={handleApplySuccess}
+          />
       )}
     </SectionContainer>
   );
