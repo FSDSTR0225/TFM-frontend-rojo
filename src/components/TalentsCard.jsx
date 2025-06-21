@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router";
 
-export const OutstandingTalents = ({
+export const TalentsCard = ({
   name,
   surname,
   avatar,

@@ -8,7 +8,7 @@ export default function DevModal({ open, setOpen, token, profileData, onProfileU
     handleSubmit,
     control,
     reset,
-    formState: { errors, isSubmitting }
+    formState: { isSubmitting }
   } = useForm();
 
   const { fields: languageFields, append: appendLanguage, remove: removeLanguage } = useFieldArray({
@@ -31,6 +31,7 @@ export default function DevModal({ open, setOpen, token, profileData, onProfileU
         role: {
           developer: {
             professionalPosition: profileData.role?.developer?.professionalPosition || "",
+            experienceYears: profileData.role?.developer?.experienceYears || "",
             location: profileData.role?.developer?.location || "",
             github: profileData.role?.developer?.github || "",
             linkedin: profileData.role?.developer?.linkedin || "",
@@ -48,6 +49,7 @@ export default function DevModal({ open, setOpen, token, profileData, onProfileU
         role: {
           developer: {
             professionalPosition: "",
+            experienceYears: "",
             location: "",
             github: "",
             linkedin: "",
@@ -76,6 +78,7 @@ export default function DevModal({ open, setOpen, token, profileData, onProfileU
           }
         }
       };
+
       const updated = await updateProfile(formattedData, token);
       if (updated?.user) {
         onProfileUpdate?.(updated.user);

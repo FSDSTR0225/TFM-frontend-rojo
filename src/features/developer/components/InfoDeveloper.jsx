@@ -30,7 +30,6 @@ function InfoDeveloper({ profileInfo, token, setProfileData, onProfileUpdated })
     setLoadingProjects(true);
     getProjectsByDeveloper(profileInfo._id, token)
       .then(res => {
-        console.log('ultimos proyectos:', res);
         if (res.error) {
           setLastProjects([]);
         } else {
@@ -72,7 +71,10 @@ function InfoDeveloper({ profileInfo, token, setProfileData, onProfileUpdated })
             </h1>
             <h3 className="text-lg mb-2 text-center">
               {profileInfo.role.developer.professionalPosition}
-            </h3>
+            </h3>            
+            <span className="text-center">
+              {profileInfo.role.developer.experienceYears}
+            </span>
             <span className="text-center">
               {profileInfo.role.developer.location}
             </span>

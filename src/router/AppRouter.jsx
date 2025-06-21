@@ -25,7 +25,7 @@ import { OfferInfoPage } from '../features/recruiters/pages/OfferInfoPage';
 import { DashBoardLayout } from '../layout/DashBoardLayout';
 import { DashBoarPage } from '../features/recruiters/pages/DashBoarPage';
 import { Onboarding } from '../pages/Onboarding/Onboarding';
-import { Home } from '../components/home/homepage';
+import { Home } from '../pages/Home';
 
 
 
