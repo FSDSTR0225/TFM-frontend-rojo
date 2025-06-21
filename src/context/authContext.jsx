@@ -8,6 +8,7 @@ export const AuthProvider = ({ children }) => {
     const [profile, setProfile] = useState(null);
     const [token, setToken] = useState(() => localStorage.getItem("token") || null);
     const [onlineUsers, setOnlineUsers] = useState([]);
+    
 
     // Mantén el socket en una ref para que no cause re-render
     const socketRef = useRef(null);

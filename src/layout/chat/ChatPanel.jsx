@@ -11,10 +11,10 @@ const socket = io('http://localhost:3000');
 
 export default function ChatPanel({ onClose, user }) {
   const { profile, onlineUsers } = useContext(AuthContext);
-  const SENDER_NAME = profile?.name || 'Anonymous';
+  // const SENDER_NAME = profile?.name || 'Anonymous';
   const [screen, setScreen] = useState("welcome");
   const [message, setMessage] = useState('');
-  const [image, setImage] = useState(null);
+  // const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const fileInputRef = useRef(null);
   const [messages, setMessages] = useState([])
@@ -24,7 +24,7 @@ export default function ChatPanel({ onClose, user }) {
 
   const token = localStorage.getItem('token');
 
-  const goTo = (next) => setScreen(next);
+  // const goTo = (next) => setScreen(next);
 
   console.log('Hola mundo: ', onlineUsers);
 
@@ -151,7 +151,7 @@ export default function ChatPanel({ onClose, user }) {
         <div className="p-2 border-b border-neutral-200 bg-neutral-50 flex space-x-2 overflow-x-auto">
           {usuariosConectados.map((usuario) => (
             <button
-              key={usuario.id}
+              key={usuario._id}
               className="flex flex-col items-center mx-2 focus:outline-none"
               onClick={() => handleSelectedUser(usuario)}
               type="button"
@@ -162,9 +162,7 @@ export default function ChatPanel({ onClose, user }) {
                 ) : (
                   usuario.name.charAt(0).toUpperCase()
                 )}
-                {onlineUsers.includes(usuario._id) && (
-                  <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full ring-2 ring-white" />
-                )}
+                
               </div>
               <span className="text-xs">{usuario.name}</span>
               <div className="text-sm text-zinc-400">
