@@ -26,6 +26,7 @@ import { DashBoardLayout } from '../layout/DashBoardLayout';
 import { DashBoarPage } from '../features/recruiters/pages/DashBoarPage';
 import { Onboarding } from '../pages/Onboarding/Onboarding';
 import { Home } from '../pages/Home';
+import { SettingsPage } from '../pages/SettingsPage';
 
 
 
@@ -47,6 +48,7 @@ const router = createBrowserRouter([
       {path: 'recruiter/:id', element: <RecProfile />},
 
       {path: 'onboarding', element: <Onboarding />},
+      {path: 'settings', element: <SettingsPage />},
 
       { path: 'login', element: <Login /> },
       { path: 'register', element: <Register /> },
