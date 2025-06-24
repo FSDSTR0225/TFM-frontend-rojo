@@ -18,7 +18,7 @@ export const OutstandingTalents = () => {
   return (
     <div className="p-4 max-w-screen-xl mx-auto">
       <div>
-        <h1 className="text-3xl font-bold mb-2 mt-10 text-neutral-0">
+        <h1 className="text-3xl font-bold mb-2 text-neutral-0">
           Outstanding talents
         </h1>
       </div>
