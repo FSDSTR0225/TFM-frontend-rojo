@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useForm } from "react-hook-form"
 import { updateProfile } from "../../services/profileService";
 
-export default function ChangePasswordModal({ open, setOpen, token, profileData, onProfileUpdate, onSubmit }) {
+export default function ChangePasswordModal({ open, setOpen, profileData, onProfileUpdate, onSubmit }) {
   const {
     register,
     handleSubmit,
