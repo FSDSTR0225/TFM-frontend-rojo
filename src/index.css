@@ -1,52 +1,49 @@
 /* 1️⃣ Importación de Tailwind v4 (CSS-first) MUST ir primero */
-@import "tailwindcss"; 
+@import "tailwindcss";
 
 /* 2️⃣ DaisyUI v5 como plugin CSS-first */
 @plugin "daisyui" {
   themes: dark --default, cupcake;
 }
 
-
-
 @theme {
-  --color-primary-10: #D7F4DA;
-  --color-primary-20: #AFE9B6;
-  --color-primary-30: #87DE91;
-  --color-primary-40: #5FD36D;
-  --color-primary-50: #37C848;
-  --color-primary-60: #32B441;
+  --color-primary-10: #d7f4da;
+  --color-primary-20: #afe9b6;
+  --color-primary-30: #87de91;
+  --color-primary-40: #5fd36d;
+  --color-primary-50: #37c848;
+  --color-primary-60: #32b441;
   --color-primary-70: #289034;
-  --color-primary-80: #21782B;
-  --color-primary-90: #16501D;
-  --color-primary-100: #0B280E;
+  --color-primary-80: #21782b;
+  --color-primary-90: #16501d;
+  --color-primary-100: #0b280e;
 
-  --color-secondary-10: #D7E5F4;
-  --color-secondary-20: #99C9FF;
-  --color-secondary-30: #60AAFF;
-  --color-secondary-40: #3392FF;
-  --color-secondary-50: #0077FF;
-  --color-secondary-60: #1D6DC9;
-  --color-secondary-70: #1A61B2;
+  --color-secondary-10: #d7e5f4;
+  --color-secondary-20: #99c9ff;
+  --color-secondary-30: #60aaff;
+  --color-secondary-40: #3392ff;
+  --color-secondary-50: #0077ff;
+  --color-secondary-60: #1d6dc9;
+  --color-secondary-70: #1a61b2;
   --color-secondary-80: #134986;
-  --color-secondary-90: #0D3059;
-  --color-secondary-100: #06182D;
+  --color-secondary-90: #0d3059;
+  --color-secondary-100: #06182d;
 
-  --color-neutral-0: #FFFFFF;
-  --color-neutral-10: #CCCCCC;
-  --color-neutral-20: #A5A5A5;
+  --color-neutral-0: #ffffff;
+  --color-neutral-10: #cccccc;
+  --color-neutral-20: #a5a5a5;
   --color-neutral-30: #797979;
   --color-neutral-40: #595959;
   --color-neutral-50: #404040;
   --color-neutral-55: #303030;
   --color-neutral-60: #262626;
   --color-neutral-70: #222222;
-  --color-neutral-80: #1C1C1C;
+  --color-neutral-80: #1c1c1c;
   --color-neutral-90: #171717;
   --color-neutral-100: #000000;
 
-  --color-gradient: linear-gradient(90deg, #37C848 0%, #60AAFF 100%);
+  --color-gradient: linear-gradient(90deg, #37c848 0%, #60aaff 100%);
 }
-
 
 /*Usar gradient*/
 .bg-gradient {
@@ -62,28 +59,40 @@
 }
 
 input:-webkit-autofill,
-input:-webkit-autofill:hover, 
-input:-webkit-autofill:focus, 
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
   -webkit-box-shadow: 0 0 0 1000px #171717 inset !important; /* cambia bg al tuyo */
   -webkit-text-fill-color: #ffffff !important; /* cambia el color del texto */
   caret-color: #ffffff !important; /* caret color */
 }
 
-
-
 /* 3️⃣ Importación de Google Fonts */
 
 body {
   @apply text-neutral-0;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-weight: 400;
 }
 
-h1, h2, h3 {
+h1,
+h2,
+h3 {
   font-weight: 700;
 }
 
 p {
   font-weight: 400;
+}
+
+/*Scrollbar hidden*/
+/* WebKit (Chrome, Safari) */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Firefox */
+.hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none; /* IE 10+ */
 }
