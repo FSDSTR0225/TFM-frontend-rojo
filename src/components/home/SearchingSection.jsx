@@ -76,7 +76,7 @@ export const SearchingSection = () => {
           {dropdownOpen && (
             <div
               ref={resultsRef}
-              className="absolute p-6 z-50 left-1/2 transform -translate-x-1/2 mt-2 w-full max-w-screen-xl bg-[#101010] border border-neutral-80 rounded-xl shadow-[0_50px_100px_rgba(0,0,0,0.8)] max-h-[70vh] overflow-y-auto hide-scrollbar"
+              className="absolute p-6 z-50 left-1/2 transform -translate-x-1/2 mt-2 w-full max-w-screen-xl bg-[#101010] border border-neutral-80 rounded-xl shadow-[0_50px_100px_rgba(0,0,0,0.4)] max-h-[70vh] overflow-y-auto hide-scrollbar"
             >
               {/* CONTENEDOR PRINCIPAL DE FILAS Y COLUMNAS PARA ALL RESULTS, TAGS Y SORT */}
               <div
