@@ -68,17 +68,17 @@ export const ListDashBoard = ({ classProps, offerId, lists, setLists, getCandida
               {/* Izquierda: avatar + info */}
               <div className="flex items-center gap-15">
                 <div className='flex gap-4 w-70'>
-                  <AvatarImage user={candidato.user} />
+                  <AvatarImage user={candidato?.user} />
                   <div>
-                    <NameUsers user={candidato.user} align='items-start' classProps={'line-clamp-1 text-md'} />
+                    <NameUsers user={candidato?.user} align='items-start' classProps={'line-clamp-1 text-md'} />
                     <p className="text-xs">
-                      {candidato.user.email}
+                      {candidato?.user?.email}
                     </p>
                   </div>
                 </div>
                 {/* Tecnologías */}
                 <div className="flex flex-wrap gap-2 mt-2 text-md">
-                  <CandidateSkills skills={candidato.user.role.developer.skills} skillsOffer={skillsOffer}/>
+                  <CandidateSkills skills={candidato?.user?.role?.developer?.skills} skillsOffer={skillsOffer}/>
                 </div>
                 <div className="flex items-center text-md gap-1">
                   <PiMapPinArea className='size-4' />
