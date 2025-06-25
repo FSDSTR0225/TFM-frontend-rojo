@@ -4,6 +4,7 @@ import { useContext } from "react";
 // import { capitalize, getInitials } from "../utils/utils";
 import { AvatarImage } from "../components/AvatarImage";
 import { NameUsers } from "../components/NameUsers";
+import { PiGear  } from 'react-icons/pi';
 
 export const Header = () => {
   const { profile, logout } = useContext(AuthContext);
@@ -198,6 +199,12 @@ export const Header = () => {
                 >
                   Logout
                 </button>
+                  <Link
+                    to={"/settings"}
+                    className='btn btn-sm rounded-full text-white bg-green-600 hover:bg-green-700'
+                  >
+                    <PiGear className="text-xl" />
+                  </Link>
               </div>
             </div>
           )}
