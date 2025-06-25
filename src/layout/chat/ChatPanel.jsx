@@ -6,12 +6,12 @@ import { AuthContext } from "../../context/authContext";
 import { CiImageOn } from "react-icons/ci";
 import { TiDelete } from "react-icons/ti";
 import { IoSend } from "react-icons/io5";
-import { getMessages, getUsers, sendMessage } from "../../services/messagesService";
+import { getMessages, getUsers, sendMessage, suscribeToMessages, unsubscribeFromMessages } from "../../services/messagesService";
 const socket = io('http://localhost:3000');
 
 export default function ChatPanel({ onClose, user }) {
-  const { profile, onlineUsers } = useContext(AuthContext);
-  // const SENDER_NAME = profile?.name || 'Anonymous';
+  const { profile, onlineUsers, socket } = useContext(AuthContext);
+  const SENDER_NAME = profile?.name || 'Anonymous';
   const [screen, setScreen] = useState("welcome");
   const [message, setMessage] = useState('');
   // const [image, setImage] = useState(null);
@@ -21,7 +21,7 @@ export default function ChatPanel({ onClose, user }) {
   const [usuariosConectados, setUsuariosConectados] = useState([]);
   const [userSelected, setUserSelected] = useState(null);
   const messageEndRef = useRef(null);
-
+  const handlerRef = useRef(null);
   const token = localStorage.getItem('token');
 
   // const goTo = (next) => setScreen(next);
@@ -52,27 +52,39 @@ export default function ChatPanel({ onClose, user }) {
   }
 
   useEffect(() => {
-    if (userSelected) {
-      console.log('userSelected', userSelected);
-      fetchMessage(userSelected._id)
+    if (!socket || !userSelected) return;
+
+    fetchMessage(userSelected._id);
+
+    // Desuscribimos el anterior si existía
+    if (handlerRef.current) {
+      unsubscribeFromMessages(socket, handlerRef.current);
+      handlerRef.current = null;
     }
-  }, [userSelected])
+
+    // Nos suscribimos y guardamos el handler
+    handlerRef.current = suscribeToMessages(userSelected._id, socket, setMessages);
+
+    // Cleanup automático al desmontar o cambiar usuario
+    return () => {
+      if (handlerRef.current) {
+        unsubscribeFromMessages(socket, handlerRef.current);
+        handlerRef.current = null;
+      }
+    };
+  }, [userSelected, socket]);
 
   useEffect(() => {
     getUsersConect()
   }, [])
 
   useEffect(() => {
-    // socket.emit('register, SENDER_NAME')
-    socket.on('chat message', (msg) => {
-      console.log('mensaje recibido', msg);
-      setMessages((prevMessages) => [...prevMessages, msg])
-    })
-    console.log('mensaje recibido', messages.length);
-    return () => {
-      socket.off('chat message');
-    };
-  }, [])
+    if (messageEndRef.current && messages) {
+      messageEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages])
+
+
 
 
   const handleImageChange = (e) => {
@@ -286,7 +298,6 @@ export default function ChatPanel({ onClose, user }) {
               </form>
             </div>
           </div>
-
         )}
 
       </div>
