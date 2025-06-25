@@ -3,7 +3,6 @@ import { getOffers } from '../../services/offersServices';
 import { getAllDevelopers } from '../../services/devService';
 import { getAllRecruiters } from '../../services/profileService';
 
-
 export const NumbersSection = () => {
   const [offers, setOffers] = useState([]);
   const [devs, setDevs] = useState([]);
@@ -42,9 +41,16 @@ export const NumbersSection = () => {
     fetchCompany();
   }, []);
 
-  console.log('este es el numero de ofertas que hay: ', offers.length );
-  console.log('este es el numero de DEVS que hay: ', devs.length );
-  console.log('este es el numero de COMPANIES que hay: ', devs.length );
+  let acceptedApplications = 0;
+    offers.map(offer => {
+      if (offer.applicants) {
+        offer.applicants.map(applicant => {
+          if (applicant.status === 'accepted') {
+            acceptedApplications++;
+          }
+        });
+      }
+    });
 
   return (
     <div className="flex justify-center items-center w-full mt-8">
@@ -63,8 +69,8 @@ export const NumbersSection = () => {
             <span className='text-neutral-20 text-sm block'>Active Offers</span>
           </div>
           <div className="flex flex-col items-center">
-            <span className='text-4xl font-bold text-secondary-50 mb-2 block'>95%</span>
-            <span className='text-neutral-20 text-sm block'>Satisfaction</span>
+            <span className='text-4xl font-bold text-secondary-50 mb-2 block'>+{acceptedApplications * 100}</span>
+            <span className='text-neutral-20 text-sm block'>Applications accepted</span>
           </div>
         </div>
       </div>
