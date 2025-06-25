@@ -69,9 +69,10 @@ export const AuthProvider = ({ children }) => {
         setToken(null);
         localStorage.removeItem('token');
         if (socketRef.current) {
+            
             socketRef.current.disconnect();
             socketRef.current = null;
-            setOnlineUsers([]);
+            
         }
     };
 

@@ -1,5 +1,7 @@
-const urlBackEnd = 'http://localhost:3000/messages';
+import { useContext } from "react";
+import { AuthContext } from "../context/authContext";
 
+const urlBackEnd = 'http://localhost:3000/messages';
 export const getUsers = async (token) => {
     const resp = await fetch(urlBackEnd + '/users', {
         method: 'GET',
@@ -33,7 +35,7 @@ export const sendMessage = async (token, text, image, selectedUserId) => {
             authorization: "Bearer " + token,
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({text,image})
+        body: JSON.stringify({ text, image })
     });
     if (!resp.ok) {
         throw new Error("Error sending message");
@@ -41,5 +43,25 @@ export const sendMessage = async (token, text, image, selectedUserId) => {
     const data = await resp.json();
     return data;
 }
+
+export const suscribeToMessages = (userId, socket, setMessages) => {
+  if (!userId || !socket) return null;
+
+  const handler = (msg) => {
+    const isFromSelectedUser = msg.senderId === userId;
+    if (isFromSelectedUser) {
+      setMessages((prev) => [...prev, msg]);
+    }
+  };
+
+  socket.on("newMessage", handler);
+
+  return handler; // 👈 devolvemos el handler real
+};
+
+export const unsubscribeFromMessages = (socket, handler) => {
+  if (!socket || !handler) return;
+  socket.off("newMessage", handler);
+};
 
 
