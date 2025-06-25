@@ -4,7 +4,13 @@ import { updateProfile } from "../../../services/profileService";
 import { TagsInputDev } from "./TagsInputDev";
 import { AvatarUpload } from "./AvatarUpload";
 
-export default function DevModal({ open, setOpen, token, profileData, onProfileUpdate }) {
+export default function DevModal({
+  open,
+  setOpen,
+  token,
+  profileData,
+  onProfileUpdate,
+}) {
   const {
     register,
     handleSubmit,
@@ -12,21 +18,25 @@ export default function DevModal({ open, setOpen, token, profileData, onProfileU
     reset,
     watch,
     setValue,
-    formState: { errors, isSubmitting }
+    formState: { errors, isSubmitting },
   } = useForm();
 
   const skills = watch("role.developer.skills") || [];
-  
+
   // Estado para manejar los datos del avatar
   const [avatarData, setAvatarData] = useState({
     imageFile: null,
-    avatarUrl: ""
+    avatarUrl: "",
   });
   const [isAvatarValid, setIsAvatarValid] = useState(false);
 
-  const { fields: languageFields, append: appendLanguage, remove: removeLanguage } = useFieldArray({
+  const {
+    fields: languageFields,
+    append: appendLanguage,
+    remove: removeLanguage,
+  } = useFieldArray({
     control,
-    name: "role.developer.languages"
+    name: "role.developer.languages",
   });
 
   useEffect(() => {
@@ -34,7 +44,7 @@ export default function DevModal({ open, setOpen, token, profileData, onProfileU
       // Inicializar el estado del avatar
       setAvatarData({
         imageFile: null,
-        avatarUrl: profileData.avatar || ""
+        avatarUrl: profileData.avatar || "",
       });
       setIsAvatarValid(!!profileData.avatar);
 
@@ -44,23 +54,27 @@ export default function DevModal({ open, setOpen, token, profileData, onProfileU
         surname: profileData.surname || "",
         description: profileData.description || "",
         email: profileData.email || "",
-        _id: profileData._id || "", 
+        _id: profileData._id || "",
         role: {
           developer: {
-            professionalPosition: profileData.role?.developer?.professionalPosition || "",
+            professionalPosition:
+              profileData.role?.developer?.professionalPosition || "",
+            experienceYears: profileData.role?.developer?.experienceYears || "",
             experienceYears: profileData.role?.developer?.experienceYears || "",
             location: profileData.role?.developer?.location || "",
             github: profileData.role?.developer?.github || "",
             linkedin: profileData.role?.developer?.linkedin || "",
-            languages: profileData.role?.developer?.languages || [{ language: "", languageLevel: "" }],
-            skills: profileData.role?.developer?.skills || []
-          }
-        }
+            languages: profileData.role?.developer?.languages || [
+              { language: "", languageLevel: "" },
+            ],
+            skills: profileData.role?.developer?.skills || [],
+          },
+        },
       });
     } else {
       setAvatarData({
         imageFile: null,
-        avatarUrl: ""
+        avatarUrl: "",
       });
       setIsAvatarValid(false);
 
@@ -72,13 +86,14 @@ export default function DevModal({ open, setOpen, token, profileData, onProfileU
         role: {
           developer: {
             professionalPosition: "",
+            experienceYears: "",
             location: "",
             github: "",
             linkedin: "",
             languages: [{ language: "", languageLevel: "" }],
-            skills: [{ skill: "" }]
-          }
-        }
+            skills: [{ skill: "" }],
+          },
+        },
       });
     }
   }, [profileData, reset]);
@@ -98,14 +113,15 @@ export default function DevModal({ open, setOpen, token, profileData, onProfileU
         role: {
           developer: {
             ...data.role.developer,
-            languages: data.role.developer.languages.filter(lang =>
-              lang.language.trim() !== "" && lang.languageLevel.trim() !== ""
+            languages: data.role.developer.languages.filter(
+              (lang) =>
+                lang.language.trim() !== "" && lang.languageLevel.trim() !== ""
             ),
             skills: data.role.developer.skills
-              .map(s => s.trim())
-              .filter(skill => skill !== "")
-          }
-        }
+              .map((s) => s.trim())
+              .filter((skill) => skill !== ""),
+          },
+        },
       };
 
       const updated = await updateProfile(formattedData, token);
@@ -136,7 +152,6 @@ export default function DevModal({ open, setOpen, token, profileData, onProfileU
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <h2 className="text-2xl font-bold text-center">Edit Dev Profile</h2>
 
-
           {/* Avatar con drag and drop */}
           <AvatarUpload
             data={avatarData}
@@ -162,20 +177,20 @@ export default function DevModal({ open, setOpen, token, profileData, onProfileU
               <label className="block text-sm text-neutral-20 mb-1">
                 <span className="label-text font-semibold">Name</span>
               </label>
-              <input 
-                {...register("name")} 
-                placeholder="Name" 
-                className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic" 
+              <input
+                {...register("name")}
+                placeholder="Name"
+                className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
               />
             </div>
             <div className="form-control">
               <label className="block text-sm text-neutral-20 mb-1">
                 <span className="label-text font-semibold">Surname</span>
               </label>
-              <input 
-                {...register("surname")} 
-                placeholder="Surname" 
-                className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic" 
+              <input
+                {...register("surname")}
+                placeholder="Surname"
+                className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
               />
             </div>
           </div>
@@ -183,12 +198,14 @@ export default function DevModal({ open, setOpen, token, profileData, onProfileU
           {/* Professional Position */}
           <div className="form-control">
             <label className="block text-sm text-neutral-20 mb-1">
-              <span className="label-text font-semibold">Professional Position</span>
+              <span className="label-text font-semibold">
+                Professional Position
+              </span>
             </label>
-            <input 
-              {...register("role.developer.professionalPosition")} 
-              placeholder="Puesto profesional" 
-              className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic" 
+            <input
+              {...register("role.developer.professionalPosition")}
+              placeholder="Puesto profesional"
+              className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
             />
           </div>
 
@@ -197,10 +214,10 @@ export default function DevModal({ open, setOpen, token, profileData, onProfileU
             <label className="block text-sm text-neutral-20 mb-1">
               <span className="label-text font-semibold">Location</span>
             </label>
-            <input 
-              {...register("role.developer.location")} 
-              placeholder="Location" 
-              className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic" 
+            <input
+              {...register("role.developer.location")}
+              placeholder="Location"
+              className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
             />
           </div>
 
@@ -212,28 +229,32 @@ export default function DevModal({ open, setOpen, token, profileData, onProfileU
             <div className="space-y-2">
               {languageFields.map((field, index) => (
                 <div key={field.id} className="flex gap-2">
-                  <input 
-                    {...register(`role.developer.languages.${index}.language`)} 
-                    placeholder="Language" 
-                    className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 flex-1 placeholder-neutral-40 placeholder:italic" 
+                  <input
+                    {...register(`role.developer.languages.${index}.language`)}
+                    placeholder="Language"
+                    className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 flex-1 placeholder-neutral-40 placeholder:italic"
                   />
-                  <input 
-                    {...register(`role.developer.languages.${index}.languageLevel`)} 
-                    placeholder="Language Level" 
-                    className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 flex-1 placeholder-neutral-40 placeholder:italic" 
+                  <input
+                    {...register(
+                      `role.developer.languages.${index}.languageLevel`
+                    )}
+                    placeholder="Language Level"
+                    className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 flex-1 placeholder-neutral-40 placeholder:italic"
                   />
-                  <button 
-                    type="button" 
-                    onClick={() => removeLanguage(index)} 
+                  <button
+                    type="button"
+                    onClick={() => removeLanguage(index)}
                     className="btn btn-sm bg-neutral-90 border border-neutral-60 text-red-400 hover:text-red-300"
                   >
                     Remove
                   </button>
                 </div>
               ))}
-              <button 
-                type="button" 
-                onClick={() => appendLanguage({ language: "", languageLevel: "" })} 
+              <button
+                type="button"
+                onClick={() =>
+                  appendLanguage({ language: "", languageLevel: "" })
+                }
                 className="btn btn-sm bg-neutral-70 text-neutral-0 hover:bg-neutral-60 border-neutral-60"
               >
                 + Add Languages
@@ -243,10 +264,16 @@ export default function DevModal({ open, setOpen, token, profileData, onProfileU
 
           {/* Skills */}
           <div className="form-control">
-            <label className="block text-sm text-neutral-20 mb-1 font-semibold">Skills</label>
+            <label className="block text-sm text-neutral-20 mb-1 font-semibold">
+              Skills
+            </label>
             <TagsInputDev
               value={skills}
-              onChange={(tags) => setValue("role.developer.skills", tags, { shouldValidate: true })}
+              onChange={(tags) =>
+                setValue("role.developer.skills", tags, {
+                  shouldValidate: true,
+                })
+              }
             />
           </div>
 
@@ -256,20 +283,20 @@ export default function DevModal({ open, setOpen, token, profileData, onProfileU
               <label className="block text-sm text-neutral-20 mb-1">
                 <span className="label-text font-semibold">Github</span>
               </label>
-              <input 
-                {...register("role.developer.github")} 
-                placeholder="GitHub URL" 
-                className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic" 
+              <input
+                {...register("role.developer.github")}
+                placeholder="GitHub URL"
+                className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
               />
             </div>
             <div className="form-control">
               <label className="block text-sm text-neutral-20 mb-1">
                 <span className="label-text font-semibold">Linkedin</span>
               </label>
-              <input 
-                {...register("role.developer.linkedin")} 
-                placeholder="LinkedIn URL" 
-                className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic" 
+              <input
+                {...register("role.developer.linkedin")}
+                placeholder="LinkedIn URL"
+                className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
               />
             </div>
           </div>
@@ -279,15 +306,15 @@ export default function DevModal({ open, setOpen, token, profileData, onProfileU
             <label className="block text-sm text-neutral-20 mb-1">
               <span className="label-text font-semibold">About Me</span>
             </label>
-            <textarea 
+            <textarea
               {...register("description", {
                 maxLength: {
-                value: 500,
-                message: "Máximo 500 caracteres"
-                }
-              })} 
-              placeholder="Text a description about you..." 
-              className="textarea textarea-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic" 
+                  value: 500,
+                  message: "Máximo 500 caracteres",
+                },
+              })}
+              placeholder="Text a description about you..."
+              className="textarea textarea-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
               rows={3}
             />
             {errors.description && (
@@ -299,16 +326,16 @@ export default function DevModal({ open, setOpen, token, profileData, onProfileU
 
           {/* Buttons */}
           <div className="flex justify-end gap-4 pt-4">
-            <button 
-              type="submit" 
-              disabled={isSubmitting} 
+            <button
+              type="submit"
+              disabled={isSubmitting}
               className="btn bg-primary-60 text-neutral-0 hover:bg-primary-50 border border-primary-50"
             >
               {isSubmitting ? "Guardando..." : "Edit Dev Profile"}
             </button>
-            <button 
-              type="button" 
-              onClick={handleClose} 
+            <button
+              type="button"
+              onClick={handleClose}
               className="btn bg-neutral-90 border border-neutral-70 text-neutral-0 hover:text-primary-40"
             >
               Cancel

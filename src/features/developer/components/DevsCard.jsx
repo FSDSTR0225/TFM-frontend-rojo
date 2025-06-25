@@ -1,6 +1,6 @@
-import React from 'react';
-import Badge from '../../../components/Badge';
-import { Link } from 'react-router';
+import React from "react";
+import Badge from "../../../components/Badge";
+import { Link } from "react-router";
 
 const DevsCard = ({
   name,
@@ -20,7 +20,11 @@ const DevsCard = ({
     >
       {badgeText && (
         <div className="absolute top-0 right-2 mt-2">
-          <Badge text={badgeText} color="border-primary-50" textColor="text-primary-50" />
+          <Badge
+            text={badgeText}
+            color="border-primary-50"
+            textColor="text-primary-50"
+          />
         </div>
       )}
 
@@ -28,7 +32,11 @@ const DevsCard = ({
         <div>
           {/* Avatar */}
           <div className="flex justify-center mt-1 mb-2">
-            <img src={avatar} alt="Avatar" className="w-16 h-16 rounded-full border-2 border-neutral-60" />
+            <img
+              src={avatar}
+              alt="Avatar"
+              className="w-16 h-16 rounded-full border-2 border-neutral-60"
+            />
           </div>
 
           {/* Name */}
@@ -41,25 +49,46 @@ const DevsCard = ({
           {/* Profession + Experience */}
           <div className="text-center text-neutral-10 text-sm">
             {profession && <span>{profession}</span>}
-            {profession && experienceYears && <span className="text-neutral-30"> • </span>}
-            {experienceYears && <span className="text-neutral-30">{experienceYears} years</span>}
+            {profession && experienceYears && (
+              <span className="text-neutral-30"> • </span>
+            )}
+            {experienceYears && (
+              <span className="text-neutral-30">{experienceYears} years</span>
+            )}
           </div>
 
           {/* Skills */}
-          {skills?.length > 0 && (
-            <div className="flex flex-wrap gap-1 mt-6 justify-center">
-              {skills.slice(0, 3).map((skill, index) => (
-                <span key={index} className="bg-primary-70 text-neutral-00 px-2 py-0.5 rounded-full text-sm">
-                  {skill}
-                </span>
-              ))}
-              {skills.length > 3 && (
-                <span className="bg-neutral-60 text-neutral-30 px-2 py-0.5 rounded-full text-sm">
-                  +{skills.length - 3}
-                </span>
-              )}
-            </div>
-          )}
+          <div className="flex gap-1 mt-4 justify-center flex-wrap max-w-full">
+            {skills.length > 0 && (
+              <>
+                {(() => {
+                  // Calcular si las dos primeras skills son demasiado largas
+                  const limitLength = 10; // ajustable
+                  const shortSkills = skills
+                    .slice(0, 3)
+                    .filter((s) => s.length <= limitLength);
+                  const displayedSkills =
+                    shortSkills.length < 3
+                      ? skills.slice(0, 2)
+                      : skills.slice(0, 3);
+
+                  return displayedSkills.map((skill, index) => (
+                    <span
+                      key={index}
+                      className="bg-primary-70 text-neutral-00 px-2 py-0.5 rounded-full text-sm whitespace-nowrap items-center flex"
+                    >
+                      {skill}
+                    </span>
+                  ));
+                })()}
+                {skills.length > 3 && (
+                  <span className="bg-neutral-60 text-neutral-30 px-2 py-0.5 rounded-full text-sm">
+                    +{skills.length - 3}
+                  </span>
+                )}
+              </>
+            )}
+          </div>
         </div>
 
         {/* Location */}
