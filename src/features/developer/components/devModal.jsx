@@ -60,7 +60,6 @@ export default function DevModal({
             professionalPosition:
               profileData.role?.developer?.professionalPosition || "",
             experienceYears: profileData.role?.developer?.experienceYears || "",
-            experienceYears: profileData.role?.developer?.experienceYears || "",
             location: profileData.role?.developer?.location || "",
             github: profileData.role?.developer?.github || "",
             linkedin: profileData.role?.developer?.linkedin || "",
@@ -328,7 +327,7 @@ export default function DevModal({
           <div className="flex justify-end gap-4 pt-4">
             <button
               type="submit"
-              disabled={isSubmitting}
+              disabled={isSubmitting || !isAvatarValid}
               className="btn bg-primary-60 text-neutral-0 hover:bg-primary-50 border border-primary-50"
             >
               {isSubmitting ? "Guardando..." : "Edit Dev Profile"}
