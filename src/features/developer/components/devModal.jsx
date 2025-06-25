@@ -199,7 +199,7 @@ export default function DevModal({ open, setOpen, token, profileData, onProfileU
             </label>
             <input 
               {...register("role.developer.location")} 
-              placeholder="Ubication" 
+              placeholder="Location" 
               className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic" 
             />
           </div>
@@ -207,7 +207,7 @@ export default function DevModal({ open, setOpen, token, profileData, onProfileU
           {/* Languages */}
           <div className="form-control">
             <label className="block text-sm text-neutral-20 mb-1">
-              <span className="label-text font-semibold">Idiomas</span>
+              <span className="label-text font-semibold">Languages</span>
             </label>
             <div className="space-y-2">
               {languageFields.map((field, index) => (
@@ -227,7 +227,7 @@ export default function DevModal({ open, setOpen, token, profileData, onProfileU
                     onClick={() => removeLanguage(index)} 
                     className="btn btn-sm bg-neutral-90 border border-neutral-60 text-red-400 hover:text-red-300"
                   >
-                    Eliminar
+                    Remove
                   </button>
                 </div>
               ))}
@@ -236,14 +236,14 @@ export default function DevModal({ open, setOpen, token, profileData, onProfileU
                 onClick={() => appendLanguage({ language: "", languageLevel: "" })} 
                 className="btn btn-sm bg-neutral-70 text-neutral-0 hover:bg-neutral-60 border-neutral-60"
               >
-                + Añadir idioma
+                + Add Languages
               </button>
             </div>
           </div>
 
           {/* Skills */}
           <div className="form-control">
-            <label className="block text-sm text-neutral-20 mb-1 font-semibold">Habilidades</label>
+            <label className="block text-sm text-neutral-20 mb-1 font-semibold">Skills</label>
             <TagsInputDev
               value={skills}
               onChange={(tags) => setValue("role.developer.skills", tags, { shouldValidate: true })}
