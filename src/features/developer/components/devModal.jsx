@@ -1,7 +1,8 @@
 import { useForm, useFieldArray } from "react-hook-form";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { updateProfile } from "../../../services/profileService";
 import { TagsInputDev } from "./TagsInputDev";
+import { AvatarUpload } from "./AvatarUpload";
 
 export default function DevModal({ open, setOpen, token, profileData, onProfileUpdate }) {
   const {
@@ -15,25 +16,34 @@ export default function DevModal({ open, setOpen, token, profileData, onProfileU
   } = useForm();
 
   const skills = watch("role.developer.skills") || [];
+  
+  // Estado para manejar los datos del avatar
+  const [avatarData, setAvatarData] = useState({
+    imageFile: null,
+    avatarUrl: ""
+  });
+  const [isAvatarValid, setIsAvatarValid] = useState(false);
 
   const { fields: languageFields, append: appendLanguage, remove: removeLanguage } = useFieldArray({
     control,
     name: "role.developer.languages"
   });
 
-  // const { fields: skillFields, append: appendSkill, remove: removeSkill } = useFieldArray({
-  //   control,
-  //   name: "role.developer.skills"
-  // });
-
   useEffect(() => {
     if (profileData) {
+      // Inicializar el estado del avatar
+      setAvatarData({
+        imageFile: null,
+        avatarUrl: profileData.avatar || ""
+      });
+      setIsAvatarValid(!!profileData.avatar);
+
       reset({
         avatar: profileData.avatar || "",
         name: profileData.name || "",
         surname: profileData.surname || "",
         description: profileData.description || "",
-        email: profileData.email || "", // Asegurar que email existe
+        email: profileData.email || "",
         _id: profileData._id || "", 
         role: {
           developer: {
@@ -48,6 +58,12 @@ export default function DevModal({ open, setOpen, token, profileData, onProfileU
         }
       });
     } else {
+      setAvatarData({
+        imageFile: null,
+        avatarUrl: ""
+      });
+      setIsAvatarValid(false);
+
       reset({
         avatar: "",
         name: "",
@@ -67,11 +83,18 @@ export default function DevModal({ open, setOpen, token, profileData, onProfileU
     }
   }, [profileData, reset]);
 
+  // Actualizar el campo avatar del formulario cuando cambie avatarData
+  useEffect(() => {
+    const avatarValue = avatarData.avatarUrl || "";
+    setValue("avatar", avatarValue, { shouldValidate: true });
+  }, [avatarData, setValue]);
+
   const onSubmit = async (data) => {
     try {
       const formattedData = {
         ...profileData,
         ...data,
+        avatar: avatarData.avatarUrl || profileData.avatar || "",
         role: {
           developer: {
             ...data.role.developer,
@@ -84,10 +107,13 @@ export default function DevModal({ open, setOpen, token, profileData, onProfileU
           }
         }
       };
+
       const updated = await updateProfile(formattedData, token);
       if (updated?.user) {
         onProfileUpdate?.(updated.user);
         reset();
+        setAvatarData({ imageFile: null, avatarUrl: "" });
+        setIsAvatarValid(false);
         setOpen(false);
       }
     } catch (error) {
@@ -97,6 +123,8 @@ export default function DevModal({ open, setOpen, token, profileData, onProfileU
 
   const handleClose = () => {
     reset();
+    setAvatarData({ imageFile: null, avatarUrl: "" });
+    setIsAvatarValid(false);
     setOpen(false);
   };
 
@@ -108,8 +136,16 @@ export default function DevModal({ open, setOpen, token, profileData, onProfileU
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <h2 className="text-2xl font-bold text-center">Edit Dev Profile</h2>
 
+
+          {/* Avatar con drag and drop */}
+          <AvatarUpload
+            data={avatarData}
+            onDataChange={setAvatarData}
+            onValidChange={setIsAvatarValid}
+            error={errors.avatar?.message}
+          />
           {/* Avatar */}
-          <div className="form-control">
+          {/* <div className="form-control">
             <label className="block text-sm text-neutral-20 mb-1">
               <span className="label-text font-semibold">Avatar</span>
             </label>
@@ -118,7 +154,7 @@ export default function DevModal({ open, setOpen, token, profileData, onProfileU
               placeholder="Avatar URL" 
               className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic" 
             />
-          </div>
+          </div> */}
 
           {/* Name y Surname */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
