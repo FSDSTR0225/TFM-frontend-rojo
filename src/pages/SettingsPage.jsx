@@ -29,10 +29,6 @@ export const SettingsPage = () => {
     }
   };
 
-  const handleProfileUpdate = (updatedData) => {
-    console.log('Profile updated: ', updatedData);
-  }
-
 
   return (
     <>
@@ -68,7 +64,6 @@ export const SettingsPage = () => {
         open={isPasswordModalOpen}
         setOpen={setIsPasswordModalOpen}
         profileData={null}
-        onProfileUpdate={handleProfileUpdate}
         onSubmit={handlePasswordChange}
       />
     </>
