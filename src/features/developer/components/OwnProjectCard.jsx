@@ -127,7 +127,6 @@ function OwnProjectCard({ profileInfo }) {
     <div className="w-full">
       {isCurrentUserProfile && (
         <div className="flex justify-end mb-2">
-          <h1 className="flex justify-start">My projects</h1>
           <button
             onClick={handleOpenNewModal}
             className="btn bg-primary-60 hover:bg-primary-70 rounded-md shadow hover:shadow-lg text-sm flex items-center gap-2"
