@@ -1,6 +1,7 @@
 import { useForm, useFieldArray } from "react-hook-form";
 import { useEffect } from "react";
 import { updateProfile } from "../../../services/profileService";
+import { TagsInputDev } from "./TagsInputDev";
 
 export default function DevModal({ open, setOpen, token, profileData, onProfileUpdate }) {
   const {
@@ -8,18 +9,22 @@ export default function DevModal({ open, setOpen, token, profileData, onProfileU
     handleSubmit,
     control,
     reset,
+    watch,
+    setValue,
     formState: { errors, isSubmitting }
   } = useForm();
+
+  const skills = watch("role.developer.skills") || [];
 
   const { fields: languageFields, append: appendLanguage, remove: removeLanguage } = useFieldArray({
     control,
     name: "role.developer.languages"
   });
 
-  const { fields: skillFields, append: appendSkill, remove: removeSkill } = useFieldArray({
-    control,
-    name: "role.developer.skills"
-  });
+  // const { fields: skillFields, append: appendSkill, remove: removeSkill } = useFieldArray({
+  //   control,
+  //   name: "role.developer.skills"
+  // });
 
   useEffect(() => {
     if (profileData) {
@@ -28,14 +33,17 @@ export default function DevModal({ open, setOpen, token, profileData, onProfileU
         name: profileData.name || "",
         surname: profileData.surname || "",
         description: profileData.description || "",
+        email: profileData.email || "", // Asegurar que email existe
+        _id: profileData._id || "", 
         role: {
           developer: {
             professionalPosition: profileData.role?.developer?.professionalPosition || "",
+            experienceYears: profileData.role?.developer?.experienceYears || "",
             location: profileData.role?.developer?.location || "",
             github: profileData.role?.developer?.github || "",
             linkedin: profileData.role?.developer?.linkedin || "",
             languages: profileData.role?.developer?.languages || [{ language: "", languageLevel: "" }],
-            skills: profileData.role?.developer?.skills?.map(skill => ({ skill })) || [{ skill: "" }]
+            skills: profileData.role?.developer?.skills || []
           }
         }
       });
@@ -71,7 +79,7 @@ export default function DevModal({ open, setOpen, token, profileData, onProfileU
               lang.language.trim() !== "" && lang.languageLevel.trim() !== ""
             ),
             skills: data.role.developer.skills
-              .map(s => s.skill.trim())
+              .map(s => s.trim())
               .filter(skill => skill !== "")
           }
         }
@@ -199,34 +207,11 @@ export default function DevModal({ open, setOpen, token, profileData, onProfileU
 
           {/* Skills */}
           <div className="form-control">
-            <label className="block text-sm text-neutral-20 mb-1">
-              <span className="label-text font-semibold">Habilidades</span>
-            </label>
-            <div className="space-y-2">
-              {skillFields.map((field, index) => (
-                <div key={field.id} className="flex gap-2">
-                  <input 
-                    {...register(`role.developer.skills.${index}.skill`)} 
-                    placeholder="Skill" 
-                    className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 flex-1 placeholder-neutral-40 placeholder:italic" 
-                  />
-                  <button 
-                    type="button" 
-                    onClick={() => removeSkill(index)} 
-                    className="btn btn-sm bg-neutral-90 border border-neutral-60 text-red-400 hover:text-red-300"
-                  >
-                    Eliminar
-                  </button>
-                </div>
-              ))}
-              <button 
-                type="button" 
-                onClick={() => appendSkill({ skill: "" })} 
-                className="btn btn-sm bg-neutral-70 text-neutral-0 hover:bg-neutral-60 border-neutral-60"
-              >
-                + Añadir habilidad
-              </button>
-            </div>
+            <label className="block text-sm text-neutral-20 mb-1 font-semibold">Habilidades</label>
+            <TagsInputDev
+              value={skills}
+              onChange={(tags) => setValue("role.developer.skills", tags, { shouldValidate: true })}
+            />
           </div>
 
           {/* GitHub & LinkedIn */}
@@ -259,11 +244,21 @@ export default function DevModal({ open, setOpen, token, profileData, onProfileU
               <span className="label-text font-semibold">About Me</span>
             </label>
             <textarea 
-              {...register("description")} 
+              {...register("description", {
+                maxLength: {
+                value: 500,
+                message: "Máximo 500 caracteres"
+                }
+              })} 
               placeholder="Text a description about you..." 
               className="textarea textarea-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic" 
               rows={3}
             />
+            {errors.description && (
+              <span className="text-red-500 text-sm">
+                {errors.description.message}
+              </span>
+            )}
           </div>
 
           {/* Buttons */}
