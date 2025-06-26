@@ -1,15 +1,17 @@
-import { useState, useContext } from "react";
+import { useContext } from "react";
 import { PiChat } from "react-icons/pi";
 import ChatPanel from "./ChatPanel";
 import { AuthContext } from "../../context/authContext";
+import { ChatContext } from "./context/ChatContext";
 
 export function Widget() {
-  const [isOpen, setIsOpen] = useState(false);
+  // const [isOpen, setIsOpen] = useState(false);
   const { profile, token } = useContext(AuthContext);
+  const {toggleChat, isOpen} = useContext(ChatContext);
 
-  const toggleChat = () => {
-    setIsOpen(!isOpen);
-  };
+  // const toggleChat = () => {
+  //   setIsOpen(!isOpen);
+  // };
 
   return (
     <>

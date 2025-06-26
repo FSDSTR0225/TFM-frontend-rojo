@@ -4,30 +4,22 @@ import { AuthContext } from "../../context/authContext";
 import { getMessages, getUsers, sendMessage, suscribeToMessages, unsubscribeFromMessages } from "../../services/messagesService";
 import { ChatScreen } from "./components/ChatScreen";
 import { WelcomeScreen } from "./components/WelcomeScreen";
+import { ChatContext } from "./context/ChatContext";
+
 
 export default function ChatPanel({ onClose, user }) {
   const { profile, onlineUsers, socket } = useContext(AuthContext);
+  const { selectedUser, backToWelcome, handleSelectedUser, screen } = useContext(ChatContext);
   const SENDER_NAME = profile?.name || 'Anonymous';
-  const [screen, setScreen] = useState("welcome");
   const [message, setMessage] = useState('');
-  // const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const fileInputRef = useRef(null);
   const [messages, setMessages] = useState([])
   const [usuariosConectados, setUsuariosConectados] = useState([]);
-  const [userSelected, setUserSelected] = useState(null);
+ 
   const messageEndRef = useRef(null);
   const handlerRef = useRef(null);
   const token = localStorage.getItem('token');
-
-  // const goTo = (next) => setScreen(next);
-
-const backToWelcome = () => {
-  setScreen("welcome");
-  setUserSelected(null);
-}
-
-
 
   const getUsersConect = async () => {
     try {
@@ -47,15 +39,11 @@ const backToWelcome = () => {
     }
   }
 
-  const handleSelectedUser = (usuario) => {
-    setScreen("chat");
-    setUserSelected(usuario);
-  }
 
   useEffect(() => {
-    if (!socket || !userSelected) return;
+    if (!socket || !selectedUser) return;
 
-    fetchMessage(userSelected._id);
+    fetchMessage(selectedUser._id);
 
     // Desuscribimos el anterior si existía
     if (handlerRef.current) {
@@ -64,7 +52,7 @@ const backToWelcome = () => {
     }
 
     // Nos suscribimos y guardamos el handler
-    handlerRef.current = suscribeToMessages(userSelected._id, socket, setMessages);
+    handlerRef.current = suscribeToMessages(selectedUser._id, socket, setMessages);
 
     // Cleanup automático al desmontar o cambiar usuario
     return () => {
@@ -73,7 +61,7 @@ const backToWelcome = () => {
         handlerRef.current = null;
       }
     };
-  }, [userSelected, socket]);
+  }, [selectedUser, socket]);
 
   useEffect(() => {
     getUsersConect()
@@ -111,7 +99,7 @@ const backToWelcome = () => {
     e.preventDefault();
     if (!message.trim() && !imagePreview) return;
     try {
-      const resp = await sendMessage(token, message, imagePreview, userSelected._id);
+      const resp = await sendMessage(token, message, imagePreview, selectedUser._id);
       setMessages((prevMessages) => [...prevMessages, resp]);
       //Clear input fields after sending the message
       setMessage('');
@@ -134,7 +122,7 @@ const backToWelcome = () => {
         )}
 
         {screen === "chat" && (
-          <ChatScreen onClose={onClose} messages={messages} messageEndRef={messageEndRef} userSelected={userSelected} onlineUsers={onlineUsers} profile={profile} backToWelcome={backToWelcome} sendMessage={handleSendMessage} fileInputRef={fileInputRef} imagePreview={imagePreview} setMessage={setMessage} message={message}  removeImage={removeImage} imageChange={handleImageChange}/>
+          <ChatScreen onClose={onClose} messages={messages} messageEndRef={messageEndRef} userSelected={selectedUser} onlineUsers={onlineUsers} profile={profile} backToWelcome={backToWelcome} sendMessage={handleSendMessage} fileInputRef={fileInputRef} imagePreview={imagePreview} setMessage={setMessage} message={message}  removeImage={removeImage} imageChange={handleImageChange}/>
         )}
 
      
