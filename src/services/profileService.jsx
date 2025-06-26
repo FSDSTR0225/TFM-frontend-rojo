@@ -1,5 +1,22 @@
 const urlBackEnd = 'http://localhost:3000';
 
+export const getAllRecruiters = async () => {
+  try {
+    const resp = await fetch(urlBackEnd + '/recruiters', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const data = await resp.json();
+    return data;
+  } catch (error) {
+    console.error('Failed to fetch Recruiters:', error);
+    return { error: true, message: error.message };
+  }
+};
+
 export const getProfileDev = async (_id) => {
     try {
         const response = await fetch(urlBackEnd + `/devs/${_id}`, {
