@@ -91,9 +91,6 @@ function InfoDeveloper({
               {profileInfo.role.developer.professionalPosition}
             </h3>
             <span className="text-center">
-              {profileInfo.role.developer.experienceYears}
-            </span>
-            <span className="text-center">
               {profileInfo.role.developer.location}
             </span>
           </div>

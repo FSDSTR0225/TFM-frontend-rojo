@@ -5,7 +5,6 @@ import { TagsInputDev } from './TagsInputDev';
 export default function NewExperienceModal({ open, setOpen, handleExperience, experience = null }) {
   const {
     register,
-    control,
     handleSubmit,
     reset,
     watch,
