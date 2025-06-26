@@ -1,5 +1,4 @@
-import { useContext } from "react";
-import { AuthContext } from "../context/authContext";
+
 
 const urlBackEnd = 'http://localhost:3000/messages';
 export const getUsers = async (token) => {

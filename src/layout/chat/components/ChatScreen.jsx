@@ -10,7 +10,7 @@ export const ChatScreen = ({onClose, messages, messageEndRef, userSelected, onli
   return (
     <div className="flex flex-col h-full bg-neutral-100 rounded-xl shadow-lg overflow-hidden border border-zinc-700">
                 {/* Encabezado */}
-                <div className="flex items-center p-3 px-4 justify-between border-b border-zinc-700 bg-gradient-to-r from-green-500 to-blue-500">
+                <div className="p-4 border-b border-neutral-80 flex justify-between items-center bg-linear-130 from-[#37c84880] from-30% via-[#37c84880] via-30% to-[#0077ff80] to-70% ">
                 <div className="flex items-center gap-4">
                 <button className="" onClick={backToWelcome} aria-label="Close"><PiCaretLeft /></button>
                   <AvatarImage user={userSelected} width={8} />
