@@ -1,4 +1,5 @@
-const urlBackEnd = 'http://localhost:3000/users';
+const BASE_URL = import.meta.env.VITE_BASE_URL
+const urlBackEnd = `${BASE_URL}/users`
 
 
 export const registeredUser = async (user) => {

@@ -1,5 +1,5 @@
-const API_URL = "http://localhost:3000/offers";
-
+const BASE_URL = import.meta.env.VITE_BASE_URL
+const API_URL = `${BASE_URL}/offers`
 export const getOffers = async () => {
     try {
         const response = await fetch(API_URL)
