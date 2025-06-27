@@ -1,8 +1,13 @@
 import React from 'react'
 
 import { capitalize, getInitials } from '../utils/utils';
+import { useContext } from 'react';
+import { AuthContext } from '../context/authContext';
 
 export const AvatarImage = ({user, width}) => {
+const {onlineUsers} = useContext(AuthContext);
+
+const userOnline = onlineUsers.includes(user?._id);
 
   // Para usar este componente son necesario 2 Props.
   // user donde le pasaremos la imagen del avatar si es del owner, recruiter. profile
@@ -39,7 +44,7 @@ const completeName = `${name} ${surname}`.trim() || 'Unknown Recruiter';
   return (
     < >
      {( user?.avatar) ? (      
-                    <div className='avatar'>
+                    <div className={`avatar ${userOnline ? 'avatar-online' : 'avatar-offline'}`}>
                       <div className={`rounded-full ${sizeClass} `}>
                         <img
                           src={ user?.avatar}
@@ -48,7 +53,7 @@ const completeName = `${name} ${surname}`.trim() || 'Unknown Recruiter';
                       </div>
                     </div>
                   ) : (
-                    <div className='avatar avatar-placeholder'>
+                    <div className={`avatar avatar-placeholder ${userOnline ? 'avatar-online' : 'avatar-offline'}`}>
                       <div className={`bg-neutral text-neutral-content rounded-full ${sizeClass}`}>
                         <span className=' font-bold'>{getInitials(completeName)}</span>
                       </div>

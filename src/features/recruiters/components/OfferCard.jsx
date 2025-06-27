@@ -10,6 +10,7 @@ import { PiMapPinArea } from "react-icons/pi";
 import Badge from "../../../components/Badge";
 import { AvatarImage } from "../../../components/AvatarImage";
 import { NameUsers } from "../../../components/NameUsers";
+import { ChatContext } from "../../../layout/chat/context/ChatContext";
 
 export const OfferCard = ({
   classProps,
@@ -29,6 +30,8 @@ export const OfferCard = ({
   const isOwner = profile?._id === offer?.owner?._id;
 
   const isRecruiter = profile?.role.type === "recruiter";
+
+  const {openChat} = useContext(ChatContext);
 
 
 
@@ -82,6 +85,11 @@ export const OfferCard = ({
 
   const handleOnClick = (e) => {
     e.stopPropagation();
+  };
+
+    const handleContactClick = (e) => {
+    e.stopPropagation();
+      openChat(offer.owner);
   };
   const handleCardClick = () => {
     if (location.pathname.startsWith('/private-rec/offers')) {
@@ -148,7 +156,7 @@ export const OfferCard = ({
               {hasApplied ? "Applied" : "Apply"}
             </MainRecButton>
             <MainRecButton
-              onClick={handleOnClick}
+              onClick={handleContactClick}
               classProps='rounded-full w-18 hover:border-neutral-0 hover:text-neutral-0 text-secondary-40 hover:bg-transparent bg-transparent'
             >
               Contact

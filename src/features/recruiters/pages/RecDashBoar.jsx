@@ -38,7 +38,7 @@ export const RecDashBoar = ({ offerId, lists, setLists }) => {
     });
     // 4. Actualiza en backend
     console.log(`Actualizando candidato ${candidate._id} de ${fromList} a ${toList}`);
-    const daysAgo = getDaysSince(candidate.appliedDate);
+    const daysAgo = getDaysSince(candidate?.appliedDate);
     await updateCandidateStatus(offerId, candidate._id, toList, localStorage.getItem('token'));
     setDragInfo({ fromList: null, candidate: null });
   };

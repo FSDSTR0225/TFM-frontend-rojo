@@ -5,8 +5,11 @@ import { MdOutlineMailOutline } from 'react-icons/md'
 import { MainRecButton } from '../../../components/MainRecButton';
 import { AvatarImage } from '../../../components/AvatarImage';
 import { NameUsers } from '../../../components/NameUsers';
+import { ChatContext } from '../../../layout/chat/context/ChatContext';
+import { useContext } from 'react';
 
 export const RecContactCard = ({owner}) => {
+  const {openChat} = useContext(ChatContext);
 
 
 
@@ -39,7 +42,7 @@ export const RecContactCard = ({owner}) => {
               </div>
              
               
-              <MainRecButton classProps=" sm:flex w-25 mt-4 text-secondary-40 bg-transparent hover:bg-transparent hover:text-neutral-0 hover:border-neutral-0">Contact</MainRecButton>
+              <MainRecButton onClick={() => openChat(owner)} classProps=" sm:flex w-25 mt-4 text-secondary-40 bg-transparent hover:bg-transparent hover:text-neutral-0 hover:border-neutral-0">Contact</MainRecButton>
             </div>
             
           </aside>

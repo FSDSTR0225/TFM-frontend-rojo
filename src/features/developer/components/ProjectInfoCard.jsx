@@ -2,6 +2,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router";
 import { PiUser, PiCalendar, PiClock, PiGithubLogo, PiHeartStraight, PiEye, PiArrowSquareOut, PiChatText  } from "react-icons/pi";
+import { AvatarImage } from "../../../components/AvatarImage";
+import { NameUsers } from "../../../components/NameUsers";
 
 export const ProjectInfoCard = ({ project }) => {
   const [showAllSkills, setShowAllSkills] = useState(false);
@@ -47,18 +49,20 @@ export const ProjectInfoCard = ({ project }) => {
           {owner && (
             <div className="flex flex-col justify-center items-center mt-4 mb-2 relative">
               <Link to={`/profile/${owner._id}`} className="relative group">
-                <img
+              <AvatarImage user={owner} width={8} />
+                {/* <img
                   src={owner.avatar}
                   alt={`${owner.name} ${owner.surname}`}
                   className="w-16 h-16 rounded-full border-2 border-neutral-60 hover:border-primary-50 transition-colors duration-300"
-                />
+                /> */}
               </Link>
 
               <Link
                 to={`/profile/${owner._id}`}
                 className="mt-2 text-neutral-0 text-lg font-semibold hover:text-primary-50 transition-colors duration-300"
               >
-                {owner.name} {owner.surname}
+              <NameUsers user={owner} />
+                {/* {owner.name} {owner.surname} */}
               </Link>
             </div>
           )}

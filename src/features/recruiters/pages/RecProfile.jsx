@@ -21,7 +21,7 @@ export const RecProfile = () => {
   const [recruiter, setRecruiter] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedOfferId, setSelectedOfferId] = useState(null);
-  const { profile, token } = useContext(AuthContext) || {};
+  const { profile, token, setProfile } = useContext(AuthContext) || {};
   const [operacion, setOperacion] = useState('crear');
 
   const { id } = useParams(); // ID del reclutador desde la URL
@@ -64,7 +64,7 @@ export const RecProfile = () => {
     <SectionContainer >
 
       <div className='flex flex-col md:flex-row md:justify-between gap-8 items-start'>
-        <RecProfileCard recruiter={recruiter} profile={profile} id={id}/>
+        <RecProfileCard recruiter={recruiter} token={token} profile={profile} id={id} setProfile={setProfile}/>
         <div className="w-full">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-semibold">Mis ofertas de empleo</h2>
