@@ -1,18 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-
-const uploadPDF = async (file) => {
-  const formData = new FormData();
-  formData.append("file", file);
-  const res = await fetch('http://localhost:3000/upload-pdf', {
-    method: "POST",
-    body: formData,
-  });
-  if (!res.ok) {
-    throw new Error("Upload failed");
-  }
-  const result = await res.json();
-  return result.secure_urls[0];
-};
+import { uploadPDF } from "../../../services/imageService";
 
 export const ResumeUpload = ({ onValidChange, data, onDataChange, error: externalError }) => {
   const fileInputRef = useRef(null);
