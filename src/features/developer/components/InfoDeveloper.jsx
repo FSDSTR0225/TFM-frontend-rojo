@@ -3,16 +3,7 @@ import { Link } from "react-router";
 import RightPanel from "./RightPanel";
 import { EditButton } from "../../../components/EditButton";
 import { AvatarImage } from "../../../components/AvatarImage";
-import {
-  PiGithubLogo,
-  PiLinkedinLogo,
-  PiChatCenteredDots,
-  PiTranslate,
-  PiCodeSimple,
-  PiCodeBlock,
-  PiEnvelope,
-  PiReadCvLogo,
-  PiChatText,
+import { PiGithubLogo, PiLinkedinLogo, PiChatCenteredDots, PiTranslate, PiCodeSimple, PiCodeBlock, PiEnvelope, PiReadCvLogo,PiChatText,
 } from "react-icons/pi";
 import DevModal from "./devModal";
 import { SectionContainer } from "../../../components/SectionContainer";
@@ -25,7 +16,7 @@ function InfoDeveloper({
   setProfileData,
   onProfileUpdated,
 }) {
-  const { profile: currentUser } = useContext(AuthContext);
+  const { profile: currentUser, setProfile } = useContext(AuthContext);
   const isCurrentUser = currentUser?._id === profileInfo?._id;
 
   const [isDevModalOpen, setIsDevModalOpen] = useState(false);
@@ -36,6 +27,30 @@ function InfoDeveloper({
   const handleOpenModal = () => {
     setIsDevModalOpen(true);
   };
+
+  // Función para descargar el PDF
+const handleDownloadCV = async (resumeUrl, fileName = 'CV.pdf') => {
+  try {
+    const response = await fetch(resumeUrl);
+    const blob = await response.blob();
+    
+    // Crear un enlace temporal para la descarga
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    
+    // Limpiar
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error('Error al descargar el CV:', error);
+    // Fallback: abrir en nueva pestaña
+    window.open(resumeUrl, '_blank');
+  }
+};
 
   useEffect(() => {
     if (!profileInfo?._id) {
@@ -145,13 +160,20 @@ function InfoDeveloper({
               <PiChatText className="text-xl" />
               Contact
             </Link>
-            <Link
-              to={profileInfo.role.developer.github}
-              className="btn w-full bg-neutral-90 hover:bg-neutral-60 border border-neutral-60 rounded-md"
-            >
-              <PiReadCvLogo className="text-xl" />
-              Download CV
-            </Link>
+            {profileInfo.role.developer.resume && (
+              <button
+                onClick={() =>
+                  handleDownloadCV(
+                    profileInfo.role.developer.resume,
+                    `${profileInfo.name}_${profileInfo.surname}_CV.pdf`
+                  )
+                }
+                className="btn w-full bg-neutral-90 hover:bg-neutral-60 border border-neutral-60 rounded-md"
+              >
+                <PiReadCvLogo className="text-xl" />
+                Download CV
+              </button>
+            )}
           </div>
 
           {/* MOST VIEWED PROJECTS */}
@@ -246,6 +268,7 @@ function InfoDeveloper({
             token={token}
             profileData={{ ...profileInfo }}
             onProfileUpdate={(updatedProfile) => {
+              setProfile(updatedProfile);
               setProfileData(updatedProfile);
               onProfileUpdated?.(updatedProfile);
             }}

@@ -134,7 +134,7 @@ function StudyCard({ profileInfo }) {
                     <img
                       src={stu.instituteLogo}
                       alt={stu.instituteName}
-                      className="border-primary-60 border-4 w-24 h-24 sm:w-32 sm:h-32 object-cover rounded"
+                      className="w-24 h-24 sm:w-32 sm:h-32 object-cover rounded-full"
                     />
                   </div>
                   <div className="flex-1 ml-0 sm:ml-2 text-center sm:text-left">
@@ -146,9 +146,10 @@ function StudyCard({ profileInfo }) {
                   </div>
                   <div className="flex-shrink-0 flex flex-col justify-end items-center sm:items-end mt-4 sm:mt-0">
                     <p className="text-sm sm:text-base text-center sm:text-right">
-                      {new Date(stu.startDate).toLocaleDateString('es-ES', { month: 'numeric', year: 'numeric' })} – 
+                      {new Date(stu.startDate).toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })} {' '}
+                        -{' '}
                       {stu.endDate
-                        ? new Date(stu.endDate).toLocaleDateString('es-ES', { month: 'numeric', year: 'numeric' })
+                        ? new Date(stu.endDate).toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })
                         : 'Actualidad'}
                     </p>
                   </div>
@@ -161,9 +162,9 @@ function StudyCard({ profileInfo }) {
                   <p className="col-span-1 sm:col-span-2">{stu.instituteName}</p>
                   <p className="col-span-1 sm:col-span-2">{stu.description}</p>
                   <p className="grid justify-items-center sm:justify-items-end text-sm sm:text-base">
-                    {new Date(stu.startDate).toLocaleDateString('es-ES', { month: 'numeric', year: 'numeric' })} – 
+                    {new Date(stu.startDate).toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })} al  
                     {stu.endDate
-                      ? new Date(stu.endDate).toLocaleDateString('es-ES', { month: 'numeric', year: 'numeric' })
+                      ? new Date(stu.endDate).toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })
                       : 'Actualidad'}
                   </p>
                 </>

@@ -7,6 +7,7 @@ import { Link } from 'react-router';
 import { AuthContext } from '../../../context/authContext';
 import { Pagination } from "../../../components/Pagination";
 import { createProject, getProjectsByDeveloper, softDeleteProject, updateProject  } from '../../../services/projectService';
+import { useNavigate } from "react-router";
 
 function OwnProjectCard({ profileInfo }) {
   const { token, profile: currentUserProfile } = useContext(AuthContext);
@@ -18,6 +19,7 @@ function OwnProjectCard({ profileInfo }) {
   const [projectToEdit, setProjectToEdit] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [projectsPerPage] = useState(4);
+  const navigate = useNavigate();
 
   const isCurrentUserProfile = profileInfo?._id === currentUserProfile?._id;
   const developerId = profileInfo?._id;
@@ -46,6 +48,10 @@ function OwnProjectCard({ profileInfo }) {
       })
       .finally(() => setLoading(false));
   }, [developerId, token]);
+
+  const handleViewProject = (projectId) => {
+    navigate(`/projects/${projectId}`);
+  };
 
   const handleOpenNewModal = () => setIsNewModalOpen(true);
   const handleCloseNewModal = () => setIsNewModalOpen(false);
@@ -152,7 +158,7 @@ function OwnProjectCard({ profileInfo }) {
         <div className="w-full">
           <div className="grid grid-cols-1 gap-6">
             {currentProjects.map(project => (
-              <div key={project._id + Math.random()} className="bg-neutral-80 border border-neutral-60 shadow-sm rounded-lg overflow-hidden min-h-[600px] lg:min-h-[320px] flex flex-col">
+              <div key={project._id + Math.random()} onClick={() => handleViewProject(project._id)} className="bg-neutral-80 border border-neutral-60 shadow-sm rounded-lg overflow-hidden min-h-[600px] lg:min-h-[320px] flex flex-col">
                 {/* Layout para móviles */}
                 <div className="lg:hidden flex-1 flex flex-col">
                   {/* Imagen en móviles */}
@@ -243,16 +249,10 @@ function OwnProjectCard({ profileInfo }) {
                                 rel="noreferrer" 
                                 className="flex-1 btn bg-transparent border-2 border-primary-50 text-primary-50 hover:bg-neutral-0 hover:text-neutral-90 hover:border-neutral-0 rounded-md hover:shadow-lg flex items-center justify-center gap-1"
                               >
-                                <PiEye className="text-xl" /> View
+                                <PiArrowSquareOut className="text-xl" /> Live View
                               </a>
                             )}
                           </div>
-                          <Link 
-                            to={`/projects/${project._id}`} 
-                            className="w-full btn bg-primary-60 hover:bg-primary-70 text-neutral-90 rounded-md flex items-center justify-center gap-1"
-                          >
-                            <PiArrowSquareOut className="text-xl" /> Details
-                          </Link>
                         </div>
                       </div>
                     </div>
@@ -332,13 +332,10 @@ function OwnProjectCard({ profileInfo }) {
                           </a>
                         )}
                         {project.liveLink && (
-                          <a href={project.liveLink} target="_blank" rel="noreferrer" className="btn bg-transparent border-2 border-primary-50 text-primary-50 hover:bg-neutral-0 hover:text-neutral-90 hover:border-neutral-0 rounded-md hover:shadow-lg flex items-center gap-1">
-                            <PiEye className="text-xl" /> View
+                          <a href={project.liveLink} target="_blank" rel="noreferrer" className="btn bg-primary-60 hover:bg-primary-70 text-neutral-90 rounded-md flex items-center gap-1">
+                            <PiArrowSquareOut className="text-xl" />Live View
                           </a>
                         )}
-                        <Link to={`/projects/${project._id}`} className="btn bg-primary-60 hover:bg-primary-70 text-neutral-90 rounded-md flex items-center gap-1">
-                          <PiArrowSquareOut className="text-xl" /> Details
-                        </Link>
                       </div>
                     </div>
                   </div>

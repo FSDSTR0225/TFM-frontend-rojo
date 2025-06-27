@@ -410,13 +410,13 @@ export const NewProjectModal = ({ onClose }) => {
           <button
             type="submit"
             disabled={loading}
-            className="btn bg-primary-60 text-neutral-0 hover:bg-primary-50 border border-primary-50"
+            className="btn bg-primary-60 text-neutral-10 hover:bg-primary-70 w-full md:w-auto"
           >
             {loading ? "Saving..." : "Publish Project"}
           </button>
           <button
             type="button"
-            className="btn bg-neutral-90 text-neutral-0 hover:text-primary-40 border border-neutral-70"
+            className="btn bg-neutral-70 text-neutral-10 hover:bg-neutral-60 border border-neutral-60 w-full md:w-auto"
             onClick={onClose}
             disabled={loading}
           >

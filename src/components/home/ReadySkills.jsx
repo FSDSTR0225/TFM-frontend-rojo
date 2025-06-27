@@ -20,7 +20,7 @@ export const ReadySkills = () => {
             </span>
           </div>
           <div className='flex flex-row items-center justify-center text-center mt-4'>
-            <Link to={`/login`} className="btn bg-gradient-to-r from-secondary-60 to-primary-60 rounded-md gap-1 mr-4">
+            <Link to={`/login`} className="btn bg-gradient-to-r from-secondary-60 to-primary-60 rounded-md gap-1 border-0 shadow-none">
               Get Started
             </Link>
           </div>
@@ -41,7 +41,7 @@ export const ReadySkills = () => {
             </span>
           </div>
           <div className='flex flex-row items-center justify-center text-center mt-4'>
-            <Link to={`/login`} className="btn bg-gradient-to-r from-secondary-60 to-primary-60 rounded-md gap-1">
+            <Link to={`/login`} className="btn bg-gradient-to-r from-secondary-60 to-primary-60 rounded-md gap-1 border-0 shadow-none">
               Create a new Project
             </Link>
           </div>
@@ -62,7 +62,7 @@ export const ReadySkills = () => {
             </span>
           </div>
           <div className='flex flex-row items-center justify-center text-center mt-4'>
-            <Link to={`/login`} className="btn bg-gradient-to-r from-primary-60 to-secondary-60 rounded-md gap-1">
+            <Link to={`/login`} className="btn bg-gradient-to-r from-primary-60 to-secondary-60 rounded-md gap-1 border-0 shadow-none">
               Create a new Offer
             </Link>
           </div>
