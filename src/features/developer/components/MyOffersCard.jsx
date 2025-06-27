@@ -56,12 +56,12 @@ function MyOffersCard() {
   // Función para cambiar de página
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
-    window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll suave al top
+    window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll smooth/suave al top
   };
 
   return (
-    <div className="w-full">
-      <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="w-full px-2 sm:px-4">
+      <ul className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
         {currentOffers.map((offer) => {
           const daysAgo = offer?.createdAt ? getDaysSince(offer?.createdAt) : 0;
           
@@ -69,74 +69,61 @@ function MyOffersCard() {
             <li
               key={offer._id}
               onClick={() => handleViewOffer(offer._id)}
-              className="card border bg-neutral-80 border-neutral-70 cursor-pointer max-h-80 shadow-xl hover:bg-neutral-90 transition-transform transform hover:scale-105"
+              className="card border bg-neutral-80 border-neutral-70 cursor-pointer shadow-xl hover:bg-neutral-90"
             >
-              <div className='card-body justify-between'>
-                <div className='flex justify-between items-center'>
-                  <div className="flex items-center gap-2" onClick={(e) => handleOwnerClick(e, offer.owner._id)}>
+              <div className='card-body p-4 sm:p-6 justify-between space-y-3 sm:space-y-4'>
+                {/* Header con usuario y badge */}
+                <div className='flex justify-center items-start gap-2'>
+                  <div className="flex items-center gap-2 flex-1 min-w-0" onClick={(e) => handleOwnerClick(e, offer.owner._id)}>
                     <AvatarImage user={offer.owner} width={8} />
-                    <NameUsers user={offer.owner} classProps={"text-xs"}/>
+                    <div className="min-w-0 flex-1">
+                      <NameUsers user={offer.owner} classProps={"text-xs sm:text-sm truncate"}/>
+                    </div>
                   </div>
                   <Badge text={"Applied"} />
                 </div>
 
-                <div className='flex flex-col justify-between'>
-                  <h3 className='text-xl font-bold'>{offer?.position || offer?.title}</h3>
-                  <p className='text-neutral-10'>{offer?.role || offer?.company}</p>
+                {/* Título y empresa */}
+                <div className='space-y-1'>
+                  <h3 className='text-lg sm:text-xl font-bold line-clamp-2'>{offer?.position || offer?.title}</h3>
+                  <p className='text-neutral-10 text-sm sm:text-base'>{offer?.role || offer?.company}</p>
                 </div>
 
-                <div className='flex gap-4'>
-                  <div className='flex items-center gap-2'>
-                    <PiMapPinArea className='size-4' />
-                    {offer.location}
+                {/* Ubicación y tipo de contrato */}
+                <div className='flex flex-col sm:flex-row gap-2 sm:gap-4'>
+                  <div className='flex items-center gap-2 text-sm'>
+                    <PiMapPinArea className='size-4 flex-shrink-0' />
+                    <span className="truncate">{offer.location}</span>
                   </div>
-                  <div className='badge text-neutral-0 bg-neutral-60'>{offer?.contractType}</div>
+                  <div className='badge text-neutral-0 bg-neutral-60 text-xs w-fit'>{offer?.contractType}</div>
                 </div>
 
+                {/* Descripción */}
                 <div>
-                  <p className='line-clamp-3'>{offer?.description}</p>
+                  <p className='line-clamp-2 sm:line-clamp-3 text-sm sm:text-base'>{offer?.description}</p>
                 </div>
 
-                <div className='flex items-center justify-end gap-4 m-2'>
-                  <MainRecButton
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleRemoveApplication(offer._id);
-                    }}
-                    classProps='rounded-full w-fit hover:border-red-500 hover:text-red-500 text-red-400 hover:bg-transparent bg-transparent'
-                  >
-                    Remove Apply
-                  </MainRecButton>
-                  <MainRecButton
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleViewOffer(offer._id);
-                    }}
-                    classProps='rounded-full w-fit hover:border-neutral-0 hover:text-neutral-0 text-secondary-40 hover:bg-transparent bg-transparent'
-                  >
-                    View Offer
-                  </MainRecButton>
-                </div>
-
-                <div className='flex items-center text-neutral-20 text-xs'>
+                {/* Footer con tiempo y aplicantes */}
+                <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-neutral-20 text-xs border-t border-neutral-70 pt-3'>
                   <p className='flex items-center gap-2'>
-                    <MdOutlineAccessTime />
-                    Posted {daysAgo} day{daysAgo !== 1 ? "s" : ""} ago
+                    <MdOutlineAccessTime className="flex-shrink-0" />
+                    <span>Posted {daysAgo} day{daysAgo !== 1 ? "s" : ""} ago</span>
                   </p>
-                  <span>{offer?.applicants ? `${offer?.applicants.length} Applicants` : "0 Applicants"}</span>
+                  <span className="text-right sm:text-left">{offer?.applicants ? `${offer?.applicants.length} Applicants` : "0 Applicants"}</span>
                 </div>
               </div>
             </li>
           );
         })}
       </ul>
-
-      <Pagination 
-        currentPage={currentPage}
-        totalPages={totalPages}
-        handlePageChange={handlePageChange}
-        filteredProjects={offers} 
-      />
+      <div className="mt-6 sm:mt-8">
+        <Pagination 
+          currentPage={currentPage}
+          totalPages={totalPages}
+          handlePageChange={handlePageChange}
+          filteredProjects={offers} 
+        />
+      </div>
     </div>
   );
 }

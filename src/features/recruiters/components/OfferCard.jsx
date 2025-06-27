@@ -42,7 +42,7 @@ export const OfferCard = ({
     e.stopPropagation();
     if (!token) {
       console.log("por aqui no pasaras");
-      navigate("/login");
+     navigate("/login", { state: { from: "/offers" } });
     }
 
     setIsOpenApplyModal(true);

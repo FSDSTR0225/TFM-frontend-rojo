@@ -1,8 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { PiFile, PiImages } from "react-icons/pi";
+import { TagsInputDev } from "../components/TagsInputDev";
 
 export function EditProjectModal({ project, onSubmitProject, onClose }) {
+  const [skills, setSkills] = useState([]);
+
   const {
     register,
     handleSubmit,
@@ -23,11 +26,6 @@ export function EditProjectModal({ project, onSubmitProject, onClose }) {
     },
   });
 
-  const { fields: skillFields, append: skillAppend, remove: skillRemove } = useFieldArray({
-    control,
-    name: 'projectSkills',
-  });
-
   const { fields: galleryFields, append: galleryAppend, remove: galleryRemove } = useFieldArray({
     control,
     name: 'gallery',
@@ -45,13 +43,14 @@ export function EditProjectModal({ project, onSubmitProject, onClose }) {
         projectSkills: project.projectSkills.map(skill => ({ skill })) || [{ skill: '' }],
         gallery: project.gallery.map(url => ({ url })) || [{ url: '' }],
       });
+      setSkills(project.projectSkills || []);
     }
   }, [project, reset]);
 
   const onSubmit = (data) => {
     const formattedData = {
       ...data,
-      projectSkills: data.projectSkills.map(s => s.skill.trim()).filter(Boolean),
+      projectSkills: skills.map(s => s.trim()).filter(Boolean),
       gallery: data.gallery.map(g => g.url.trim()).filter(Boolean),
     };
     onSubmitProject(formattedData);
@@ -121,36 +120,18 @@ export function EditProjectModal({ project, onSubmitProject, onClose }) {
           </section>
 
           {/* Skills Section */}
+          {/* Skills Section */}
           <div className="space-y-4">
             <label className="flex items-center gap-2 font-semibold text-primary-50">
               Habilidades
             </label>
-            {skillFields.map((field, index) => (
-              <div key={field.id} className="flex gap-2 items-center">
-                <input
-                  type="text"
-                  placeholder="Ej. React"
-                  className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 flex-1 placeholder-neutral-40"
-                  {...register(`projectSkills.${index}.skill`)}
-                  defaultValue={field.skill}
-                />
-                <button
-                  type="button"
-                  onClick={() => skillRemove(index)}
-                  className="btn btn-sm bg-neutral-90 border border-neutral-60 text-red-400 hover:text-red-300"
-                >
-                  Eliminar
-                </button>
-              </div>
-            ))}
-            <button
-              type="button"
-              onClick={() => skillAppend({ skill: '' })}
-              className="btn btn-sm bg-neutral-90 border border-neutral-60 text-neutral-0 hover:text-primary-40 hover:border-primary-40"
-            >
-              + Añadir Habilidad
-            </button>
+            <TagsInputDev
+              value={skills}
+              onChange={(tags) => setSkills(tags)}
+              placeholder="Añade habilidades y presiona enter"
+            />
           </div>
+
 
           {/* Gallery Section */}
           <div className="space-y-4">
@@ -188,22 +169,22 @@ export function EditProjectModal({ project, onSubmitProject, onClose }) {
           {/* Links Section */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm text-neutral-20 mb-1">Enlace GitHub</label>
-              <input
-                {...register('githubProjectLink')}
-                className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40"
-                type="url"
-                placeholder="(e.g. https://github.com/user/repo)"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm text-neutral-20 mb-1">Enlace en Vivo</label>
+              <label className="block text-sm text-neutral-20 mb-1">Live Project URL</label>
               <input
                 {...register('liveLink')}
                 className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40"
                 type="url"
                 placeholder="(e.g. https://example.com)"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm text-neutral-20 mb-1">GitHub Code URL</label>
+              <input
+                {...register('githubProjectLink')}
+                className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40"
+                type="url"
+                placeholder="(e.g. https://github.com/user/repo)"
               />
             </div>
           </div>
