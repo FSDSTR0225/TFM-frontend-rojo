@@ -1,5 +1,22 @@
 const urlBackEnd = 'http://localhost:3000';
 
+export const getAllRecruiters = async () => {
+    try {
+        const resp = await fetch(urlBackEnd + '/recruiters', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        const data = await resp.json();
+        return data;
+    } catch (error) {
+        console.error('Failed to fetch Recruiters:', error);
+        return { error: true, message: error.message };
+    }
+};
+
 export const getProfileDev = async (_id) => {
     try {
         const response = await fetch(urlBackEnd + `/devs/${_id}`, {
@@ -9,10 +26,74 @@ export const getProfileDev = async (_id) => {
             }
         })
         const data = await response.json();
-        console.log("Data: "+ data);
+        console.log("Data: " + data);
         return data;
     } catch (error) {
         console.log(error);
         throw error;
     }
 }
+
+export const updateProfile = async (devProfile, token) => {
+    console.log('Dev Profile:', devProfile);
+    console.log('Dev token:', token);
+
+    try {
+        const resp = await fetch(urlBackEnd + '/devs/profile', {
+            method: "PUT",
+            headers: {
+                authorization: "Bearer " + token,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(devProfile)
+        });
+        if (!resp.ok) {
+            throw new Error("Error editing the devProfile")
+        }
+        const data = await resp.json();
+        return data;
+    } catch (error) {
+        console.log("Error: ", error);
+        throw error;
+    }
+};
+
+export const updateProfileRecruiter = async (recProfile, token) => {
+    console.log('Rec Profile:', recProfile);
+    console.log('Dev token:', token);
+
+    try {
+        const resp = await fetch(urlBackEnd + '/recruiters/profile', {
+            method: "PUT",
+            headers: {
+                authorization: "Bearer " + token,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(recProfile)
+        });
+        if (!resp.ok) {
+            throw new Error("Error editing the recProfile")
+        }
+        const data = await resp.json();
+        return data;
+    } catch (error) {
+        console.log("Error: ", error);
+        throw error;
+    }
+};
+
+export const getRecruiterById = async (_id) => {
+    try {
+        const response = await fetch(`${urlBackEnd}/recruiters/${_id}`)
+        if (!response.ok) {
+            throw new Error("Error getting user")
+        }
+        const recruiterData = await response.json()
+        console.log("🚀 ~ getRecruiterById ~ recruiterData:", recruiterData)
+
+        return recruiterData
+    } catch (error) {
+        console.error("profileService Error:", error);
+        throw error;
+    }
+};
