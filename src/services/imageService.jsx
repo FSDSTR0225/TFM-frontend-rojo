@@ -1,10 +1,11 @@
-const urlBackEnd = 'http://localhost:3000';
+const BASE_URL = import.meta.env.VITE_BASE_URL;
+const urlBackEnd = `${BASE_URL}`;
 
 export const uploadImage = async (file) => {
   const formData = new FormData();
   formData.append("file", file);
 
-  const res = await fetch(urlBackEnd + '/upload', {
+  const res = await fetch(urlBackEnd + "/upload", {
     method: "POST",
     body: formData,
   });

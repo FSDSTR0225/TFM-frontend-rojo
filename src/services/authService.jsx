@@ -1,28 +1,24 @@
-const BASE_URL = import.meta.env.VITE_BASE_URL
-const urlBackEnd = `${BASE_URL}/users`
-
+const BASE_URL = import.meta.env.VITE_BASE_URL;
+const urlBackEnd = `${BASE_URL}/users`;
 
 export const registeredUser = async (user) => {
-
-  const resp = await fetch(urlBackEnd + '/register', {
-    method: 'POST',
+  const resp = await fetch(urlBackEnd + "/register", {
+    method: "POST",
     headers: {
-      'content-type': 'application/json'
+      "content-type": "application/json",
     },
-    body: JSON.stringify(user)
+    body: JSON.stringify(user),
   });
   const data = await resp.json();
   return data;
-
-}
-
+};
 
 export const loginUser = async (email, password) => {
   try {
-    const resp = await fetch(urlBackEnd + '/login', {
-      method: 'POST',
+    const resp = await fetch(urlBackEnd + "/login", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ email, password }),
     });
@@ -34,24 +30,23 @@ export const loginUser = async (email, password) => {
     const data = await resp.json();
     return data;
   } catch (err) {
-    console.error('Error en loginUser:', err.message);
+    console.error("Error en loginUser:", err.message);
     throw err;
   }
 };
 
-
 export const getUserLogged = async (token) => {
   try {
-    const resp = await fetch(urlBackEnd + '/getUserProfile', {
-      method: 'GET',
+    const resp = await fetch(urlBackEnd + "/getUserProfile", {
+      method: "GET",
       headers: {
-        authorization: "Bearer " + token
-      }
+        authorization: "Bearer " + token,
+      },
     });
-    if(!resp.ok) throw new Error('Token inválido');
+    if (!resp.ok) throw new Error("Token inválido");
     const data = await resp.json();
     return data;
   } catch (error) {
     throw error;
   }
-}
+};
