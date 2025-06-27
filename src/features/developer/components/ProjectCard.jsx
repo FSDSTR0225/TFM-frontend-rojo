@@ -1,5 +1,3 @@
-import React from "react";
-import Badge from "../../../components/Badge";
 import { Link } from "react-router";
 
 const ProjectCard = ({
@@ -9,7 +7,6 @@ const ProjectCard = ({
   gallery = [],
   projectid,
   title,
-  badgeText,
   category,
   developerId,
   smallTitle = false,
@@ -38,16 +35,6 @@ const ProjectCard = ({
           >
             • {category}
           </span>
-        )}
-
-        {badgeText && (
-          <div className="absolute top-1/2 transform -translate-y-1/2 right-2">
-            <Badge
-              text={badgeText}
-              color="border-primary-50"
-              textColor="text-primary-50"
-            />
-          </div>
         )}
       </div>
       <div className="relative flex-grow overflow-hidden group">
