@@ -24,15 +24,15 @@ export const RecModalEdit = ({ openModal, setOpenModal, profile, token, onProfil
         if (profile) {
             console.log("Perfil en modal:", profile);
             reset({
-                name: profile.name || "",
-                surname: profile.surname || "",
-                sector: profile.role.recruiter.sector || "",
-                companyName: profile.role.recruiter.companyName || "",
-                location: profile.role.recruiter.location || "",
-                email: profile.role.recruiter.contact.email || "",
-                phone: profile.role.recruiter.contact.phone || "",
-                website: profile.role.recruiter.website || "",
-                description: profile.description || "",
+                name: profile?.name || "",
+                surname: profile?.surname || "",
+                sector: profile?.role?.recruiter?.sector || "",
+                companyName: profile?.role?.recruiter?.companyName || "",
+                location: profile?.role?.recruiter?.location || "",
+                email: profile?.role?.recruiter?.contact?.email || "",
+                phone: profile?.role?.recruiter?.contact?.phone || "",
+                website: profile?.role?.recruiter?.website || "",
+                description: profile?.description || "",
             });
 
             setAvatarData({
