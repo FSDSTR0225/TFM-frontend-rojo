@@ -137,7 +137,7 @@ function ExperienceCard({ profileInfo }) {
                       <img
                         src={exp.companyLogo}
                         alt={exp.company}
-                        className="border-primary-60 border-4 w-24 h-24 sm:w-32 sm:h-32 object-cover rounded"
+                        className="w-24 h-24 sm:w-32 sm:h-32 object-cover rounded-full"
                       />
                     </div>
                     <div className="flex-1 ml-0 sm:ml-2 text-center sm:text-left">
@@ -162,13 +162,13 @@ function ExperienceCard({ profileInfo }) {
                     <div className="flex-shrink-0 flex flex-col justify-end items-center sm:items-end mt-4 sm:mt-0">
                       <p className="text-sm sm:text-base text-center sm:text-right">
                         {new Date(exp.startDate).toLocaleDateString('es-ES', {
-                          month: 'numeric',
+                          month: 'long',
                           year: 'numeric'
                         })}{' '}
                         -{' '}
                         {exp.endDate
                           ? new Date(exp.endDate).toLocaleDateString('es-ES', {
-                              month: 'numeric',
+                              month: 'long',
                               year: 'numeric'
                             })
                           : 'Actualidad'}
@@ -196,13 +196,13 @@ function ExperienceCard({ profileInfo }) {
                     )}
                     <p className="grid justify-items-center sm:justify-items-end text-sm sm:text-base">
                       {new Date(exp.startDate).toLocaleDateString('es-ES', {
-                        month: 'numeric',
+                        month: 'long',
                         year: 'numeric'
                       })}{' '}
                       -{' '}
                       {exp.endDate
                         ? new Date(exp.endDate).toLocaleDateString('es-ES', {
-                            month: 'numeric',
+                            month: 'long',
                             year: 'numeric'
                           })
                         : 'Actualidad'}

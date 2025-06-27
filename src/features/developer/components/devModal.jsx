@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { updateProfile } from "../../../services/profileService";
 import { TagsInputDev } from "./TagsInputDev";
 import { AvatarUpload } from "./AvatarUpload";
+import { ResumeUpload } from "./PdfUpload";
 
 export default function DevModal({
   open,
@@ -30,6 +31,14 @@ export default function DevModal({
   });
   const [isAvatarValid, setIsAvatarValid] = useState(false);
 
+    // Estado para manejar los datos del curriculum
+  const [resumeData, setResumeData] = useState({
+    imageFile: null,
+    resumeUrl: "",
+  });
+  const [isResumeValid, setIsResumeValid] = useState(false);
+
+
   const {
     fields: languageFields,
     append: appendLanguage,
@@ -48,6 +57,13 @@ export default function DevModal({
       });
       setIsAvatarValid(!!profileData.avatar);
 
+      // Inicializar el estado del curriculum
+      setResumeData({
+        pdfFile: null,
+        resumeUrl: profileData.resume || "",
+      });
+      setIsResumeValid(!!profileData.resume);
+
       reset({
         avatar: profileData.avatar || "",
         name: profileData.name || "",
@@ -57,8 +73,8 @@ export default function DevModal({
         _id: profileData._id || "",
         role: {
           developer: {
-            professionalPosition:
-              profileData.role?.developer?.professionalPosition || "",
+            professionalPosition: profileData.role?.developer?.professionalPosition || "",
+            resume: profileData.role?.developer?.resume || "",
             experienceYears: profileData.role?.developer?.experienceYears || "",
             location: profileData.role?.developer?.location || "",
             github: profileData.role?.developer?.github || "",
@@ -77,6 +93,12 @@ export default function DevModal({
       });
       setIsAvatarValid(false);
 
+      setResumeData({
+        pdfFile: null,
+        resumeUrl: "",
+      });
+      setIsResumeValid(false);
+
       reset({
         avatar: "",
         name: "",
@@ -85,6 +107,7 @@ export default function DevModal({
         role: {
           developer: {
             professionalPosition: "",
+            resume: "",
             experienceYears: "",
             location: "",
             github: "",
@@ -103,6 +126,12 @@ export default function DevModal({
     setValue("avatar", avatarValue, { shouldValidate: true });
   }, [avatarData, setValue]);
 
+  // Actualizar el campo avatar del formulario cuando cambie resumeData
+  useEffect(() => {
+    const resumeValue = resumeData.resumeUrl || "";
+    setValue("role.developer.resume", resumeValue, { shouldValidate: true });
+  }, [resumeData, setValue]);
+
   const onSubmit = async (data) => {
     try {
       const formattedData = {
@@ -112,6 +141,7 @@ export default function DevModal({
         role: {
           developer: {
             ...data.role.developer,
+            resume: resumeData.resumeUrl || data.role.developer.resume || "",
             languages: data.role.developer.languages.filter(
               (lang) =>
                 lang.language.trim() !== "" && lang.languageLevel.trim() !== ""
@@ -129,6 +159,8 @@ export default function DevModal({
         reset();
         setAvatarData({ imageFile: null, avatarUrl: "" });
         setIsAvatarValid(false);
+        setResumeData({ pdfFile: null, resumeUrl: "" });
+        setIsResumeValid(false);
         setOpen(false);
       }
     } catch (error) {
@@ -140,6 +172,8 @@ export default function DevModal({
     reset();
     setAvatarData({ imageFile: null, avatarUrl: "" });
     setIsAvatarValid(false);
+    setResumeData({ pdfFile: null, resumeUrl: "" });
+    setIsResumeValid(false);
     setOpen(false);
   };
 
@@ -207,6 +241,14 @@ export default function DevModal({
               className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
             />
           </div>
+
+          {/* Resume Upload */}
+          <ResumeUpload
+            data={resumeData}
+            onDataChange={setResumeData}
+            onValidChange={setIsResumeValid}
+            error={errors.role?.developer?.resume?.message}
+          />
 
           {/* Location */}
           <div className="form-control">
@@ -328,14 +370,14 @@ export default function DevModal({
             <button
               type="submit"
               disabled={isSubmitting || !isAvatarValid}
-              className="btn bg-primary-60 text-neutral-0 hover:bg-primary-50 border border-primary-50"
+              className="btn bg-primary-60 text-neutral-10 hover:bg-primary-70 w-full md:w-auto"
             >
-              {isSubmitting ? "Guardando..." : "Edit Dev Profile"}
+              {isSubmitting ? "Saving..." : "Edit Dev Profile"}
             </button>
             <button
               type="button"
               onClick={handleClose}
-              className="btn bg-neutral-90 border border-neutral-70 text-neutral-0 hover:text-primary-40"
+              className="btn bg-neutral-70 text-neutral-10 hover:bg-neutral-60 border border-neutral-60 w-full md:w-auto"
             >
               Cancel
             </button>

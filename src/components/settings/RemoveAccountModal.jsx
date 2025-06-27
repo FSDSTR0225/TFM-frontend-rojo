@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useForm } from "react-hook-form"
 import { updateProfile } from "../../services/profileService";
 
-export default function ChangePasswordModal({ open, setOpen, profileData, onProfileUpdate, onSubmit }) {
+export default function RemoveAccountModal({ open, setOpen, profileData, onProfileUpdate, onSubmit }) {
   const {
     register,
     handleSubmit,
@@ -64,51 +64,38 @@ export default function ChangePasswordModal({ open, setOpen, profileData, onProf
     <div className="modal modal-open fixed inset-0 flex justify-center items-center z-50">
       <div className="modal-box max-w-3xl bg-neutral-80 border border-neutral-70 rounded-lg p-6 relative">
         <form onSubmit={handleSubmit(handlePassSubmit)} className="flex flex-col gap-4">
-          <h2 className="text-2xl font-bold text-center">Change your password</h2>
+          <h2 className="text-2xl font-bold text-center">Remove your account</h2>
 
 
-          {/* Password Viejo*/}
+
+
+          {/*Email*/}
           <div className="form-control">
             <label className="block text-sm text-neutral-20 mb-1">
-              <span className="label-text font-semibold">Current password</span>
-            </label>
-            <input 
-              type="password"
-              {...register("oldPassword", {
-                required: "Your current password is requiered"
-              })} 
-              placeholder="Enter your current password" 
-              className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic" 
-            />
-          </div>
-
-          {/* Password nuevo */}
-          <div className="form-control">
-            <label className="block text-sm text-neutral-20 mb-1">
-              <span className="label-text font-semibold">New password</span>
+              <span className="label-text font-semibold">Email</span>
             </label>
             <input 
               type="password"
               {...register("newPassword", {
-                required: "Your new password is requiered"
+                required: "Your email is requiered"
               })} 
-              placeholder="Enter your new password" 
+              placeholder="Enter your email" 
               className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic" 
             />
           </div>
 
-          {/* Password nuevo again */}
+          {/* Password*/}
           <div className="form-control">
             <label className="block text-sm text-neutral-20 mb-1">
-              <span className="label-text font-semibold">Confirm new password</span>
+              <span className="label-text font-semibold">Password</span>
             </label>
             <input 
               type="password"
-              {...register("confirmPassword", {
-                required: "Confirm your new password",
+              {...register("Password", {
+                required: "Your password is requiered",
                 validate: value => value === newPassword
               })} 
-              placeholder="Confirm your new password" 
+              placeholder="Enter your password" 
               className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic" 
             />
           </div>
@@ -120,9 +107,9 @@ export default function ChangePasswordModal({ open, setOpen, profileData, onProf
             <button 
               type="submit" 
               disabled={isSubmitting} 
-              className="btn bg-primary-60 text-neutral-0 hover:bg-primary-50 border border-primary-50"
+              className="btn bg-red-600 text-neutral-0 hover:bg-red-500 border "
             >
-              {isSubmitting ? "Changing..." : "Change your password"}
+              {isSubmitting ? "Changing..." : "Remove your account"}
             </button>
             <button 
               type="button" 

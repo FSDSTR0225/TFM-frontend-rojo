@@ -189,13 +189,13 @@ export default function StudyModal({ open, setOpen, handleStudy, study = null })
         <div className="flex justify-end gap-4 pt-4">
           <button
             type="submit"
-            className="btn bg-primary-60 text-neutral-0 hover:bg-primary-50 border border-primary-50"
+            className="btn bg-primary-60 text-neutral-10 hover:bg-primary-70 w-full md:w-auto"
           >
             {study ? "Save Study" : "Publish Study"}
           </button>
           <button
             type="button"
-            className="btn bg-neutral-90 border border-neutral-70 text-neutral-0 hover:text-primary-40"
+            className="btn bg-neutral-70 text-neutral-10 hover:bg-neutral-60 border border-neutral-60 w-full md:w-auto"
             onClick={handleClose}
           >
             Cancel

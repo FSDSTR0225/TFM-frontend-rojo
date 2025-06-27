@@ -33,11 +33,6 @@ function MyOffersCard() {
     }
   }, [currentUser, token]);
 
-  const handleRemoveApplication = async (offerId) => {
-    // Meter lógica borrar la postulación
-    console.log("Retirar postulación de:", offerId);
-  };
-
   const handleViewOffer = (offerId) => {
     navigate(`/offers/${offerId}`);
   };
@@ -64,6 +59,13 @@ function MyOffersCard() {
       <ul className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
         {currentOffers.map((offer) => {
           const daysAgo = offer?.createdAt ? getDaysSince(offer?.createdAt) : 0;
+
+          const myApp = offer.applicants.find(a =>
+            a.user?._id?.toString() === currentUser?._id?.toString()
+          );
+
+          const status = myApp?.status || "pending";
+          const badgeText = status.charAt(0).toUpperCase() + status.slice(1);
           
           return (
             <li
@@ -80,7 +82,9 @@ function MyOffersCard() {
                       <NameUsers user={offer.owner} classProps={"text-xs sm:text-sm truncate"}/>
                     </div>
                   </div>
-                  <Badge text={"Applied"} />
+                  <span className="bg-gradient-to-r from-secondary-90 to-primary-90 rounded-md px-2 py-0.5 w-fit h-fit inline-block text-xs">
+                    {badgeText || ''}
+                  </span>
                 </div>
 
                 {/* Título y empresa */}

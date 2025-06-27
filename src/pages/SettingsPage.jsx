@@ -3,11 +3,13 @@ import { SectionContainer } from "../components/SectionContainer";
 import { Link } from "react-router";
 import { updatePassword } from '../services/settingsService';
 import ChangePasswordModal from '../components/settings/ChangePasswordModal';
+import RemoveAccountModal from '../components/settings/RemoveAccountModal';
 import { AuthContext } from '../context/authContext';
 
 export const SettingsPage = () => {
   const { token } = useContext(AuthContext);
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+  const [isRemoveModalOpen, setIsRemoveModalOpen] = useState(false);
   
   const handleOpenPasswordModal = () => {
     setIsPasswordModalOpen(true);
@@ -26,6 +28,26 @@ export const SettingsPage = () => {
     } catch (error) {
       console.error('Error changing password:', error);
       alert('Error changing password');
+    }
+  };
+
+  const handleOpenRemoveModal = () => {
+    setIsRemoveModalOpen(true);
+  };
+
+  const handleRemoveChange = async (data) => {
+    try {
+      const result = await RemoveAccount(data, token);
+      
+      if (result) {
+        console.log('remove data:', result);
+        setIsRemoveModalOpen(false);
+      } else {
+        console.error('Error removing your account:', result.error);
+      }
+    } catch (error) {
+      console.error('Error removing your account:', error);
+      alert('Error removing your account');
     }
   };
 
@@ -57,6 +79,21 @@ export const SettingsPage = () => {
             </div>
             
           </div>
+          <div className='flex flex-col items-center text-center my-6'>
+            
+            <div className='mb-5'>
+              <span className='mr-5'>
+                Remove your account: 
+              </span>
+              <button
+                onClick={handleOpenRemoveModal}
+                className='btn btn-sm rounded-full text-white bg-red-600 hover:bg-red-700'
+              >
+                Remove
+              </button>
+            </div>
+            
+          </div>
         </div>
       </SectionContainer>
 
@@ -65,6 +102,12 @@ export const SettingsPage = () => {
         setOpen={setIsPasswordModalOpen}
         profileData={null}
         onSubmit={handlePasswordChange}
+      />
+      <RemoveAccountModal 
+        open={isRemoveModalOpen}
+        setOpen={setIsRemoveModalOpen}
+        profileData={null}
+        onSubmit={handleRemoveChange}
       />
     </>
   );
