@@ -32,7 +32,7 @@ const ProjectCard = ({
 
         {category && (
           <span
-            className={`text-neutral-30 mx-2 truncate block ${
+            className={`text-neutral-30 mx-2  ${
               smallTitle ? "text-xs" : "text-sm"
             }`}
           >

@@ -1,4 +1,5 @@
-const urlBackEnd = 'http://localhost:3000';
+const BASE_URL = import.meta.env.VITE_BASE_URL;
+const urlBackEnd = `${BASE_URL}`;
 
 // Obtener experiencias por developer
 export async function getExperiencesByDeveloper(developerId, token) {
@@ -12,15 +13,15 @@ export async function getExperiencesByDeveloper(developerId, token) {
     const data = await res.json();
     return data;
   } catch (error) {
-    console.error('Failed to fetch experiences by developer:', error);
-    return { error: true, message: 'Request failed' };
+    console.error("Failed to fetch experiences by developer:", error);
+    return { error: true, message: "Request failed" };
   }
 }
 
 export async function softDeleteExperience(id, token) {
   try {
     const res = await fetch(`${urlBackEnd}/experiences/${id}/soft-delete`, {
-      method: 'PUT',
+      method: "PUT",
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -28,29 +29,29 @@ export async function softDeleteExperience(id, token) {
     const data = await res.json();
     return data;
   } catch (error) {
-    console.error('Failed to soft delete experience:', error);
-    return { error: true, message: 'Fallo en la solicitud' };
+    console.error("Failed to soft delete experience:", error);
+    return { error: true, message: "Fallo en la solicitud" };
   }
 }
 
 export const createExperience = async (payload, token) => {
   try {
-    const resp = await fetch(urlBackEnd + '/experiences', {
-      method: 'POST',
+    const resp = await fetch(urlBackEnd + "/experiences", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(payload),
     });
 
-    if (!resp.ok) throw new Error('Error saving the experience');
+    if (!resp.ok) throw new Error("Error saving the experience");
 
     const experience = await resp.json();
-    console.log('Respuesta del backend (createExperience):', experience)
+    console.log("Respuesta del backend (createExperience):", experience);
     return experience;
   } catch (error) {
-    console.error('Failed to create experience:', error);
+    console.error("Failed to create experience:", error);
     return { error: true, message: error.message };
   }
 };
@@ -58,21 +59,21 @@ export const createExperience = async (payload, token) => {
 export const updateExperience = async (id, payload, token) => {
   try {
     const resp = await fetch(`${urlBackEnd}/experiences/${id}`, {
-      method: 'PUT',
+      method: "PUT",
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(payload),
     });
 
-    if (!resp.ok) throw new Error('Error updating the experience');
+    if (!resp.ok) throw new Error("Error updating the experience");
 
     const experience = await resp.json();
-    console.log('Respuesta del backend (updateExperience):', experience);
+    console.log("Respuesta del backend (updateExperience):", experience);
     return experience;
   } catch (error) {
-    console.error('Failed to update experience:', error);
+    console.error("Failed to update experience:", error);
     return { error: true, message: error.message };
   }
 };
