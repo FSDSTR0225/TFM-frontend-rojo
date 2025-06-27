@@ -1,14 +1,14 @@
 import { Link } from "react-router";
 import { AuthContext } from "../context/authContext";
 import { useContext } from "react";
-import { capitalize, getInitials } from "../utils/utils";
+// import { capitalize, getInitials } from "../utils/utils";
+import { AvatarImage } from "../components/AvatarImage";
+import { NameUsers } from "../components/NameUsers";
+import { PiGear  } from 'react-icons/pi';
 
 export const Header = () => {
   const { profile, logout } = useContext(AuthContext);
 
-  const name = capitalize(profile?.name || "");
-  const surname = capitalize(profile?.surname || "");
-  const completeName = `${name} ${surname}`.trim() || "Unknown Recruiter";
 
   return (
     <header className='bg-neutral-80 p-2 drawer border-b-1 border-neutral-70'>
@@ -147,8 +147,12 @@ export const Header = () => {
             </div>
           ) : (
             <div className='flex items-center gap-4  pr-6  text-white'>
-            <div className="hidden  lg:flex items-center gap-4 min-w-40">
-              {profile?.avatar ? (
+              <div className='hidden lg:flex items-center justify-end gap-2 min-w-46'>
+                <NameUsers user={profile} classProps={"text-xs items-end"} align={"items-end"}>
+                {profile.role.type === "recruiter" ? "Recruiter" : "Developer"}
+                </NameUsers>
+                <AvatarImage user={profile} />
+                {/* {profile?.avatar ? (
                 <div className='avatar'>
                   <div className='size-10 rounded-full'>
                     <img
@@ -167,7 +171,7 @@ export const Header = () => {
               <div className="felx flex-col -space-y-1">
                 <p className='text-sm'>{completeName}</p>
                 <p className="text-xs text-neutral-10 ">{profile.role.type}</p>
-              </div>
+              </div> */}
               </div>
 
               {/* Botones */}
@@ -181,7 +185,7 @@ export const Header = () => {
                   </Link>
                 ) : (
                   <Link
-                    to={`recruiter/${profile._id}`}
+                    to={`profile/${profile._id}`}
                     className='btn btn-sm rounded-full text-white bg-green-600 hover:bg-green-700'
                   >
                     Ver Perfil
@@ -195,6 +199,12 @@ export const Header = () => {
                 >
                   Logout
                 </button>
+                  <Link
+                    to={"/settings"}
+                    className='btn btn-sm rounded-full text-white bg-green-600 hover:bg-green-700'
+                  >
+                    <PiGear className="text-xl" />
+                  </Link>
               </div>
             </div>
           )}
@@ -259,7 +269,7 @@ export const Header = () => {
           </li>
           <li>
             <Link
-              to='/portfolios'
+              to='/projects'
               className='btn text-neutral-0 bg-neutral-90 m-2 hover:bg-primary-60'
             >
               <svg

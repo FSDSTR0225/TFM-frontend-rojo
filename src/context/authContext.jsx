@@ -1,50 +1,95 @@
-import { useState, createContext, useEffect } from "react";
+import { useState, createContext, useEffect, useRef } from "react";
 import { getUserLogged } from "../services/authService";
-
+import { io } from "socket.io-client";
 
 export const AuthContext = createContext();
 
+const BASE_URL = import.meta.env.VITE_BASE_URL;
+const urlBackEnd = `${BASE_URL}`;
+
 export const AuthProvider = ({ children }) => {
-    const [profile, setProfile] = useState(null);
-    const [token, setToken] = useState(() => localStorage.getItem("token") || null);
-   
+  const [profile, setProfile] = useState(null);
+  const [token, setToken] = useState(
+    () => localStorage.getItem("token") || null
+  );
+  const [onlineUsers, setOnlineUsers] = useState([]);
 
-    const infoUserLogged = async () => {
-        try {
-            const resp = await getUserLogged(token);
-            setProfile(resp);
-        } catch (err) {
-            setProfile(null);
-            setToken(null);
-            localStorage.removeItem('token');
-        }
+  // Mantén el socket en una ref para que no cause re-render
+  const socketRef = useRef(null);
+  const infoUserLogged = async () => {
+    try {
+      const resp = await getUserLogged(token);
+      setProfile(resp);
+    } catch (err) {
+      setProfile(null);
+      setToken(null);
+      localStorage.removeItem("token");
+    }
+  };
+
+  useEffect(() => {
+    if (profile && !socketRef.current) {
+      socketRef.current = io(urlBackEnd, {
+        query: { userId: profile._id },
+      });
+      socketRef.current.on("connect", () => {
+        console.log("Socket conectado con id:", socketRef.current.id);
+      });
+      socketRef.current.on("disconnect", () => {
+        console.log("Socket desconectado");
+      });
+      socketRef.current.on("getOnlineUsers", (users) => {
+        console.log("getOnlineUsers", users);
+        setOnlineUsers(users);
+      });
+    }
+
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+        socketRef.current = null;
+        setOnlineUsers([]);
+      }
     };
+  }, [profile]);
 
-    const logout = () => {
-        setProfile(null);
-        setToken(null);
-        localStorage.removeItem('token');
-    };
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
+      setToken(storedToken);
+    }
+  }, []);
 
+  useEffect(() => {
+    if (token && !profile) {
+      console.log("🚀 ~ useEffect ~ token:", token);
+      infoUserLogged();
+    }
+  }, [token]);
 
-    useEffect(() => {
-        const storedToken = localStorage.getItem('token');
-        if (storedToken) {
-            setToken(storedToken);
-        }
-    }, []);
+  const logout = () => {
+    setProfile(null);
+    setToken(null);
+    localStorage.removeItem("token");
+    if (socketRef.current) {
+      socketRef.current.disconnect();
+      socketRef.current = null;
+    }
+  };
 
-    useEffect(() => {
-        if (token && !profile) {
-            console.log("🚀 ~ useEffect ~ token:", token)
-            infoUserLogged();
-            
-        }
-    }, [token]);
-
-    return (
-        <AuthContext.Provider value={{ profile, setProfile, token, setToken,logout }}>
-            {children}
-        </AuthContext.Provider>
-    );
+  return (
+    <AuthContext.Provider
+      value={{
+        profile,
+        setProfile,
+        token,
+        setToken,
+        logout,
+        onlineUsers,
+        socket: socketRef.current,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 };
