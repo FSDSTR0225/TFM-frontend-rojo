@@ -10,12 +10,14 @@ import { getRecruiterById } from '../../../services/profileService';
 
 import { RecProfileCard } from '../components/RecProfileCard';
 import { ModalDelete } from '../components/ModalDelete';
+import { ApplyModal } from '../components/ApplyModal';
 
 export const RecProfile = () => {
   const [offers, setOffers] = useState([]);
   const [isOpenModalDelete, setIsOpenModalDelete] = useState(false);
   const [isOpenModalCreate, setTsOpenModalCreate] = useState(false);
   const [isOpenModalEdit, setIsOpenModalEdit] = useState(false);
+  const [isOpenModalApply, setIsOpenModalApply] = useState(false);
   const [recruiter, setRecruiter] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedOfferId, setSelectedOfferId] = useState(null);
@@ -87,6 +89,8 @@ export const RecProfile = () => {
                     setIsOpenModalDelete={setIsOpenModalDelete}
                     isOpenModalDelete={isOpenModalDelete}
                     setSelectedOfferId={setSelectedOfferId}
+                    isOpenApplyModal={isOpenModalApply}
+              setIsOpenApplyModal={setIsOpenModalApply}
                     isOpenModalEdit={isOpenModalEdit}
                     setIsOpenModalEdit={setIsOpenModalEdit}
                     key={offer._id} />
@@ -112,6 +116,13 @@ export const RecProfile = () => {
           idOffer={selectedOfferId}
           isOpen={isOpenModalEdit}
           setIsOpen={setIsOpenModalEdit}
+          token={token}
+          reloadPage={fetchData} />
+        }
+        {isOpenModalApply && <ApplyModal
+          idOffer={selectedOfferId}
+          isOpen={isOpenModalApply}
+          setIsOpen={setIsOpenModalApply}
           token={token}
           reloadPage={fetchData} />
         }
