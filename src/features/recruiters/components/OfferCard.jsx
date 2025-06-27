@@ -7,7 +7,7 @@ import { MenuCard } from "./MenuCard";
 import { useContext } from "react";
 import { AuthContext } from "../../../context/authContext";
 import { PiMapPinArea } from "react-icons/pi";
-import Badge from "../../../components/Badge.jsx";
+import Badge from "../../../components/Badge";
 import { AvatarImage } from "../../../components/AvatarImage";
 import { NameUsers } from "../../../components/NameUsers";
 import { ChatContext } from "../../../layout/chat/context/ChatContext";
