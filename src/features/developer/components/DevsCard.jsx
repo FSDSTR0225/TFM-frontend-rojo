@@ -1,5 +1,5 @@
 import React from "react";
-import Badge from "../../../components/Badge.jsx";
+import Badge from "../../../components/Badge";
 import { Link } from "react-router";
 
 const DevsCard = ({
