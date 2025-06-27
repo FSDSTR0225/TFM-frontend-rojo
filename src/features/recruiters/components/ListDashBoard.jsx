@@ -99,7 +99,7 @@ export const ListDashBoard = ({ classProps, offerId, lists, setLists, getCandida
                       }`}
                   >
                     {Object.entries(lists).map(([key]) => (
-                      <option key={key} value={key}>
+                      <option  key={key} value={key}>
                         {key}
                       </option>
                     ))}

@@ -7,10 +7,7 @@ export const RecModalEdit = ({ openModal, setOpenModal, profile, token, onProfil
     const {
         register,
         handleSubmit,
-        control,
         reset,
-        watch,
-        setValue,
         formState: { errors, isSubmitting },
     } = useForm();
 
