@@ -1,6 +1,7 @@
 import { Link } from "react-router"
 import logo from '../../assets/CodepplyLogo.svg'
 import { PiBriefcase, PiStack, PiUsers } from "react-icons/pi"
+import favicon from '../../assets/CodepplyFly.svg'
 
 
 export const Navbar = () => {
@@ -34,7 +35,12 @@ export const Navbar = () => {
             <img
               src={logo}
               alt='Codepply Logo'
-              className='h-6 ml-3'
+              className='h-6 ml-3 sm:hidden md:block '
+            />
+            <img
+              src={favicon}
+              alt='Codepply Logo'
+              className='h-6 ml-3 hidden sm:block md:hidden'
             />
           </Link>
           <div className='hidden flex-none sm:flex'>
