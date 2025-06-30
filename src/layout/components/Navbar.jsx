@@ -38,14 +38,14 @@ export const Navbar = () => {
             />
           </Link>
           <div className='hidden flex-none sm:flex'>
-            <ul className='md:menu-md menu-horizontal  menu-sm'>
+            <ul className='md:menu-md menu-horizontal  menu-sm gap-4'>
               {/* Navbar menu content here */}
 
               {/* Button for Developers */}
               <li >
                 <Link
                   to='/developers'
-                  className="btn items-center gap-2  bg-neutral-90  hover:bg-primary-60  focus:bg-neutral-60 m-0 w-28  "
+                  className="btn items-center gap-2  bg-neutral-90  hover:bg-primary-60  focus:bg-neutral-60 m-0 w-32  "
                 >
                   <PiUsers />
                   Developers
@@ -56,7 +56,7 @@ export const Navbar = () => {
               <li >
                 <Link
                   to='/projects'
-                  className="btn items-center gap-2  bg-neutral-90  hover:bg-primary-60  focus:bg-neutral-60 m-0  w-28 "
+                  className="btn items-center gap-2  bg-neutral-90  hover:bg-primary-60  focus:bg-neutral-60 m-0  w-32 "
                 >
                   <PiStack />
                   Projects
@@ -65,7 +65,7 @@ export const Navbar = () => {
               <li>
                 <Link
                   to='/offers'
-                  className="btn items-center gap-2  bg-neutral-90  hover:bg-primary-60  focus:bg-neutral-60 m-0 w-28  "
+                  className="btn items-center gap-2  bg-neutral-90  hover:bg-primary-60  focus:bg-neutral-60 m-0 w-32  "
                 >
                   <PiBriefcase />
                   Jobs
