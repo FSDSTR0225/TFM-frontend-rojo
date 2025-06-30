@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import { registeredUser } from '../../services/authService';
 import { Link } from 'react-router';
 import { useNavigate } from "react-router";
-import logo from '../../assets/codepply-Logotype-gradient.svg'
+import logo from '../../assets/Codepply-Logotype-gradient.svg'
 
 export const Register = () => {
   const navigate = useNavigate();
