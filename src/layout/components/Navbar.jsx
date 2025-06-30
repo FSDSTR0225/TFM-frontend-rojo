@@ -1,5 +1,5 @@
 import { Link } from "react-router"
-import logo from '../../assets/codepplyLogo.svg'
+import logo from '../../assets/CodepplyLogo.svg'
 import { PiBriefcase, PiStack, PiUsers } from "react-icons/pi"
 
 

@@ -1,5 +1,5 @@
 import { Link } from 'react-router'
-import logo from '../../src/assets/codepply-Logotype-gradient.svg'
+import logo from '../../src/assets/Codepply-Logotype-gradient.svg'
 
 export const Footer = () => {
   return (
