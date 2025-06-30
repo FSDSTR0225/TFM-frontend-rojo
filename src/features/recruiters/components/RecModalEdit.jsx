@@ -87,9 +87,9 @@ export const RecModalEdit = ({ openModal, setOpenModal, profile, token, onProfil
     };
 
     return (
-        <dialog open={openModal} className="modal">
-            <div className="fixed inset-0 flex items-center justify-center">
-                <div className="modal-box max-w-3xl w-full bg-neutral-80 border border-neutral-70 text-neutral-0 shadow-md rounded-lg">
+        <dialog open={openModal} className="modal ">
+            <div className="sm:modal-middle inset-0 flex items-center justify-center ">
+                <div className="modal-box max-w-3xl w-full bg-neutral-80 border border-neutral-70 shadow-md rounded-lg">
                     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
                         <h2 className="text-2xl font-bold text-center">Edit Recruiter Profile</h2>
                         <AvatarUpload
@@ -106,7 +106,7 @@ export const RecModalEdit = ({ openModal, setOpenModal, profile, token, onProfil
                                 <input
                                     {...register("name")}
                                     placeholder="Name"
-                                    className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
+                                    className="input input-bordered bg-neutral-90  border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
                                 />
                             </div>
                             <div className="form-control">
@@ -116,7 +116,7 @@ export const RecModalEdit = ({ openModal, setOpenModal, profile, token, onProfil
                                 <input
                                     {...register("surname")}
                                     placeholder="Surname"
-                                    className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
+                                    className="input input-bordered bg-neutral-90  border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
                                 />
                             </div>
                         </div>
@@ -129,7 +129,7 @@ export const RecModalEdit = ({ openModal, setOpenModal, profile, token, onProfil
                             <input
                                 {...register("sector")}
                                 placeholder="Enginering, IT, etc."
-                                className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
+                                className="input input-bordered bg-neutral-90  border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
                             />
                         </div>
                         <div className="form-control">
@@ -141,7 +141,7 @@ export const RecModalEdit = ({ openModal, setOpenModal, profile, token, onProfil
                             <input
                                 {...register("companyName")}
                                 placeholder="Company Name"
-                                className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
+                                className="input input-bordered bg-neutral-90  border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
                             />
                         </div>
                         <div className="form-control">
@@ -151,7 +151,7 @@ export const RecModalEdit = ({ openModal, setOpenModal, profile, token, onProfil
                             <input
                                 {...register("location")}
                                 placeholder="Location"
-                                className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
+                                className="input input-bordered bg-neutral-90  border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
                             />
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -162,7 +162,7 @@ export const RecModalEdit = ({ openModal, setOpenModal, profile, token, onProfil
                                 <input
                                     {...register("email")}
                                     placeholder="example@example.es"
-                                    className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
+                                    className="input input-bordered bg-neutral-90  border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
                                 />
                             </div>
                             <div className="form-control">
@@ -172,7 +172,7 @@ export const RecModalEdit = ({ openModal, setOpenModal, profile, token, onProfil
                                 <input
                                     {...register("phone")}
                                     placeholder="+34 123 435 435"
-                                    className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
+                                    className="input input-bordered bg-neutral-90  border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
                                 />
                             </div>
                         </div>
@@ -183,7 +183,7 @@ export const RecModalEdit = ({ openModal, setOpenModal, profile, token, onProfil
                             <input
                                 {...register("website")}
                                 placeholder="website.com"
-                                className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
+                                className="input input-bordered bg-neutral-90  border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
                             />
                         </div>
                         <div className="form-control">
@@ -198,7 +198,7 @@ export const RecModalEdit = ({ openModal, setOpenModal, profile, token, onProfil
                                     },
                                 })}
                                 placeholder="Text a description about you..."
-                                className="textarea textarea-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
+                                className="textarea textarea-bordered bg-neutral-90  border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
                                 rows={3}
                             />
                             {errors.description && (
@@ -207,7 +207,7 @@ export const RecModalEdit = ({ openModal, setOpenModal, profile, token, onProfil
                                 </span>
                             )}
                         </div>
-                        <div className="flex justify-end gap-4 pt-4">
+                        <div className="flex flex-col justify-end gap-4 pt-4">
                             <button
                                 type="submit"
                                 disabled={isSubmitting || !isAvatarValid}
