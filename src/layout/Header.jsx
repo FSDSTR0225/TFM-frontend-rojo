@@ -4,9 +4,15 @@ import { useContext } from "react";
 import { SideMenu } from "./components/SideMenu";
 import { Navbar } from "./components/Navbar";
 import { AuthMenu } from "./components/AuthMenu";
+import { useState } from "react";
 
 export const Header = () => {
   const { profile, logout } = useContext(AuthContext);
+  const [openSideMenu, setOpenSideMenu] = useState(false);
+
+  const toggleSideMenu = () => {
+    setOpenSideMenu(!openSideMenu);
+  };
 
   return (
     <header className='bg-neutral-80 py-2 pl-2  drawer border-b-1 border-neutral-70'>
@@ -14,6 +20,8 @@ export const Header = () => {
         id='my-drawer-3'
         type='checkbox'
         className='drawer-toggle'
+        checked={openSideMenu}
+        onChange={toggleSideMenu}
       />
       <div className='drawer-content flex flex-row'>
         {/* Navbar */}
@@ -21,7 +29,7 @@ export const Header = () => {
         <AuthMenu profile={profile } logout={logout} />
 
       </div>
-      <SideMenu />
+      <SideMenu onClose={toggleSideMenu} />
     </header>
   );
 };

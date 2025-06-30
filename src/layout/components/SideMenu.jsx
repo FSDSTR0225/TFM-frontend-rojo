@@ -3,14 +3,9 @@ import { Link } from "react-router"
 import logo from '../../assets/CodepplyLogo.svg'
 
 
-export const SideMenu = () => {
+export const SideMenu = ({onClose}) => {
   return (
-     <div className='drawer-side z-90'>
-      <input
-        id='my-drawer-3'
-        type='checkbox'
-        className='drawer-toggle'
-      />
+     <div className='drawer-side z-80'>
         <label
           htmlFor='my-drawer-3'
           aria-label='close sidebar'
@@ -24,6 +19,7 @@ export const SideMenu = () => {
           <Link 
               to='../'
               className="self-center flex"
+              onClick={onClose}
               >
                 <img
                   src={logo}
@@ -37,6 +33,7 @@ export const SideMenu = () => {
             <Link
               to='/developers'
               className='btn bg-neutral-90 m-2 hover:bg-primary-60 gap-2'
+              onClick={onClose}
             >
               <PiUsers />
               Developers
@@ -49,6 +46,7 @@ export const SideMenu = () => {
             <Link
               to='/projects'
               className='btn bg-neutral-90 m-2 hover:bg-primary-60'
+              onClick={onClose}
             >
               <PiStack />
               Projects
@@ -58,6 +56,7 @@ export const SideMenu = () => {
             <Link
               to='/offers'
               className='btn bg-neutral-90 m-2 hover:bg-secondary-60'
+              onClick={onClose}
             >
               <PiBriefcase />
               Jobs
