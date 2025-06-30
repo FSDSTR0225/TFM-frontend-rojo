@@ -27,7 +27,7 @@ import { DashBoarPage } from '../features/recruiters/pages/DashBoarPage';
 import { Onboarding } from '../pages/Onboarding/Onboarding';
 import { Home } from '../pages/Home';
 import { SettingsPage } from '../pages/SettingsPage';
-
+import { TermsPage, PrivacyPage, CookiesPage, AboutPage } from './LegalRoutes';
 
 
 
@@ -52,6 +52,10 @@ const router = createBrowserRouter([
 
       { path: 'login', element: <Login /> },
       { path: 'register', element: <Register /> },
+      { path: 'about', element: <AboutPage /> },
+      { path: 'legal/terms', element: <TermsPage /> },
+      { path: 'legal/privacy', element: <PrivacyPage /> },
+      { path: 'legal/cookies', element: <CookiesPage /> },
 
       // --- Private Dev (developers) ---
       {
