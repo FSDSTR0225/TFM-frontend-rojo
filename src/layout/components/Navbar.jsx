@@ -1,5 +1,6 @@
 import { Link } from "react-router"
 import logo from '../../assets/codepplyLogo.svg'
+import { PiBriefcase, PiStack, PiUsers } from "react-icons/pi"
 
 
 export const Navbar = () => {
@@ -37,75 +38,36 @@ export const Navbar = () => {
             />
           </Link>
           <div className='hidden flex-none sm:flex'>
-            <ul className='menu-md menu-horizontal'>
+            <ul className='md:menu-md menu-horizontal  menu-sm'>
               {/* Navbar menu content here */}
 
               {/* Button for Developers */}
-              <li>
+              <li >
                 <Link
                   to='/developers'
-                  className='btn text-neutral-0 bg-neutral-90 w-28 mx-2 hover:bg-primary-60 hover:text-neutral-0 focus:bg-neutral-60  focus:text-neutral-0'
+                  className="btn items-center gap-2  bg-neutral-90  hover:bg-primary-60  focus:bg-neutral-60 m-0 w-28  "
                 >
-                  <svg
-                    xmlns='http://www.w3.org/2000/svg'
-                    className='h-5 w-5'
-                    fill='none'
-                    viewBox='0 0 24 24'
-                    stroke='currentColor'
-                  >
-                    <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      strokeWidth='2'
-                      d='M3 7h18M3 12h18m-6 5h6'
-                    />
-                  </svg>
+                  <PiUsers />
                   Developers
                 </Link>
               </li>
 
               {/* Button for Projects */}
-              <li>
+              <li >
                 <Link
                   to='/projects'
-                  className='btn text-neutral-0 bg-neutral-90 w-28 mx-2 hover:bg-primary-60 hover:text-neutral-0 focus:bg-neutral-60  focus:text-neutral-0'
+                  className="btn items-center gap-2  bg-neutral-90  hover:bg-primary-60  focus:bg-neutral-60 m-0  w-28 "
                 >
-                  <svg
-                    xmlns='http://www.w3.org/2000/svg'
-                    className='h-5 w-5'
-                    fill='none'
-                    viewBox='0 0 24 24'
-                    stroke='currentColor'
-                  >
-                    <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      strokeWidth='2'
-                      d='M3 7h18M3 12h18m-6 5h6'
-                    />
-                  </svg>
+                  <PiStack />
                   Projects
                 </Link>
               </li>
               <li>
                 <Link
                   to='/offers'
-                  className='btn text-neutral-0 bg-neutral-90 w-28 mx-2 hover:bg-secondary-60 hover:text-neutral-0 focus:bg-neutral-60 focus:text-neutral-0'
+                  className="btn items-center gap-2  bg-neutral-90  hover:bg-primary-60  focus:bg-neutral-60 m-0 w-28  "
                 >
-                  <svg
-                    xmlns='http://www.w3.org/2000/svg'
-                    className='h-5 w-5'
-                    fill='none'
-                    viewBox='0 0 24 24'
-                    stroke='currentColor'
-                  >
-                    <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      strokeWidth='2'
-                      d='M4 6h16M4 10h16m-7 4h7'
-                    />
-                  </svg>
+                  <PiBriefcase />
                   Jobs
                 </Link>
               </li>
