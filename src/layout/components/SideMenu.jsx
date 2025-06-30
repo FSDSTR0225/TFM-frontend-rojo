@@ -1,6 +1,6 @@
 import { PiBriefcase, PiStack, PiUsers } from "react-icons/pi"
 import { Link } from "react-router"
-import logo from '../../assets/codepplyLogo.svg'
+import logo from '../../assets/CodepplyLogo.svg'
 
 
 export const SideMenu = () => {
