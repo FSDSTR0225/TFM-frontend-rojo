@@ -1,4 +1,6 @@
+import { PiBriefcase, PiStack, PiUsers } from "react-icons/pi"
 import { Link } from "react-router"
+import logo from '../../assets/codepplyLogo.svg'
 
 
 export const SideMenu = () => {
@@ -14,95 +16,50 @@ export const SideMenu = () => {
 
           {/* Button for Developers */}
           <li>
+          <Link 
+              to='../'
+              className="self-center flex"
+              >
+                <img
+                  src={logo}
+                  alt="Codepply Logo"
+                  className="h-6"
+                />
+              </Link> 
+          </li> 
+          <div className="mt-4">
+            <li>
             <Link
               to='/developers'
-              className='btn text-neutral-0 bg-neutral-90 m-2 hover:bg-primary-60'
+              className='btn bg-neutral-90 m-2 hover:bg-primary-60 gap-2'
             >
-              <svg
-                xmlns='http://www.w3.org/2000/svg'
-                className='h-5 w-5'
-                fill='none'
-                viewBox='0 0 24 24'
-                stroke='currentColor'
-              >
-                <path
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                  strokeWidth='2'
-                  d='M3 7h18M3 12h18m-6 5h6'
-                />
-              </svg>
+              <PiUsers />
               Developers
             </Link>
           </li>
 
           {/* Button for Projects */}
+          
           <li>
             <Link
               to='/projects'
-              className='btn text-neutral-0 bg-neutral-90 m-2 hover:bg-neutral-40'
+              className='btn bg-neutral-90 m-2 hover:bg-primary-60'
             >
-              <svg
-                xmlns='http://www.w3.org/2000/svg'
-                className='h-5 w-5'
-                fill='none'
-                viewBox='0 0 24 24'
-                stroke='currentColor'
-              >
-                <path
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                  strokeWidth='2'
-                  d='M3 12h18m-6 6l6-6-6-6'
-                />
-              </svg>
-              Home
-            </Link>
-          </li>
-          <li>
-            <Link
-              to='/projects'
-              className='btn text-neutral-0 bg-neutral-90 m-2 hover:bg-primary-60'
-            >
-              <svg
-                xmlns='http://www.w3.org/2000/svg'
-                className='h-5 w-5'
-                fill='none'
-                viewBox='0 0 24 24'
-                stroke='currentColor'
-              >
-                <path
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                  strokeWidth='2'
-                  d='M3 7h18M3 12h18m-6 5h6'
-                />
-              </svg>
+              <PiStack />
               Projects
             </Link>
           </li>
           <li>
             <Link
               to='/offers'
-              className='btn text-neutral-0 bg-neutral-90 m-2 hover:bg-secondary-60'
+              className='btn bg-neutral-90 m-2 hover:bg-secondary-60'
             >
-              <svg
-                xmlns='http://www.w3.org/2000/svg'
-                className='h-5 w-5'
-                fill='none'
-                viewBox='0 0 24 24'
-                stroke='currentColor'
-              >
-                <path
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                  strokeWidth='2'
-                  d='M4 6h16M4 10h16m-7 4h7'
-                />
-              </svg>
+              <PiBriefcase />
               Jobs
             </Link>
           </li>
+          </div>
+          
         </ul>
       </div>
 

@@ -13,13 +13,13 @@ export const AuthMenu = ({profile, logout}) => {
             <div className='flex gap-2 items-center'>
               <Link
                 to={"/login"}
-                className='btn rounded-full text-neutral-0 bg-primary-60 w-20 mx-2 hover:bg-primary-70 hover:text-neutral-0'
+                className=' btn-sm md:btn-md md:w-22 btn rounded-full  bg-primary-60 w-18  hover:bg-primary-70'
               >
                 Login
               </Link>
               <Link
                 to={"/register"}
-                className='btn rounded-full text-neutral-0 bg-neutral-90 border:-2 border-neutral-60 w-22  hover:bg-neutral-60 hover:text-neutral-0'
+                className='btn btn-sm md:btn-md md:w-22 rounded-full  bg-neutral-90 border:-2 border-neutral-60 w-18  hover:bg-neutral-60 '
               >
                 Register
               </Link>
