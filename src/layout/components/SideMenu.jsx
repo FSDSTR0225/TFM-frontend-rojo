@@ -6,6 +6,11 @@ import logo from '../../assets/CodepplyLogo.svg'
 export const SideMenu = () => {
   return (
      <div className='drawer-side z-90'>
+      <input
+        id='my-drawer-3'
+        type='checkbox'
+        className='drawer-toggle'
+      />
         <label
           htmlFor='my-drawer-3'
           aria-label='close sidebar'

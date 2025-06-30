@@ -7,10 +7,10 @@ import { UserMenu } from "./UserMenu";
 
 export const AuthMenu = ({profile, logout}) => {
   return (
-    <div className='flex gap-2 items-center'>
+    <div className='flex items-center'>
           {/* Auth menu content here */}
           {!profile ? (
-            <div className='flex gap-2 items-center'>
+            <div className='flex gap-2 items-center right-0'>
               <Link
                 to={"/login"}
                 className=' btn-sm md:btn-md md:w-22 btn rounded-full  bg-primary-60 w-18  hover:bg-primary-70'
