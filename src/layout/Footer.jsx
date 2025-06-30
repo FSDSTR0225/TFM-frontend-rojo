@@ -1,5 +1,6 @@
-import React from 'react'
+
 import { Link } from 'react-router'
+import logo from '../../src/assets/codepply-Logotype-gradient.svg'
 
 export const Footer = () => {
   return (
@@ -7,7 +8,7 @@ export const Footer = () => {
   <aside>
   <Link to={"/"} className="mr-4 pr-4 flex items-center">
             <img
-              src="/src/assets/Codepply-Logotype-gradient.svg"
+              src={logo}
               alt="Codepply Logo"
               className="h-6"
             />
