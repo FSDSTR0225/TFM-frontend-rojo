@@ -1,4 +1,4 @@
-import logo from '../../assets/codepply-Logotype-gradient.svg'
+import logo from '../../assets/Codepply-Logotype-gradient.svg'
 import { useContext, useEffect } from 'react'
 import { useForm } from 'react-hook-form';
 import { Link, useLocation } from 'react-router';
@@ -36,7 +36,7 @@ export const Login = () => {
 
     return (
         <div className="flex items-center justify-center px-4 mt-32 mb-56">
-            <div className="card w-full max-w-md bg-neutral-80 shadow-2xl text-neutral-0 border-1 border-neutral-60">
+            <div className="card w-full max-w-md bg-neutral-80 shadow-2xl  border-1 border-neutral-60">
 
                 <div className="card-body">
                     <h2 className="text-2xl font-bold text-center mb-4 mt-4">Login Account </h2>
