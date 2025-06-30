@@ -2,10 +2,11 @@ import { useForm } from 'react-hook-form';
 import { registeredUser } from '../../services/authService';
 import { Link } from 'react-router';
 import { useNavigate } from "react-router";
+import logo from '../../assets/codepply-Logotype-gradient.svg'
 
 export const Register = () => {
   const navigate = useNavigate();
-  const { register, watch, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors } } = useForm();
 
   const registerUser = async (formDatos) => {
     let newUser = { ...formDatos };
@@ -124,7 +125,7 @@ export const Register = () => {
             <Link to={'/login'} className="text-primary-50 hover:underline">Log in</Link>
           </p>
           <img
-            src="/src/assets/Codepply-Logotype-gradient.svg"
+            src={logo}
             alt="Codepply Logo"
             className="h-6 mx-auto mt-8"
           />

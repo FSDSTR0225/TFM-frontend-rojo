@@ -1,7 +1,7 @@
-
-import React, { useContext, useEffect } from 'react'
+import logo from '../../assets/codepply-Logotype-gradient.svg'
+import { useContext, useEffect } from 'react'
 import { useForm } from 'react-hook-form';
-import { Link, Navigate, useLocation } from 'react-router';
+import { Link, useLocation } from 'react-router';
 import { AuthContext } from '../../context/authContext';
 import { useNavigate } from "react-router";
 import { loginUser } from '../../services/authService';
@@ -12,7 +12,7 @@ export const Login = () => {
         formState: { errors } } = useForm();
     const navigate = useNavigate();
     const location = useLocation();
-    const { token, setToken,profile } = useContext(AuthContext);
+    const { setToken,profile } = useContext(AuthContext);
 
     const login = async () => {
         const resp = await loginUser(watch('email'), watch('password'));
@@ -90,7 +90,7 @@ export const Login = () => {
                         <Link to={'/register'} className="text-primary-50 hover:underline">Sign Up</Link>
                     </p>
                     <img
-                        src="/src/assets/Codepply-Logotype-gradient.svg"
+                        src={logo}
                         alt="Codepply Logo"
                         className="h-6 mx-auto mt-8"
                     />
