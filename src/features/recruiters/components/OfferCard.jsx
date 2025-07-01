@@ -110,7 +110,7 @@ export const OfferCard = ({
         classProps && classProps
       } card border bg-neutral-80 border-neutral-70 cursor-pointer max-h-80 shadow-xl hover:bg-neutral-90 transition-transform transform hover:scale-105 `}
     >
-      <div className="card-body justify-between">
+      <div className="card-body p-4 sm:p-6  justify-between">
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-2 " onClick={handleOwnerClick}>
             <AvatarImage user={offer.owner} width={8} />
@@ -132,12 +132,12 @@ export const OfferCard = ({
           <h3 className="text-xl font-bold">{offer?.position}</h3>
           <p className="text-neutral-10">{offer?.role}</p>
         </div>
-        <div className="flex gap-4">
+        <div className="flex gap-4 flex-wrap">
           <div className="flex items-center gap-2">
             <PiMapPinArea className="size-4" />
             {offer.location}
           </div>
-          <div className="badge text-neutral-0 bg-neutral-60">
+          <div className="badge bg-neutral-60">
             {offer?.contractType}
           </div>
         </div>

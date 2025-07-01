@@ -12,13 +12,23 @@ import { capitalize } from "../utils/utils";
 
 
 export const NameUsers = ({user, classProps, children, align="items-center" }) => {
+
      const name = capitalize(user?.name || '');
     const surname = capitalize(user?.surname || '');
     const completeName = `${name} ${surname}`.trim() || 'Unknown Recruiter';
+
+    let display = ''
+if(typeof children === "string")
+  { display = capitalize(children)
+  }else{
+    display = children
+  }
+  ;
+
   return (
     <div className={`flex flex-col ${align}`}>
     <span className={`font-bold ${classProps}`}>{completeName}</span>
-    <span className={`text-xs text-neutral-10` }>{capitalize(children)}</span>
+    <span className={`text-xs text-neutral-10` }>{display}</span>
     </div>
   )
 }
