@@ -8,7 +8,7 @@ import { ChatContext } from "./context/ChatContext";
 
 
 export default function ChatPanel({ onClose, user }) {
-  const { profile, onlineUsers, socket } = useContext(AuthContext);
+  const { profile, onlineUsers, socket,notifications,setNotifications } = useContext(AuthContext);
   const { selectedUser, backToWelcome, handleSelectedUser, screen } = useContext(ChatContext);
   const SENDER_NAME = profile?.name || 'Anonymous';
   const [message, setMessage] = useState('');
@@ -52,8 +52,7 @@ export default function ChatPanel({ onClose, user }) {
     }
 
     // Nos suscribimos y guardamos el handler
-    handlerRef.current = suscribeToMessages(selectedUser._id, socket, setMessages);
-
+    handlerRef.current = suscribeToMessages(selectedUser._id, socket, setMessages,notifications,setNotifications);
     // Cleanup automático al desmontar o cambiar usuario
     return () => {
       if (handlerRef.current) {
@@ -62,6 +61,10 @@ export default function ChatPanel({ onClose, user }) {
       }
     };
   }, [selectedUser, socket]);
+
+  useEffect(() => {
+  console.log('🔔 Notificaciones actualizadas:', notifications);
+}, [notifications]);
 
   useEffect(() => {
     getUsersConect()
