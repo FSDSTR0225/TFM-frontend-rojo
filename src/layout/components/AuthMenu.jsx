@@ -5,7 +5,10 @@ import { UserMenu } from "./UserMenu";
 
 
 
+
 export const AuthMenu = ({profile, logout}) => {
+ 
+
   return (
     <div className='flex items-center'>
           {/* Auth menu content here */}
@@ -26,8 +29,10 @@ export const AuthMenu = ({profile, logout}) => {
             </div>
           ) : (
             <div className='dropdown dropdown-end   items-center gap-4  pr-6 '>
-              <CardUser profile={profile} />
-                <UserMenu profile={profile} logout={logout} />
+              <CardUser profile={profile}  />
+                
+            <UserMenu profile={profile} logout={logout}  />
+          
               {/* Botones */}
               
             </div>

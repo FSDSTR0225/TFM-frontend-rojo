@@ -24,12 +24,12 @@ const handleDashboard = () => {
     <article  className=' card bg-neutral-80 shadow-xl border border-neutral-70 flex-col  w-full '>
             <div className='card-body gap-6'>
               {isOwner && <EditButton classProps={"self-end"} onClick={() => setIsOpen(!isOpen)} />}
-              <div className='space-y-4'>
+              <div className=''>
               <h2 className='text-xl md:text-2xl  font-bold m'>{offer.position}</h2>
               <p className='text-neutral-10'>{offer.role}</p>
               </div>
               
-              <div className='flex items-center gap-4 m-4'>
+              <div className='flex flex-wrap items-center gap-4 m-4'>
                 <PiMapPinArea className='size-6' />
                 {offer.location}
                 <span className='badge badge-soft badge-info'>{offer.contractType}</span>
