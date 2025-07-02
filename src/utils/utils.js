@@ -34,3 +34,12 @@ export const getDaysSince = (dateString) => {
 // const name = capitalize(owner?.name || '');
 // const surname = capitalize(owner?.surname || '');
 // const completeName = `${name} ${surname}`.trim() || 'Unknown Recruiter';
+
+
+export const formatMessageTime = (date) =>{
+  return new Date(date).toLocaleTimeString("es-ES",{
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
+  })
+}

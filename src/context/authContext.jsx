@@ -13,7 +13,7 @@ export const AuthProvider = ({ children }) => {
     () => localStorage.getItem("token") || null
   );
   const [onlineUsers, setOnlineUsers] = useState([]);
-
+  const [notifications, setNotifications] = useState([]);
   // Mantén el socket en una ref para que no cause re-render
   const socketRef = useRef(null);
   const infoUserLogged = async () => {
@@ -86,6 +86,8 @@ export const AuthProvider = ({ children }) => {
         setToken,
         logout,
         onlineUsers,
+        notifications,
+        setNotifications,
         socket: socketRef.current,
       }}
     >
