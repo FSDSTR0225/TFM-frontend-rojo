@@ -43,21 +43,12 @@ export const sendMessage = async (token, text, image, selectedUserId) => {
   return data;
 };
 
-export const suscribeToMessages = (userId, socket, setMessages, notifications, setNotifications) => {
+export const suscribeToMessages = (userId, socket, setMessages) => {
   if (!userId || !socket) return null;
 
   const handler = (msg) => {
     const isFromSelectedUser = msg.senderId === userId;
     if (isFromSelectedUser) {
-      if (!notifications.includes(msg)) {
-        setNotifications((prev) => {
-          const alreadyExists = prev.some((n) => n._id === msg._id);
-          if (!alreadyExists) {
-            return [msg, ...prev];
-          }
-          return prev;
-        });
-      }
       setMessages((prev) => [...prev, msg]);
     }
   };

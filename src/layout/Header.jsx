@@ -6,6 +6,8 @@ import { Navbar } from "./components/Navbar";
 import { AuthMenu } from "./components/AuthMenu";
 import { useState } from "react";
 import { CiBellOn } from "react-icons/ci";
+import { formatMessageTime } from "../utils/utils";
+
 
 export const Header = () => {
   const { profile, logout, notifications, setNotifications } = useContext(AuthContext);
@@ -14,6 +16,18 @@ export const Header = () => {
   const toggleSideMenu = () => {
     setOpenSideMenu(!openSideMenu);
   };
+
+  const getNotificationText = (notif) => {
+    const types = {
+      1: `${notif.senderName} te ha enviado un mensaje`,
+      2: `${notif.senderName} ha dado like a tu publicación`,
+      3: `${notif.senderName} ha comentado en tu foto`,
+      // añade más tipos según necesites
+    };
+
+    return types[notif.type] || "Tienes una nueva notificación";
+  };
+
 
   return (
     <header className='bg-neutral-80 py-2 pl-2  drawer border-b-1 border-neutral-70'>
@@ -61,14 +75,16 @@ export const Header = () => {
 
                 <div className="max-h-72 overflow-y-auto p-2 space-y-2">
                   {notifications.length > 0 ? (
-                    notifications.map((notif) => (
+                    notifications.map((notif, index) => (
                       <div
-                        key={notif._id}
+                        key={notif._id || `${notif.senderName}-${notif.type}-${index}`}
                         className="w-full bg-neutral-60 text-base-content shadow-md rounded-md p-3"
                       >
-                        <div className="text-sm font-medium">{notif.text}</div>
+                        <div className="text-sm font-medium">
+                          {getNotificationText(notif)}
+                        </div>
                         <span className="text-xs opacity-60 block mt-1">
-                          {new Date(notif.createdAt).toLocaleTimeString()}
+                          {formatMessageTime(notif.createdAt)}
                         </span>
                       </div>
                     ))
@@ -80,6 +96,7 @@ export const Header = () => {
                 </div>
               </div>
             )}
+
           </div>
         </div>
 
