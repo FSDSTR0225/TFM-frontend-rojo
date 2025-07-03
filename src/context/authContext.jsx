@@ -14,6 +14,7 @@ export const AuthProvider = ({ children }) => {
   );
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [notifications, setNotifications] = useState([]);
+  
   // Mantén el socket en una ref para que no cause re-render
   const socketRef = useRef(null);
   const infoUserLogged = async () => {
