@@ -1,6 +1,3 @@
-import { AvatarImage } from '../../../components/AvatarImage';
-import { PiChat, PiEnvelope, PiFileArrowDown, PiMapPinArea, PiReadCvLogo } from "react-icons/pi";
-
 import { useState } from 'react';
 import { updateCandidateStatus } from '../../../services/offersServices';
 import { TabsDashboard } from './TabsDashboard';
@@ -52,39 +49,3 @@ export const ListDashBoard = ({ classProps, offerId, lists, setLists, getCandida
 
                                     );
 };
-//                Derecha: ubicación + acciones 
-//               <div className="flex items-center gap-4">
-//                 <div className="relative">
-//                   <select
-//                     value={activeTab}
-//                     onChange={(e) => changeStatusCandidate(e.target.value, candidato._id)}
-//                     className={`px-3 py-1 pr-7 rounded-md text-md capitalize appearance-none
-//                     ${activeTab
-//                         ? `${fadedColors[activeTab] || 'bg-black/20'} ${textColors[activeTab] || 'text-white'}`
-//                         : 'text-neutral-400'
-//                       }`}
-//                   >
-//                     {Object.entries(lists).map(([key]) => (
-//                       <option  key={key} value={key}>
-//                         {key}
-//                       </option>
-//                     ))}
-//                   </select>
-//                   <div className="pointer-events-none absolute right-2 top-1/2 transform -translate-y-1/2">
-//                     <GoChevronDown />
-//                   </div>
-//                 </div>
-
-//                 <button className="bg-neutral-50 text-white px-4 py-1 rounded-md text-md">
-//                   Contact
-//                 </button>
-//               </div>
-//             </div>
-//           ))
-//         ) : (
-//           <p className="text-neutral-50">No hay candidatos en "{activeTab}".</p>
-//         )}
-//       </div>
-//     </div> 
-//   );
-// };

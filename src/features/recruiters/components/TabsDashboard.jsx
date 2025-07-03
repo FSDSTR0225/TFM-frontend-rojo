@@ -1,4 +1,4 @@
-import React from 'react'
+
 
 export const TabsDashboard = ({activeTab, setActiveTab, lists, colors}) => {
   return (

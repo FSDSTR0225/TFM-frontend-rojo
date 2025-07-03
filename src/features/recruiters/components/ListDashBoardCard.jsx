@@ -5,15 +5,49 @@ import { CandidateSkills } from "./candidateSkills"
 import { useContext } from "react"
 import { ChatContext } from "../../../layout/chat/context/ChatContext"
 import { GoChevronDown } from "react-icons/go"
+import { capitalize } from "../../../utils/utils"
 
 
 export const ListDashBoardCard = ({lists, activeTab, skillsOffer, colors, fadedColors, textColors, changeStatusCandidate }) => {
+
+
+  
+  const handleDownloadCV = async (resumeUrl, fileName = 'CV.pdf') => {
+  try {
+    const response = await fetch(resumeUrl);
+    const blob = await response.blob();
+    
+    // Crear un enlace temporal para la descarga
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    
+    // Limpiar
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error('Error al descargar el CV:', error);
+    // Fallback: abrir en nueva pestaña
+    window.open(resumeUrl, '_blank');
+  }
+};
+
     const {openChat} = useContext(ChatContext);
+
+
   return (
     <div className="flex flex-col gap-4">
         <div className='flex flex-col gap-4'>
-            {lists[activeTab]?.length > 0 ? (
-              lists[activeTab].map((candidato) => (
+           {lists[activeTab]?.length > 0 ? (
+        lists[activeTab].map((candidato) => {
+          const name = capitalize(candidato?.user?.name || '');
+          const surname = capitalize(candidato?.user?.surname || '');
+          const completeName = `${name} ${surname}`.trim() || 'Unknown Profile';
+          const isResume = candidato?.user?.role?.developer?.resume;
+          return (
     <div key={candidato._id} className="bg-neutral-80 p-4 gap-2 rounded-lg shadow-sm border border-neutral-60 flex flex-col">
                 <div
                   
@@ -83,14 +117,19 @@ export const ListDashBoardCard = ({lists, activeTab, skillsOffer, colors, fadedC
                                                   <div className="flex flex-col md:flex-row  intems-center  gap-1 gap-x-2">
                                                   <div className="flex gap-2">
                         
-                                              <button
-                                                onClick={() => openChat(candidato.user)}
-                                                className='btn btn-md bg-neutral-90 hover:bg-neutral-60'
+                                              <button 
+                                                onClick={() =>
+                  handleDownloadCV(
+                    candidato.user.role.developer.resume,
+                    `${completeName}_CV.pdf`
+                  )
+                }
+                                                className={`btn btn-md  bg-neutral-90 hover:bg-neutral-60 ${!isResume && 'btn-disabled'} `}
                                               >
                                                 <PiReadCvLogo size={20} />
                                               </button>
                                               <button
-                                                onClick={() => openChat(candidato.user)}
+                                                
                                                 className='btn btn-md bg-neutral-90 hover:bg-neutral-60'
                                               >
                                                 <PiFileArrowDown size={20} />
@@ -98,7 +137,7 @@ export const ListDashBoardCard = ({lists, activeTab, skillsOffer, colors, fadedC
                                                   </div>
                                                   <div className="flex gap-2">
                         
-                                                <a className="btn btn-md bg-neutral-90 hover:bg-neutral-60" href={candidato?.user?.email}><PiEnvelope size={20} /></a>
+                                                <a className="btn btn-md bg-neutral-90 hover:bg-neutral-60" href={`mailto: ${candidato?.user?.email}`}><PiEnvelope size={20} /></a>
                                               <button
                                                 onClick={() => openChat(candidato.user)}
                                                 className='btn btn-md bg-linear-135 from-[#37C848] from-10%  to-[#0077ff80] to-90% '
@@ -114,7 +153,7 @@ export const ListDashBoardCard = ({lists, activeTab, skillsOffer, colors, fadedC
                                              <CandidateSkills skills={candidato?.user?.role?.developer?.skills} skillsOffer={skillsOffer}/>
                                            </div>
                                         </div>
-                                      ))
+                                      )})
                                     ) : (
                                       <p className='text-neutral-50'>No hay candidatos en "{activeTab}".</p>
                                     )}

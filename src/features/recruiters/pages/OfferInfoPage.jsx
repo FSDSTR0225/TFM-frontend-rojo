@@ -19,6 +19,7 @@ import { CandidateSkills } from "../components/candidateSkills";
 import { PiChat, PiEnvelope, PiFileArrowDown, PiMapPinArea, PiReadCvLogo } from "react-icons/pi";
 import { GoChevronDown } from "react-icons/go";
 import { ChatContext } from "../../../layout/chat/context/ChatContext";
+import { capitalize } from "../../../utils/utils";
 
 export const OfferInfoPage = () => {
   const [offer, setOffer] = useState(null);
@@ -38,6 +39,29 @@ export const OfferInfoPage = () => {
   const [lists, setLists] = useState([]);
 
   const { id } = useParams();
+
+  const handleDownloadCV = async (resumeUrl, fileName = 'CV.pdf') => {
+  try {
+    const response = await fetch(resumeUrl);
+    const blob = await response.blob();
+    
+    // Crear un enlace temporal para la descarga
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    
+    // Limpiar
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error('Error al descargar el CV:', error);
+    // Fallback: abrir en nueva pestaña
+    window.open(resumeUrl, '_blank');
+  }
+};
 
   const changeStatusCandidate = async (status, idCandidato) => {
     await updateCandidateStatus(id, idCandidato, status, localStorage.getItem("token"));
@@ -142,7 +166,12 @@ export const OfferInfoPage = () => {
         <aside className='lg:w-1/1 lg:overflow-auto'>
           <div className='flex flex-col gap-4'>
             {lists?.length > 0 ? (
-              lists.map((candidato) => (
+              lists.map((candidato) => {
+                const name = capitalize(candidato?.user?.name || '');
+                          const surname = capitalize(candidato?.user?.surname || '');
+                          const completeName = `${name} ${surname}`.trim() || 'Unknown Profile';
+                          const isResume = candidato?.user?.role?.developer?.resume;
+                return (
     <div key={candidato._id} className="bg-neutral-80 p-4 gap-2 rounded-lg shadow-sm border border-neutral-60 flex flex-col">
                 <div
                   
@@ -212,12 +241,17 @@ export const OfferInfoPage = () => {
                           <div className="flex flex-col md:flex-row lg:flex-col intems-center  gap-1 gap-x-2">
                           <div className="flex gap-2">
 
-                      <button
-                        onClick={() => openChat(candidato.user)}
-                        className='btn btn-md bg-neutral-90 hover:bg-neutral-60'
-                      >
-                        <PiReadCvLogo size={20} />
-                      </button>
+                      <button 
+                                                onClick={() =>
+                  handleDownloadCV(
+                    candidato.user.role.developer.resume,
+                    `${completeName}_CV.pdf`
+                  )
+                }
+                                                className={`btn btn-md  bg-neutral-90 hover:bg-neutral-60 ${!isResume && 'btn-disabled'} `}
+                                              >
+                                                <PiReadCvLogo size={20} />
+                                              </button>
                       <button
                         onClick={() => openChat(candidato.user)}
                         className='btn btn-md bg-neutral-90 hover:bg-neutral-60'
@@ -243,7 +277,7 @@ export const OfferInfoPage = () => {
                      <CandidateSkills skills={candidato?.user?.role?.developer?.skills} skillsOffer={skillsOffer}/>
                    </div>
                 </div>
-              ))
+              )})
             ) : (
               <p className='text-neutral-50'>No hay candidatos en "{activeTab}".</p>
             )}
