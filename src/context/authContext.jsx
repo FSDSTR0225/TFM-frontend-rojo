@@ -13,17 +13,21 @@ export const AuthProvider = ({ children }) => {
     () => localStorage.getItem("token") || null
   );
   const [onlineUsers, setOnlineUsers] = useState([]);
+  const [isCheckingOnboarding, setIsCheckingOnboarding] = useState(false);
 
   // Mantén el socket en una ref para que no cause re-render
   const socketRef = useRef(null);
   const infoUserLogged = async () => {
     try {
+      setIsCheckingOnboarding(true);
       const resp = await getUserLogged(token);
       setProfile(resp);
     } catch (err) {
       setProfile(null);
       setToken(null);
       localStorage.removeItem("token");
+    } finally {
+      setIsCheckingOnboarding(false);
     }
   };
 
@@ -87,6 +91,7 @@ export const AuthProvider = ({ children }) => {
         logout,
         onlineUsers,
         socket: socketRef.current,
+        isCheckingOnboarding,
       }}
     >
       {children}

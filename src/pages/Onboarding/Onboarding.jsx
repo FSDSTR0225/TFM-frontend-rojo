@@ -1,7 +1,8 @@
 // Conservamos tu estructura original con tu animación y componentes
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router";
+import { AuthContext } from "../../context/authContext";
 import { StartingComponent } from "../Onboarding/StartingStepper";
 import { UserComponent } from "../Onboarding/UserComponent";
 import { UserComponent2 } from "../Onboarding/UserComponent2";
@@ -10,6 +11,7 @@ import { RoleComponent2 } from "../Onboarding/RoleComponent2";
 import { RecruiterComponent } from "../Onboarding/RecruiterComponent";
 import { CompleteComponent } from "../Onboarding/CompleteComponent";
 import { sendProfileUpdate } from "../../services/profileService";
+import { getUserLogged } from "../../services/authService";
 
 function parseJwt(token) {
   try {
@@ -29,6 +31,7 @@ function parseJwt(token) {
 
 export const Onboarding = () => {
   const navigate = useNavigate();
+  const { profile, setProfile } = useContext(AuthContext);
   const [role, setRole] = useState("");
   const [showStarting, setShowStarting] = useState(true);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
@@ -67,6 +70,11 @@ export const Onboarding = () => {
   const currentStep = steps[currentStepIndex];
 
   useEffect(() => {
+    if (profile?.hasCompletedOnboarding) {
+      navigate("/", { replace: true });
+      return;
+    }
+
     const token = localStorage.getItem("token");
     if (token) {
       const payload = parseJwt(token);
@@ -78,7 +86,7 @@ export const Onboarding = () => {
     } else {
       navigate("/login");
     }
-  }, [navigate]);
+  }, [profile, navigate]);
 
   const handleStepDataChange = (stepId, data) => {
     setFormData((prev) => ({
@@ -117,9 +125,10 @@ export const Onboarding = () => {
 
       await sendProfileUpdate(formData, role, token);
 
-      alert("Onboarding completado correctamente");
-      // Aquí puedes hacer reset de estados o navegar
-      navigate("/"); // o donde quieras mandar
+      const updatedProfile = await getUserLogged(token);
+      setProfile(updatedProfile);
+
+      navigate("/", { replace: true });
     } catch (error) {
       console.error(error);
       alert("Error al completar onboarding: " + error.message);
