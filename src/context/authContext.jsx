@@ -2,6 +2,7 @@ import { useState, createContext, useEffect, useRef } from "react";
 import { getUserLogged } from "../services/authService";
 import { io } from "socket.io-client";
 
+
 export const AuthContext = createContext();
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
@@ -13,7 +14,9 @@ export const AuthProvider = ({ children }) => {
     () => localStorage.getItem("token") || null
   );
   const [onlineUsers, setOnlineUsers] = useState([]);
+  const [notifications, setNotifications] = useState([]);
 
+  
   // Mantén el socket en una ref para que no cause re-render
   const socketRef = useRef(null);
   const infoUserLogged = async () => {
@@ -75,6 +78,7 @@ export const AuthProvider = ({ children }) => {
       socketRef.current.disconnect();
       socketRef.current = null;
     }
+    
   };
 
   return (
@@ -86,6 +90,8 @@ export const AuthProvider = ({ children }) => {
         setToken,
         logout,
         onlineUsers,
+        notifications,
+        setNotifications,
         socket: socketRef.current,
       }}
     >

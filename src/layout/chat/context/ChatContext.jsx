@@ -13,9 +13,12 @@ export const ChatProvider = ({children}) => {
   };
 
   const backToWelcome = () => {
+  
   setScreen("welcome");
   setSelectedUser(null);
 }
+
+
     const openChat = (user) => {
         toggleChat();
         setScreen("chat");

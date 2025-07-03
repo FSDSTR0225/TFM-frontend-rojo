@@ -7,8 +7,10 @@ import { WelcomeScreen } from "./components/WelcomeScreen";
 import { ChatContext } from "./context/ChatContext";
 
 
+
+
 export default function ChatPanel({ onClose, user }) {
-  const { profile, onlineUsers, socket } = useContext(AuthContext);
+  const { profile, onlineUsers, socket, notifications, setNotifications } = useContext(AuthContext);
   const { selectedUser, backToWelcome, handleSelectedUser, screen } = useContext(ChatContext);
   const SENDER_NAME = profile?.name || 'Anonymous';
   const [message, setMessage] = useState('');
@@ -16,7 +18,7 @@ export default function ChatPanel({ onClose, user }) {
   const fileInputRef = useRef(null);
   const [messages, setMessages] = useState([])
   const [usuariosConectados, setUsuariosConectados] = useState([]);
- 
+
   const messageEndRef = useRef(null);
   const handlerRef = useRef(null);
   const token = localStorage.getItem('token');
@@ -39,6 +41,12 @@ export default function ChatPanel({ onClose, user }) {
     }
   }
 
+  // useEffect(() => {
+  //   if (usuariosConectados.includes(selectedUser)) {
+  //     setUsuariosConectados(usuariosConectados.filter(user => user._id !== selectedUser._id));
+  //   }
+  // }, [message])
+
 
   useEffect(() => {
     if (!socket || !selectedUser) return;
@@ -53,7 +61,6 @@ export default function ChatPanel({ onClose, user }) {
 
     // Nos suscribimos y guardamos el handler
     handlerRef.current = suscribeToMessages(selectedUser._id, socket, setMessages);
-
     // Cleanup automático al desmontar o cambiar usuario
     return () => {
       if (handlerRef.current) {
@@ -64,6 +71,10 @@ export default function ChatPanel({ onClose, user }) {
   }, [selectedUser, socket]);
 
   useEffect(() => {
+    console.log('🔔 Notificaciones actualizadas:', notifications);
+  }, [notifications]);
+
+  useEffect(() => {
     getUsersConect()
   }, [])
 
@@ -71,7 +82,7 @@ export default function ChatPanel({ onClose, user }) {
     if (messageEndRef.current && messages) {
       messageEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [messages])
+  }, [messages]);
 
 
 
@@ -101,6 +112,21 @@ export default function ChatPanel({ onClose, user }) {
     try {
       const resp = await sendMessage(token, message, imagePreview, selectedUser._id);
       setMessages((prevMessages) => [...prevMessages, resp]);
+      //Emitir evento de socket para enviar la notificación
+      socket.emit("sendNotification", {
+        senderName: SENDER_NAME,
+        receiverId: selectedUser._id,
+        receiverName: selectedUser.name, // o el campo correspondiente si tiene otro nombre
+        type: 1 // Puedes usar un string o número según tu backend
+      });
+
+       setUsuariosConectados((prev) => {
+      if (!prev.some(user => user._id === selectedUser._id)) {
+        return [...prev, selectedUser];
+      }
+      return prev;
+    });
+
       //Clear input fields after sending the message
       setMessage('');
       setImagePreview(null);
@@ -110,22 +136,46 @@ export default function ChatPanel({ onClose, user }) {
     }
   }
 
+  useEffect(() => {
+    if (!socket) return;
+
+    const handler = (data) => {
+      console.log("🔔 Nueva notificación:", data);
+      setNotifications((prev) => [...prev, { ...data, createdAt: Date.now() }]);
+      if (data.type === 1) {
+        setUsuariosConectados((prev) => {
+          if (!prev.some(user => user._id === data.senderId)) {
+            return [...prev, data];
+          }
+          return prev;
+        });
+      }
+    };
+
+    socket.on("getNotification", handler);
+
+    return () => {
+      socket.off("getNotification", handler);
+    };
+  }, [socket]);
+
+
   return (
     <div className="flex flex-col h-full">
-      
-      
-        {/* Sección de usuarios conectados */}
-        
 
-        {screen === "welcome" && (
-          <WelcomeScreen users={usuariosConectados} handleSelectedUser={handleSelectedUser} onlineUsers={onlineUsers} user={user} onClose={onClose} />
-        )}
 
-        {screen === "chat" && (
-          <ChatScreen onClose={onClose} messages={messages} messageEndRef={messageEndRef} userSelected={selectedUser} onlineUsers={onlineUsers} profile={profile} backToWelcome={backToWelcome} sendMessage={handleSendMessage} fileInputRef={fileInputRef} imagePreview={imagePreview} setMessage={setMessage} message={message}  removeImage={removeImage} imageChange={handleImageChange}/>
-        )}
+      {/* Sección de usuarios conectados */}
 
-     
+
+      {screen === "welcome" && (
+        <WelcomeScreen users={usuariosConectados} handleSelectedUser={handleSelectedUser} onlineUsers={onlineUsers} user={user} onClose={onClose} />
+      )}
+
+      {screen === "chat" && (
+        <ChatScreen onClose={onClose} messages={messages} messageEndRef={messageEndRef} userSelected={selectedUser} onlineUsers={onlineUsers} profile={profile} backToWelcome={backToWelcome} sendMessage={handleSendMessage} fileInputRef={fileInputRef} imagePreview={imagePreview} setMessage={setMessage} message={message} removeImage={removeImage} imageChange={handleImageChange} />
+      )}
+
+
     </div>
   );
 }
