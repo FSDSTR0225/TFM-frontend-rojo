@@ -20,8 +20,8 @@ export function Widget() {
           <div className="relative">
             {/* Panel */}
             <div
-              className={`
-                absolute bottom-16 right-0 md:right-8 w-[320px] h-[500px]
+              className={` z-60
+                absolute -bottom-4 -right-6 sm:bottom-16 sm:right-10 w-[95dvw] h-[95dvh]  md:right-8 sm:w-[320px] sm:h-[500px]
                 bg-neutral-70 rounded-2xl shadow-2xl border border-neutral-60 overflow-hidden
                 transform origin-bottom-right
                 transition duration-500 ease-in-out

@@ -71,7 +71,7 @@ export const OfferModal = ({ token, reloadPage, idOffer, isOpen, setIsOpen, oper
   return (
     // Overlay y centrar modal
     <dialog open={isOpen} className="modal">
-      <div className="fixed inset-0 flex items-center justify-center">
+      <div className="inset-0 flex items-center justify-center">
         {/* Caja del modal centrada */}
         <div className="modal-box max-w-3xl w-full bg-neutral-80 border border-neutral-70 text-neutral-0 shadow-md rounded-lg">
           <form

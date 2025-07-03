@@ -87,10 +87,10 @@ export const RecModalEdit = ({ openModal, setOpenModal, profile, token, onProfil
     };
 
     return (
-        <dialog open={openModal} className="modal ">
+        <dialog open={openModal} className="modal">
             <div className="sm:modal-middle inset-0 flex items-center justify-center ">
-                <div className="modal-box max-w-3xl w-full bg-neutral-80 border border-neutral-70 shadow-md rounded-lg">
-                    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+                <div className="modal-box sm:min-w-2xl bg-neutral-80 border border-neutral-70 shadow-md rounded-lg mb-4">
+                    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 ">
                         <h2 className="text-2xl font-bold text-center">Edit Recruiter Profile</h2>
                         <AvatarUpload
                             data={avatarData}

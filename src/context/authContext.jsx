@@ -13,6 +13,7 @@ export const AuthProvider = ({ children }) => {
     () => localStorage.getItem("token") || null
   );
   const [onlineUsers, setOnlineUsers] = useState([]);
+  const [notifications, setNotifications] = useState([]);
   const [isCheckingOnboarding, setIsCheckingOnboarding] = useState(false);
 
   // Mantén el socket en una ref para que no cause re-render
@@ -90,6 +91,8 @@ export const AuthProvider = ({ children }) => {
         setToken,
         logout,
         onlineUsers,
+        notifications,
+        setNotifications,
         socket: socketRef.current,
         isCheckingOnboarding,
       }}
