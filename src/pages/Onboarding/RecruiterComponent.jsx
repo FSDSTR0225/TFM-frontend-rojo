@@ -175,8 +175,15 @@ export const RecruiterComponent = ({ data, onDataChange, onValidChange }) => {
                 id="website"
                 className={inputClasses + " rounded-l-none"}
                 placeholder="yourcompany.com"
-                value={get("website")}
-                onChange={handleChange}
+                value={get("website").replace(/^https?:\/\//, "")}
+                onChange={(e) =>
+                  handleChange({
+                    target: {
+                      id: "website",
+                      value: "https://" + e.target.value,
+                    },
+                  })
+                }
               />
             </div>
             {touched.website && errors.website && (
