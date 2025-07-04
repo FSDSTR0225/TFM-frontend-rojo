@@ -5,6 +5,7 @@ import { SectionContainer } from "../../../components/SectionContainer";
 import { OfferInfo } from "../components/OfferInfo";
 import {
   getCandidatesByOfferId,
+  getCoverLetter,
   getOffersById,
   updateCandidateStatus,
 } from "../../../services/offersServices";
@@ -39,6 +40,14 @@ export const OfferInfoPage = () => {
   const [lists, setLists] = useState([]);
 
   const { id } = useParams();
+
+  const handleDownloadCoverLetter = async (offerId, userId) => {
+    try {
+     await getCoverLetter(offerId, userId);
+    } catch (error) {
+      new Error("Error downloading PDF"); throw error;
+    }
+  }
 
   const handleDownloadCV = async (resumeUrl, fileName = 'CV.pdf') => {
   try {
@@ -253,7 +262,7 @@ export const OfferInfoPage = () => {
                                                 <PiReadCvLogo size={20} />
                                               </button>
                       <button
-                        onClick={() => openChat(candidato.user)}
+                        onClick={() => handleDownloadCoverLetter(offer._id, candidato._id)}
                         className='btn btn-md bg-neutral-90 hover:bg-neutral-60'
                       >
                         <PiFileArrowDown size={20} />

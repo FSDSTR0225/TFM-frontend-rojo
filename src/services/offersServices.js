@@ -278,3 +278,31 @@ export const getOffersAppliedByDev = async (devId, token) => {
     throw error;
   }
 };
+
+export const getCoverLetter = async (offerId, userId) => {
+  try {
+    const response = await fetch(`${API_URL}/cover-letter/${offerId}/${userId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) {
+      throw new Error("Error downloading PDF");
+    }
+     const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "cover-letter.pdf"; // Cambia el nombre si lo necesitas
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error("OffersService Error:", error);
+    throw error;
+  }
+};
