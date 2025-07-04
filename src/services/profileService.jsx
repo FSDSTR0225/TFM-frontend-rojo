@@ -107,7 +107,7 @@ export const sendProfileUpdate = async (formData, role, token) => {
     birthDate: formData.userinfo1.birthDate,
     phone: formData.userinfo1.phone,
     avatar: formData.userinfo2.imageUrl,
-    description: formData.userinfo2.description,
+    description: formData.userinfo1.description,
     hasCompletedOnboarding: true,
     role: {
       type: role,
