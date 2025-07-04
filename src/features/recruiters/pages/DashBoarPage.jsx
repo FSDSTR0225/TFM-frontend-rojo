@@ -3,13 +3,49 @@ import { RecDashBoar } from "./RecDashBoar";
 import { useParams } from "react-router";
 import { PiDotsNine, PiDotsThreeVertical, PiListBullets } from "react-icons/pi";
 import { ListDashBoard } from "../components/ListDashBoard";
-import { getCandidatesByOfferId } from "../../../services/offersServices";
+import { getCandidatesByOfferId, getCoverLetter } from "../../../services/offersServices";
+import { useContext } from "react";
+import { ChatContext } from "../../../layout/chat/context/ChatContext";
 
 export const DashBoarPage = () => {
   const { offerId } = useParams();
   const [viewList, setViewList] = useState(false);
   const [nameOffer, setNameOffer] = useState('');
   const [skillsOffer, setSkillsOffer] = useState([]);
+
+const handleDownloadCoverLetter = async (offerId, userId) => {
+    try {
+     await getCoverLetter(offerId, userId);
+    } catch (error) {
+      new Error("Error downloading PDF"); throw error;
+    }
+  }
+  
+  const handleDownloadCV = async (resumeUrl, fileName = 'CV.pdf') => {
+  try {
+    const response = await fetch(resumeUrl);
+    const blob = await response.blob();
+    
+    // Crear un enlace temporal para la descarga
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    
+    // Limpiar
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error('Error al descargar el CV:', error);
+    // Fallback: abrir en nueva pestaña
+    window.open(resumeUrl, '_blank');
+  }
+};
+
+    const {openChat} = useContext(ChatContext);
+
 
   //objeto con cinco arrays, uno por cada columna del Kanban.
   const [lists, setLists] = useState({
@@ -66,6 +102,9 @@ export const DashBoarPage = () => {
 
       <div className="hidden lg:block">
         {viewList ? <ListDashBoard offerId={offerId}
+          openChat={openChat}
+          handleDownloadCoverLetter={handleDownloadCoverLetter}
+          handleDownloadCV={handleDownloadCV}
           skillsOffer={skillsOffer}
           lists={lists}
           setLists={setLists}

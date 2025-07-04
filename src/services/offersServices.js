@@ -290,13 +290,41 @@ export const getCoverLetter = async (offerId, userId) => {
     if (!response.ok) {
       throw new Error("Error downloading PDF");
     }
-     const blob = await response.blob();
+    const blob = await response.blob();
     const url = window.URL.createObjectURL(blob);
 
+    let filename = "cover-letter.pdf";
+    const disposition = response.headers.get("Content-Disposition");
+    
+    // DEBUG: Log para verificar qué está recibiendo el frontend
+    console.log("🔍 Cover Letter Debug:");
+    console.log("Headers disponibles:", [...response.headers.entries()]);
+    console.log("Content-Disposition header:", disposition);
+    
+    if (disposition && disposition.includes("filename=")) {
+      // Mejorar la regex para capturar correctamente el filename
+      const filenameMatch = disposition.match(/filename="([^"]+)"/); // Para filename="nombre.pdf"
+      const filenameStarMatch = disposition.match(/filename=([^;]+)/); // Para filename=nombre.pdf (sin comillas)
+      
+      console.log("filenameMatch:", filenameMatch);
+      console.log("filenameStarMatch:", filenameStarMatch);
+      
+      if (filenameMatch && filenameMatch[1]) {
+        filename = filenameMatch[1];
+        console.log("✅ Filename extraído (con comillas):", filename);
+      } else if (filenameStarMatch && filenameStarMatch[1]) {
+        filename = filenameStarMatch[1].replace(/"/g, ""); // Remover comillas si las hay
+        console.log("✅ Filename extraído (sin comillas):", filename);
+      }
+    } else {
+      console.log("❌ No se encontró Content-Disposition o filename en el header");
+    }
+    
+    console.log("📁 Filename final para descarga:", filename);
 
     const a = document.createElement("a");
     a.href = url;
-    a.download = "cover-letter.pdf"; // Cambia el nombre si lo necesitas
+    a.download = filename;
     document.body.appendChild(a);
     a.click();
     a.remove();

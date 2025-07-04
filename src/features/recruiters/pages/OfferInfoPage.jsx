@@ -180,6 +180,7 @@ export const OfferInfoPage = () => {
                           const surname = capitalize(candidato?.user?.surname || '');
                           const completeName = `${name} ${surname}`.trim() || 'Unknown Profile';
                           const isResume = candidato?.user?.role?.developer?.resume;
+                          const isCoverLetter = (candidato.coverLetter?.length ?? 0) >= 10;
                 return (
     <div key={candidato._id} className="bg-neutral-80 p-4 gap-2 rounded-lg shadow-sm border border-neutral-60 flex flex-col">
                 <div
@@ -263,14 +264,15 @@ export const OfferInfoPage = () => {
                                               </button>
                       <button
                         onClick={() => handleDownloadCoverLetter(offer._id, candidato._id)}
-                        className='btn btn-md bg-neutral-90 hover:bg-neutral-60'
+                        className={`btn btn-md  bg-neutral-90 hover:bg-neutral-60 ${!isCoverLetter && 'btn-disabled'} `}
+                                              
                       >
                         <PiFileArrowDown size={20} />
                       </button>
                           </div>
                           <div className="flex gap-2">
 
-                        <a className="btn btn-md bg-neutral-90 hover:bg-neutral-60" href={candidato?.user?.email}><PiEnvelope size={20} /></a>
+                        <a className="btn btn-md bg-neutral-90 hover:bg-neutral-60" href={`mailto:${candidato?.user?.email}`}><PiEnvelope size={20} /></a>
                       <button
                         onClick={() => openChat(candidato.user)}
                         className='btn btn-md bg-linear-135 from-[#37C848] from-10%  to-[#0077ff80] to-90% '
