@@ -1,8 +1,13 @@
+
 import { PiGear } from "react-icons/pi";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 export const UserMenu = ({ profile, logout }) => {
-
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
 
   return (
     <ul
@@ -58,9 +63,7 @@ export const UserMenu = ({ profile, logout }) => {
       )}
 
       <button
-        onClick={() => {
-          logout();
-        }}
+        onClick={handleLogout}
         className='btn btn-sm btn-outline border-red-500 text-red-400 hover:bg-red-600 hover:text-white hover:border-red-600 transition'
       >
         Logout

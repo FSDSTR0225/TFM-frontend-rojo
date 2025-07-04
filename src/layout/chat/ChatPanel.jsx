@@ -7,6 +7,8 @@ import { WelcomeScreen } from "./components/WelcomeScreen";
 import { ChatContext } from "./context/ChatContext";
 
 
+
+
 export default function ChatPanel({ onClose, user }) {
   const { profile, onlineUsers, socket, notifications, setNotifications } = useContext(AuthContext);
   const { selectedUser, backToWelcome, handleSelectedUser, screen } = useContext(ChatContext);
@@ -38,6 +40,12 @@ export default function ChatPanel({ onClose, user }) {
       throw new Error(error);
     }
   }
+
+  // useEffect(() => {
+  //   if (usuariosConectados.includes(selectedUser)) {
+  //     setUsuariosConectados(usuariosConectados.filter(user => user._id !== selectedUser._id));
+  //   }
+  // }, [message])
 
 
   useEffect(() => {
@@ -74,7 +82,7 @@ export default function ChatPanel({ onClose, user }) {
     if (messageEndRef.current && messages) {
       messageEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [messages])
+  }, [messages]);
 
 
 
@@ -112,6 +120,14 @@ export default function ChatPanel({ onClose, user }) {
         receiverName: selectedUser.name,
         type: 1
       });
+
+       setUsuariosConectados((prev) => {
+      if (!prev.some(user => user._id === selectedUser._id)) {
+        return [...prev, selectedUser];
+      }
+      return prev;
+    });
+
       //Clear input fields after sending the message
       setMessage('');
       setImagePreview(null);
@@ -127,6 +143,14 @@ export default function ChatPanel({ onClose, user }) {
     const handler = (data) => {
       console.log("🔔 Nueva notificación:", data);
       setNotifications((prev) => [...prev, { ...data, createdAt: Date.now() }]);
+      if (data.type === 1) {
+        setUsuariosConectados((prev) => {
+          if (!prev.some(user => user._id === data.senderId)) {
+            return [...prev, data];
+          }
+          return prev;
+        });
+      }
     };
 
     socket.on("getNotification", handler);

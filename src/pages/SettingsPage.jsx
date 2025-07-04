@@ -54,13 +54,13 @@ export const SettingsPage = () => {
 
   return (
     <>
-      <SectionContainer classProps="lg:flex-column gap-4 lg:items-start">
-        <div className='w-full items-center justify-center'>
+      <SectionContainer classProps="items-center ">
+        <div className='w-full  justify-center '>
           <h1 className="bg-gradient-to-r from-primary-50 to-secondary-50 text-transparent bg-clip-text leading-normal inline-block text-5xl font-bold mb-2">
             Personal information
           </h1>
         </div>
-        <div className='w-full items-center justify-center rounded-3xl bg-neutral-80 border border-neutral-70 p-6 relative px-4 mx-auto'>
+        <div className='w-full items-center justify-center rounded-3xl bg-neutral-80 border border-neutral-70 p-6  px-4 mx-auto flex flex-col'>
           <div className='flex flex-col items-center text-center my-6'>
             <span className='text-neutral-20 mb-5'>
               Manage your profile and personal preferences.

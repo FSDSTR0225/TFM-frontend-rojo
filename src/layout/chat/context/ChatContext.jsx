@@ -14,6 +14,7 @@ export const ChatProvider = ({ children }) => {
   };
 
   const backToWelcome = () => {
+<<<<<<< HEAD
     setScreen("welcome");
     setSelectedUser(null);
   }
@@ -23,6 +24,20 @@ export const ChatProvider = ({ children }) => {
     setSelectedUser(user);
     setIsChatOpen(true);
   };
+=======
+  
+  setScreen("welcome");
+  setSelectedUser(null);
+}
+
+
+    const openChat = (user) => {
+        toggleChat();
+        setScreen("chat");
+        setSelectedUser(user);
+        setIsChatOpen(true);
+    };
+>>>>>>> dev
 
   const closeChat = () => {
     setSelectedUser(null);
