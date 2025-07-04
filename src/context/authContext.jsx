@@ -2,7 +2,6 @@ import { useState, createContext, useEffect, useRef } from "react";
 import { getUserLogged } from "../services/authService";
 import { io } from "socket.io-client";
 
-
 export const AuthContext = createContext();
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
@@ -15,18 +14,21 @@ export const AuthProvider = ({ children }) => {
   );
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [notifications, setNotifications] = useState([]);
+  const [isCheckingOnboarding, setIsCheckingOnboarding] = useState(false);
 
-  
   // Mantén el socket en una ref para que no cause re-render
   const socketRef = useRef(null);
   const infoUserLogged = async () => {
     try {
+      setIsCheckingOnboarding(true);
       const resp = await getUserLogged(token);
       setProfile(resp);
     } catch (err) {
       setProfile(null);
       setToken(null);
       localStorage.removeItem("token");
+    } finally {
+      setIsCheckingOnboarding(false);
     }
   };
 
@@ -78,7 +80,6 @@ export const AuthProvider = ({ children }) => {
       socketRef.current.disconnect();
       socketRef.current = null;
     }
-    
   };
 
   return (
@@ -93,6 +94,7 @@ export const AuthProvider = ({ children }) => {
         notifications,
         setNotifications,
         socket: socketRef.current,
+        isCheckingOnboarding,
       }}
     >
       {children}

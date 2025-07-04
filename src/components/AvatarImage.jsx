@@ -45,7 +45,7 @@ const [imgError, setImgError] = useState(null);
   return (
     < >
      {( user?.avatar && !imgError) ? (      
-                    <div className={`avatar outline-2 outline-neutral-90 rounded-full  ${userOnline && (isDeveloper ? 'avatar-online before:w-[20%] before:h-[20%] before:top-[6%] before:right-[2%]  before:bg-primary-50 outline-primary-50 ' : 'before:w-[20%] before:h-[20%] before:top-[6%] before:right-[2%] outline-secondary-50 avatar-online  before:bg-secondary-50')}`}>
+                    <div className={`avatar outline-2 outline-neutral-60 rounded-full  ${userOnline && (isDeveloper ? 'avatar-online before:w-[20%] before:h-[20%] before:top-[6%] before:right-[2%]  before:bg-primary-50 outline-primary-50 ' : 'before:w-[20%] before:h-[20%] before:top-[6%] before:right-[2%] outline-secondary-50 avatar-online  before:bg-secondary-50')}`}>
                       <div className={`rounded-full ${sizeClass} `}>
                         <img
                           src={ user?.avatar}
@@ -55,7 +55,7 @@ const [imgError, setImgError] = useState(null);
                       </div>
                     </div>
                   ) : (
-                    <div className={`avatar avatar-placeholder outline-2 outline-neutral-90 rounded-full  ${userOnline && (isDeveloper ? 'avatar-online before:w-[20%] before:h-[20%] before:top-[6%] before:right-[2%]  before:bg-primary-50 outline-primary-50 ' : 'before:w-[20%] before:h-[20%] before:top-[6%] before:right-[2%] outline-secondary-50 avatar-online  before:bg-secondary-50')}`}>
+                    <div className={`avatar avatar-placeholder outline-2 outline-neutral-60 rounded-full  ${userOnline && (isDeveloper ? 'avatar-online before:w-[20%] before:h-[20%] before:top-[6%] before:right-[2%]  before:bg-primary-50 outline-primary-50 ' : 'before:w-[20%] before:h-[20%] before:top-[6%] before:right-[2%] outline-secondary-50 avatar-online  before:bg-secondary-50')}`}>
                       <div className={`bg-neutral text-neutral-content rounded-full ${sizeClass}`}>
                         <span className=' font-bold'>{getInitials(completeName)}</span>
                       </div>
