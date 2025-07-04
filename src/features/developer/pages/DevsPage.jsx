@@ -375,6 +375,7 @@ export const DevsPage = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
           {currentDevs.map((developer) => (
             <DevsCard
+            developer={developer}
               key={developer._id}
               developerId={developer._id}
               name={developer.name}
