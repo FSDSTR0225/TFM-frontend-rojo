@@ -18,7 +18,7 @@ export const RecruiterComponent = ({ data, onDataChange, onValidChange }) => {
       case "website":
         return value.trim() === "" ? "Website is required" : "";
       case "companyName":
-      case "companyLocation":
+      case "location":
       case "sector":
         return value.trim() === "" ? "This field is required" : "";
       case "contactPhone":
@@ -32,7 +32,7 @@ export const RecruiterComponent = ({ data, onDataChange, onValidChange }) => {
     const newErrors = {};
     const fields = [
       "companyName",
-      "companyLocation",
+      "location",
       "contactEmail",
       "contactPhone",
       "sector",
@@ -96,18 +96,18 @@ export const RecruiterComponent = ({ data, onDataChange, onValidChange }) => {
             )}
           </div>
           <div className="flex flex-col flex-1 mt-4 md:mt-0">
-            <label htmlFor="companyLocation" className={labelClasses}>
+            <label htmlFor="location" className={labelClasses}>
               Location
             </label>
             <input
-              id="companyLocation"
+              id="location"
               placeholder="City, Country"
               className={inputClasses}
-              value={get("companyLocation")}
+              value={get("location")}
               onChange={handleChange}
             />
-            {touched.companyLocation && errors.companyLocation && (
-              <p className={errorClasses}>{errors.companyLocation}</p>
+            {touched.location && errors.location && (
+              <p className={errorClasses}>{errors.location}</p>
             )}
           </div>
         </div>
