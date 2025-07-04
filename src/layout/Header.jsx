@@ -18,16 +18,14 @@ export const Header = () => {
   };
 
   const getNotificationText = (notif) => {
+    if (notif.type === 1) return null;
     const types = {
-      1: `${notif.senderName} te ha enviado un mensaje`,
-      2: `${notif.senderName} ha dado like a tu publicación`,
+      2: `${notif.senderName} ha dado like a tu Proyecto`,
       3: `${notif.senderName} ha comentado en tu foto`,
       // añade más tipos según necesites
     };
-
     return types[notif.type] || "Tienes una nueva notificación";
   };
-
 
   return (
     <header className='bg-neutral-80 py-2 pl-2  drawer border-b-1 border-neutral-70'>
@@ -45,22 +43,26 @@ export const Header = () => {
         {/* Bell icon y menú de notificaciones */}
         <div className="mx-4 flex items-center">
           <div className="relative">
-            <button
-              type="button"
-              className="relative flex items-center justify-center text-white hover:text-gray-200"
-              aria-label="Notificaciones"
-              onClick={() => setNotificationsOpen((prev) => !prev)}
-            >
-              <CiBellOn className="h-6 w-6" />
-              {notifications.length > 0 && (
-                <span className="absolute -top-1 -right-1 h-4 w-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
-                  {notifications.length}
-                </span>
-              )}
-            </button>
+            {
+              profile && (
+                <button
+                  type="button"
+                  className="relative flex items-center justify-center text-white hover:text-gray-200"
+                  aria-label="Notificaciones"
+                  onClick={() => setNotificationsOpen((prev) => !prev)}
+                >
+                  <CiBellOn className="h-6 w-6" />
+                  {notifications.filter(notif => notif.type !== 1).length > 0 && (
+                    <span className="absolute -top-1 -right-1 h-4 w-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                      {notifications.filter(notif => notif.type !== 1).length}
+                    </span>
+                  )}
+                </button>
+              )
+            }
 
             {/* Panel de notificaciones */}
-            {notificationsOpen && (
+            {profile && notificationsOpen && (
               <div className="absolute right-0 mt-2 w-80 max-w-xs bg-neutral-70 shadow-lg rounded-xl z-50">
                 <div className="flex justify-between items-center px-4 py-3 border-b border-base-200">
                   <span className="font-semibold text-base-content">Notificaciones</span>
@@ -74,20 +76,22 @@ export const Header = () => {
                 </div>
 
                 <div className="max-h-72 overflow-y-auto p-2 space-y-2">
-                  {notifications.length > 0 ? (
-                    notifications.map((notif, index) => (
-                      <div
-                        key={notif._id || `${notif.senderName}-${notif.type}-${index}`}
-                        className="w-full bg-neutral-60 text-base-content shadow-md rounded-md p-3"
-                      >
-                        <div className="text-sm font-medium">
-                          {getNotificationText(notif)}
+                  {notifications.filter(notif => notif.type !== 1).length > 0 ? (
+                    notifications
+                      .filter(notif => notif.type !== 1)
+                      .map((notif, index) => (
+                        <div
+                          key={notif._id || `${notif.senderName}-${notif.type}-${index}`}
+                          className="w-full bg-neutral-60 text-base-content shadow-md rounded-md p-3"
+                        >
+                          <div className="text-sm font-medium">
+                            {getNotificationText(notif)}
+                          </div>
+                          <span className="text-xs opacity-60 block mt-1">
+                            {formatMessageTime(notif.createdAt)}
+                          </span>
                         </div>
-                        <span className="text-xs opacity-60 block mt-1">
-                          {formatMessageTime(notif.createdAt)}
-                        </span>
-                      </div>
-                    ))
+                      ))
                   ) : (
                     <div className="p-3 text-sm text-gray-400 text-center">
                       No hay notificaciones
@@ -96,7 +100,6 @@ export const Header = () => {
                 </div>
               </div>
             )}
-
           </div>
         </div>
 
