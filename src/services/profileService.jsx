@@ -98,3 +98,70 @@ export const getRecruiterById = async (_id) => {
     throw error;
   }
 };
+
+export const sendProfileUpdate = async (formData, role, token) => {
+  let dataToSend = {
+    email: formData.userinfo1.email,
+    name: formData.userinfo1.name,
+    surname: formData.userinfo1.surname,
+    birthDate: formData.userinfo1.birthDate,
+    phone: formData.userinfo1.phone,
+    avatar: formData.userinfo2.imageUrl,
+    description: formData.userinfo2.description,
+    hasCompletedOnboarding: true,
+    role: {
+      type: role,
+    },
+  };
+
+  if (role === "developer") {
+    dataToSend.role.developer = {
+      professionalPosition: formData.roletype1.professionalPosition,
+      resume: formData.roletype1.resume,
+      experienceYears: formData.roletype1.experienceYears,
+      location: formData.roletype1.location,
+      linkedin: formData.roletype1.linkedin,
+      github: formData.roletype1.github,
+      skills: formData.roletype2.skills || [],
+      languages: formData.roletype1.languages || [],
+    };
+  } else if (role === "recruiter") {
+    // Aquí armamos el objeto contact explícitamente para evitar problemas
+    const contact = {
+      email: formData.recruiter1.contactEmail || "", // o ajusta la propiedad real
+      phone: formData.recruiter1.contactPhone || "",
+    };
+
+    dataToSend.role.recruiter = {
+      companyName: formData.recruiter1.companyName,
+      location: formData.recruiter1.location,
+      sector: formData.recruiter1.sector,
+      website: formData.recruiter1.website,
+      contact: contact,
+      multimedia: formData.recruiter1.multimedia,
+    };
+  } else {
+    throw new Error("Rol no válido");
+  }
+
+  const url =
+    role === "developer"
+      ? urlBackEnd + "/devs/onboarding"
+      : urlBackEnd + "/recruiters/profile";
+
+  const response = await fetch(url, {
+    method: "PUT",
+    headers: {
+      authorization: "Bearer " + token,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(dataToSend),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.message || "Error al actualizar perfil");
+  }
+
+  return response.json();
+};
