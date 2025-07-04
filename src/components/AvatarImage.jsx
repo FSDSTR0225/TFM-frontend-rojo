@@ -1,8 +1,8 @@
-import React from 'react'
 
 import { capitalize, getInitials } from '../utils/utils';
 import { useContext } from 'react';
 import { AuthContext } from '../context/authContext';
+import { useState } from 'react';
 
 export const AvatarImage = ({user, width}) => {
 const {onlineUsers} = useContext(AuthContext);
@@ -39,21 +39,23 @@ const userOnline = onlineUsers.includes(user?._id);
 const surname = capitalize(user?.surname || '');
 const completeName = `${name} ${surname}`.trim() || 'Unknown Recruiter';
 
+const [imgError, setImgError] = useState(null);
 
 
   return (
     < >
-     {( user?.avatar) ? (      
-                    <div className={`avatar border-2 border-neutral-90 rounded-full  ${userOnline && (isDeveloper ? 'avatar-online before:w-[20%] before:h-[20%] before:top-[6%] before:right-[2%] before:outline-none before:bg-primary-50 border-primary-50 ' : 'before:w-[20%] before:h-[20%] before:top-[6%] before:right-[2%] border-secondary-50 avatar-online before:outline-none before:bg-secondary-50')}`}>
+     {( user?.avatar && !imgError) ? (      
+                    <div className={`avatar outline-2 outline-neutral-90 rounded-full  ${userOnline && (isDeveloper ? 'avatar-online before:w-[20%] before:h-[20%] before:top-[6%] before:right-[2%]  before:bg-primary-50 outline-primary-50 ' : 'before:w-[20%] before:h-[20%] before:top-[6%] before:right-[2%] outline-secondary-50 avatar-online  before:bg-secondary-50')}`}>
                       <div className={`rounded-full ${sizeClass} `}>
                         <img
                           src={ user?.avatar}
-                          alt='Logo'
+                          alt='Avatar'
+                          onError={() => setImgError(true)}
                         />
                       </div>
                     </div>
                   ) : (
-                    <div className={`avatar avatar-placeholder ${userOnline && 'avatar-online' }`}>
+                    <div className={`avatar avatar-placeholder outline-2 outline-neutral-90 rounded-full  ${userOnline && (isDeveloper ? 'avatar-online before:w-[20%] before:h-[20%] before:top-[6%] before:right-[2%]  before:bg-primary-50 outline-primary-50 ' : 'before:w-[20%] before:h-[20%] before:top-[6%] before:right-[2%] outline-secondary-50 avatar-online  before:bg-secondary-50')}`}>
                       <div className={`bg-neutral text-neutral-content rounded-full ${sizeClass}`}>
                         <span className=' font-bold'>{getInitials(completeName)}</span>
                       </div>

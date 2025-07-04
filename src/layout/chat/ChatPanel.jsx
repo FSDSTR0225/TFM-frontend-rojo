@@ -7,6 +7,8 @@ import { WelcomeScreen } from "./components/WelcomeScreen";
 import { ChatContext } from "./context/ChatContext";
 
 
+
+
 export default function ChatPanel({ onClose, user }) {
   const { profile, onlineUsers, socket, notifications, setNotifications } = useContext(AuthContext);
   const { selectedUser, backToWelcome, handleSelectedUser, screen } = useContext(ChatContext);
@@ -38,6 +40,12 @@ export default function ChatPanel({ onClose, user }) {
       throw new Error(error);
     }
   }
+
+  // useEffect(() => {
+  //   if (usuariosConectados.includes(selectedUser)) {
+  //     setUsuariosConectados(usuariosConectados.filter(user => user._id !== selectedUser._id));
+  //   }
+  // }, [message])
 
 
   useEffect(() => {
@@ -74,7 +82,7 @@ export default function ChatPanel({ onClose, user }) {
     if (messageEndRef.current && messages) {
       messageEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [messages])
+  }, [messages]);
 
 
 
@@ -106,11 +114,20 @@ export default function ChatPanel({ onClose, user }) {
       setMessages((prevMessages) => [...prevMessages, resp]);
       //Emitir evento de socket para enviar la notificación
       socket.emit("sendNotification", {
+        senderId: profile._id,           // <--- agrega esto
         senderName: SENDER_NAME,
         receiverId: selectedUser._id,
-        receiverName: selectedUser.name, // o el campo correspondiente si tiene otro nombre
-        type: 1 // Puedes usar un string o número según tu backend
+        receiverName: selectedUser.name,
+        type: 1
       });
+
+       setUsuariosConectados((prev) => {
+      if (!prev.some(user => user._id === selectedUser._id)) {
+        return [...prev, selectedUser];
+      }
+      return prev;
+    });
+
       //Clear input fields after sending the message
       setMessage('');
       setImagePreview(null);
@@ -126,6 +143,14 @@ export default function ChatPanel({ onClose, user }) {
     const handler = (data) => {
       console.log("🔔 Nueva notificación:", data);
       setNotifications((prev) => [...prev, { ...data, createdAt: Date.now() }]);
+      if (data.type === 1) {
+        setUsuariosConectados((prev) => {
+          if (!prev.some(user => user._id === data.senderId)) {
+            return [...prev, data];
+          }
+          return prev;
+        });
+      }
     };
 
     socket.on("getNotification", handler);
@@ -144,11 +169,30 @@ export default function ChatPanel({ onClose, user }) {
 
 
       {screen === "welcome" && (
-        <WelcomeScreen users={usuariosConectados} handleSelectedUser={handleSelectedUser} onlineUsers={onlineUsers} user={user} onClose={onClose} />
+        <WelcomeScreen users={usuariosConectados}
+          handleSelectedUser={handleSelectedUser}
+          onlineUsers={onlineUsers}
+          user={user}
+          notifications={notifications}
+          profile={profile}
+          onClose={onClose} />
       )}
 
       {screen === "chat" && (
-        <ChatScreen onClose={onClose} messages={messages} messageEndRef={messageEndRef} userSelected={selectedUser} onlineUsers={onlineUsers} profile={profile} backToWelcome={backToWelcome} sendMessage={handleSendMessage} fileInputRef={fileInputRef} imagePreview={imagePreview} setMessage={setMessage} message={message} removeImage={removeImage} imageChange={handleImageChange} />
+        <ChatScreen onClose={onClose}
+          messages={messages}
+          messageEndRef={messageEndRef}
+          userSelected={selectedUser}
+          onlineUsers={onlineUsers}
+          profile={profile}
+          backToWelcome={backToWelcome}
+          sendMessage={handleSendMessage}
+          fileInputRef={fileInputRef}
+          imagePreview={imagePreview}
+          setMessage={setMessage}
+          message={message}
+          removeImage={removeImage}
+          imageChange={handleImageChange} />
       )}
 
 
