@@ -2,40 +2,15 @@ import { PiChat, PiEnvelope, PiFileArrowDown, PiMapPinArea, PiReadCvLogo } from 
 import { AvatarImage } from "../../../components/AvatarImage"
 import { NameUsers } from "../../../components/NameUsers"
 import { CandidateSkills } from "./candidateSkills"
-import { useContext } from "react"
-import { ChatContext } from "../../../layout/chat/context/ChatContext"
+
 import { GoChevronDown } from "react-icons/go"
 import { capitalize } from "../../../utils/utils"
 
 
-export const ListDashBoardCard = ({lists, activeTab, skillsOffer, colors, fadedColors, textColors, changeStatusCandidate }) => {
 
+export const ListDashBoardCard = ({lists, activeTab, skillsOffer, colors, fadedColors, textColors, changeStatusCandidate, offerId, openChat, handlerDownloadCV, handlerDownloadCoverLetter }) => {
 
   
-  const handleDownloadCV = async (resumeUrl, fileName = 'CV.pdf') => {
-  try {
-    const response = await fetch(resumeUrl);
-    const blob = await response.blob();
-    
-    // Crear un enlace temporal para la descarga
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = fileName;
-    document.body.appendChild(link);
-    link.click();
-    
-    // Limpiar
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(url);
-  } catch (error) {
-    console.error('Error al descargar el CV:', error);
-    // Fallback: abrir en nueva pestaña
-    window.open(resumeUrl, '_blank');
-  }
-};
-
-    const {openChat} = useContext(ChatContext);
 
 
   return (
@@ -47,6 +22,7 @@ export const ListDashBoardCard = ({lists, activeTab, skillsOffer, colors, fadedC
           const surname = capitalize(candidato?.user?.surname || '');
           const completeName = `${name} ${surname}`.trim() || 'Unknown Profile';
           const isResume = candidato?.user?.role?.developer?.resume;
+          const isCoverLetter = (candidato?.user?.role?.developer?.coverLetter?.length ?? 0) >= 5;
           return (
     <div key={candidato._id} className="bg-neutral-80 p-4 gap-2 rounded-lg shadow-sm border border-neutral-60 flex flex-col">
                 <div
@@ -119,7 +95,7 @@ export const ListDashBoardCard = ({lists, activeTab, skillsOffer, colors, fadedC
                         
                                               <button 
                                                 onClick={() =>
-                  handleDownloadCV(
+                  handlerDownloadCV(
                     candidato.user.role.developer.resume,
                     `${completeName}_CV.pdf`
                   )
@@ -129,8 +105,8 @@ export const ListDashBoardCard = ({lists, activeTab, skillsOffer, colors, fadedC
                                                 <PiReadCvLogo size={20} />
                                               </button>
                                               <button
-                                                
-                                                className='btn btn-md bg-neutral-90 hover:bg-neutral-60'
+                                                onClick={() => handlerDownloadCoverLetter(offerId, candidato._id)}
+                                                className={`btn btn-md  bg-neutral-90 hover:bg-neutral-60 ${!isCoverLetter && 'btn-disabled'} `}
                                               >
                                                 <PiFileArrowDown size={20} />
                                               </button>

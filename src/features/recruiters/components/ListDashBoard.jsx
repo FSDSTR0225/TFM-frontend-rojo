@@ -4,7 +4,7 @@ import { TabsDashboard } from './TabsDashboard';
 import { ListDashBoardCard } from './ListDashBoardCard';
 
 
-export const ListDashBoard = ({ classProps, offerId, lists, setLists, getCandidates,skillsOffer }) => {
+export const ListDashBoard = ({ classProps, offerId, lists, setLists, getCandidates,skillsOffer, openChat, handlerDownloadCV, handlerDownloadCoverLetter }) => {
   const [activeTab, setActiveTab] = useState(Object.keys(lists)[0]);
 
   const changeStatusCandidate = async (status, idCandidato) => {
@@ -43,7 +43,9 @@ export const ListDashBoard = ({ classProps, offerId, lists, setLists, getCandida
       
 
       {/* Contenido de la pestaña activa */}
-      <ListDashBoardCard lists={lists} activeTab={activeTab} setActiveTab={setActiveTab} skillsOffer={skillsOffer} colors={colors} fadedColors={fadedColors} textColors={textColors} changeStatusCandidate={changeStatusCandidate} />
+      <ListDashBoardCard lists={lists} activeTab={activeTab} 
+      handlerDownloadCV={handlerDownloadCV} handlerDownloadCoverLetter={handlerDownloadCoverLetter} openChat={openChat}
+      setActiveTab={setActiveTab} skillsOffer={skillsOffer} colors={colors} fadedColors={fadedColors} textColors={textColors} changeStatusCandidate={changeStatusCandidate} offerId={offerId} />
       
                               </div>
 
