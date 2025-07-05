@@ -1,5 +1,5 @@
 // Conservamos tu estructura original con tu animación y componentes
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router";
 import { AuthContext } from "../../context/authContext";
@@ -88,15 +88,24 @@ export const Onboarding = () => {
     }
   }, [profile, navigate]);
 
-  const handleStepDataChange = (stepId, data) => {
-    setFormData((prev) => ({
-      ...prev,
-      [stepId]: {
-        ...prev[stepId],
-        ...data,
-      },
-    }));
-  };
+  const handleStepDataChange = useCallback((stepId, data) => {
+    setFormData((prev) => {
+      const currentStepData = prev[stepId];
+      const mergedData = { ...currentStepData, ...data };
+
+      if (
+        stepId === "roletype2" &&
+        JSON.stringify(currentStepData) === JSON.stringify(mergedData)
+      ) {
+        return prev;
+      }
+
+      return {
+        ...prev,
+        [stepId]: mergedData,
+      };
+    });
+  }, []);
 
   const handleStart = () => {
     setShowStarting(false);

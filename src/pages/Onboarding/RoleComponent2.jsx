@@ -1,43 +1,62 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { getAllSkills } from "../../services/offersServices";
 
 export const RoleComponent2 = ({ data, onDataChange, onValidChange }) => {
-  // Handler para actualizar data
-  const handleChange = (e) => {
-    const { id, value } = e.target;
-    onDataChange({ ...data, [id]: value });
-  };
+  const [allSkills, setAllSkills] = useState([]);
+  const [selectedSkills, setSelectedSkills] = useState(() =>
+    data && data.skills ? data.skills : []
+  );
 
+  // Cargar habilidades al iniciar
   useEffect(() => {
-    // Validación sencilla: todos los campos con texto no vacío
-    const allFilled = Object.values(data || {}).every(val => val.trim() !== "");
-    onValidChange?.(allFilled);
-  }, [data, onValidChange]);
+    const loadSkills = async () => {
+      const skills = await getAllSkills();
+      setAllSkills(skills);
+    };
+    loadSkills();
+  }, []);
 
-  const get = (id) => data?.[id] || "";
+  // Actualizar datos y validación
+  useEffect(() => {
+    onDataChange({ skills: selectedSkills });
+    onValidChange?.(selectedSkills.length > 0);
+  }, [selectedSkills, onDataChange, onValidChange]);
 
+  const toggleSkill = (skillName) => {
+    setSelectedSkills((prev) =>
+      prev.includes(skillName)
+        ? prev.filter((s) => s !== skillName)
+        : prev.length < 10
+        ? [...prev, skillName]
+        : prev
+    );
+  };
   return (
-    <div className="space-y-4">
-      <div className="grid">
-        <label htmlFor="name" className="mb-1 font-medium">Name</label>
-        <input
-          id="name"
-          placeholder="Your name"
-          className="w-full px-3 py-2 border rounded"
-          value={get("name")}
-          onChange={handleChange}
-        />
-      </div>
+    <div className="flex justify-center items-start w-full max-h-screen mt-6 overflow-hidden">
+      <div className="p-4 max-w-3xl w-full">
+        <h5 className="text-md font-semibold text-neutral-20 mb-3">
+          Select up to 10 skills
+        </h5>
 
-      <div className="grid">
-        <label htmlFor="description" className="mb-1 font-medium">Description</label>
-        <textarea
-          id="description"
-          placeholder="Add a description"
-          className="w-full px-3 py-2 border rounded resize-none"
-          style={{ height: "6rem" }}
-          value={get("description")}
-          onChange={handleChange}
-        />
+        <div
+          className="flex flex-wrap gap-3 overflow-y-auto mb-6"
+          style={{ maxHeight: "320px" }} // o '500px' para desktop, lo que prefieras
+        >
+          {allSkills.map((skill) => (
+            <button
+              key={skill.name}
+              type="button"
+              onClick={() => toggleSkill(skill.name)}
+              className={`px-3 py-1 rounded-full text-sm transition ${
+                selectedSkills.includes(skill.name)
+                  ? "bg-primary-60 text-neutral-0"
+                  : "bg-transparent border border-neutral-30 text-neutral-30 hover:bg-neutral-40"
+              }`}
+            >
+              {skill.name}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );
