@@ -96,3 +96,16 @@ p {
   scrollbar-width: none;
   -ms-overflow-style: none; /* IE 10+ */
 }
+
+@media (min-width: 912px) {
+  #role-row-1 {
+    flex-direction: row !important;
+    gap: 1rem !important; /* para simular space-x-4 */
+  }
+}
+
+@media (max-width: 911px) {
+  #role-row-1 {
+    flex-direction: column !important;
+  }
+}
