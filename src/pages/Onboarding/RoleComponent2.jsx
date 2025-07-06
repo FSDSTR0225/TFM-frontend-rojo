@@ -38,10 +38,7 @@ export const RoleComponent2 = ({ data, onDataChange, onValidChange }) => {
           Select up to 10 skills
         </h5>
 
-        <div
-          className="flex flex-wrap gap-3 overflow-y-auto mb-6"
-          style={{ maxHeight: "320px" }} // o '500px' para desktop, lo que prefieras
-        >
+        <div className="flex flex-wrap gap-3 overflow-y-auto mb-6 max-h-[400px] md:max-h-[320px]">
           {allSkills.map((skill) => (
             <button
               key={skill.name}

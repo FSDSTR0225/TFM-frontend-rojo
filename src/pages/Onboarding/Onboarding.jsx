@@ -1,4 +1,3 @@
-// Conservamos tu estructura original con tu animación y componentes
 import React, { useState, useContext, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router";
@@ -68,6 +67,12 @@ export const Onboarding = () => {
 
   const steps = stepConfigs[role] || [];
   const currentStep = steps[currentStepIndex];
+  // Al principio, justo después de `const steps = stepConfigs[role] || [];`
+  const visibleSteps = steps.filter((step) => step.id !== "complete");
+  const displayedStepIndex = Math.min(
+    currentStepIndex,
+    visibleSteps.length - 1
+  );
 
   useEffect(() => {
     if (profile?.hasCompletedOnboarding) {
@@ -210,43 +215,46 @@ export const Onboarding = () => {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 50 }}
               transition={{ duration: 0.5 }}
-              className="flex justify-between items-center px-20 pt-12"
+              className="flex justify-between items-center px-4 pt-6 sm:px-20 sm:pt-12"
             >
-              <div className="flex items-center justify-between w-full">
-                <h2
-                  className={`${colorSet.text} text-lg font-medium whitespace-nowrap`}
-                >
-                  {currentStep.title}
-                </h2>
-                <div className="flex items-center gap-4 flex-1 max-w-md min-w-0 justify-end">
-                  <nav
-                    aria-label="Steps"
-                    className="flex flex-1 h-1 items-center gap-[18px] min-w-0"
-                  >
-                    {steps.map((step, index) => (
-                      <div
-                        key={step.id}
-                        className={`flex-1 h-full rounded transition-colors duration-300 ${
-                          index < currentStepIndex
-                            ? colorSet.stepActive
-                            : index === currentStepIndex
-                            ? colorSet.stepper
-                            : "bg-neutral-55"
-                        }`}
-                      />
-                    ))}
-                  </nav>
-                  <div
+              <div className="flex items-center justify-between w-full gap-8">
+                {currentStep.id !== "complete" && (
+                  <h2
                     className={`${colorSet.text} text-lg font-medium whitespace-nowrap`}
                   >
-                    {currentStep.id !== "complete" &&
-                      `${currentStepIndex + 1} / ${steps.length}`}
+                    {currentStep.title}
+                  </h2>
+                )}{" "}
+                {currentStep.id !== "complete" && (
+                  <div className="flex items-center gap-4 flex-1 max-w-md min-w-0 justify-end">
+                    <nav
+                      aria-label="Steps"
+                      className="flex flex-1 h-1 items-center gap-[18px] min-w-0"
+                    >
+                      {visibleSteps.map((step, index) => (
+                        <div
+                          key={step.id}
+                          className={`flex-1 h-full rounded transition-colors duration-300 ${
+                            index < displayedStepIndex
+                              ? colorSet.stepActive
+                              : index === displayedStepIndex
+                              ? colorSet.stepper
+                              : "bg-neutral-55"
+                          }`}
+                        />
+                      ))}
+                    </nav>
+                    <div
+                      className={`${colorSet.text} text-lg font-medium whitespace-nowrap`}
+                    >
+                      {`${displayedStepIndex + 1} / ${visibleSteps.length}`}
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             </motion.div>
 
-            <div className="relative h-full">
+            <div className="relative flex-1 flex flex-col h-full">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={currentStep.id}
@@ -255,14 +263,14 @@ export const Onboarding = () => {
                   animate="center"
                   exit="exit"
                   transition={{ duration: 0.5 }}
-                  className="absolute inset-0 overflow-y-auto"
+                  className="absolute inset-0 overflow-y-auto h-full flex flex-col"
                 >
                   {renderStepComponent()}
                 </motion.div>
               </AnimatePresence>
             </div>
 
-            <div className="absolute bottom-6 right-5 w-full max-w-5xl flex justify-end gap-4 md:px-10 md:py-2">
+            <div className="absolute bottom-6 right-0 w-full max-w-5xl flex justify-center gap-4 px-4 py-2 sm:justify-end sm:right-5 sm:px-10 sm:py-2">
               {currentStepIndex < steps.length - 1 ? (
                 <>
                   {steps[currentStepIndex].id === "userinfo1" ? (
@@ -294,7 +302,7 @@ export const Onboarding = () => {
                 </>
               ) : (
                 <button
-                  className={`px-4 py-2 rounded ${colorSet.bg} text-neutral-0 ${colorSet.hoverBg} transition`}
+                  className={`px-10 py-2 rounded ${colorSet.bg} text-neutral-0 ${colorSet.hoverBg} transition`}
                   onClick={handleSubmit}
                 >
                   Finish
