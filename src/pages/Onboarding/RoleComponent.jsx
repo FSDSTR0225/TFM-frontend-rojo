@@ -1,66 +1,77 @@
-import React, { useEffect, useState } from "react";
-import { PiTrashSimple } from "react-icons/pi";
+import React, { useState, useEffect } from "react";
+import { PiTrashSimple, PiGithubLogo, PiLinkedinLogo } from "react-icons/pi";
 
 const inputClasses =
   "w-full px-3 py-2 text-sm bg-neutral-90 text-neutral-0 border border-neutral-60 rounded placeholder-neutral-40 placeholder:italic";
 const labelClasses = "text-base text-neutral-20 mb-1";
 const errorClasses = "text-xs text-red-500 mt-1";
 
-export const RoleComponent = ({ data, onDataChange, onValidChange }) => {
+export const RoleComponent = ({
+  data,
+  onDataChange,
+  onValidChange,
+  showErrors,
+}) => {
   const [errors, setErrors] = useState({});
-  const [touched, setTouched] = useState({});
 
-  const validateField = (id, value) => {
-    switch (id) {
-      case "professionalPosition":
-      case "location":
-        return value.trim() === "" ? "This field is required" : "";
-      case "experienceYears":
-        return isNaN(value) || Number(value) < 0
-          ? "Must be a positive number"
-          : "";
-      case "linkedin":
-      case "github":
-        return "";
-      default:
-        return "";
-    }
-  };
-
-  const validateAll = () => {
+  useEffect(() => {
     const newErrors = {};
-    const fields = [
-      "professionalPosition",
-      "experienceYears",
-      "location",
-      "linkedin",
-      "github",
-    ];
 
-    fields.forEach((field) => {
-      const value = data?.[field] || "";
-      const error = validateField(field, value);
-      if (error) newErrors[field] = error;
-    });
+    // Validar campos obligatorios
+    if (!data.professionalPosition || data.professionalPosition.trim() === "") {
+      newErrors.professionalPosition = "This field is required";
+    }
+
+    if (!data.experienceYears || data.experienceYears.trim() === "") {
+      newErrors.experienceYears = "This field is required";
+    } else if (
+      isNaN(data.experienceYears) ||
+      Number(data.experienceYears) < 0
+    ) {
+      newErrors.experienceYears = "Must be a positive number";
+    }
+
+    if (!data.location || data.location.trim() === "") {
+      newErrors.location = "This field is required";
+    }
+
+    // Validar linkedin y github si tienen valor (opcional)
+    if (data.linkedin && data.linkedin.trim() !== "") {
+      if (!/^https:\/\/.+/.test(data.linkedin.trim())) {
+        newErrors.linkedin = "Must be a valid URL starting with https://";
+      }
+    }
+    if (data.github && data.github.trim() !== "") {
+      if (!/^https:\/\/.+/.test(data.github.trim())) {
+        newErrors.github = "Must be a valid URL starting with https://";
+      }
+    }
+
+    // Validar idiomas: al menos un idioma con ambos campos rellenos
+    const languages = data.languages || [];
+    const hasValidLanguage = languages.some(
+      (lang) =>
+        lang.language &&
+        lang.language.trim() !== "" &&
+        lang.languageLevel &&
+        lang.languageLevel.trim() !== ""
+    );
+    if (!hasValidLanguage) {
+      newErrors.languages = "At least one language with level is required";
+    }
 
     setErrors(newErrors);
     onValidChange?.(Object.keys(newErrors).length === 0);
-  };
-
-  useEffect(() => {
-    validateAll();
-  }, [data]);
+  }, [data, onValidChange]);
 
   const handleChange = (e) => {
     const { id, value } = e.target;
-    setTouched((prev) => ({ ...prev, [id]: true }));
     onDataChange({ ...data, [id]: value });
   };
 
   const handleExperienceChange = (e) => {
-    let value = e.target.value;
+    const value = e.target.value;
     if (/^\d*$/.test(value)) {
-      setTouched((prev) => ({ ...prev, experienceYears: true }));
       onDataChange({ ...data, experienceYears: value });
     }
   };
@@ -85,29 +96,35 @@ export const RoleComponent = ({ data, onDataChange, onValidChange }) => {
 
   const get = (id) => data?.[id] || "";
 
-  return (
-    <div className="flex justify-center items-start w-full h-full py-8 px-4 max-h-[500px] md:max-h-[350px] overflow-y-auto m-4">
-      <div className="w-full max-w-2xl space-y-6">
-        <div className="flex flex-col">
-          <label htmlFor="professionalPosition" className={labelClasses}>
-            Your professional position
-          </label>
-          <input
-            id="professionalPosition"
-            placeholder="e.g. Frontend Developer"
-            className={inputClasses}
-            value={get("professionalPosition")}
-            onChange={handleChange}
-          />
-          {touched.professionalPosition && errors.professionalPosition && (
-            <p className={errorClasses}>{errors.professionalPosition}</p>
-          )}
-        </div>
+  const languages =
+    data.languages && data.languages.length > 0
+      ? data.languages
+      : [{ language: "", languageLevel: "" }];
 
-        <div className="flex flex-col md:flex-row md:space-x-4">
-          <div className="flex flex-col flex-1">
+  return (
+    <div className="flex justify-center items-start w-full h-full py-8 px-4 max-h-[500px] md:max-h-[360px] overflow-y-auto mt-6">
+      <div className="w-full max-w-2xl space-y-6">
+        {/* Primera fila */}
+        <div className="flex flex-col md:flex-row md:space-x-4" id="role-row-1">
+          <div className="flex flex-col flex-1 min-w-0 mb-4 md:mb-0">
+            <label htmlFor="professionalPosition" className={labelClasses}>
+              Your professional position
+            </label>
+            <input
+              id="professionalPosition"
+              placeholder="e.g. Frontend Developer"
+              className={inputClasses}
+              value={get("professionalPosition")}
+              onChange={handleChange}
+            />
+            {showErrors && errors.professionalPosition && (
+              <p className={errorClasses}>{errors.professionalPosition}</p>
+            )}
+          </div>
+
+          <div className="flex flex-col md:w-24 min-w-[10rem] mb-4 md:mb-0">
             <label htmlFor="experienceYears" className={labelClasses}>
-              Your year of experience
+              Experience (years)
             </label>
             <input
               id="experienceYears"
@@ -117,12 +134,12 @@ export const RoleComponent = ({ data, onDataChange, onValidChange }) => {
               onChange={handleExperienceChange}
               inputMode="numeric"
             />
-            {touched.experienceYears && errors.experienceYears && (
+            {showErrors && errors.experienceYears && (
               <p className={errorClasses}>{errors.experienceYears}</p>
             )}
           </div>
 
-          <div className="flex flex-col flex-1 mt-4 md:mt-0">
+          <div className="flex flex-col flex-1 min-w-0">
             <label htmlFor="location" className={labelClasses}>
               Your current location
             </label>
@@ -133,15 +150,22 @@ export const RoleComponent = ({ data, onDataChange, onValidChange }) => {
               value={get("location")}
               onChange={handleChange}
             />
-            {touched.location && errors.location && (
+            {showErrors && errors.location && (
               <p className={errorClasses}>{errors.location}</p>
             )}
           </div>
         </div>
 
-        <div className="flex flex-col md:flex-row md:space-x-4">
-          <div className="flex flex-col flex-1">
-            <label htmlFor="linkedin" className={labelClasses}>
+        <hr className="border-t border-neutral-60 my-4" />
+
+        {/* Segunda fila */}
+        <div className="flex flex-col md:flex-row md:space-x-6 space-y-4 md:space-y-0">
+          <div className="flex flex-1 min-w-0 flex-col">
+            <label
+              htmlFor="linkedin"
+              className={labelClasses + " flex items-center"}
+            >
+              <PiLinkedinLogo className="text-neutral-20 mr-2" size={20} />
               LinkedIn
             </label>
             <div className="flex">
@@ -150,9 +174,9 @@ export const RoleComponent = ({ data, onDataChange, onValidChange }) => {
               </span>
               <input
                 id="linkedin"
-                className={inputClasses + " rounded-l-none"}
+                className={inputClasses}
                 placeholder="linkedin.com/in/yourprofile"
-                value={get("linkedin").replace(/^https?:\/\//, "")} // Sin https en el input
+                value={get("linkedin").replace(/^https?:\/\//, "")}
                 onChange={(e) =>
                   handleChange({
                     target: {
@@ -163,13 +187,17 @@ export const RoleComponent = ({ data, onDataChange, onValidChange }) => {
                 }
               />
             </div>
-            {touched.linkedin && errors.linkedin && (
+            {showErrors && errors.linkedin && (
               <p className={errorClasses}>{errors.linkedin}</p>
             )}
           </div>
 
-          <div className="flex flex-col flex-1 mt-4 md:mt-0">
-            <label htmlFor="github" className={labelClasses}>
+          <div className="flex flex-1 min-w-0 flex-col">
+            <label
+              htmlFor="github"
+              className={labelClasses + " flex items-center"}
+            >
+              <PiGithubLogo className="text-neutral-20 mr-2" size={20} />
               GitHub
             </label>
             <div className="flex">
@@ -178,7 +206,7 @@ export const RoleComponent = ({ data, onDataChange, onValidChange }) => {
               </span>
               <input
                 id="github"
-                className={inputClasses + " rounded-l-none"}
+                className={inputClasses}
                 placeholder="github.com/yourprofile"
                 value={get("github").replace(/^https?:\/\//, "")}
                 onChange={(e) =>
@@ -191,73 +219,65 @@ export const RoleComponent = ({ data, onDataChange, onValidChange }) => {
                 }
               />
             </div>
-            {touched.github && errors.github && (
+            {showErrors && errors.github && (
               <p className={errorClasses}>{errors.github}</p>
             )}
           </div>
         </div>
 
-        <div>
-          <div className="flex justify-left items-center mb-2 gap-6">
+        <hr className="border-t border-neutral-60 my-4" />
+
+        {/* Tercera fila - idiomas */}
+        <div className="flex flex-col">
+          <div className="flex items-center justify-between mb-0">
             <label className={labelClasses}>Languages</label>
-            {/* Mostrar botón a la derecha sólo cuando no hay inputs */}
-            {!data.languages?.length && (
-              <button
-                type="button"
-                onClick={addLanguage}
-                className="text-sm text-neutral-20 hover:text-neutral-0 bg-neutral-55 px-3 py-1 rounded"
-              >
-                + Add Language
-              </button>
-            )}
-          </div>
-
-          {(data.languages || []).map((lang, i) => (
-            <div
-              key={i}
-              className="flex flex-col md:flex-row md:space-x-4 mb-3 items-center"
-            >
-              <div className="flex flex-col flex-1">
-                <input
-                  placeholder="Language"
-                  className={inputClasses}
-                  value={lang.language || ""}
-                  onChange={(e) =>
-                    handleLanguageChange(i, "language", e.target.value)
-                  }
-                />
-              </div>
-              <div className="flex flex-col flex-1 mt-4 md:mt-0">
-                <input
-                  placeholder="Level (e.g. Fluent, Intermediate)"
-                  className={inputClasses}
-                  value={lang.languageLevel || ""}
-                  onChange={(e) =>
-                    handleLanguageChange(i, "languageLevel", e.target.value)
-                  }
-                />
-              </div>
-              <button
-                type="button"
-                onClick={() => removeLanguage(i)}
-                className="md:mt-0 text-primary-80 font-semibold"
-                aria-label="Remove language"
-                style={{ flexShrink: 0, width: 32, height: 32 }}
-              >
-                <PiTrashSimple size={20} />
-              </button>
-            </div>
-          ))}
-
-          {/* Mostrar botón debajo de inputs cuando hay al menos uno */}
-          {data.languages?.length > 0 && (
             <button
               type="button"
               onClick={addLanguage}
-              className="text-sm text-neutral-20 hover:text-neutral-0 bg-neutral-60 px-3 py-1 rounded"
+              className="text-sm text-neutral-20 hover:text-neutral-0 bg-neutral-55 px-3 py-1 rounded ml-4"
             >
               + Add Language
             </button>
+          </div>
+
+          {languages.map((lang, i, arr) => (
+            <div
+              key={i}
+              className="flex flex-col md:flex-row md:space-x-4 mt-2 items-center"
+            >
+              <input
+                placeholder="Language"
+                className={inputClasses + " flex-1 mb-2 md:mb-0"}
+                value={lang.language || ""}
+                onChange={(e) =>
+                  handleLanguageChange(i, "language", e.target.value)
+                }
+              />
+              <input
+                placeholder="Level (e.g. Fluent, Intermediate)"
+                className={inputClasses + " flex-1"}
+                value={lang.languageLevel || ""}
+                onChange={(e) =>
+                  handleLanguageChange(i, "languageLevel", e.target.value)
+                }
+              />
+              {arr.length > 1 && (
+                <button
+                  type="button"
+                  onClick={() => removeLanguage(i)}
+                  className="md:mt-0 text-primary-80 font-semibold ml-2"
+                  aria-label="Remove language"
+                  style={{ flexShrink: 0, width: 32, height: 32 }}
+                >
+                  <PiTrashSimple size={20} />
+                </button>
+              )}
+            </div>
+          ))}
+
+          {/* Mostrar error de idiomas */}
+          {showErrors && errors.languages && (
+            <p className={errorClasses}>{errors.languages}</p>
           )}
         </div>
       </div>

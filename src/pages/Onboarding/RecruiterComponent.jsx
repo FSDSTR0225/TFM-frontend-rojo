@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 
 const inputClasses =
   "w-full px-3 py-2 text-sm bg-neutral-90 text-neutral-0 border border-neutral-60 rounded placeholder-neutral-40 placeholder:italic";
@@ -28,7 +28,7 @@ export const RecruiterComponent = ({ data, onDataChange, onValidChange }) => {
     }
   };
 
-  const validateAll = () => {
+  const validateAll = useCallback(() => {
     const newErrors = {};
     const fields = [
       "companyName",
@@ -47,11 +47,18 @@ export const RecruiterComponent = ({ data, onDataChange, onValidChange }) => {
 
     setErrors(newErrors);
     onValidChange?.(Object.keys(newErrors).length === 0);
-  };
+  }, [data, onValidChange]);
 
   useEffect(() => {
     validateAll();
-  }, [data]);
+  }, [validateAll]);
+
+  const handleBlur = (e) => {
+    const { id } = e.target;
+    setTouched((prev) => ({ ...prev, [id]: true }));
+    const error = validateField(id, data?.[id] || "");
+    setErrors((prev) => ({ ...prev, [id]: error }));
+  };
 
   const handlePhoneChange = (e) => {
     let value = e.target.value.replace(/[^\d+ ]/g, "");
@@ -63,13 +70,11 @@ export const RecruiterComponent = ({ data, onDataChange, onValidChange }) => {
       let rest = value.slice(3).replace(/\s+/g, "");
       value = prefix + " " + rest;
     }
-    setTouched((prev) => ({ ...prev, contactPhone: true }));
     onDataChange({ ...data, contactPhone: value });
   };
 
   const handleChange = (e) => {
     const { id, value } = e.target;
-    setTouched((prev) => ({ ...prev, [id]: true }));
     onDataChange({ ...data, [id]: value });
   };
 
@@ -90,6 +95,7 @@ export const RecruiterComponent = ({ data, onDataChange, onValidChange }) => {
               className={inputClasses}
               value={get("companyName")}
               onChange={handleChange}
+              onBlur={handleBlur}
             />
             {touched.companyName && errors.companyName && (
               <p className={errorClasses}>{errors.companyName}</p>
@@ -105,6 +111,7 @@ export const RecruiterComponent = ({ data, onDataChange, onValidChange }) => {
               className={inputClasses}
               value={get("location")}
               onChange={handleChange}
+              onBlur={handleBlur}
             />
             {touched.location && errors.location && (
               <p className={errorClasses}>{errors.location}</p>
@@ -124,6 +131,7 @@ export const RecruiterComponent = ({ data, onDataChange, onValidChange }) => {
               className={inputClasses}
               value={get("contactEmail")}
               onChange={handleChange}
+              onBlur={handleBlur}
             />
             {touched.contactEmail && errors.contactEmail && (
               <p className={errorClasses}>{errors.contactEmail}</p>
@@ -139,6 +147,7 @@ export const RecruiterComponent = ({ data, onDataChange, onValidChange }) => {
               className={inputClasses}
               value={get("contactPhone")}
               onChange={handlePhoneChange}
+              onBlur={handleBlur}
             />
             {touched.contactPhone && errors.contactPhone && (
               <p className={errorClasses}>{errors.contactPhone}</p>
@@ -158,6 +167,7 @@ export const RecruiterComponent = ({ data, onDataChange, onValidChange }) => {
               className={inputClasses}
               value={get("sector")}
               onChange={handleChange}
+              onBlur={handleBlur}
             />
             {touched.sector && errors.sector && (
               <p className={errorClasses}>{errors.sector}</p>
@@ -184,6 +194,7 @@ export const RecruiterComponent = ({ data, onDataChange, onValidChange }) => {
                     },
                   })
                 }
+                onBlur={handleBlur}
               />
             </div>
             {touched.website && errors.website && (
