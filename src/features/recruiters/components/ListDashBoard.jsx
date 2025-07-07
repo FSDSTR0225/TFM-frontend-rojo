@@ -4,7 +4,7 @@ import { TabsDashboard } from './TabsDashboard';
 import { ListDashBoardCard } from './ListDashBoardCard';
 
 
-export const ListDashBoard = ({ classProps, offerId, lists, setLists, getCandidates,skillsOffer, openChat, handlerDownloadCV, handlerDownloadCoverLetter }) => {
+export const ListDashBoard = ({ classProps, offerId, lists, setLists, getCandidates,skillsOffer, openChat, handleDownloadCV, handleDownloadCoverLetter }) => {
   const [activeTab, setActiveTab] = useState(Object.keys(lists)[0]);
 
   const changeStatusCandidate = async (status, idCandidato) => {
@@ -39,12 +39,12 @@ export const ListDashBoard = ({ classProps, offerId, lists, setLists, getCandida
 
     <div className="w-full">
       {/* Tabs */}
-      <TabsDashboard lists={lists} ActiveTab={activeTab} colors={colors} setActiveTab={setActiveTab}/>
+      <TabsDashboard lists={lists} activeTab={activeTab} colors={colors} setActiveTab={setActiveTab}/>
       
 
       {/* Contenido de la pestaña activa */}
       <ListDashBoardCard lists={lists} activeTab={activeTab} 
-      handlerDownloadCV={handlerDownloadCV} handlerDownloadCoverLetter={handlerDownloadCoverLetter} openChat={openChat}
+      handleDownloadCV={handleDownloadCV} handleDownloadCoverLetter={handleDownloadCoverLetter} openChat={openChat}
       setActiveTab={setActiveTab} skillsOffer={skillsOffer} colors={colors} fadedColors={fadedColors} textColors={textColors} changeStatusCandidate={changeStatusCandidate} offerId={offerId} />
       
                               </div>
