@@ -146,7 +146,7 @@ function ExperienceCard({ profileInfo }) {
                       </h3>
                       <p className="mb-1 sm:mb-2">{exp.company}</p>
                       <p className="mb-2 sm:mb-4">{exp.description}</p>
-                      {exp.experienceSkills?.length > 0 && (
+                      {/* {exp.experienceSkills?.length > 0 && (
                         <div className="flex flex-wrap gap-2 mb-2 justify-center sm:justify-start">
                           {exp.experienceSkills.map((skill, i) => (
                             <span
@@ -157,7 +157,7 @@ function ExperienceCard({ profileInfo }) {
                             </span>
                           ))}
                         </div>
-                      )}
+                      )} */}
                     </div>
                     <div className="flex-shrink-0 flex flex-col justify-end items-center sm:items-end mt-4 sm:mt-0">
                       <p className="text-sm sm:text-base text-center sm:text-right">
@@ -182,7 +182,7 @@ function ExperienceCard({ profileInfo }) {
                     </h3>
                     <p className="col-span-1 sm:col-span-2">{exp.company}</p>
                     <p className="col-span-1 sm:col-span-2">{exp.description}</p>
-                    {exp.experienceSkills?.length > 0 && (
+                    {/* {exp.experienceSkills?.length > 0 && (
                       <div className="col-span-1 sm:col-span-2 flex flex-wrap gap-2 mb-2">
                         {exp.experienceSkills.map((skill, i) => (
                           <span
@@ -193,7 +193,7 @@ function ExperienceCard({ profileInfo }) {
                           </span>
                         ))}
                       </div>
-                    )}
+                    )} */}
                     <p className="grid justify-items-center sm:justify-items-end text-sm sm:text-base">
                       {new Date(exp.startDate).toLocaleDateString('es-ES', {
                         month: 'long',

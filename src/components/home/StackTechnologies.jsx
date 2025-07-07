@@ -14,14 +14,14 @@ export const StackTechnologies = () => {
   ];
 
   const techImages = [
-    'https://cdn.worldvectorlogo.com/logos/mongodb-icon-2.svg',
-    'https://cdn.worldvectorlogo.com/logos/react-2.svg',
-    'https://cdn.worldvectorlogo.com/logos/typescript.svg',
-    'https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Unofficial_JavaScript_logo_2.svg/1024px-Unofficial_JavaScript_logo_2.svg.png',
-    'https://cdn.worldvectorlogo.com/logos/python-5.svg',
-    'https://static.cdnlogo.com/logos/m/88/mysql.svg',
-    'https://raw.githubusercontent.com/devicons/devicon/ca28c779441053191ff11710fe24a9e6c23690d6/icons/nodejs/nodejs-plain-wordmark.svg',
-    'https://cdn.worldvectorlogo.com/logos/postgresql.svg'
+    'https://res.cloudinary.com/djxyqh8fx/image/upload/v1751453660/mongodb-icon_odsgnz.svg',
+    'https://res.cloudinary.com/djxyqh8fx/image/upload/v1751453733/react-icon_urbntl.svg',
+    'https://res.cloudinary.com/djxyqh8fx/image/upload/v1751453808/typescript-icon_yeafon.svg',
+    'https://res.cloudinary.com/djxyqh8fx/image/upload/v1751453935/javascript-icon_emsenf.png',
+    'https://res.cloudinary.com/djxyqh8fx/image/upload/v1751454010/python-icon_quwslf.svg',
+    'https://res.cloudinary.com/djxyqh8fx/image/upload/v1751454075/mysql-icon_jnh7zm.svg',
+    'https://res.cloudinary.com/djxyqh8fx/image/upload/v1751454113/nodejs-icon_zza7u2.svg',
+    'https://res.cloudinary.com/djxyqh8fx/image/upload/v1751454149/postgresql-icon_q0tmkq.svg'
   ];
 
   const techCategories = [

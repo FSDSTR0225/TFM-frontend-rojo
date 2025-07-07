@@ -1,5 +1,6 @@
-import { useEffect } from "react";
+import { useEffect, useState, } from "react";
 import { useForm } from "react-hook-form";
+import { StudyLogoUpload } from "./StudyLogoUpload"
 
 export default function StudyModal({ open, setOpen, handleStudy, study = null }) {
   const {
@@ -11,6 +12,11 @@ export default function StudyModal({ open, setOpen, handleStudy, study = null })
     formState: { errors },
   } = useForm();
 
+  const [logoData, setLogoData] = useState({
+    imageFile: null,
+    logoUrl: "",
+  });
+  const [isLogoValid, setIsLogoValid] = useState(true); // El logo no es requerido
 
   const startDate = watch("startDate");
   const endDate = watch("endDate");
@@ -23,6 +29,12 @@ export default function StudyModal({ open, setOpen, handleStudy, study = null })
 
   useEffect(() => {
       if (study) {
+
+        setLogoData({
+          imageFile: null,
+          logoUrl: study.instituteLogo || "",
+        });
+
         // Función para convertir fecha a formato YYYY-MM
         const formatDateForMonth = (dateString) => {
           if (!dateString) return "";
@@ -46,6 +58,12 @@ export default function StudyModal({ open, setOpen, handleStudy, study = null })
           endDate: formatDateForMonth(study.endDate),
         });
       } else {
+
+        // Resetear estado del logo
+        setLogoData({
+          imageFile: null,
+          logoUrl: "",
+        });
         reset({
           degree: "",
           instituteLogo: "",
@@ -56,6 +74,12 @@ export default function StudyModal({ open, setOpen, handleStudy, study = null })
         });
       }
   }, [study, reset]);
+
+  // Actualizar el campo instituteLogo del formulario cuando cambie logoData
+  useEffect(() => {
+    const logoValue = logoData.logoUrl || "";
+    setValue("instituteLogo", logoValue, { shouldValidate: true });
+  }, [logoData, setValue]);
 
 
   const onSubmit = (data) => {
@@ -76,59 +100,55 @@ export default function StudyModal({ open, setOpen, handleStudy, study = null })
       <div className="modal-box max-w-xl bg-neutral-80 border border-neutral-70 rounded-lg p-6 relative">
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <h2 className="text-2xl font-bold text-center">
-            {study ? "Editar estudio" : "Nuevo estudio"}
+            {study ? "Edit Study" : "New study"}
           </h2>
 
           {/* Degree */}
           <div className="form-control">
             <label className="block text-sm text-neutral-20 mb-1">
-              <span className="label-text font-semibold">Título o Grado</span>
+              <span className="label-text font-semibold">Title or degree</span>
             </label>
             <input
               {...register("degree", { required: true })}
-              placeholder="Ej. Ingeniería Informática"
+              placeholder="E.g: Computer Engineering"
               className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
             />
             {errors.degree && (
-              <span className="text-red-500 text-sm">Este campo es requerido</span>
+              <span className="text-red-500 text-sm">This field is required</span>
             )}
           </div>
 
-          {/* instituteLogo */}
-          <div className="form-control">
-            <label className="block text-sm text-neutral-20 mb-1">
-              <span className="label-text font-semibold">Logo</span>
-            </label>
-            <input
-              {...register("instituteLogo")}
-              placeholder="Logo de la universidad o centro"
-              className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
-            />
-          </div>
+          {/* Logo Upload con drag and drop */}
+          <StudyLogoUpload
+            data={logoData}
+            onDataChange={setLogoData}
+            onValidChange={setIsLogoValid}
+            error={errors.instituteLogo?.message}
+          />
 
 
           {/* Institute */}
           <div className="form-control">
             <label className="block text-sm text-neutral-20 mb-1">
-              <span className="label-text font-semibold">Institución</span>
+              <span className="label-text font-semibold">Institute</span>
             </label>
             <input
               {...register("instituteName", { required: true })}
-              placeholder="Nombre de la universidad o centro"
+              placeholder="Institute Name"
               className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
             />
             {errors.instituteName && (
-              <span className="text-red-500 text-sm">Este campo es requerido</span>
+              <span className="text-red-500 text-sm">This field is required</span>
             )}
           </div>
 
           {/* Description */}
-          <div className="form-control">
+          {/* <div className="form-control">
             <label className="block text-sm text-neutral-20 mb-1">
-              <span className="label-text font-semibold">Descripción</span>
+              <span className="label-text font-semibold">Description</span>
             </label>
             <textarea
-              {...register("description", { maxLength: { value: 200, message: "Máximo 200 caracteres" } })}
+              {...register("description", { maxLength: { value: 200, message: "Max 200 caracters" } })}
               placeholder="Breve descripción del estudio realizado"
               className="textarea textarea-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
               rows={3}
@@ -138,18 +158,18 @@ export default function StudyModal({ open, setOpen, handleStudy, study = null })
                 {errors.description.message}
               </span>
             )}
-          </div>
+          </div> */}
 
           {/* Dates */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Start Date */}
             <div className="form-control">
               <label className="block text-sm text-neutral-20 mb-1">
-                <span className="label-text font-semibold">Fecha de inicio</span>
+                <span className="label-text font-semibold">Start Date</span>
               </label>
               <input
                 {...register("startDate", { 
-                  required: "Fecha de inicio requerida",
+                  required: "Start Date is required",
                 })}
                 type="month"
                 max={new Date().toISOString().slice(0, 7)}
@@ -164,14 +184,14 @@ export default function StudyModal({ open, setOpen, handleStudy, study = null })
             {/* End Date */}
             <div className="form-control">
               <label className="block text-sm text-neutral-20 mb-1">
-                <span className="label-text font-semibold">Fecha de finalización</span>
+                <span className="label-text font-semibold">End Date</span>
               </label>
               <input
                 {...register("endDate", {
-                  required: "Fecha de finalización requerida",
+                  required: "End Date is required",
                   validate: value => {
                     if (!startDate) return true;
-                    return value >= startDate || "La fecha final debe ser igual o posterior a la de inicio";
+                    return value >= startDate || "The end date must be equal to or later than the start date";
                   }
                 })}
                 type="month"

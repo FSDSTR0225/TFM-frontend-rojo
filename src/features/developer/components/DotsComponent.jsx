@@ -15,7 +15,7 @@ const DotsComponent = ({ onEdit, onDelete }) => {
         >
           <button>
             <CiEdit />
-            Editar
+            Edit
           </button>
         </li>
         <li
@@ -24,7 +24,7 @@ const DotsComponent = ({ onEdit, onDelete }) => {
         >
           <div>
             <MdOutlineDeleteSweep />
-            Eliminar
+            Remove
           </div>
         </li>
       </ul>

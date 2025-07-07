@@ -70,7 +70,7 @@ export const NumbersSection = () => {
           </div>
           <div className="flex flex-col items-center">
             <span className="text-3xl sm:text-4xl md:text-5xl font-bold text-secondary-50 mb-2 block">+{acceptedApplications * 100}</span>
-            <span className="text-neutral-20 text-sm md:text-base block">Applications accepted</span>
+            <span className="text-neutral-20 text-sm md:text-base block">Hired</span>
           </div>
         </div>
       </div>
