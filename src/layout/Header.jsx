@@ -18,6 +18,7 @@ export const Header = () => {
   };
 
   const getNotificationText = (notif) => {
+    console.log("Notification:", notif);
     if (notif.type === 1) return null;
     const types = {
       2: `${notif.senderName} ha dado like a tu Proyecto`,
