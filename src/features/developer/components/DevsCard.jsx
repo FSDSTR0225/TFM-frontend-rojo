@@ -1,9 +1,9 @@
 import { Link } from "react-router";
+import { AvatarImage } from "../../../components/AvatarImage";
+import { NameUsers } from "../../../components/NameUsers";
 
 const DevsCard = ({
-  name,
-  surname,
-  avatar,
+  developer,
   profession,
   experienceYears,
   location,
@@ -19,18 +19,13 @@ const DevsCard = ({
         <div>
           {/* Avatar */}
           <div className="flex justify-center mt-1 mb-2">
-            <img
-              src={avatar}
-              alt="Avatar"
-              className="w-16 h-16 rounded-full border-2 border-neutral-60"
-            />
+            <AvatarImage user={developer} width={16} />
           </div>
 
           {/* Name */}
           <div className="text-center">
-            <span className="text-neutral-0 font-semibold text-lg leading-tight group-hover:text-primary-40">
-              {name} {surname}
-            </span>
+              <NameUsers classProps={"font-semibold text-lg leading-tight group-hover:text-primary-40 "} user={developer} />
+          
           </div>
 
           {/* Profession + Experience */}

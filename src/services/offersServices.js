@@ -78,6 +78,17 @@ export const getSkillsByQuery = async (query) => {
   }
 };
 
+export const getAllSkills = async () => {
+  try {
+    const response = await fetch(`${API_URL}/allskills`);
+    if (!response.ok) throw new Error("Error al cargar habilidades");
+    return await response.json();
+  } catch (error) {
+    console.error("Error en getAllSkills:", error);
+    return []; // Devuelve array vacío si hay error
+  }
+};
+
 export const createdOffert = async (offert, token) => {
   try {
     const resp = await fetch(API_URL + "/", {
@@ -273,6 +284,67 @@ export const getOffersAppliedByDev = async (devId, token) => {
     }
     const data = await response.json();
     return data;
+  } catch (error) {
+    console.error("OffersService Error:", error);
+    throw error;
+  }
+};
+
+export const getCoverLetter = async (offerId, userId) => {
+  try {
+    const response = await fetch(
+      `${API_URL}/cover-letter/${offerId}/${userId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Error downloading PDF");
+    }
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+
+    let filename = "cover-letter.pdf";
+    const disposition = response.headers.get("Content-Disposition");
+
+    // DEBUG: Log para verificar qué está recibiendo el frontend
+    console.log("🔍 Cover Letter Debug:");
+    console.log("Headers disponibles:", [...response.headers.entries()]);
+    console.log("Content-Disposition header:", disposition);
+
+    if (disposition && disposition.includes("filename=")) {
+      // Mejorar la regex para capturar correctamente el filename
+      const filenameMatch = disposition.match(/filename="([^"]+)"/); // Para filename="nombre.pdf"
+      const filenameStarMatch = disposition.match(/filename=([^;]+)/); // Para filename=nombre.pdf (sin comillas)
+
+      console.log("filenameMatch:", filenameMatch);
+      console.log("filenameStarMatch:", filenameStarMatch);
+
+      if (filenameMatch && filenameMatch[1]) {
+        filename = filenameMatch[1];
+        console.log("✅ Filename extraído (con comillas):", filename);
+      } else if (filenameStarMatch && filenameStarMatch[1]) {
+        filename = filenameStarMatch[1].replace(/"/g, ""); // Remover comillas si las hay
+        console.log("✅ Filename extraído (sin comillas):", filename);
+      }
+    } else {
+      console.log(
+        "❌ No se encontró Content-Disposition o filename en el header"
+      );
+    }
+
+    console.log("📁 Filename final para descarga:", filename);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
   } catch (error) {
     console.error("OffersService Error:", error);
     throw error;

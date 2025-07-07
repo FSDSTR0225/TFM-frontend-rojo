@@ -1,24 +1,26 @@
-// Conservamos tu estructura original con tu animación y componentes
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from 'framer-motion';
-import { useNavigate } from 'react-router';
-import { StartingComponent } from '../Onboarding/StartingStepper';
-import { UserComponent } from '../Onboarding/UserComponent';
-import { UserComponent2 } from '../Onboarding/UserComponent2';
-import { RoleComponent } from '../Onboarding/RoleComponent';
-import { RoleComponent2 } from '../Onboarding/RoleComponent2';
-import { RecruiterComponent } from '../Onboarding/RecruiterComponent';
-import { CompleteComponent } from '../Onboarding/CompleteComponent';
+import React, { useState, useContext, useEffect, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router";
+import { AuthContext } from "../../context/authContext";
+import { StartingComponent } from "../Onboarding/StartingStepper";
+import { UserComponent } from "../Onboarding/UserComponent";
+import { UserComponent2 } from "../Onboarding/UserComponent2";
+import { RoleComponent } from "../Onboarding/RoleComponent";
+import { RoleComponent2 } from "../Onboarding/RoleComponent2";
+import { RecruiterComponent } from "../Onboarding/RecruiterComponent";
+import { CompleteComponent } from "../Onboarding/CompleteComponent";
+import { sendProfileUpdate } from "../../services/profileService";
+import { getUserLogged } from "../../services/authService";
 
 function parseJwt(token) {
   try {
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
     const jsonPayload = decodeURIComponent(
       atob(base64)
-        .split('')
-        .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-        .join('')
+        .split("")
+        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+        .join("")
     );
     return JSON.parse(jsonPayload);
   } catch {
@@ -28,7 +30,8 @@ function parseJwt(token) {
 
 export const Onboarding = () => {
   const navigate = useNavigate();
-  const [role, setRole] = useState('');
+  const { profile, setProfile } = useContext(AuthContext);
+  const [role, setRole] = useState("");
   const [showStarting, setShowStarting] = useState(true);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [isStepValid, setIsStepValid] = useState(false);
@@ -44,46 +47,70 @@ export const Onboarding = () => {
 
   const stepConfigs = {
     developer: [
-      { id: 'userinfo1', title: 'Personal Info', Component: UserComponent },
-      { id: 'userinfo2', title: 'Avatar', Component: UserComponent2 },
-      { id: 'roletype1', title: 'Developer details', Component: RoleComponent },
-      { id: 'roletype2', title: 'Skills', Component: RoleComponent2 },
-      { id: 'complete', title: 'Complete', Component: CompleteComponent },
+      { id: "userinfo1", title: "Personal Info", Component: UserComponent },
+      { id: "userinfo2", title: "Avatar", Component: UserComponent2 },
+      { id: "roletype1", title: "Developer details", Component: RoleComponent },
+      { id: "roletype2", title: "Skills", Component: RoleComponent2 },
+      { id: "complete", title: "Complete", Component: CompleteComponent },
     ],
     recruiter: [
-      { id: 'userinfo1', title: 'Personal Info', Component: UserComponent },
-      { id: 'userinfo2', title: 'Avatar', Component: UserComponent2 },
-      { id: 'recruiter1', title: 'About the Company', Component: RecruiterComponent },
-      { id: 'complete', title: 'Complete', Component: CompleteComponent },
+      { id: "userinfo1", title: "Personal Info", Component: UserComponent },
+      { id: "userinfo2", title: "Avatar", Component: UserComponent2 },
+      {
+        id: "recruiter1",
+        title: "About the Company",
+        Component: RecruiterComponent,
+      },
+      { id: "complete", title: "Complete", Component: CompleteComponent },
     ],
   };
 
   const steps = stepConfigs[role] || [];
   const currentStep = steps[currentStepIndex];
+  // Al principio, justo después de `const steps = stepConfigs[role] || [];`
+  const visibleSteps = steps.filter((step) => step.id !== "complete");
+  const displayedStepIndex = Math.min(
+    currentStepIndex,
+    visibleSteps.length - 1
+  );
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    if (profile?.hasCompletedOnboarding) {
+      navigate("/", { replace: true });
+      return;
+    }
+
+    const token = localStorage.getItem("token");
     if (token) {
       const payload = parseJwt(token);
       if (payload?.role) {
         setRole(payload.role);
       } else {
-        navigate('/login');
+        navigate("/login");
       }
     } else {
-      navigate('/login');
+      navigate("/login");
     }
-  }, [navigate]);
+  }, [profile, navigate]);
 
-  const handleStepDataChange = (stepId, data) => {
-    setFormData(prev => ({
-      ...prev,
-      [stepId]: {
-        ...prev[stepId],
-        ...data
+  const handleStepDataChange = useCallback((stepId, data) => {
+    setFormData((prev) => {
+      const currentStepData = prev[stepId];
+      const mergedData = { ...currentStepData, ...data };
+
+      if (
+        stepId === "roletype2" &&
+        JSON.stringify(currentStepData) === JSON.stringify(mergedData)
+      ) {
+        return prev;
       }
-    }));
-  };
+
+      return {
+        ...prev,
+        [stepId]: mergedData,
+      };
+    });
+  }, []);
 
   const handleStart = () => {
     setShowStarting(false);
@@ -104,31 +131,23 @@ export const Onboarding = () => {
   };
 
   const handleSubmit = async () => {
-  try {
-    console.log("🔄 Enviando datos al backend...");
-    console.log("📦 Payload:", JSON.stringify(formData, null, 2));
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("No token found");
 
-    // Aquí iría tu llamada al backend, por ejemplo:
-    // await fetch("/api/onboarding", {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify(formData),
-    // });
+      console.log("Enviando datos de onboarding:", { formData, role, token });
 
-    console.log("✅ Datos enviados correctamente.");
-    alert('Datos enviados correctamente');
+      await sendProfileUpdate(formData, role, token);
 
-    // Reset
-    setShowStarting(true);
-    setCurrentStepIndex(0);
-    setFormData({
-      userinfo1: {}, userinfo2: {}, roletype1: {}, roletype2: {}, recruiter1: {}, complete: {}
-    });
-  } catch (error) {
-    console.error("❌ Error al enviar datos:", error);
-    alert('Error al enviar datos');
-  }
-};
+      const updatedProfile = await getUserLogged(token);
+      setProfile(updatedProfile);
+
+      navigate("/", { replace: true });
+    } catch (error) {
+      console.error(error);
+      alert("Error al completar onboarding: " + error.message);
+    }
+  };
 
   const renderStepComponent = () => {
     if (!currentStep) return null;
@@ -138,20 +157,31 @@ export const Onboarding = () => {
         role={role}
         onValidChange={setIsStepValid}
         data={formData[currentStep.id]}
-        onDataChange={data => handleStepDataChange(currentStep.id, data)}
+        onDataChange={(data) => handleStepDataChange(currentStep.id, data)}
       />
     );
   };
 
-  const colorSet = role === 'recruiter' ? {
-    text: 'text-secondary-50', bg: 'bg-secondary-50', hoverBg: 'hover:bg-secondary-70',
-    hovertext: 'hover:text-neutral-0', border: 'border-secondary-60',
-    stepActive: 'bg-secondary-50 text-white', stepper: 'bg-secondary-20'
-  } : {
-    text: 'text-primary-70', bg: 'bg-primary-60', hoverBg: 'hover:bg-primary-80',
-    hovertext: 'hover:text-neutral-0', border: 'border-primary-80',
-    stepActive: 'bg-primary-50 text-white', stepper: 'bg-primary-20'
-  };
+  const colorSet =
+    role === "recruiter"
+      ? {
+          text: "text-secondary-50",
+          bg: "bg-secondary-50",
+          hoverBg: "hover:bg-secondary-70",
+          hovertext: "hover:text-neutral-0",
+          border: "border-secondary-60",
+          stepActive: "bg-secondary-50 text-white",
+          stepper: "bg-secondary-20",
+        }
+      : {
+          text: "text-primary-70",
+          bg: "bg-primary-60",
+          hoverBg: "hover:bg-primary-80",
+          hovertext: "hover:text-neutral-0",
+          border: "border-primary-80",
+          stepActive: "bg-primary-50 text-white",
+          stepper: "bg-primary-20",
+        };
 
   const variants = {
     enter: { opacity: 0, x: 50 },
@@ -171,7 +201,11 @@ export const Onboarding = () => {
             transition={{ duration: 0.5 }}
             className="absolute inset-0"
           >
-            <StartingComponent colorSet={colorSet} role={role} onStart={handleStart} />
+            <StartingComponent
+              colorSet={colorSet}
+              role={role}
+              onStart={handleStart}
+            />
           </motion.div>
         ) : (
           <>
@@ -181,32 +215,46 @@ export const Onboarding = () => {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 50 }}
               transition={{ duration: 0.5 }}
-              className="flex justify-between items-center px-20 pt-12"
+              className="flex justify-between items-center px-4 pt-6 sm:px-20 sm:pt-12"
             >
-              <div className="flex items-center justify-between w-full">
-                <h2 className={`${colorSet.text} text-lg font-medium whitespace-nowrap`}>
-                  {currentStep.title}
-                </h2>
-                <div className="flex items-center gap-4 flex-1 max-w-md min-w-0 justify-end">
-                  <nav aria-label="Steps" className="flex flex-1 h-1 items-center gap-[18px] min-w-0">
-                    {steps.map((step, index) => (
-                      <div
-                        key={step.id}
-                        className={`flex-1 h-full rounded transition-colors duration-300 ${
-                          index < currentStepIndex ? colorSet.stepActive :
-                          index === currentStepIndex ? colorSet.stepper : 'bg-neutral-55'
-                        }`}
-                      />
-                    ))}
-                  </nav>
-                  <div className={`${colorSet.text} text-lg font-medium whitespace-nowrap`}>
-                    {currentStep.id !== 'complete' && `${currentStepIndex + 1} / ${steps.length}`}
+              <div className="flex items-center justify-between w-full gap-8">
+                {currentStep.id !== "complete" && (
+                  <h2
+                    className={`${colorSet.text} text-lg font-medium whitespace-nowrap`}
+                  >
+                    {currentStep.title}
+                  </h2>
+                )}{" "}
+                {currentStep.id !== "complete" && (
+                  <div className="flex items-center gap-4 flex-1 max-w-md min-w-0 justify-end">
+                    <nav
+                      aria-label="Steps"
+                      className="flex flex-1 h-1 items-center gap-[18px] min-w-0"
+                    >
+                      {visibleSteps.map((step, index) => (
+                        <div
+                          key={step.id}
+                          className={`flex-1 h-full rounded transition-colors duration-300 ${
+                            index < displayedStepIndex
+                              ? colorSet.stepActive
+                              : index === displayedStepIndex
+                              ? colorSet.stepper
+                              : "bg-neutral-55"
+                          }`}
+                        />
+                      ))}
+                    </nav>
+                    <div
+                      className={`${colorSet.text} text-lg font-medium whitespace-nowrap`}
+                    >
+                      {`${displayedStepIndex + 1} / ${visibleSteps.length}`}
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             </motion.div>
 
-            <div className="relative h-full">
+            <div className="relative flex-1 flex flex-col h-full">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={currentStep.id}
@@ -215,17 +263,17 @@ export const Onboarding = () => {
                   animate="center"
                   exit="exit"
                   transition={{ duration: 0.5 }}
-                  className="absolute inset-0 overflow-y-auto"
+                  className="absolute inset-0 overflow-y-auto h-full flex flex-col"
                 >
                   {renderStepComponent()}
                 </motion.div>
               </AnimatePresence>
             </div>
 
-            <div className="absolute bottom-6 right-5 w-full max-w-5xl flex justify-end gap-4 md:px-10 md:py-2">
+            <div className="absolute bottom-6 right-0 w-full max-w-5xl flex justify-center gap-4 px-4 py-2 sm:justify-end sm:right-5 sm:px-10 sm:py-2">
               {currentStepIndex < steps.length - 1 ? (
                 <>
-                  {steps[currentStepIndex].id === 'userinfo1' ? (
+                  {steps[currentStepIndex].id === "userinfo1" ? (
                     <button
                       className={`px-4 py-2 rounded border ${colorSet.border} ${colorSet.text} ${colorSet.hoverBg} ${colorSet.hovertext} transition`}
                       onClick={() => setShowStarting(true)}
@@ -244,14 +292,17 @@ export const Onboarding = () => {
                     className={`px-4 py-2 rounded ${colorSet.bg} text-neutral-0 ${colorSet.hoverBg} transition`}
                     onClick={next}
                     disabled={!isStepValid}
-                    style={{ opacity: !isStepValid ? 0.5 : 1, cursor: !isStepValid ? 'not-allowed' : 'pointer' }}
+                    style={{
+                      opacity: !isStepValid ? 0.5 : 1,
+                      cursor: !isStepValid ? "not-allowed" : "pointer",
+                    }}
                   >
                     Next
                   </button>
                 </>
               ) : (
                 <button
-                  className={`px-4 py-2 rounded ${colorSet.bg} text-neutral-0 ${colorSet.hoverBg} transition`}
+                  className={`px-10 py-2 rounded ${colorSet.bg} text-neutral-0 ${colorSet.hoverBg} transition`}
                   onClick={handleSubmit}
                 >
                   Finish
