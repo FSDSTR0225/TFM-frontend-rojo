@@ -83,7 +83,7 @@ export const OfferInfoPage = () => {
   const hasApplied =
     Array.isArray(offer?.applicants) &&
     profile?._id &&
-    offer?.applicants?.some((applicant) => applicant?.user === profile._id || applicant?.user?._id === profile?._id || applicant?.user?.toString() === profile?._id);
+    offer?.applicants?.some((applicant) => applicant?.user === profile._id);
 
   const getCandidates = async () => {
     const data = await getCandidatesByOfferId(id, localStorage.getItem("token"));
@@ -111,8 +111,6 @@ export const OfferInfoPage = () => {
     fetchOffer();
   }, [id]);
 
-
-
   const handleApplyModal = (e) => {
     e.stopPropagation();
     if (!token) {
@@ -121,11 +119,6 @@ export const OfferInfoPage = () => {
     }
 
     setIsOpenApplyModal(true);
-  };
-
-  const handleApplySuccess = (updatedOffer) => {
-    console.log("Offer applied successfully:", updatedOffer);
-    setOffer(updatedOffer);
   };
 
   const colors = {
@@ -322,7 +315,6 @@ export const OfferInfoPage = () => {
           setIsOpen={setIsOpenApplyModal}
           token={token}
           handleApply={handleApplyModal}
-          onApplySuccess={handleApplySuccess}
         />
       )}
     </SectionContainer>

@@ -94,9 +94,6 @@ const handleDownloadCoverLetter = async (offerId, userId) => {
       {/* En pantallas menores a lg: siempre muestra ListDashBoard */}
       <div className="lg:hidden">
         <ListDashBoard offerId={offerId}
-          openChat={openChat}
-          handleDownloadCoverLetter={handleDownloadCoverLetter}
-          handleDownloadCV={handleDownloadCV}
           skillsOffer={skillsOffer}
           lists={lists}
           setLists={setLists}
@@ -112,9 +109,6 @@ const handleDownloadCoverLetter = async (offerId, userId) => {
           lists={lists}
           setLists={setLists}
           getCandidates={getCandidates} /> : <RecDashBoar offerId={offerId}
-            openChat={openChat}
-            handleDownloadCoverLetter={handleDownloadCoverLetter}
-            handleDownloadCV={handleDownloadCV}
             lists={lists}
             setLists={setLists} />}
       </div>
