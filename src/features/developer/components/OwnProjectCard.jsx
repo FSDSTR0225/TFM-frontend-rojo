@@ -176,10 +176,10 @@ function OwnProjectCard({ profileInfo }) {
                     )}
                     {/* Botón de opciones en móviles */}
                     {isCurrentUserProfile && (
-                      <div className="absolute top-3 right-3">
+                      <div className="absolute top-3 right-3" onClick={(e) => e.stopPropagation()}>
                         <DotsComponent
-                          onEdit={() => handleOpenEditModal(project)}
-                          onDelete={() => handleDelete(project._id)}
+                          onEdit={(e) => handleOpenEditModal(project, e)}
+                          onDelete={(e) => handleDelete(project._id, e)}
                         />
                       </div>
                     )}
@@ -238,6 +238,7 @@ function OwnProjectCard({ profileInfo }) {
                                 target="_blank" 
                                 rel="noreferrer" 
                                 className="flex-1 btn bg-neutral-90 hover:bg-neutral-60 border border-neutral-60 rounded-md flex items-center justify-center gap-1"
+                                onClick={(e) => e.stopPropagation()}
                               >
                                 <PiGithubLogo className="text-xl" /> Github
                               </a>
@@ -248,6 +249,7 @@ function OwnProjectCard({ profileInfo }) {
                                 target="_blank" 
                                 rel="noreferrer" 
                                 className="flex-1 btn bg-transparent border-2 border-primary-50 text-primary-50 hover:bg-neutral-0 hover:text-neutral-90 hover:border-neutral-0 rounded-md hover:shadow-lg flex items-center justify-center gap-1"
+                                onClick={(e) => e.stopPropagation()}
                               >
                                 <PiArrowSquareOut className="text-xl" /> Live View
                               </a>
@@ -285,10 +287,10 @@ function OwnProjectCard({ profileInfo }) {
                           <h2 className="card-title">{project.title}</h2>
                         </div>
                         {isCurrentUserProfile && (
-                          <div className="justify-self-end flex gap-2">
+                          <div className="justify-self-end flex gap-2" onClick={(e) => e.stopPropagation()}>
                             <DotsComponent
-                              onEdit={() => handleOpenEditModal(project)}
-                              onDelete={() => handleDelete(project._id)}
+                              onEdit={(e) => handleOpenEditModal(project, e)}
+                              onDelete={(e) => handleDelete(project._id, e)}
                             />
                           </div>
                         )}
@@ -327,12 +329,24 @@ function OwnProjectCard({ profileInfo }) {
                     <div className="p-6 pt-4 mt-auto">
                       <div className="card-actions justify-end">
                         {project.githubProjectLink && (
-                          <a href={project.githubProjectLink} target="_blank" rel="noreferrer" className="btn bg-neutral-90 hover:bg-neutral-60 border border-neutral-60 rounded-md flex items-center gap-1">
+                          <a 
+                            href={project.githubProjectLink} 
+                            target="_blank" 
+                            rel="noreferrer" 
+                            className="btn bg-neutral-90 hover:bg-neutral-60 border border-neutral-60 rounded-md flex items-center gap-1"
+                            onClick={(e) => e.stopPropagation()}
+                          >
                             <PiGithubLogo className="text-xl" /> Github
                           </a>
                         )}
                         {project.liveLink && (
-                          <a href={project.liveLink} target="_blank" rel="noreferrer" className="btn bg-primary-60 hover:bg-primary-70 text-neutral-90 rounded-md flex items-center gap-1">
+                          <a 
+                            href={project.liveLink} 
+                            target="_blank" 
+                            rel="noreferrer" 
+                            className="btn bg-primary-60 hover:bg-primary-70 text-neutral-90 rounded-md flex items-center gap-1"
+                            onClick={(e) => e.stopPropagation()}
+                          >
                             <PiArrowSquareOut className="text-xl" />Live View
                           </a>
                         )}

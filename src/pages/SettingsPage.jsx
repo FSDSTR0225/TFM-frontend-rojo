@@ -1,7 +1,7 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { SectionContainer } from "../components/SectionContainer";
 import { Link } from "react-router";
-import { updatePassword } from '../services/settingsService';
+import { updatePassword, deleteAccount, getSettings } from '../services/settingsService';
 import ChangePasswordModal from '../components/settings/ChangePasswordModal';
 import RemoveAccountModal from '../components/settings/RemoveAccountModal';
 import { AuthContext } from '../context/authContext';
@@ -10,7 +10,29 @@ export const SettingsPage = () => {
   const { token } = useContext(AuthContext);
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const [isRemoveModalOpen, setIsRemoveModalOpen] = useState(false);
-  
+  const [profileData, setProfileData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  // Obtener datos del usuario al cargar la página
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const userData = await getSettings(token);
+        if (userData && !userData.error) {
+          setProfileData(userData);
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (token) {
+      fetchUserData();
+    }
+  }, [token]);
+
   const handleOpenPasswordModal = () => {
     setIsPasswordModalOpen(true);
   };
@@ -35,13 +57,16 @@ export const SettingsPage = () => {
     setIsRemoveModalOpen(true);
   };
 
-  const handleRemoveChange = async (data) => {
+  const handleRemoveChange = async () => {
     try {
-      const result = await RemoveAccount(data, token);
+      // Solo enviamos el token, no los datos del formulario
+      const result = await deleteAccount(token);
       
       if (result) {
-        console.log('remove data:', result);
+        console.log('Account deleted:', result);
         setIsRemoveModalOpen(false);
+        // Aquí podrías redirigir al usuario o limpiar el contexto de autenticación
+        alert('Account deleted successfully!');
       } else {
         console.error('Error removing your account:', result.error);
       }
@@ -51,16 +76,19 @@ export const SettingsPage = () => {
     }
   };
 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <>
-      <SectionContainer classProps="items-center ">
-        <div className='w-full  justify-center '>
+      <SectionContainer classProps="lg:flex-column gap-4 lg:items-start">
+        <div className='w-full items-center justify-center'>
           <h1 className="bg-gradient-to-r from-primary-50 to-secondary-50 text-transparent bg-clip-text leading-normal inline-block text-5xl font-bold mb-2">
             Personal information
           </h1>
         </div>
-        <div className='w-full items-center justify-center rounded-3xl bg-neutral-80 border border-neutral-70 p-6  px-4 mx-auto flex flex-col'>
+        <div className='w-full items-center justify-center rounded-3xl bg-neutral-80 border border-neutral-70 p-6 relative px-4 mx-auto'>
           <div className='flex flex-col items-center text-center my-6'>
             <span className='text-neutral-20 mb-5'>
               Manage your profile and personal preferences.
@@ -100,13 +128,13 @@ export const SettingsPage = () => {
       <ChangePasswordModal 
         open={isPasswordModalOpen}
         setOpen={setIsPasswordModalOpen}
-        profileData={null}
+        profileData={profileData}
         onSubmit={handlePasswordChange}
       />
       <RemoveAccountModal 
         open={isRemoveModalOpen}
         setOpen={setIsRemoveModalOpen}
-        profileData={null}
+        profileData={profileData}
         onSubmit={handleRemoveChange}
       />
     </>

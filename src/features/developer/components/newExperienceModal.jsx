@@ -1,6 +1,8 @@
-import { useEffect } from 'react';
+import { useEffect, useState, } from "react";
 import { useForm } from 'react-hook-form';
 import { TagsInputDev } from './TagsInputDev';
+import { ExperienceLogoUpload } from "./ExperienceLogoUpload"
+
 
 export default function NewExperienceModal({ open, setOpen, handleExperience, experience = null }) {
   const {
@@ -11,6 +13,12 @@ export default function NewExperienceModal({ open, setOpen, handleExperience, ex
     setValue,
     formState: { errors },
   } = useForm();
+
+  const [logoData, setLogoData] = useState({
+    imageFile: null,
+    logoUrl: "",
+  });
+  const [isLogoValid, setIsLogoValid] = useState(true);
 
   const startDate = watch("startDate");
   const endDate = watch("endDate");
@@ -24,6 +32,11 @@ export default function NewExperienceModal({ open, setOpen, handleExperience, ex
 
   useEffect(() => {
     if (experience) {
+
+      setLogoData({
+        imageFile: null,
+        logoUrl: experience.companyLogo || "",
+      });
       // Función para convertir fecha a formato YYYY-MM
       const formatDateForMonth = (dateString) => {
         if (!dateString) return "";
@@ -42,6 +55,13 @@ export default function NewExperienceModal({ open, setOpen, handleExperience, ex
         experienceSkills: experience.experienceSkills || []
       });
     } else {
+
+      // Resetear estado del logo
+      setLogoData({
+        imageFile: null,
+        logoUrl: "",
+      });
+
       reset({
         company: "",
         companyLogo: "",
@@ -53,9 +73,16 @@ export default function NewExperienceModal({ open, setOpen, handleExperience, ex
     }
   }, [experience, reset]);
 
+  // Actualizar el campo companyLogo del formulario cuando cambie logoData
+  useEffect(() => {
+    const logoValue = logoData.logoUrl || "";
+    setValue("companyLogo", logoValue, { shouldValidate: true });
+  }, [logoData, setValue]);
+
   const onSubmit = (data) => {
     const formatted = {
       ...data,
+      companyLogo: logoData.logoUrl || "",
       experienceSkills: data.experienceSkills.map(s => s.trim()).filter(Boolean),
     };
     handleExperience(formatted, experience?._id);
@@ -75,13 +102,13 @@ export default function NewExperienceModal({ open, setOpen, handleExperience, ex
       <div className="modal-box max-w-xl bg-neutral-80 border border-neutral-70 rounded-lg p-6 relative">
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <h2 className="text-2xl font-bold text-center">
-            {experience ? "Editar experiencia" : "Nueva experiencia"}
+            {experience ? "Edit experience" : "New Experience"}
           </h2>
 
           {/* Company */}
           <div className="form-control">
             <label className="block text-sm text-neutral-20 mb-1">
-              <span className="label-text font-semibold">Compañía</span>
+              <span className="label-text font-semibold">Company</span>
             </label>
             <input
               {...register("company", { required: true })}
@@ -89,26 +116,22 @@ export default function NewExperienceModal({ open, setOpen, handleExperience, ex
               className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
             />
             {errors.company && (
-              <span className="text-red-500 text-sm">Este campo es requerido</span>
+              <span className="text-red-500 text-sm">This field is required</span>
             )}
           </div>
 
-          {/* CompanyLogo */}
-          <div className="form-control">
-            <label className="block text-sm text-neutral-20 mb-1">
-              <span className="label-text font-semibold">Logo de la Compañía</span>
-            </label>
-            <input
-              {...register("companyLogo")}
-              placeholder="e.g Google"
-              className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
-            />
-          </div>
+          {/* Logo Upload con drag and drop */}
+          <ExperienceLogoUpload
+            data={logoData}
+            onDataChange={setLogoData}
+            onValidChange={setIsLogoValid}
+            error={errors.companyLogo?.message}
+          />
 
           {/* Position */}
           <div className="form-control">
             <label className="block text-sm text-neutral-20 mb-1">
-              <span className="label-text font-semibold">Puesto</span>
+              <span className="label-text font-semibold">Position</span>
             </label>
             <input
               {...register("position", { required: true })}
@@ -116,12 +139,12 @@ export default function NewExperienceModal({ open, setOpen, handleExperience, ex
               className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
             />
             {errors.position && (
-              <span className="text-red-500 text-sm">Este campo es requerido</span>
+              <span className="text-red-500 text-sm">This field is required</span>
             )}
           </div>
 
           {/* Skills */}
-          <div className="form-control">
+          {/* <div className="form-control">
             <label className="block text-sm text-neutral-20 mb-1 font-semibold">
               Skills
             </label>
@@ -129,18 +152,18 @@ export default function NewExperienceModal({ open, setOpen, handleExperience, ex
               value={skills}
               onChange={(tags) => setValue("experienceSkills", tags, { shouldValidate: true })}
             />
-          </div>
+          </div> */}
 
           {/* Dates */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4"> 
             {/* Start Date */}
             <div className="form-control">
               <label className="block text-sm text-neutral-20 mb-1">
-                <span className="label-text font-semibold">Fecha de inicio</span>
+                <span className="label-text font-semibold">Start Date</span>
               </label>
               <input
                 {...register("startDate", { 
-                  required: "Fecha de inicio requerida",
+                  required: "Start Date is required",
                 })}
                 type="month"
                 max={new Date().toISOString().slice(0, 7)}
@@ -155,14 +178,14 @@ export default function NewExperienceModal({ open, setOpen, handleExperience, ex
             {/* End Date */}
             <div className="form-control">
               <label className="block text-sm text-neutral-20 mb-1">
-                <span className="label-text font-semibold">Fecha de finalización</span>
+                <span className="label-text font-semibold">End Date</span>
               </label>
               <input
                 {...register("endDate", {
-                  required: "Fecha de finalización requerida",
+                  required: "End Date is required",
                   validate: value => {
                     if (!startDate) return true;
-                    return value >= startDate || "La fecha final debe ser igual o posterior a la de inicio";
+                    return value >= startDate || "The end date must be equal to or later than the start date";
                   }
                 })}
                 type="month"

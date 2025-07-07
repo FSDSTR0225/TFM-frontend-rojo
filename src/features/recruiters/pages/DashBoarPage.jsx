@@ -112,9 +112,6 @@ const handleDownloadCoverLetter = async (offerId, userId) => {
           lists={lists}
           setLists={setLists}
           getCandidates={getCandidates} /> : <RecDashBoar offerId={offerId}
-            openChat={openChat}
-            handleDownloadCoverLetter={handleDownloadCoverLetter}
-            handleDownloadCV={handleDownloadCV}
             lists={lists}
             setLists={setLists} />}
       </div>

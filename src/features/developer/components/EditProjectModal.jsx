@@ -74,9 +74,9 @@ export function EditProjectModal({ project, onSubmitProject, onClose }) {
             </header>
 
             <div>
-              <label className="block text-sm text-neutral-20 mb-1">Título</label>
+              <label className="block text-sm text-neutral-20 mb-1">Title</label>
               <input
-                {...register('title', { required: 'El título es obligatorio' })}
+                {...register('title', { required: 'Title is required' })}
                 className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40"
                 type="text"
                 placeholder="Write your project title..."
@@ -85,7 +85,7 @@ export function EditProjectModal({ project, onSubmitProject, onClose }) {
             </div>
 
             <div>
-              <label className="block text-sm text-neutral-20 mb-1">Descripción</label>
+              <label className="block text-sm text-neutral-20 mb-1">Description</label>
               <textarea
                 {...register('description')}
                 className="textarea textarea-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40"
@@ -96,7 +96,7 @@ export function EditProjectModal({ project, onSubmitProject, onClose }) {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm text-neutral-20 mb-1">Año</label>
+                <label className="block text-sm text-neutral-20 mb-1">Year</label>
                 <input
                   {...register('year')}
                   className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40"
@@ -106,7 +106,7 @@ export function EditProjectModal({ project, onSubmitProject, onClose }) {
               </div>
 
               <div>
-                <label className="block text-sm text-neutral-20 mb-1">Categoría</label>
+                <label className="block text-sm text-neutral-20 mb-1">Category</label>
                 <input
                   {...register('category')}
                   className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40"
@@ -123,12 +123,12 @@ export function EditProjectModal({ project, onSubmitProject, onClose }) {
           {/* Skills Section */}
           <div className="space-y-4">
             <label className="flex items-center gap-2 font-semibold text-primary-50">
-              Habilidades
+              Skills
             </label>
             <TagsInputDev
               value={skills}
               onChange={(tags) => setSkills(tags)}
-              placeholder="Añade habilidades y presiona enter"
+              placeholder="Add Skills and press Enter"
             />
           </div>
 
@@ -137,13 +137,13 @@ export function EditProjectModal({ project, onSubmitProject, onClose }) {
           <div className="space-y-4">
             <label className="flex items-center gap-2 font-semibold text-primary-50">
               <PiImages size={20} />
-              Galería de Imágenes
+              Images Gallery
             </label>
             {galleryFields.map((field, index) => (
               <div key={field.id} className="flex gap-2 items-center">
                 <input
                   type="url"
-                  placeholder="https://ejemplo.com/imagen.jpg"
+                  placeholder="https://example.com/image.jpg"
                   className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 flex-1 placeholder-neutral-40"
                   {...register(`gallery.${index}.url`)}
                   defaultValue={field.url}
@@ -153,7 +153,7 @@ export function EditProjectModal({ project, onSubmitProject, onClose }) {
                   onClick={() => galleryRemove(index)}
                   className="btn btn-sm bg-neutral-90 border border-neutral-60 text-red-400 hover:text-red-300"
                 >
-                  Eliminar
+                  Remove
                 </button>
               </div>
             ))}
@@ -162,7 +162,7 @@ export function EditProjectModal({ project, onSubmitProject, onClose }) {
               onClick={() => galleryAppend({ url: '' })}
               className="btn btn-sm bg-neutral-90 border border-neutral-60 text-neutral-0 hover:text-primary-40 hover:border-primary-40"
             >
-              + Añadir Imagen
+              + Add Image
             </button>
           </div>
 

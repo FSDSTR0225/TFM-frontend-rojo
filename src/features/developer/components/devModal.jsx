@@ -36,7 +36,6 @@ export default function DevModal({
     imageFile: null,
     resumeUrl: "",
   });
-  const [isResumeValid, setIsResumeValid] = useState(false);
 
 
   const {
@@ -62,7 +61,6 @@ export default function DevModal({
         pdfFile: null,
         resumeUrl: profileData.resume || "",
       });
-      setIsResumeValid(!!profileData.resume);
 
       reset({
         avatar: profileData.avatar || "",
@@ -97,7 +95,7 @@ export default function DevModal({
         pdfFile: null,
         resumeUrl: "",
       });
-      setIsResumeValid(false);
+      
 
       reset({
         avatar: "",
@@ -160,7 +158,6 @@ export default function DevModal({
         setAvatarData({ imageFile: null, avatarUrl: "" });
         setIsAvatarValid(false);
         setResumeData({ pdfFile: null, resumeUrl: "" });
-        setIsResumeValid(false);
         setOpen(false);
       }
     } catch (error) {
@@ -173,7 +170,6 @@ export default function DevModal({
     setAvatarData({ imageFile: null, avatarUrl: "" });
     setIsAvatarValid(false);
     setResumeData({ pdfFile: null, resumeUrl: "" });
-    setIsResumeValid(false);
     setOpen(false);
   };
 
@@ -246,7 +242,6 @@ export default function DevModal({
           <ResumeUpload
             data={resumeData}
             onDataChange={setResumeData}
-            onValidChange={setIsResumeValid}
             error={errors.role?.developer?.resume?.message}
           />
 
@@ -298,7 +293,7 @@ export default function DevModal({
                 }
                 className="btn btn-sm bg-neutral-70 text-neutral-0 hover:bg-neutral-60 border-neutral-60"
               >
-                + Add Languages
+                + Add Language
               </button>
             </div>
           </div>
@@ -372,7 +367,7 @@ export default function DevModal({
               disabled={isSubmitting || !isAvatarValid}
               className="btn bg-primary-60 text-neutral-10 hover:bg-primary-70 w-full md:w-auto"
             >
-              {isSubmitting ? "Saving..." : "Edit Dev Profile"}
+              {isSubmitting ? "Saving..." : "Save changes"}
             </button>
             <button
               type="button"
