@@ -63,7 +63,14 @@ export const Header = () => {
 
             {/* Panel de notificaciones */}
             {profile && notificationsOpen && (
-              <div className="absolute right-0 mt-2 w-80 max-w-xs bg-neutral-70 shadow-lg rounded-xl z-50">
+              <div
+                className={`
+                  absolute z-50 mt-2
+                  w-[95vw] max-w-xs left-1/2 -translate-x-1/2 right-auto
+                  sm:w-80 sm:max-w-xs sm:left-auto sm:right-0 sm:translate-x-0
+                  bg-neutral-70 shadow-lg rounded-xl
+                `}
+              >
                 <div className="flex justify-between items-center px-4 py-3 border-b border-base-200">
                   <span className="font-semibold text-base-content">Notificaciones</span>
                   <button
@@ -82,9 +89,9 @@ export const Header = () => {
                       .map((notif, index) => (
                         <div
                           key={notif._id || `${notif.senderName}-${notif.type}-${index}`}
-                          className="w-full bg-neutral-60 text-base-content shadow-md rounded-md p-3"
+                          className="w-full bg-neutral-60 text-base-content shadow-md rounded-md p-3 break-words"
                         >
-                          <div className="text-sm font-medium">
+                          <div className="text-sm font-medium break-words">
                             {getNotificationText(notif)}
                           </div>
                           <span className="text-xs opacity-60 block mt-1">
