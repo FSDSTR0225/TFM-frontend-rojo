@@ -35,10 +35,10 @@ export const RecProfileCard = ({ recruiter, profile, id, token, setProfile }) =>
           }
           <div className="flex flex-col items-center">
             <div className="flex items-center justify-center rounded-full w-32 h-32 text-8xl">
-              <AvatarImage user={profile} width={32} />
+              <AvatarImage user={recruiter} width={32} />
             </div>
             <h1 className="text-xl font-bold mt-4 text-center">
-              <NameUsers user={profile} classProps="text-lg font-semibold">
+              <NameUsers user={recruiter} classProps="text-lg font-semibold">
                 {profile?.role.type}
               </NameUsers>
             </h1>

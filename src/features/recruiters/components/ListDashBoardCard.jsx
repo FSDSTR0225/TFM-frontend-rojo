@@ -8,7 +8,7 @@ import { capitalize } from "../../../utils/utils"
 
 
 
-export const ListDashBoardCard = ({lists, activeTab, skillsOffer, colors, fadedColors, textColors, changeStatusCandidate, offerId, openChat, handlerDownloadCV, handlerDownloadCoverLetter }) => {
+export const ListDashBoardCard = ({lists, activeTab, skillsOffer, colors, fadedColors, textColors, changeStatusCandidate, offerId, openChat, handleDownloadCV, handleDownloadCoverLetter }) => {
 
   
 
@@ -22,7 +22,7 @@ export const ListDashBoardCard = ({lists, activeTab, skillsOffer, colors, fadedC
           const surname = capitalize(candidato?.user?.surname || '');
           const completeName = `${name} ${surname}`.trim() || 'Unknown Profile';
           const isResume = candidato?.user?.role?.developer?.resume;
-          const isCoverLetter = (candidato?.user?.role?.developer?.coverLetter?.length ?? 0) >= 5;
+          const isCoverLetter = (candidato?.coverLetter?.length ?? 0) >= 5;
           return (
     <div key={candidato._id} className="bg-neutral-80 p-4 gap-2 rounded-lg shadow-sm border border-neutral-60 flex flex-col">
                 <div
@@ -95,7 +95,7 @@ export const ListDashBoardCard = ({lists, activeTab, skillsOffer, colors, fadedC
                         
                                               <button 
                                                 onClick={() =>
-                  handlerDownloadCV(
+                  handleDownloadCV(
                     candidato.user.role.developer.resume,
                     `${completeName}_CV.pdf`
                   )
@@ -105,7 +105,7 @@ export const ListDashBoardCard = ({lists, activeTab, skillsOffer, colors, fadedC
                                                 <PiReadCvLogo size={20} />
                                               </button>
                                               <button
-                                                onClick={() => handlerDownloadCoverLetter(offerId, candidato._id)}
+                                                onClick={() => handleDownloadCoverLetter(offerId, candidato._id)}
                                                 className={`btn btn-md  bg-neutral-90 hover:bg-neutral-60 ${!isCoverLetter && 'btn-disabled'} `}
                                               >
                                                 <PiFileArrowDown size={20} />
