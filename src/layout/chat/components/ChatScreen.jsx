@@ -35,10 +35,10 @@ export const ChatScreen = ({ onClose, messages, messageEndRef, userSelected, onl
             key={message._id}
             className={`chat ${message.senderId === profile._id ? "chat-end" : "chat-start"} `}
             ref={messageEndRef}>
-            <div className="chat-image avatar border rounded-full border-neutral-50">
+            <div className="chat-image ">
               {
                 message.senderId === profile._id
-                  ? <AvatarImage user={profile} width={8} /> || "/avatar.png"
+                  ? <AvatarImage classProps={""} user={profile} width={8} /> || "/avatar.png"
                   : <AvatarImage user={userSelected} width={8} /> || "/avatar.png"
               }
             </div>
