@@ -65,11 +65,11 @@ export const Header = () => {
             {profile && notificationsOpen && (
               <div
                 className={`
-      absolute z-50 mt-2
-      w-[95vw] max-w-xs left-1/2 -translate-x-1/2 right-auto
-      sm:w-80 sm:max-w-xs sm:left-auto sm:right-0 sm:translate-x-0
-      bg-neutral-70 shadow-lg rounded-xl
-    `}
+                  absolute z-50 mt-2
+                  w-[95vw] max-w-xs left-1/2 -translate-x-1/2 right-auto
+                  sm:w-80 sm:max-w-xs sm:left-auto sm:right-0 sm:translate-x-0
+                  bg-neutral-70 shadow-lg rounded-xl
+                `}
               >
                 <div className="flex justify-between items-center px-4 py-3 border-b border-base-200">
                   <span className="font-semibold text-base-content">Notificaciones</span>
