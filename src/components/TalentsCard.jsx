@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router";
+import { NameUsers } from "../components/NameUsers";
 
 export const TalentsCard = ({
-  name,
-  surname,
+  developer,
   avatar,
   profession,
   experienceYears,
@@ -50,7 +50,12 @@ export const TalentsCard = ({
       {/* Info */}
       <div className="pt-10 mt-2 pb-4 px-4 text-center">
         <div className="text-neutral-0 font-semibold text-lg leading-tight group-hover:text-primary-40">
-          {name} {surname}
+          <NameUsers
+            classProps={
+              "font-semibold text-lg leading-tight group-hover:text-primary-40 "
+            }
+            user={developer}
+          />
         </div>
 
         {/* Profesión + años de experiencia */}

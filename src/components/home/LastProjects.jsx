@@ -80,32 +80,29 @@ export const LastProjects = () => {
         gap-6
       "
       >
-        {bestProjects
-          .slice(0, 4) // máximo 4 proyectos para md y mobile
-          .map((project, index) => {
-            // En lg+ mostramos solo 3 proyectos
-            // Ocultamos el 4to proyecto en lg y mayores
-            const isHiddenOnLg = index === 3 ? "lg:hidden" : "";
+        {bestProjects.slice(0, 4).map((project, index) => {
+          const isHiddenOnLg = index === 3 ? "lg:hidden" : "";
 
-            return (
-              <div
-                key={project._id}
-                className={`w-full aspect-[394/256] ${isHiddenOnLg}`}
-              >
-                <ProjectCard
-                  developerId={project.owner?._id}
-                  name={project.owner?.name}
-                  surname={project.owner?.surname}
-                  avatar={project.owner?.avatar}
-                  title={project.title}
-                  category={project.category}
-                  gallery={project.gallery}
-                  projectid={project._id}
-                  badgeText={project.badgeText}
-                />
-              </div>
-            );
-          })}
+          // Opcional para depurar:
+          // console.log('Owner:', project.owner);
+
+          return (
+            <div
+              key={project._id}
+              className={`w-full aspect-[394/256] ${isHiddenOnLg}`}
+            >
+              <ProjectCard
+                developerId={project.owner?._id}
+                developer={project.owner} // <== Aquí está la clave
+                title={project.title}
+                category={project.category}
+                gallery={project.gallery}
+                projectid={project._id}
+                badgeText={project.badgeText}
+              />
+            </div>
+          );
+        })}
       </div>
     </div>
   );

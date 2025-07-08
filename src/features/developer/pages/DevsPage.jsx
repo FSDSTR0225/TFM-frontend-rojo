@@ -2,8 +2,13 @@ import React, { useState, useEffect, useRef } from "react";
 import DevsCard from "../components/DevsCard";
 import { getAllDevelopers } from "../../../services/devService";
 import { getAllProjects } from "../../../services/projectService";
-import { Pagination } from '../../../components/Pagination';
-import { PiFunnel, PiFunnelX, PiSortDescending, PiSortAscending } from "react-icons/pi";
+import { Pagination } from "../../../components/Pagination";
+import {
+  PiFunnel,
+  PiFunnelX,
+  PiSortDescending,
+  PiSortAscending,
+} from "react-icons/pi";
 
 const categories = [
   "All",
@@ -19,7 +24,10 @@ const normalizeSkills = (skills) => {
   if (!skills) return [];
   if (Array.isArray(skills)) return skills.map((s) => s.trim()).filter(Boolean);
   if (typeof skills === "string")
-    return skills.split(",").map((s) => s.trim()).filter(Boolean);
+    return skills
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
   return [];
 };
 
@@ -77,7 +85,8 @@ export const DevsPage = () => {
         const devId = dev._id;
         const devCategories = projectsByDev[devId] || [];
         const uniqueCategories = [...new Set(devCategories)];
-        const categories = uniqueCategories.length > 0 ? uniqueCategories : ["Other"];
+        const categories =
+          uniqueCategories.length > 0 ? uniqueCategories : ["Other"];
         return { ...dev, categories };
       });
       setDevelopers(enrichedDevs);
@@ -92,22 +101,22 @@ export const DevsPage = () => {
   }, [activeTab, skillsFilter, experienceFilter]);
 
   useEffect(() => {
-  const updateCardsPerPage = () => {
-    const width = window.innerWidth;
+    const updateCardsPerPage = () => {
+      const width = window.innerWidth;
 
-    if (width >= 768) {
-      setCardsPerPage(12); // 3 o 4 columnas
-    } else if (width >= 640) {
-      setCardsPerPage(10); // 2 columnas
-    } else {
-      setCardsPerPage(10); // 1 columna
-    }
-  };
+      if (width >= 768) {
+        setCardsPerPage(12); // 3 o 4 columnas
+      } else if (width >= 640) {
+        setCardsPerPage(10); // 2 columnas
+      } else {
+        setCardsPerPage(10); // 1 columna
+      }
+    };
 
-  updateCardsPerPage(); // Initial call
-  window.addEventListener("resize", updateCardsPerPage);
-  return () => window.removeEventListener("resize", updateCardsPerPage);
-}, []);
+    updateCardsPerPage(); // Initial call
+    window.addEventListener("resize", updateCardsPerPage);
+    return () => window.removeEventListener("resize", updateCardsPerPage);
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -123,9 +132,7 @@ export const DevsPage = () => {
 
   const allSkills = [
     ...new Set(
-      developers.flatMap((dev) =>
-        normalizeSkills(dev.role?.developer?.skills)
-      )
+      developers.flatMap((dev) => normalizeSkills(dev.role?.developer?.skills))
     ),
   ].sort();
 
@@ -147,7 +154,7 @@ export const DevsPage = () => {
       if (!exp) return false;
 
       const years = parseInt(exp, 10);
-      
+
       if (isNaN(years)) return false;
       if (experienceFilter === "0-1") return years <= 1;
       if (experienceFilter === "2-4") return years >= 2 && years <= 4;
@@ -165,10 +172,7 @@ export const DevsPage = () => {
 
   const totalPages = Math.ceil(filteredDevs.length / cardsPerPage);
   const startIndex = (currentPage - 1) * cardsPerPage;
-  const currentDevs = filteredDevs.slice(
-    startIndex,
-    startIndex + cardsPerPage
-  );
+  const currentDevs = filteredDevs.slice(startIndex, startIndex + cardsPerPage);
 
   const handlePageChange = (pageNum) => {
     if (pageNum === currentPage) return;
@@ -184,7 +188,9 @@ export const DevsPage = () => {
 
   return (
     <div className="p-4 max-w-screen-xl mx-auto">
-      <h1 className="text-3xl font-bold mb-2 mt-10 text-neutral-0">Meet Our Developers</h1>
+      <h1 className="text-3xl font-bold mb-2 mt-4 md:mt-10 text-neutral-0">
+        Meet Our Developers
+      </h1>
       <p className="text-md font-normal mb-4 text-neutral-30">
         Discover the diverse talents and skills of our expert developers
       </p>
@@ -211,7 +217,8 @@ export const DevsPage = () => {
             <ul
               className="absolute top-12 z-50 rounded-box bg-neutral-80 shadow-2xl shadow-black border-2 border-neutral-70 min-w-85"
               onMouseLeave={(e) => {
-                const toElement = e.relatedTarget || e.nativeEvent.relatedTarget;
+                const toElement =
+                  e.relatedTarget || e.nativeEvent.relatedTarget;
                 // Si toElement no existe o no está dentro del dropdown, cierra
                 if (!toElement || !e.currentTarget.contains(toElement)) {
                   setFiltersOpen(false);
@@ -220,106 +227,106 @@ export const DevsPage = () => {
             >
               {/* Skills Filter */}
               <li className="flex flex-col flex-wrap p-2 bg-neutral-80 border-b-2 border-neutral-50">
-              <fieldset className="mb-4 flex items-center gap-2 flex-wrap overflow-auto max-h-50">
-                <legend className="mb-2 font-semibold text-primary-50">Skills</legend>
-                <div className="flex flex-wrap gap-2">
-                  {allSkills.length === 0 && (
-                    <p className="text-neutral-400">No skills available</p>
-                  )}
-                  {allSkills.map((skill) => (
-                    <label
-                      key={skill}
-                      className={`flex items-center cursor-pointer btn btn-sm rounded-full ${
-                        skillsFilter.includes(skill)
-                          ? "bg-primary-70"
-                          : "bg-neutral-55 border-none hover:bg-primary-60"
-                      }`}
-                    >
-                      <input
-                        type="checkbox"
-                        checked={skillsFilter.includes(skill)}
-                        onChange={(e) => {
-                          const checked = e.target.checked;
-                          setSkillsFilter((prev) =>
-                            checked
-                              ? [...prev, skill]
-                              : prev.filter((s) => s !== skill)
-                          );
-                        }}
-                        className="hidden"
-                      />
-                      {skill}
-                    </label>
-                  ))}
-                </div>
-              </fieldset>
-
-              {/* Experience Dropdown */}
-              <fieldset>
-                <legend className="mb-2 font-semibold text-primary-50">Experience Years</legend>
-                <div className="relative inline-block w-48" ref={dropdownRef}>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setExperienceDropdownOpen((open) => !open)
-                    }
-                    className="w-full bg-neutral-55 border border-neutral-50 text-white py-2 px-3 rounded-md flex justify-between items-center"
-                  >
-                    <span>
-                      {
-                        experienceOptions.find(
-                          (opt) => opt.value === experienceFilter
-                        )?.label || "All"
-                      }
-                    </span>
-                    <svg
-                      className={`fill-current h-4 w-4 transition-transform duration-200 ${
-                        experienceDropdownOpen ? "rotate-180" : "rotate-0"
-                      }`}
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                    >
-                      <path d="M5.516 7.548a.625.625 0 01.884-.012l3.108 2.99 3.106-2.99a.625.625 0 11.873.89l-3.6 3.47a.625.625 0 01-.87 0l-3.601-3.47a.625.625 0 01-.001-.89z" />
-                    </svg>
-                  </button>
-                  {experienceDropdownOpen && (
-                    <ul className="absolute z-50 mt-1 w-full bg-neutral-60 rounded-md shadow-lg max-h-60 overflow-auto text-white">
-                      {experienceOptions.map((option) => (
-                        <li
-                          key={option.value}
-                          className={`cursor-pointer py-2 pl-3 pr-9 hover:bg-primary-60 ${
-                            experienceFilter === option.value
-                              ? "bg-primary-700"
-                              : ""
-                          }`}
-                          onClick={() => {
-                            setExperienceFilter(option.value);
-                            setExperienceDropdownOpen(false);
+                <fieldset className="mb-4 flex items-center gap-2 flex-wrap overflow-auto max-h-50">
+                  <legend className="mb-2 font-semibold text-primary-50">
+                    Skills
+                  </legend>
+                  <div className="flex flex-wrap gap-2">
+                    {allSkills.length === 0 && (
+                      <p className="text-neutral-400">No skills available</p>
+                    )}
+                    {allSkills.map((skill) => (
+                      <label
+                        key={skill}
+                        className={`flex items-center cursor-pointer btn btn-sm rounded-full ${
+                          skillsFilter.includes(skill)
+                            ? "bg-primary-70"
+                            : "bg-neutral-55 border-none hover:bg-primary-60"
+                        }`}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={skillsFilter.includes(skill)}
+                          onChange={(e) => {
+                            const checked = e.target.checked;
+                            setSkillsFilter((prev) =>
+                              checked
+                                ? [...prev, skill]
+                                : prev.filter((s) => s !== skill)
+                            );
                           }}
-                        >
-                          <span
-                            className={`block truncate ${
-                              experienceFilter === option.value
-                                ? "font-semibold"
-                                : "font-normal"
-                            }`}
-                          >
-                            {option.label}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              </fieldset>
+                          className="hidden"
+                        />
+                        {skill}
+                      </label>
+                    ))}
+                  </div>
+                </fieldset>
 
-              {/* Reset Filters */}
-              <button
-                onClick={resetFilters}
-                className="mt-4 btn btn-outline btn-error w-full"
-              >
-                Reset Filters
-              </button>
+                {/* Experience Dropdown */}
+                <fieldset>
+                  <legend className="mb-2 font-semibold text-primary-50">
+                    Experience Years
+                  </legend>
+                  <div className="relative inline-block w-48" ref={dropdownRef}>
+                    <button
+                      type="button"
+                      onClick={() => setExperienceDropdownOpen((open) => !open)}
+                      className="w-full bg-neutral-55 border border-neutral-50 text-white py-2 px-3 rounded-md flex justify-between items-center"
+                    >
+                      <span>
+                        {experienceOptions.find(
+                          (opt) => opt.value === experienceFilter
+                        )?.label || "All"}
+                      </span>
+                      <svg
+                        className={`fill-current h-4 w-4 transition-transform duration-200 ${
+                          experienceDropdownOpen ? "rotate-180" : "rotate-0"
+                        }`}
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M5.516 7.548a.625.625 0 01.884-.012l3.108 2.99 3.106-2.99a.625.625 0 11.873.89l-3.6 3.47a.625.625 0 01-.87 0l-3.601-3.47a.625.625 0 01-.001-.89z" />
+                      </svg>
+                    </button>
+                    {experienceDropdownOpen && (
+                      <ul className="absolute z-50 mt-1 w-full bg-neutral-60 rounded-md shadow-lg max-h-60 overflow-auto text-white">
+                        {experienceOptions.map((option) => (
+                          <li
+                            key={option.value}
+                            className={`cursor-pointer py-2 pl-3 pr-9 hover:bg-primary-60 ${
+                              experienceFilter === option.value
+                                ? "bg-primary-700"
+                                : ""
+                            }`}
+                            onClick={() => {
+                              setExperienceFilter(option.value);
+                              setExperienceDropdownOpen(false);
+                            }}
+                          >
+                            <span
+                              className={`block truncate ${
+                                experienceFilter === option.value
+                                  ? "font-semibold"
+                                  : "font-normal"
+                              }`}
+                            >
+                              {option.label}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                </fieldset>
+
+                {/* Reset Filters */}
+                <button
+                  onClick={resetFilters}
+                  className="mt-4 btn btn-outline btn-error w-full"
+                >
+                  Reset Filters
+                </button>
               </li>
             </ul>
           )}
@@ -375,7 +382,7 @@ export const DevsPage = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
           {currentDevs.map((developer) => (
             <DevsCard
-            developer={developer}
+              developer={developer}
               key={developer._id}
               developerId={developer._id}
               name={developer.name}
