@@ -67,14 +67,21 @@ export const TalentsCard = ({
 
       {/* Avatar flotante */}
       <div className="absolute top-11 left-1/2 transform -translate-x-1/2 z-20">
+        {/* Capa con borde degradado */}
         <div className="p-0.5 rounded-full bg-gradient-to-br from-primary-40 to-secondary-40">
-          <figure>
+          {/* Máscara circular con fondo blanco */}
+          <div className="rounded-full bg-white w-24 h-24 overflow-hidden flex items-center justify-center">
+            {/* Imagen centrada, ajustando proporciones sin deformar */}
             <img
               src={avatar}
               alt="Avatar"
-              className="w-24 h-24 rounded-full bg-white"
+              className="max-w-none max-h-full"
+              style={{
+                width: "auto",
+                height: "100%",
+              }}
             />
-          </figure>
+          </div>
         </div>
       </div>
 
