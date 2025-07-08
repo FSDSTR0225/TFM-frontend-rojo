@@ -167,6 +167,10 @@ const getFilteredOffersByDev = () => {
   const totalPages = Math.ceil(filteredOffers.length / 6);
   const totalPagesApplied = Math.ceil(filteredAppliedOffers.length / 6);
   const totalPagesByDev = Math.ceil(filteredOffersByDev.length / 6);
+
+  const isListCard = filteredOffers.length > 3;
+  const isListCardApplied = filteredAppliedOffers.length > 3;
+  const isListCardByDev = filteredOffersByDev.length > 3;
   
   const startIndex = (currentPage - 1) * 6;
 
@@ -304,7 +308,11 @@ const fetchOffers= async () => {
         resetFilters={resetFilters}
       />
 
-      <OfferList view={true}>
+      <OfferList view={true}
+          isListCard={isListCard}
+          isListCardApplied={isListCardApplied}
+          isListCardByDev={isListCardByDev}
+          >
         {currentOffersByDev?.map((offer) => {
           return (
             <OfferCard
@@ -345,7 +353,11 @@ const fetchOffers= async () => {
         resetFilters={resetFilters}
       />
 
-      <OfferList view={true}>
+      <OfferList view={true}
+      isListCard={isListCard}
+          isListCardApplied={isListCardApplied}
+          isListCardByDev={isListCardByDev}
+          >
         {currentAppliedOffers?.map((offer) => {
           return (
             <OfferCard
@@ -387,7 +399,11 @@ const fetchOffers= async () => {
         resetFilters={resetFilters}
       />
 
-      <OfferList view={true}>
+      <OfferList view={true}
+      isListCard={isListCard}
+          isListCardApplied={isListCardApplied}
+          isListCardByDev={isListCardByDev}
+          >
         {currentOffers?.map((offer) => {
           return (
             <OfferCard
