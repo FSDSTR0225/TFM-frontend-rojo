@@ -104,7 +104,7 @@ export const Header = () => {
         </div>
 
         {/* Menu User */}
-        <AuthMenu profile={profile} logout={logout} />
+        <AuthMenu profile={profile} logout={logout} notifications={notifications} setNotifications={setNotifications} setNotificationsOpen={setNotificationsOpen} getNotificationText={getNotificationText} />
       </div>
       <SideMenu onClose={toggleSideMenu} />
     </header>
