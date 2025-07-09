@@ -73,11 +73,11 @@ export const OfferModal = ({ token, reloadPage, idOffer, isOpen, setIsOpen, oper
     <dialog open={isOpen} className="modal">
       <div className="inset-0 flex items-center justify-center">
         {/* Caja del modal centrada */}
-        <div className="modal-box max-w-3xl w-full bg-neutral-80 border border-neutral-70 text-neutral-0 shadow-md rounded-lg">
+        <div className="modal-box max-w-3xl w-full bg-neutral-80 border border-neutral-70 text-neutral-0 shadow-md rounded-lg my-auto self-center">
           <form
             method="dialog"
             onSubmit={handleSubmit(onSubmit)}
-            className="space-y-6 p-6"
+            className="space-y-6 p-4 sm:p-6"
           >
             <h2 className="text-3xl font-bold text-center mb-4">Post a Job Offer</h2>
             <hr className="border-t border-neutral-60" />

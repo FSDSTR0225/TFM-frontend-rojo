@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router";
-import { getDaysSince, summarizerText } from "../../../utils/utils";
+import { getDaysSince } from "../../../utils/utils";
 import { MdOutlineAccessTime } from "react-icons/md";
 
 import { MainRecButton } from "../../../components/MainRecButton";
@@ -11,9 +11,7 @@ import Badge from "./Badge";
 import { AvatarImage } from "../../../components/AvatarImage";
 import { NameUsers } from "../../../components/NameUsers";
 import { ChatContext } from "../../../layout/chat/context/ChatContext";
-import { useState } from "react";
-import { useEffect } from "react";
-import { useSummarizer } from "../../../context/SummarizerContext";
+
 
 export const OfferCard = ({
   classProps,
@@ -27,30 +25,7 @@ export const OfferCard = ({
   setIsOpenModalEdit,
 }) => {
 
-  const { isSummarizerReady } = useSummarizer();
 
-  const [displayDescription, setDisplayDescription] = useState(offer?.description);
-
-  // Efecto para resumir cuando isSummarizerReady cambia a true O la oferta cambia
-  useEffect(() => {
-    const processDescription = async () => {
-      if (offer?.description && isSummarizerReady) {
-        const result = await summarizerText(offer.description);
-        if (result.success) {
-          setDisplayDescription(result.text);
-        } else {
-          // Si falla por alguna razón (incluso estando isSummarizerReady),
-          // vuelve a mostrar la descripción completa
-          setDisplayDescription(offer.description);
-        }
-      } else {
-        // Si el summarizer no está listo, muestra la descripción completa
-        setDisplayDescription(offer.description);
-      }
-    };
-
-    processDescription();
-  }, [offer?.description, isSummarizerReady]); // Depende de la oferta y del estado global
 
   const navigate = useNavigate();
   const { profile, token } = useContext(AuthContext);
@@ -171,7 +146,7 @@ export const OfferCard = ({
           </div>
         </div>
         <div>
-          <p className="line-clamp-3">{displayDescription}</p>
+          <p className="line-clamp-3">{offer?.description}</p>
         </div>
 
         {!isOwner && !isRecruiter && (

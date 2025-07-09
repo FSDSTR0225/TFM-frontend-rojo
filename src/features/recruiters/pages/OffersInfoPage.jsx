@@ -11,8 +11,6 @@ import { FilterOffers } from "../components/FilterOffers";
 import { useContext } from "react";
 import { AuthContext } from "../../../context/authContext";
 import { ApplyModal } from "../components/ApplyModal";
-import { summarizerTextTest } from "../../../utils/utils";
-import { useSummarizer } from "../../../context/SummarizerContext";
 
 
 export const OffersInfoPage = () => {
@@ -37,41 +35,6 @@ export const OffersInfoPage = () => {
   const { profile } = useContext(AuthContext);
 
   const isDeveloper = profile?.role.type === "developer";
-
-  const { 
-    isSummarizerReady, 
-    setIsSummarizerReady, 
-    isSummarizerAPIAvailable, 
-    setIsSummarizerAPIAvailable, 
-    summarizerMessage, 
-    setSummarizerMessage 
-  } = useSummarizer();
-
-  // Efecto para comprobar la disponibilidad de la API al cargar la página
-  useEffect(() => {
-    if ('Summarizer' in window) {
-      setIsSummarizerAPIAvailable(true);
-    } else {
-      setSummarizerMessage("La API de resumen de Chrome no está disponible en tu navegador.");
-    }
-  }, []);
-
-  const handleActivateSummarizer = async () => {
-    setSummarizerMessage("Activando resúmenes...");
-    const result = await summarizerTextTest(); // Llama a la función de prueba
-    if (result.success) {
-      setIsSummarizerReady(true);
-      setSummarizerMessage("Resúmenes activados. Las descripciones se están resumiendo.");
-    } else if (result.errorType === "user_gesture_required") {
-      // Esto no debería ocurrir si el clic ya es el user gesture, pero es una buena práctica
-      setSummarizerMessage("Por favor, haz clic en 'Activar Resúmenes' de nuevo si la descripción no se actualiza. Requiere un gesto de usuario.");
-    } else if (result.errorType === "api_not_available") {
-      setSummarizerMessage("La API de resumen de Chrome no está disponible en tu navegador.");
-    } else {
-      setSummarizerMessage("Error al activar los resúmenes. Asegúrate de tener las flags de Chrome habilitadas.");
-    }
-  };
-
 
 
 
@@ -260,7 +223,7 @@ const fetchOffers= async () => {
   };
 
   return (
-    <SectionContainer>
+    <SectionContainer classProps='py-12'>
       <div>
         <h2 className='text-3xl font-bold'>Your Next Tech Career Starts Here</h2>
         <p className='text-neutral-10 text-lg '>
@@ -268,28 +231,7 @@ const fetchOffers= async () => {
           fields.
         </p>
       </div>
-            {/* Botón de activación y mensaje */}
-      {isSummarizerAPIAvailable && !isSummarizerReady && (
-        <div className="">
-          
-          <button
-            onClick={handleActivateSummarizer}
-            className="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-          >
-            Activate Summaries with AI
-          </button>
-        </div>
-      )}
-      {!isSummarizerAPIAvailable && (
-        <div className="mb-4 p-4 bg-yellow-100 border border-yellow-400 text-yellow-700 rounded" role="alert">
-            <p>{summarizerMessage}</p>
-        </div>
-      )}
-      {isSummarizerReady && (
-        <div className="mb-4 p-2 bg-green-100 border border-green-400 text-green-700 rounded" role="alert">
-            <p>{summarizerMessage}</p>
-        </div>
-      )}
+   
       <div>
         {isDeveloper && (
         <div className="tabs tabs-border mt-4">
