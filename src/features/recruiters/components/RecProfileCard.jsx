@@ -6,7 +6,7 @@ import { AvatarImage } from '../../../components/AvatarImage';
 import { NameUsers } from '../../../components/NameUsers'
 import { RecModalEdit } from './RecModalEdit';
 import { getUserLogged } from '../../../services/authService';
-export const RecProfileCard = ({ recruiter, profile, id, token, setProfile }) => {
+export const RecProfileCard = ({ recruiter, profile, id, token, setProfile, onRecruiterUpdate}) => {
   const navigate = useNavigate();
   const [isRecModalOpen, setIsRecModalOpen] = useState(false);
   const isOwner = profile?._id === id;
@@ -18,6 +18,9 @@ export const RecProfileCard = ({ recruiter, profile, id, token, setProfile }) =>
   const updateProfile = async() => {
     let freshProfile = await getUserLogged(token);
     setProfile(freshProfile);
+    if (onRecruiterUpdate) {
+      await onRecruiterUpdate();
+    }
   }
 
   const handleOpenModal = () => {
@@ -142,6 +145,7 @@ export const RecProfileCard = ({ recruiter, profile, id, token, setProfile }) =>
             setOpenModal={setIsRecModalOpen}
             profile={profile}
             onProfileUpdate={updateProfile}
+            setProfile={setProfile}
           />
         )}
 

@@ -32,6 +32,8 @@ export const RecProfile = () => {
 
 
 
+
+
   const totalPages = Math.ceil(offers.length / 4);
   const startIndex = (currentPage - 1) * 4;
   const currentOffers = offers.slice(startIndex, startIndex + 4);
@@ -40,6 +42,15 @@ export const RecProfile = () => {
     if (pageNum === currentPage) return;
     setCurrentPage(pageNum); // Primero actualizamos la página 
   };
+
+  const updateRecruiterData = async () => {
+  try {
+    const recruiterData = await getRecruiterById(id);
+    setRecruiter(recruiterData);
+  } catch (error) {
+    console.error("Error fetching recruiter data:", error);
+  }
+};
 
   const fetchData = async () => {
     try {
@@ -55,6 +66,8 @@ export const RecProfile = () => {
   };
 
 
+
+
   useEffect(() => {
     console.log("isOpenModalEdit:", isOpenModalEdit)
     fetchData();
@@ -65,12 +78,12 @@ export const RecProfile = () => {
     <SectionContainer classProps={"py-12"} >
 
       <div className='flex flex-col md:flex-row  gap-4 '>
-        <RecProfileCard recruiter={recruiter} token={token} profile={profile} id={id} setProfile={setProfile}/>
+        <RecProfileCard recruiter={recruiter} token={token} profile={profile} id={id} setProfile={setProfile} onRecruiterUpdate={updateRecruiterData}/>
         <div className="w-full flex flex-col">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-semibold">My Offers</h2>
           </div>
-          <div className='flex flex-col p-4 border border-neutral-70 rounded-lg h-full justify-between'>
+          <div className='flex flex-col p-6 border border-neutral-70 rounded-lg h-full justify-between'>
           {(isOwner && profile?.role?.type === 'recruiter') && (<><button onClick={() => setTsOpenModalCreate(true)} className="bg-secondary-50 text-black px-4 py-2 rounded hover:bg-secondary-70 transition cursor-pointer text-sm self-end">
               + Create new offer
             </button>
@@ -88,7 +101,7 @@ export const RecProfile = () => {
               </div>
             </div>
             }
-            <div className=" grid lg:grid-cols-2 gap-8 py-4 flex-1">
+            <div className=" grid lg:grid-cols-1 gap-8 py-4 flex-1">
               {currentOffers?.map((offer) => {
                 return (
                   <OfferCard

@@ -112,7 +112,7 @@ export const OfferCard = ({
       onClick={handleCardClick}
       className={`${
         classProps && classProps
-      } card border bg-neutral-80 border-neutral-70 cursor-pointer max-h-80 shadow-xl hover:bg-neutral-90 transition-transform transform hover:scale-105 `}
+      } card border bg-neutral-80 border-neutral-70 cursor-pointer max-h-85 shadow-xl hover:bg-neutral-90 transition-transform transform hover:scale-105 `}
     >
       <div className="card-body p-4 sm:p-6  justify-between">
         <div className="flex justify-between items-center">
