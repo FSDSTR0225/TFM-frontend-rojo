@@ -12,6 +12,7 @@ import { RecProfileCard } from '../components/RecProfileCard';
 import { ModalDelete } from '../components/ModalDelete';
 import { ApplyModal } from '../components/ApplyModal';
 
+
 export const RecProfile = () => {
   const [offers, setOffers] = useState([]);
   const [isOpenModalDelete, setIsOpenModalDelete] = useState(false);
@@ -80,6 +81,13 @@ export const RecProfile = () => {
                 operacion={operacion}
                 reloadPage={fetchData} />
             </>)}
+            {offers.length === 0 && 
+            <div className="flex  self-center items-end gap-8 py-4 flex-1">
+              <div className=" bg-neutral-80 p-4 rounded-lg border border-neutral-70 md:w-md">
+                <p className="text-center self-center text-neutral-20">You don't have any job offers yet. Create one now and start receiving applications!</p>
+              </div>
+            </div>
+            }
             <div className=" grid lg:grid-cols-2 gap-8 py-4 flex-1">
               {currentOffers?.map((offer) => {
                 return (
