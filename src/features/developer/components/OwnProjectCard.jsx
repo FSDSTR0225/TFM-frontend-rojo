@@ -18,7 +18,7 @@ function OwnProjectCard({ profileInfo }) {
   const [error, setError] = useState(null);
   const [projectToEdit, setProjectToEdit] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [projectsPerPage] = useState(4);
+  const [projectsPerPage] = useState(3);
   const navigate = useNavigate();
 
   const isCurrentUserProfile = profileInfo?._id === currentUserProfile?._id;
@@ -66,7 +66,7 @@ function OwnProjectCard({ profileInfo }) {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm("¿Seguro que quieres eliminar este proyecto?")) return;
+    if (!confirm("Are you sure you want to delete this project?")) return;
 
     const res = await softDeleteProject(id, token);
     if (!res.error) {
@@ -85,7 +85,7 @@ function OwnProjectCard({ profileInfo }) {
         handleCloseNewModal();
       }
     } catch {
-      setError('Error al crear el proyecto');
+      setError('Error creating project');
     } finally {
       setLoading(false);
     }
@@ -102,7 +102,7 @@ function OwnProjectCard({ profileInfo }) {
         handleCloseEditModal();
       }
     } catch {
-      setError('Error al actualizar el proyecto');
+      setError('Error updating project');
     } finally {
       setLoading(false);
     }
@@ -151,9 +151,18 @@ function OwnProjectCard({ profileInfo }) {
       )}
 
       {sortedProjects.length === 0 ? (
-        <div className="text-neutral-50 text-sm">
-          <span>No projects yet.</span>
+      <div className="flex flex-col items-center justify-center py-16 px-6 text-center">
+        <div className="w-20 h-20 mx-auto mb-6 bg-neutral-70 rounded-full flex items-center justify-center">
+          <PiEye className="text-3xl text-neutral-30" />
         </div>
+        <h3 className="text-xl font-semibold text-neutral-20 mb-3">
+          There are no projects yet
+        </h3>
+        <p className="text-neutral-40 max-w-md">
+          {profileInfo?.name || 'This developer'} hasn't shared any projects yet.
+        </p>
+        <p className="text-neutral-40 max-w-md">Check back soon to see them!</p>
+      </div>
       ) : (
         <div className="w-full">
           <div className="grid grid-cols-1 gap-6">
@@ -210,7 +219,7 @@ function OwnProjectCard({ profileInfo }) {
                     {/* Contenido */}
                     <div className="flex-1 px-6">
                       <p className="text-sm mb-2">
-                        {project.description || 'Sin descripción'}
+                        {project.description || 'No description'}
                       </p>
                       
                       <p className="font-medium mb-4">{project.year || ''}</p>
@@ -298,7 +307,7 @@ function OwnProjectCard({ profileInfo }) {
                       
                       <div className="flex items-center justify-between mb-2">
                         <span className="bg-primary-60/20 text-primary-50 rounded-md px-2 py-0.5 w-fit h-fit inline-block text-xs">
-                          {project.category || 'No se especifica el tipo de proyecto'}
+                          {project.category || 'The type of project is not specified'}
                         </span>
                         <div className="flex items-center gap-1 text-neutral-40 text-sm">
                           <PiEye className="text-primary-80" size={16} />
@@ -310,7 +319,7 @@ function OwnProjectCard({ profileInfo }) {
                     {/* Contenido */}
                     <div className="flex-1 px-6">
                       <p className="text-sm mb-2">
-                        {project.description || 'Sin descripción'}
+                        {project.description || 'No description'}
                       </p>
                       
                       <p className="font-medium mb-4">{project.year || ''}</p>

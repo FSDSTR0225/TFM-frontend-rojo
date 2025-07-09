@@ -406,17 +406,17 @@ export const NewProjectModal = ({ onClose }) => {
 
 
         {/* Buttons */}
-        <div className="flex justify-end gap-4 pt-4">
+          <div className="flex flex-col sm:flex-row sm:justify-end gap-3 pt-4">
           <button
             type="submit"
             disabled={loading}
-            className="btn bg-primary-60 text-neutral-10 hover:bg-primary-70 w-full md:w-auto"
+              className="btn bg-primary-60 text-neutral-10 hover:bg-primary-70"
           >
             {loading ? "Saving..." : "Publish Project"}
           </button>
           <button
             type="button"
-            className="btn bg-neutral-70 text-neutral-10 hover:bg-neutral-60 border border-neutral-60 w-full md:w-auto"
+              className="btn bg-neutral-70 text-neutral-10 hover:bg-neutral-60 border border-neutral-60"
             onClick={onClose}
             disabled={loading}
           >

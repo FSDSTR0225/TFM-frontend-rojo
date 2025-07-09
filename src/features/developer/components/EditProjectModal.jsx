@@ -190,17 +190,17 @@ export function EditProjectModal({ project, onSubmitProject, onClose }) {
           </div>
 
           {/* Buttons */}
-          <div className="flex justify-end gap-4 pt-4">
+          <div className="flex flex-col sm:flex-row sm:justify-end gap-3 pt-4">
             <button
               type="submit"
               disabled={isSubmitting}
-              className="btn bg-primary-60 text-neutral-10 hover:bg-primary-70 w-full md:w-auto"
+              className="btn bg-primary-60 hover:bg-primary-70"
             >
               {isSubmitting ? "Saving..." : "Edit Project"}
             </button>
             <button
               type="button"
-              className="btn bg-neutral-70 text-neutral-10 hover:bg-neutral-60 border border-neutral-60 w-full md:w-auto"
+              className="btn bg-neutral-70 hover:bg-neutral-60 border border-neutral-60"
               onClick={onClose}
               disabled={isSubmitting}
             >
