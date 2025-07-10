@@ -1,9 +1,6 @@
 // src/components/ProjectInfoCard.js
 import React, { useState } from "react";
 import { Link } from "react-router";
-<<<<<<< HEAD
-import { PiUser, PiCalendar, PiClock, PiGithubLogo, PiHeartStraight, PiEye, PiArrowSquareOut, PiChatText } from "react-icons/pi";
-=======
 import {
   PiUser,
   PiCalendar,
@@ -14,7 +11,6 @@ import {
   PiArrowSquareOut,
   PiChatText,
 } from "react-icons/pi";
->>>>>>> dev
 import { AvatarImage } from "../../../components/AvatarImage";
 import { NameUsers } from "../../../components/NameUsers";
 
@@ -34,15 +30,9 @@ export const ProjectInfoCard = ({ project, setSelectedOwner }) => {
     owner,
   } = project;
 
-<<<<<<< HEAD
-  setSelectedOwner(owner);
-
-  const skillsToShow = showAllSkills ? projectSkills : projectSkills?.slice(0, 5) || [];
-=======
   const skillsToShow = showAllSkills
     ? projectSkills
     : projectSkills?.slice(0, 5) || [];
->>>>>>> dev
 
   return (
     <div className="relative bg-neutral-80 flex flex-col rounded-lg shadow-md overflow-hidden border border-neutral-70 p-8 text-inherit no-underline w-full max-w-full">
@@ -69,11 +59,7 @@ export const ProjectInfoCard = ({ project, setSelectedOwner }) => {
           {owner && (
             <div className="flex flex-col justify-center items-center mt-4 mb-2 relative">
               <Link to={`/profile/${owner._id}`} className="relative group">
-<<<<<<< HEAD
-                <AvatarImage user={owner} width={8} />
-=======
                 <AvatarImage user={owner} width={16} />
->>>>>>> dev
                 {/* <img
                   src={owner.avatar}
                   alt={`${owner.name} ${owner.surname}`}
@@ -170,13 +156,9 @@ export const ProjectInfoCard = ({ project, setSelectedOwner }) => {
                       type="button"
                       onClick={() => setShowAllSkills(true)}
                       className="bg-neutral-60 text-neutral-30 px-2 py-0.5 rounded-full text-sm cursor-pointer"
-<<<<<<< HEAD
-                      aria-label={`Show ${projectSkills.length - 5} more skills`}
-=======
                       aria-label={`Show ${
                         projectSkills.length - 5
                       } more skills`}
->>>>>>> dev
                     >
                       +{projectSkills.length - 5}
                     </button>
