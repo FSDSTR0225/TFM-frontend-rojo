@@ -83,7 +83,7 @@ export const RecProfile = () => {
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-semibold">My Offers</h2>
           </div>
-          <div className='flex flex-col p-6 border border-neutral-70 rounded-lg h-full justify-between'>
+          <div className='flex flex-col p-6 h-full justify-between'>
           {(isOwner && profile?.role?.type === 'recruiter') && (<><button onClick={() => setTsOpenModalCreate(true)} className="bg-secondary-50 text-black px-4 py-2 rounded hover:bg-secondary-70 transition cursor-pointer text-sm self-end">
               + Create new offer
             </button>
@@ -114,7 +114,10 @@ export const RecProfile = () => {
               setIsOpenApplyModal={setIsOpenModalApply}
                     isOpenModalEdit={isOpenModalEdit}
                     setIsOpenModalEdit={setIsOpenModalEdit}
-                    key={offer._id} />
+                    key={offer._id} 
+                    classProps={""}
+                    />
+                    
                 )
               })}
             </div>

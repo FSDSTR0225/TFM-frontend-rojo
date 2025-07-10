@@ -28,7 +28,7 @@ export const RecProfileCard = ({ recruiter, profile, id, token, setProfile, onRe
   };
 
   return (
-    <div className="flex flex-col gap-4 w-full md:w-1/2 lg:w-1/3">
+    <div className="flex flex-col gap-4 w-full md:w-1/2 lg:w-1/2">
       <div className="card bg-neutral-80 shadow-xl border border-neutral-70 flex-col text-sm md:text-lg w-full md:max-w-100">
         <div className="card-body gap-3 items-center">
           {isOwner && profile?.role?.type === 'recruiter' &&
