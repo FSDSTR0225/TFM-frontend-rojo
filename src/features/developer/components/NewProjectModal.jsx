@@ -1,16 +1,11 @@
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import {
-  PiTrash,
-  PiImages,
-  PiFilmSlate,
-  PiCodeBlock,
-  PiFile,
-} from "react-icons/pi";
+import { PiTrash, PiImages, PiCodeBlock, PiFile } from "react-icons/pi";
 import { CategorySelect } from "../components/CategorySelect";
 import { TagsInputDev } from "../components/TagsInputDev";
 import { createProject } from "../../../services/projectService";
+import { AvatarUpload } from "../components/AvatarUpload";
 
 export const NewProjectModal = ({ onClose }) => {
   const navigate = useNavigate();
@@ -22,75 +17,80 @@ export const NewProjectModal = ({ onClose }) => {
     formState: { errors },
     setValue,
     watch,
-  } = useForm({
-    mode: "onChange",
-  });
+  } = useForm({ mode: "onChange" });
+
   const [codeSections, setCodeSections] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const [galleryUrls, setGalleryUrls] = useState([""]);
-  const [videoUrl, setVideoUrl] = useState("");
-  const [showVideo, setShowVideo] = useState(false);
+  // Gallery slots max 5
+  const [gallerySlots, setGallerySlots] = useState([
+    { avatarUrl: null, imageFile: null },
+  ]);
 
   const skills = watch("projectSkills") || [];
-
   const currentYear = new Date().getFullYear();
 
-  const isValidImageUrl = (url) => {
-    if (!url) return false;
-    return (
-      /\.(jpg|jpeg|png|gif|webp)(\?.*)?$/i.test(url) ||
-      url.includes("format=auto")
-    );
+  const onSlotChange = (index, data) => {
+    setGallerySlots((prev) => {
+      const updated = [...prev];
+      updated[index] = data;
+
+      const hasEmpty = updated.some((s) => !s.avatarUrl);
+      if (!hasEmpty && updated.length < 5) {
+        updated.push({ avatarUrl: null, imageFile: null });
+      }
+
+      const filtered = [];
+      let emptyCount = 0;
+      for (const slot of updated) {
+        if (!slot.avatarUrl) {
+          emptyCount++;
+          if (emptyCount > 1) continue;
+        }
+        filtered.push(slot);
+      }
+
+      return filtered.slice(0, 5);
+    });
   };
 
-  const handleGalleryChange = (index, value) => {
-    const updated = [...galleryUrls];
-    updated[index] = value;
-    setGalleryUrls(updated);
-  };
+  const onSlotRemove = (index) => {
+    setGallerySlots((prev) => {
+      const updated = [...prev];
+      updated[index] = { avatarUrl: null, imageFile: null };
 
-  const handleAddGallery = () => {
-    if (galleryUrls.length < 5) {
-      setGalleryUrls([...galleryUrls, ""]);
-    }
-  };
+      const hasEmpty = updated.some((s) => !s.avatarUrl);
+      if (!hasEmpty) {
+        updated.push({ avatarUrl: null, imageFile: null });
+      }
 
-  const handleRemoveGallery = (index) => {
-    const updated = [...galleryUrls];
-    updated.splice(index, 1);
-    setGalleryUrls(updated);
-  };
+      const filtered = [];
+      let emptyCount = 0;
+      for (const slot of updated) {
+        if (!slot.avatarUrl) {
+          emptyCount++;
+          if (emptyCount > 1) continue;
+        }
+        filtered.push(slot);
+      }
 
-  const handleAddCodeSection = () => {
-    setCodeSections([...codeSections, ""]);
-  };
-
-  const handleCodeChange = (index, value) => {
-    const updated = [...codeSections];
-    updated[index] = value;
-    setCodeSections(updated);
+      return filtered.slice(0, 5);
+    });
   };
 
   const onSubmit = async (data) => {
     setLoading(true);
     setError(null);
 
-    const filteredGallery = galleryUrls
-      .map((url) => url.trim())
-      .filter((url) => isValidImageUrl(url));
-
-    const cleanVideoUrl =
-      showVideo && /\.(mp4|webm|ogg)$/i.test(videoUrl.trim())
-        ? videoUrl.trim()
-        : null;
+    const filteredGallery = gallerySlots
+      .map((item) => item.avatarUrl?.trim())
+      .filter((url) => !!url);
 
     const payload = {
       ...data,
       codeSections,
       gallery: filteredGallery,
-      videoUrl: cleanVideoUrl,
     };
 
     const token = localStorage.getItem("token");
@@ -105,10 +105,8 @@ export const NewProjectModal = ({ onClose }) => {
       console.log("ID del proyecto creado:", project.project._id);
 
       reset();
-      setCodeSections([""]);
-      setGalleryUrls([""]);
-      setVideoUrl("");
-      setShowVideo(false);
+      setCodeSections([]);
+      setGallerySlots([{ avatarUrl: null, imageFile: null }]);
       onClose();
 
       navigate(`/projects/${project.project._id}`);
@@ -117,6 +115,52 @@ export const NewProjectModal = ({ onClose }) => {
     } finally {
       setLoading(false);
     }
+  };
+
+  // Slots galería arriba (solo slots, sin AvatarUpload)
+  const GallerySlots = () => (
+    <div className="flex gap-2 overflow-x-auto pb-2 max-w-full">
+      {gallerySlots
+        .filter((slot) => slot.avatarUrl)
+        .map((slot, i) => (
+          <div
+            key={i}
+            className="relative w-30 h-30 border border-neutral-600 rounded-lg bg-neutral-900 flex justify-center items-center overflow-hidden flex-shrink-0"
+          >
+            <img
+              src={slot.avatarUrl}
+              alt={`Imagen ${i + 1}`}
+              className="w-full h-full object-cover"
+            />
+            <button
+              onClick={() => onSlotRemove(i)}
+              className="absolute top-1 right-1 bg-black bg-opacity-60 rounded-full w-6 h-6 flex justify-center items-center text-white cursor-pointer"
+              title="Eliminar imagen"
+              type="button"
+            >
+              <PiTrash size={16} />
+            </button>
+          </div>
+        ))}
+    </div>
+  );
+
+  // Componente para añadir nueva imagen debajo, con tamaño fijo
+  const AddImage = () => {
+    const emptyIndex = gallerySlots.findIndex((s) => !s.avatarUrl);
+    if (emptyIndex === -1) return null;
+
+    return (
+      <div>
+        <AvatarUpload
+          data={gallerySlots[emptyIndex]}
+          onDataChange={(data) => onSlotChange(emptyIndex, data)}
+          onValidChange={() => {}}
+          style={{ width: 120, height: 120 }}
+          showTitle={false}
+        />
+      </div>
+    );
   };
 
   return (
@@ -130,13 +174,13 @@ export const NewProjectModal = ({ onClose }) => {
         {error && <p className="text-red-400 mb-2">{error}</p>}
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          {/* Project Details */}
           <section className="space-y-4 mt-3">
-            <header className="flex items-center gap-2 text-primary-50 font-semibold text-lg ">
+            <header className="flex items-center gap-2 text-primary-50 font-semibold text-lg">
               <PiFile size={20} />
               <h3>Project Details</h3>
             </header>
 
-            {/* Project Title */}
             <label
               className="block text-sm text-neutral-20 mb-1"
               htmlFor="title"
@@ -151,7 +195,6 @@ export const NewProjectModal = ({ onClose }) => {
               {...register("title", { required: true })}
             />
 
-            {/* Year, Role, Duration */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label
@@ -255,7 +298,6 @@ export const NewProjectModal = ({ onClose }) => {
               </div>
             </div>
 
-            {/* Project Description */}
             <label
               className="block text-sm text-neutral-20 mb-1"
               htmlFor="description"
@@ -268,121 +310,32 @@ export const NewProjectModal = ({ onClose }) => {
               className="textarea textarea-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
               {...register("description")}
             />
-
             <hr className="border-t border-neutral-55 mt-3" />
           </section>
 
           {/* Image Gallery Section */}
-          <div className="space-y-4 pt-4">
+          <div className="pt-4">
             <div className="text-primary-50">
               <label className="font-semibold flex items-center gap-2 mb-1">
                 <PiImages size={20} />
-                Add Images
+                Upload Images
               </label>
               <p className="text-sm text-neutral-30">
-                Add up to five images. The first will be the project thumbnail.
+                Upload up to five images. The first will be the project
+                thumbnail.
               </p>
             </div>
-
-            <div className="flex gap-4 overflow-x-auto pb-2">
-              {galleryUrls.map((url, index) => (
-                <div
-                  key={index}
-                  className="relative flex-shrink-0 w-28 h-28 rounded overflow-hidden border border-neutral-60 bg-neutral-60"
-                >
-                  {url && isValidImageUrl(url) ? (
-                    <img
-                      src={url}
-                      alt={`Image ${index + 1}`}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <span className="flex items-center justify-center w-full h-full text-sm text-neutral-40 ">
-                      Preview
-                    </span>
-                  )}
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveGallery(index)}
-                    className="absolute top-1 right-1 bg-neutral-90 text-primary-40 hover:text-primary-70 font-bold rounded-full w-6 h-6 flex items-center justify-center shadow"
-                    aria-label={`Remove image #${index + 1}`}
-                  >
-                    ×
-                  </button>
-                </div>
-              ))}
+            <div className="mt-4 mb-2">
+              <GallerySlots />
             </div>
 
-            <div className="space-y-3">
-              {galleryUrls.map((url, index) => (
-                <input
-                  key={index}
-                  type="url"
-                  placeholder={`Image URL #${index + 1}`}
-                  value={url}
-                  onChange={(e) => handleGalleryChange(index, e.target.value)}
-                  className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic placeholder:text-sm"
-                  aria-label={`Image URL #${index + 1}`}
-                />
-              ))}
-            </div>
+            <AddImage />
 
-            {galleryUrls.length < 5 && (
-              <button
-                type="button"
-                onClick={handleAddGallery}
-                className="btn btn-sm bg-neutral-90 border border-neutral-60 text-neutral-0 hover:text-primary-40 hover:border-primary-40"
-              >
-                + Add more
-              </button>
-            )}
-            <hr className="border-t border-neutral-55" />
-          </div>
+            <p className="text-sm text-neutral-30 my-2">
+              Accepted formats: JPG, PNG, GIF. Max size: 5MB.
+            </p>
 
-          {/* Video Section with toggle */}
-          <div className="space-y-6 pt-2">
-            <div className="flex items-center justify-between">
-              <label
-                className={`font-semibold flex items-center gap-2 ${
-                  showVideo ? "text-primary-50" : "text-neutral-30"
-                }`}
-              >
-                <PiFilmSlate size={20} />
-                Add a video URL (optional)
-              </label>
-              <input
-                type="checkbox"
-                className="toggle toggle-sm border-neutral-50 bg-neutral-90 checked:bg-primary-60"
-                checked={showVideo}
-                onChange={(e) => setShowVideo(e.target.checked)}
-              />
-            </div>
-
-            {showVideo && (
-              <div className="space-y-2">
-                <input
-                  type="url"
-                  placeholder="Paste a YouTube video URL here"
-                  value={videoUrl}
-                  onChange={(e) => setVideoUrl(e.target.value)}
-                  className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full -mt-2 placeholder-neutral-40 placeholder:italic placeholder:text-sm"
-                />
-
-                {videoUrl.trim() && (
-                  <div className="aspect-video w-full rounded border border-neutral-60 bg-neutral-70 overflow-hidden">
-                    <iframe
-                      src={videoUrl}
-                      title="Video Preview"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                      className="w-full h-full object-cover"
-                      frameBorder="0"
-                    />
-                  </div>
-                )}
-              </div>
-            )}
-            <hr className="border-t border-neutral-55" />
+            <hr className="border-t border-neutral-55 mt-8" />
           </div>
 
           {/* Code Snippets */}
@@ -398,7 +351,11 @@ export const NewProjectModal = ({ onClose }) => {
                   className="textarea textarea-bordered bg-neutral-90 text-white border border-neutral-60 w-full font-mono placeholder-neutral-20"
                   placeholder={`Code block #${index + 1}`}
                   value={code}
-                  onChange={(e) => handleCodeChange(index, e.target.value)}
+                  onChange={(e) => {
+                    const updated = [...codeSections];
+                    updated[index] = e.target.value;
+                    setCodeSections(updated);
+                  }}
                 />
                 <button
                   type="button"
@@ -417,13 +374,14 @@ export const NewProjectModal = ({ onClose }) => {
 
             <button
               type="button"
-              onClick={handleAddCodeSection}
+              onClick={() => setCodeSections([...codeSections, ""])}
               className="btn btn-sm bg-neutral-90 border border-neutral-60 text-neutral-0 hover:text-primary-40 hover:border-primary-40"
             >
               + Add Code Block
             </button>
           </div>
 
+          {/* Project Links */}
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label
@@ -444,16 +402,16 @@ export const NewProjectModal = ({ onClose }) => {
             <div>
               <label
                 className="block text-sm text-neutral-20 mb-1"
-                htmlFor="githubProjectLink"
+                htmlFor="githubLink"
               >
-                GitHub Code URL
+                GitHub Repository URL
               </label>
               <input
-                id="githubProjectLink"
+                id="githubLink"
                 type="url"
                 placeholder="(e.g. https://github.com/user/repo)"
                 className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
-                {...register("githubProjectLink")}
+                {...register("githubLink")}
               />
             </div>
           </div>
