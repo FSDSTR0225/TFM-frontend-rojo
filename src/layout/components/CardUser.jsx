@@ -12,7 +12,7 @@ export const CardUser = ({ profile }) => {
           classProps={"font-semibold text-xs sm:text-sm truncate"}
           align={"items-end"}
         >
-          <span className={`text-[10px] sm:text-xs ${profile.role.type === "recruiter" ? "text-secondary-50" : "text-primary-50"}`}>
+          <span className={`text-[10px] sm:text-xs ${profile.role.type === "recruiter" ? "text-secondary-40" : "text-primary-50"}`}>
             {profile.role.type === "recruiter" ? "Recruiter" : "Developer"}
           </span>
         </NameUsers>
