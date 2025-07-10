@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { RecDashBoar } from "./RecDashBoar";
-import { useParams } from "react-router";
+import { Link, useParams } from "react-router";
 import { PiDotsNine, PiDotsThreeVertical, PiListBullets } from "react-icons/pi";
 import { ListDashBoard } from "../components/ListDashBoard";
 import { getCandidatesByOfferId, getCoverLetter, getOffersById } from "../../../services/offersServices";
@@ -110,11 +110,12 @@ const handleDownloadCoverLetter = async (offerId, userId) => {
       <div className="flex flex-col gap-4 mb-4 items-center sm:items-stretch">
         <h1 className="text-2xl font-bold">{offer?.position}</h1>
         <div className="flex flex-col md:flex-row justify-between  gap-2">
-        <div className="md:max-w-md border border-neutral-70 p-4">
+        <div className="flex flex-col gap-2 md:max-w-md border border-neutral-70 p-4 self-start">
 
-        <p className="text-neutral-10 text-sm line-clamp-5">{offer?.description}</p>
+        <p className="text-neutral-10 text-sm line-clamp-4">{offer?.description}</p>
+        <Link to={`/offers/${offerId}`} className="text-secondary-60 hover:underline text-sm self-end">View complete description</Link>
         </div>
-        <asside className={`flex flex-wrap gap-2 items-center justify-center`}>
+        <aside className={`flex flex-wrap gap-2 items-center justify-center`}>
           <div className="card bg-neutral-80 shadow-xl border border-neutral-70 flex-col items-center min-w-30">
             <div className="card-body p-4">
               <h3 className="text-md font-bold ">New Applicants</h3>
@@ -155,7 +156,7 @@ const handleDownloadCoverLetter = async (offerId, userId) => {
               
             </div>
           </div>
-        </asside>
+        </aside>
         </div>
       </div>
       {/* Botón solo visible en lg y superiores */}
