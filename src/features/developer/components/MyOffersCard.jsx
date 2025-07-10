@@ -35,11 +35,6 @@ function MyOffersCard() {
     navigate(`/offers/${offerId}`);
   };
 
-  const handleOwnerClick = (e, ownerId) => {
-    e.stopPropagation();
-    navigate(`../../recruiter/${ownerId}`);
-  };
-
   // Cálculos para la paginación
   const totalPages = Math.ceil(offers.length / offersPerPage);
   const indexOfLastOffer = currentPage * offersPerPage;
@@ -76,7 +71,6 @@ function MyOffersCard() {
                 <div className="flex justify-center items-start gap-2">
                   <div
                     className="flex items-center gap-2 flex-1 min-w-0"
-                    onClick={(e) => handleOwnerClick(e, offer.owner._id)}
                   >
                     <AvatarImage user={offer.owner} width={8} />
                     <div className="min-w-0 flex-1">

@@ -21,6 +21,7 @@ import { RecApplications } from "../features/recruiters/pages/RecApplications";
 import { MainLayout } from "../layout/MainLayout";
 import { Register } from "../features/auth/register";
 import { Login } from "../features/auth/login";
+import { ResetPassword } from "../features/auth/ResetPassword";
 import { OffersInfoPage } from "../features/recruiters/pages/OffersInfoPage";
 import { OfferInfoPage } from "../features/recruiters/pages/OfferInfoPage";
 import { DashBoardLayout } from "../layout/DashBoardLayout";
@@ -52,6 +53,7 @@ const router = createBrowserRouter([
 
           { path: "onboarding", element: <Onboarding /> },
           { path: "settings", element: <SettingsPage /> },
+          { path: "reset-password/:token", element: <ResetPassword /> },
 
           { path: "login", element: <Login /> },
           { path: "register", element: <Register /> },

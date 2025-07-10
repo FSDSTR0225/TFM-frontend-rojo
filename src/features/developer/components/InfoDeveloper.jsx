@@ -6,6 +6,7 @@ import { AvatarImage } from "../../../components/AvatarImage";
 import { PiGithubLogo, PiLinkedinLogo, PiChatCenteredDots, PiTranslate, PiCodeSimple, PiCodeBlock, PiEnvelope, PiReadCvLogo,PiChatText,
 } from "react-icons/pi";
 import DevModal from "./devModal";
+import { ChatContext } from '../../../layout/chat/context/ChatContext';
 import { SectionContainer } from "../../../components/SectionContainer";
 import { getProjectsByDeveloper } from "../../../services/projectService";
 import { AuthContext } from "../../../context/authContext";
@@ -16,6 +17,7 @@ function InfoDeveloper({
   setProfileData,
   onProfileUpdated,
 }) {
+  const {openChat} = useContext(ChatContext);
   const { profile: currentUser, setProfile } = useContext(AuthContext);
   const isCurrentUser = currentUser?._id === profileInfo?._id;
 
@@ -154,12 +156,15 @@ const handleDownloadCV = async (resumeUrl, fileName = 'CV.pdf') => {
           {/* CONTACT Y DOWNLOAD CV */}
           <div className="grid grid-cols-1 gap-2 w-full my-4">
             <Link
-              to={profileInfo.role.developer.github}
+              onClick={() => openChat(profileInfo)}
               className="btn w-full bg-neutral-90 hover:bg-neutral-60 border border-neutral-60 rounded-md"
             >
               <PiChatText className="text-xl" />
               Contact
             </Link>
+
+
+
             {profileInfo.role.developer.resume && (
               <button
                 onClick={() =>
@@ -183,9 +188,9 @@ const handleDownloadCV = async (resumeUrl, fileName = 'CV.pdf') => {
               Most Viewed Projects
             </h2>
             {loadingProjects ? (
-              <p>Cargando proyectos...</p>
+              <p>CLoading projects...</p>
             ) : mostViewedProjects.length === 0 ? (
-              <p>No hay proyectos para mostrar</p>
+              <p>There are no projects to show</p>
             ) : (
               <ol className="list-decimal list-inside">
                 {mostViewedProjects.map((proj) => (
@@ -252,7 +257,7 @@ const handleDownloadCV = async (resumeUrl, fileName = 'CV.pdf') => {
         </div>
 
         {/* PANEL DERECHO */}
-        <div className="col-span-1 lg:col-span-2 -mt-3.5">
+        <div className="col-span-1 lg:col-span-2">
           <RightPanel
             profileInfo={profileInfo}
             token={token}

@@ -36,7 +36,6 @@ export default function DevModal({
     imageFile: null,
     resumeUrl: "",
   });
-  const [isResumeValid, setIsResumeValid] = useState(false);
 
 
   const {
@@ -62,7 +61,6 @@ export default function DevModal({
         pdfFile: null,
         resumeUrl: profileData.resume || "",
       });
-      setIsResumeValid(!!profileData.resume);
 
       reset({
         avatar: profileData.avatar || "",
@@ -97,7 +95,7 @@ export default function DevModal({
         pdfFile: null,
         resumeUrl: "",
       });
-      setIsResumeValid(false);
+      
 
       reset({
         avatar: "",
@@ -160,7 +158,6 @@ export default function DevModal({
         setAvatarData({ imageFile: null, avatarUrl: "" });
         setIsAvatarValid(false);
         setResumeData({ pdfFile: null, resumeUrl: "" });
-        setIsResumeValid(false);
         setOpen(false);
       }
     } catch (error) {
@@ -173,7 +170,6 @@ export default function DevModal({
     setAvatarData({ imageFile: null, avatarUrl: "" });
     setIsAvatarValid(false);
     setResumeData({ pdfFile: null, resumeUrl: "" });
-    setIsResumeValid(false);
     setOpen(false);
   };
 
@@ -246,7 +242,6 @@ export default function DevModal({
           <ResumeUpload
             data={resumeData}
             onDataChange={setResumeData}
-            onValidChange={setIsResumeValid}
             error={errors.role?.developer?.resume?.message}
           />
 
@@ -298,7 +293,7 @@ export default function DevModal({
                 }
                 className="btn btn-sm bg-neutral-70 text-neutral-0 hover:bg-neutral-60 border-neutral-60"
               >
-                + Add Languages
+                + Add Language
               </button>
             </div>
           </div>
@@ -366,20 +361,20 @@ export default function DevModal({
           </div>
 
           {/* Buttons */}
-          <div className="flex justify-end gap-4 pt-4">
-            <button
-              type="submit"
-              disabled={isSubmitting || !isAvatarValid}
-              className="btn bg-primary-60 text-neutral-10 hover:bg-primary-70 w-full md:w-auto"
-            >
-              {isSubmitting ? "Saving..." : "Edit Dev Profile"}
-            </button>
+          <div className="flex flex-col sm:flex-row sm:justify-end gap-3 pt-4">
             <button
               type="button"
               onClick={handleClose}
-              className="btn bg-neutral-70 text-neutral-10 hover:bg-neutral-60 border border-neutral-60 w-full md:w-auto"
+              className="btn bg-neutral-70 hover:bg-neutral-60 border border-neutral-60"
             >
               Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={isSubmitting || !isAvatarValid}
+              className="btn bg-primary-60 hover:bg-primary-70"
+            >
+              {isSubmitting ? "Saving..." : "Save changes"}
             </button>
           </div>
         </form>

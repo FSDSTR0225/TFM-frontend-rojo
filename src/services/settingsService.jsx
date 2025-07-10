@@ -48,3 +48,28 @@ export async function updatePassword(updPass, token) {
     return { error: true, message: "Request failed" };
   }
 }
+
+export async function deleteAccount(token) {
+  try {
+    const res = await fetch(urlBackEnd + `/settings/delete-account`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    });
+        
+    const data = await res.json();
+        
+    if (res.ok) {
+      console.log('Account deleted successfully');
+      return data;
+    } else {
+      console.error('Error:', data.msg);
+      throw new Error(data.msg || 'Error deleting account');
+    }
+  } catch (error) {
+    console.error('Error deleting account:', error);
+    throw error;
+  }
+};
