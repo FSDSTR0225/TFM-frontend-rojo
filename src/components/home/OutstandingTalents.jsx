@@ -35,13 +35,22 @@ export const OutstandingTalents = () => {
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+      <div
+        className="
+  grid 
+  grid-cols-1 
+  sm:grid-cols-1 
+  md:grid-cols-2 
+  lg:grid-cols-2 
+  xl:grid-cols-4 
+  gap-6
+"
+      >
         {developers.map((developer) => (
           <TalentsCard
             key={developer._id}
             developerId={developer._id}
-            name={developer.name}
-            surname={developer.surname}
+            developer={developer} // ✅ Esta línea es esencial
             avatar={developer.avatar}
             profession={developer.role?.developer?.professionalPosition}
             experienceYears={developer.role?.developer?.experienceYears}

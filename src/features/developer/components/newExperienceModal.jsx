@@ -18,7 +18,6 @@ export default function NewExperienceModal({ open, setOpen, handleExperience, ex
     imageFile: null,
     logoUrl: "",
   });
-  const [isLogoValid, setIsLogoValid] = useState(true);
 
   const startDate = watch("startDate");
   const endDate = watch("endDate");
@@ -28,7 +27,6 @@ export default function NewExperienceModal({ open, setOpen, handleExperience, ex
       setValue("endDate", startDate);
     }
   }, [startDate, endDate, setValue]);
-  const skills = watch("experienceSkills") || [];
 
   useEffect(() => {
     if (experience) {
@@ -124,7 +122,6 @@ export default function NewExperienceModal({ open, setOpen, handleExperience, ex
           <ExperienceLogoUpload
             data={logoData}
             onDataChange={setLogoData}
-            onValidChange={setIsLogoValid}
             error={errors.companyLogo?.message}
           />
 
@@ -200,16 +197,16 @@ export default function NewExperienceModal({ open, setOpen, handleExperience, ex
           </div>
 
           {/* Buttons */}
-        <div className="flex justify-end gap-4 pt-4">
+        <div className="flex flex-col sm:flex-row sm:justify-end gap-3 pt-4">
           <button
             type="submit"
-            className="btn bg-primary-60 text-neutral-10 hover:bg-primary-70 w-full md:w-auto"
+            className="btn bg-primary-60 hover:bg-primary-70"
           >
             {experience ? "Save Experience" : "Publish Experience"}
           </button>
           <button
             type="button"
-            className="btn bg-neutral-70 text-neutral-10 hover:bg-neutral-60 border border-neutral-60 w-full md:w-auto"
+            className="btn bg-neutral-70 hover:bg-neutral-60 border border-neutral-60"
             onClick={handleClose}
           >
             Cancel

@@ -16,7 +16,6 @@ export default function StudyModal({ open, setOpen, handleStudy, study = null })
     imageFile: null,
     logoUrl: "",
   });
-  const [isLogoValid, setIsLogoValid] = useState(true); // El logo no es requerido
 
   const startDate = watch("startDate");
   const endDate = watch("endDate");
@@ -122,7 +121,6 @@ export default function StudyModal({ open, setOpen, handleStudy, study = null })
           <StudyLogoUpload
             data={logoData}
             onDataChange={setLogoData}
-            onValidChange={setIsLogoValid}
             error={errors.instituteLogo?.message}
           />
 
@@ -206,16 +204,16 @@ export default function StudyModal({ open, setOpen, handleStudy, study = null })
           </div>
 
           {/* Botones */}
-        <div className="flex justify-end gap-4 pt-4">
+          <div className="flex flex-col sm:flex-row sm:justify-end gap-3 pt-4">
           <button
             type="submit"
-            className="btn bg-primary-60 text-neutral-10 hover:bg-primary-70 w-full md:w-auto"
+            className="btn bg-primary-60 hover:bg-primary-70"
           >
             {study ? "Save Study" : "Publish Study"}
           </button>
           <button
             type="button"
-            className="btn bg-neutral-70 text-neutral-10 hover:bg-neutral-60 border border-neutral-60 w-full md:w-auto"
+            className="btn bg-neutral-70 hover:bg-neutral-60 border border-neutral-60"
             onClick={handleClose}
           >
             Cancel

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { AuthContext } from '../../../context/authContext';
 import { getStudiesByDeveloper, softDeleteStudy, createStudy, updateStudy } from '../../../services/studyService';
-import { PiPlusBold } from 'react-icons/pi';
+import { PiPlusBold, PiEye } from 'react-icons/pi';
 import StudyModal from '../components/studyModal';
 import DotsComponent from '../components/DotsComponent';
 
@@ -29,7 +29,7 @@ function StudyCard({ profileInfo }) {
         setLoading(false);
       })
       .catch(() => {
-        setError('Error al obtener los estudios');
+        setError('Error giving studies');
         setLoading(false);
       });
   }, [profileInfo?._id, token]);
@@ -62,14 +62,14 @@ function StudyCard({ profileInfo }) {
         setStudies(res.studies || []);
       }
     } catch (error) {
-      console.error('Error guardando estudio:', error);
+      console.error('Error saving study:', error);
     }
 
     closeModal();
   };
 
   const handleDelete = async (id) => {
-    if (!confirm('¿Seguro que quieres eliminar este estudio?')) return;
+    if (!confirm('Are you sure you want to delete this study?')) return;
 
     const res = await softDeleteStudy(id, token);
     if (!res.error) {
@@ -105,7 +105,18 @@ function StudyCard({ profileInfo }) {
       ) : error ? (
         <div className="text-red-500 text-sm">{error}</div>
       ) : studies.length === 0 ? (
-        <div className="text-neutral-50 text-sm"><span>No studies yet.</span></div>
+        <div className="flex flex-col items-center justify-center py-16 px-6 text-center">
+          <div className="w-20 h-20 mx-auto mb-6 bg-neutral-70 rounded-full flex items-center justify-center">
+            <PiEye className="text-3xl text-neutral-30" />
+          </div>
+          <h3 className="text-xl font-semibold text-neutral-20 mb-3">
+            There are no studies yet
+          </h3>
+          <p className="text-neutral-40 max-w-md">
+            {profileInfo?.name || 'This developer'} hasn't shared any study yet.
+          </p>
+          <p className="text-neutral-40 max-w-md">Check back soon to see them!</p>
+        </div>
       ) : (
         <ul className="space-y-4">
           {studies
@@ -146,27 +157,36 @@ function StudyCard({ profileInfo }) {
                   </div>
                   <div className="flex-shrink-0 flex flex-col justify-end items-center sm:items-end mt-4 sm:mt-0">
                     <p className="text-sm sm:text-base text-center sm:text-right">
-                      {new Date(stu.startDate).toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })} {' '}
+                      {new Date(stu.startDate).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })} {' '}
                         -{' '}
                       {stu.endDate
-                        ? new Date(stu.endDate).toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })
-                        : 'Actualidad'}
+                        ? new Date(stu.endDate).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+                        : 'Current'}
                     </p>
                   </div>
                 </>
               ) : (
                 <>
-                  <h3 className="col-span-1 sm:col-span-2 text-lg sm:text-xl uppercase font-bold">
-                    {stu.degree}
-                  </h3>
-                  <p className="col-span-1 sm:col-span-2">{stu.instituteName}</p>
-                  <p className="col-span-1 sm:col-span-2">{stu.description}</p>
-                  <p className="grid justify-items-center sm:justify-items-end text-sm sm:text-base">
-                    {new Date(stu.startDate).toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })} al  
-                    {stu.endDate
-                      ? new Date(stu.endDate).toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })
-                      : 'Actualidad'}
-                  </p>
+                  <div className="col-span-1 sm:col-span-3">
+                    <h3 className="text-lg sm:text-xl uppercase font-bold">
+                      {stu.degree}
+                    </h3>
+                  </div>
+                  <div className="col-span-1 sm:col-span-3">
+                    <p>{stu.instituteName}</p>
+                  </div>
+                  <div className="col-span-1 sm:col-span-3">
+                    <p>{stu.description}</p>
+                  </div>
+                  <div className="col-span-1 sm:col-span-3">
+                    <p className="text-center sm:text-right text-sm sm:text-base">
+                      {new Date(stu.startDate).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })} {' '}
+                        -{' '}  
+                      {stu.endDate
+                        ? new Date(stu.endDate).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+                        : 'Current'}
+                    </p>
+                  </div>
                 </>
               )}
             </li>

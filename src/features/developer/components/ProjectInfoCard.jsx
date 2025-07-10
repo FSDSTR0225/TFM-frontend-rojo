@@ -1,7 +1,16 @@
 // src/components/ProjectInfoCard.js
 import React, { useState } from "react";
 import { Link } from "react-router";
-import { PiUser, PiCalendar, PiClock, PiGithubLogo, PiHeartStraight, PiEye, PiArrowSquareOut, PiChatText  } from "react-icons/pi";
+import {
+  PiUser,
+  PiCalendar,
+  PiClock,
+  PiGithubLogo,
+  PiHeartStraight,
+  PiEye,
+  PiArrowSquareOut,
+  PiChatText,
+} from "react-icons/pi";
 import { AvatarImage } from "../../../components/AvatarImage";
 import { NameUsers } from "../../../components/NameUsers";
 
@@ -21,26 +30,27 @@ export const ProjectInfoCard = ({ project }) => {
     owner,
   } = project;
 
-  const skillsToShow = showAllSkills ? projectSkills : projectSkills?.slice(0, 5) || [];
+  const skillsToShow = showAllSkills
+    ? projectSkills
+    : projectSkills?.slice(0, 5) || [];
 
   return (
     <div className="relative bg-neutral-80 flex flex-col rounded-lg shadow-md overflow-hidden border border-neutral-70 p-8 text-inherit no-underline w-full max-w-full">
-
       {category && (
         <div className="absolute top-0 left-8 right-8 mt-8 flex justify-between items-center">
-            <span className="bg-primary-60/20 text-primary-50 px-2 py-0.5 rounded-md text-sm">
-                {category}
-            </span>
-            <div className="flex items-center gap-4 text-neutral-0">
-                <div className="flex items-center gap-1">
-                <PiHeartStraight className="text-primary-80" />
-                <span>{project.likes || 0}</span>
-                </div>
-                <div className="flex items-center gap-1">
-                <PiEye className="text-primary-80" />
-                <span>{Math.floor((project.views || 0) / 2)}</span>
-                </div>
+          <span className="bg-primary-60/20 text-primary-50 px-2 py-0.5 rounded-md text-sm">
+            {category}
+          </span>
+          <div className="flex items-center gap-4 text-neutral-0">
+            <div className="flex items-center gap-1">
+              <PiHeartStraight className="text-primary-80" />
+              <span>{project.likes || 0}</span>
             </div>
+            <div className="flex items-center gap-1">
+              <PiEye className="text-primary-80" />
+              <span>{Math.floor((project.views || 0) / 2)}</span>
+            </div>
+          </div>
         </div>
       )}
 
@@ -49,7 +59,7 @@ export const ProjectInfoCard = ({ project }) => {
           {owner && (
             <div className="flex flex-col justify-center items-center mt-4 mb-2 relative">
               <Link to={`/profile/${owner._id}`} className="relative group">
-              <AvatarImage user={owner} width={8} />
+                <AvatarImage user={owner} width={16} />
                 {/* <img
                   src={owner.avatar}
                   alt={`${owner.name} ${owner.surname}`}
@@ -61,7 +71,7 @@ export const ProjectInfoCard = ({ project }) => {
                 to={`/profile/${owner._id}`}
                 className="mt-2 text-neutral-0 text-lg font-semibold hover:text-primary-50 transition-colors duration-300"
               >
-              <NameUsers user={owner} />
+                <NameUsers user={owner} />
                 {/* {owner.name} {owner.surname} */}
               </Link>
             </div>
@@ -69,24 +79,24 @@ export const ProjectInfoCard = ({ project }) => {
 
           <hr className="border-t border-neutral-60 my-4" />
 
-        <div className="flex flex-col gap-2 text-neutral-10 text-sm">
+          <div className="flex flex-col gap-2 text-neutral-10 text-sm">
             {professionalRole && (
-                <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2">
                 <PiUser className="text-primary-50" size={18} />
                 <span className="text-neutral-0">{professionalRole}</span>
-                </div>
+              </div>
             )}
             {year && (
-                <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2">
                 <PiCalendar className="text-primary-50" size={18} />
                 <span className="text-neutral-0">{year}</span>
-                </div>
+              </div>
             )}
             {duration && (
-                <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2">
                 <PiClock className="text-primary-50" size={18} />
                 <span className="text-neutral-0">{duration}</span>
-                </div>
+              </div>
             )}
 
             {/* GitHub link justo debajo de Duration */}
@@ -130,35 +140,35 @@ export const ProjectInfoCard = ({ project }) => {
 
             {/* Skills */}
             {projectSkills && projectSkills.length > 0 && (
-                <div>
+              <div>
                 <div className="flex flex-wrap justify-start gap-1">
-                    {skillsToShow.map((skill, index) => (
+                  {skillsToShow.map((skill, index) => (
                     <span
-                        key={index}
-                        className="bg-primary-70 text-neutral-0 px-2 py-0.5 rounded-full text-sm"
+                      key={index}
+                      className="bg-primary-70 text-neutral-0 px-2 py-0.5 rounded-full text-sm"
                     >
-                        {skill}
+                      {skill}
                     </span>
-                    ))}
+                  ))}
 
-                    {!showAllSkills && projectSkills.length > 5 && (
+                  {!showAllSkills && projectSkills.length > 5 && (
                     <button
-                        type="button"
-                        onClick={() => setShowAllSkills(true)}
-                        className="bg-neutral-60 text-neutral-30 px-2 py-0.5 rounded-full text-sm cursor-pointer"
-                        aria-label={`Show ${projectSkills.length - 5} more skills`}
+                      type="button"
+                      onClick={() => setShowAllSkills(true)}
+                      className="bg-neutral-60 text-neutral-30 px-2 py-0.5 rounded-full text-sm cursor-pointer"
+                      aria-label={`Show ${
+                        projectSkills.length - 5
+                      } more skills`}
                     >
-                        +{projectSkills.length - 5}
+                      +{projectSkills.length - 5}
                     </button>
-                    )}
+                  )}
                 </div>
-                </div>
+              </div>
             )}
           </div>
         </div>
-        </div>
       </div>
+    </div>
   );
 };
-
-

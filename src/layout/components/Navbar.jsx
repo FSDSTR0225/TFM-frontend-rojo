@@ -36,37 +36,38 @@ export const Navbar = () => {
             <ul className='md:menu-md menu-horizontal  menu-sm gap-4'>
               {/* Navbar menu content here */}
 
-              {/* Button for Developers */}
-              <li >
-                <Link
-                  to='/developers'
-                  className="btn items-center gap-2  bg-neutral-90  hover:bg-primary-60  focus:bg-neutral-60 m-0 w-32  "
-                >
-                  <PiUsers />
-                  Developers
-                </Link>
-              </li>
+          {/* Button for Developers */}
+          <li>
+            <Link
+              to="/developers"
+              className="btn items-center gap-2  bg-neutral-90  hover:bg-primary-60  focus:bg-neutral-60 m-0 w-32 no-noise btn-shadow-black "
+            >
+              <PiUsers />
+              Developers
+            </Link>
+          </li>
 
-              {/* Button for Projects */}
-              <li >
-                <Link
-                  to='/projects'
-                  className="btn items-center gap-2  bg-neutral-90  hover:bg-primary-60  focus:bg-neutral-60 m-0  w-32 "
-                >
-                  <PiStack />
-                  Projects
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to='/offers'
-                  className="btn items-center gap-2  bg-neutral-90  hover:bg-primary-60  focus:bg-neutral-60 m-0 w-32  "
-                >
-                  <PiBriefcase />
-                  Jobs
-                </Link>
-              </li>
-            </ul>
-          </div>
-        </div>)
-}
+          {/* Button for Projects */}
+          <li>
+            <Link
+              to="/projects"
+              className="btn items-center gap-2  bg-neutral-90  hover:bg-primary-60  focus:bg-neutral-60 m-0  w-32 no-noise btn-shadow-black "
+            >
+              <PiStack />
+              Projects
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/offers"
+              className="btn items-center gap-2  bg-neutral-90  hover:bg-primary-60  focus:bg-neutral-60 m-0 w-32 no-noise btn-shadow-black "
+            >
+              <PiBriefcase />
+              Jobs
+            </Link>
+          </li>
+        </ul>
+      </div>
+    </div>
+  );
+};
