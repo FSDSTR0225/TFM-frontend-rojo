@@ -3,7 +3,8 @@ import { useForm } from "react-hook-form";
 import { AvatarUpload } from '../../developer/components/AvatarUpload';
 import { updateProfileRecruiter } from '../../../services/profileService';
 
-export const RecModalEdit = ({ openModal, setOpenModal, profile, token, onProfileUpdate }) => {
+
+export const RecModalEdit = ({ openModal, setOpenModal, profile, token, onProfileUpdate, setProfile}) => {
     const {
         register,
         handleSubmit,
@@ -67,16 +68,22 @@ export const RecModalEdit = ({ openModal, setOpenModal, profile, token, onProfil
             const updated = await updateProfileRecruiter(formattedData, token);
             console.log("Updated profile:", updated);
             if (updated?.recruiter) {
+                 setProfile(updated.recruiter);
                 onProfileUpdate();
                 reset();
                 setAvatarData({ imageFile: null, avatarUrl: "" });
                 setIsAvatarValid(false);
                 setOpenModal(false);
+                setProfile(updated.recruiter);
             }
+             
+                
         } catch (error) {
             console.error("Error al actualizar el perfil:", error);
         }
     };
+
+
 
 
     const handleClose = () => {

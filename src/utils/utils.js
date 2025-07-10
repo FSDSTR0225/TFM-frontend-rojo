@@ -43,3 +43,4 @@ export const formatMessageTime = (date) =>{
     hour12: false
   })
 }
+

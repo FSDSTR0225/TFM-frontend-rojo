@@ -1,9 +1,9 @@
 import { Link } from "react-router";
+import { NameUsers } from "../../../components/NameUsers";
+import { AvatarImage } from "../../../components/AvatarImage";
 
 const ProjectCard = ({
-  name,
-  surname,
-  avatar,
+  developer,
   gallery = [],
   projectid,
   title,
@@ -16,7 +16,7 @@ const ProjectCard = ({
   return (
     <div className="w-full h-full bg-neutral-80 flex flex-col rounded-lg shadow-md relative overflow-hidden transition-transform transform hover:scale-105 border border-neutral-70">
       <div className="flex items-center gap-2 mb-2 px-2 pt-2 z-10 relative">
-        <img src={avatar} alt="Avatar" className="w-6 h-6 rounded-full" />
+        <AvatarImage user={developer} width={6} />
 
         <Link
           to={`/profile/${developerId}`}
@@ -24,7 +24,12 @@ const ProjectCard = ({
             smallTitle ? "text-xs sm:text-sm" : "text-sm sm:text-base"
           }`}
         >
-          {name} {surname}
+          <NameUsers
+            classProps={
+              "font-semibold text-ms leading-tight group-hover:text-primary-40 truncate block"
+            }
+            user={developer}
+          />
         </Link>
 
         {category && (

@@ -1,12 +1,12 @@
-import { NavLink } from "react-router";
+import { PiCaretLeft } from "react-icons/pi";
+import { Link } from "react-router";
 export const DashBoardHeader = () => {
     return (
-        <div className="flex flex-col justify-center md:flex-row">
-            <ul className="menu menu-vertical lg:menu-horizontal gap-20 rounded-box">
-                <li className="bg-base-200">
-                    <NavLink to={'/private-rec/offers'}>Offers</NavLink></li>
-                <li className="bg-base-200"><a>Developers</a></li>
-            </ul>
+        <div className="flex mb-4  ">
+           
+                
+                    <Link to={'/private-rec/offers'} className="btn btn-ghost gap-2"><PiCaretLeft />  Back offers</Link>
+           
         </div>
     )
 }

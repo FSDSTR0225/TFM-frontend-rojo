@@ -1,17 +1,22 @@
 import { useEffect, useState } from "react";
 import { RecDashBoar } from "./RecDashBoar";
-import { useParams } from "react-router";
+import { Link, useParams } from "react-router";
 import { PiDotsNine, PiDotsThreeVertical, PiListBullets } from "react-icons/pi";
 import { ListDashBoard } from "../components/ListDashBoard";
-import { getCandidatesByOfferId, getCoverLetter } from "../../../services/offersServices";
+import { getCandidatesByOfferId, getCoverLetter, getOffersById } from "../../../services/offersServices";
 import { useContext } from "react";
 import { ChatContext } from "../../../layout/chat/context/ChatContext";
+
 
 export const DashBoarPage = () => {
   const { offerId } = useParams();
   const [viewList, setViewList] = useState(false);
   const [nameOffer, setNameOffer] = useState('');
   const [skillsOffer, setSkillsOffer] = useState([]);
+  const [offer, setOffer] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
 
 const handleDownloadCoverLetter = async (offerId, userId) => {
     try {
@@ -71,16 +76,88 @@ const handleDownloadCoverLetter = async (offerId, userId) => {
     setLists(grouped);
   } 
 
+  const fetchOfferByid = async () => {
+    try {
+      const offer = await getOffersById(offerId);
+      setOffer(offer);
+    } catch (error) {
+      setError(error);
+      console.error('Error fetching offer:', error);
+    }finally{
+      setIsLoading(false);
+    }
+  };
+
   // 1. Carga candidatos
   useEffect(() => {
-    getCandidates();
+    getCandidates(
+    fetchOfferByid()
+    );
   }, [offerId]);
 
+  if (isLoading) {
+    return (<>
+
+  <div className="skeleton h-4 w-28"></div>
+  <div className="skeleton h-4 w-full"></div>
+  <div className="skeleton h-4 w-full"></div>
+  
+    </>
+  )}
 
   return (
     <>
-      <div>
-        <h1>{nameOffer}</h1>
+      <div className="flex flex-col gap-4 mb-4 items-center sm:items-stretch">
+        <h1 className="text-2xl font-bold">{offer?.position}</h1>
+        <div className="flex flex-col md:flex-row justify-between  gap-2">
+        <div className="flex flex-col gap-2 md:max-w-md border border-neutral-70 p-4 self-start">
+
+        <p className="text-neutral-10 text-sm line-clamp-4">{offer?.description}</p>
+        <Link to={`/offers/${offerId}`} className="text-secondary-60 hover:underline text-sm self-end">View complete description</Link>
+        </div>
+        <aside className={`flex flex-wrap gap-2 items-center justify-center`}>
+          <div className="card bg-neutral-80 shadow-xl border border-neutral-70 flex-col items-center min-w-30">
+            <div className="card-body p-4">
+              <h3 className="text-md font-bold ">New Applicants</h3>
+              <p className="text-xs text-neutral-20">Pending</p>
+              <p className="text-xl">{lists?.pending?.length}</p>
+              
+            </div>
+          </div>
+          <div className="card bg-neutral-80 shadow-xl border border-neutral-70 flex-col items-center min-w-35">
+            <div className="card-body p-4">
+              <h3 className="text-md font-bold ">Reviewed</h3>
+              <p className="text-xs text-neutral-20">Pending</p>
+              <p className="text-xl">{lists?.reviewed?.length}</p>
+              
+            </div>
+          </div>
+          <div className="card bg-neutral-80 shadow-xl border border-neutral-70 flex-col items-center min-w-35">
+            <div className="card-body p-4">
+              <h3 className="text-md font-bold ">Interviewed</h3>
+              <p className="text-xs text-neutral-20">Pending</p>
+              <p className="text-xl">{lists?.interviewed?.length}</p>
+             
+            </div>
+          </div>
+          <div className="card bg-neutral-80 shadow-xl border border-neutral-70 flex-col items-center min-w-35">
+            <div className="card-body p-4">
+              <h3 className="text-md font-bold ">Accepted</h3>
+              <p className="text-xs text-neutral-20">Pending</p>
+              <p className="text-xl">{lists?.accepted?.length}</p>
+              
+            </div>
+          </div>
+          <div className="card bg-neutral-80 shadow-xl border border-neutral-70 flex-col items-center min-w-35">
+            <div className="card-body p-4">
+              <h3 className="text-md font-bold ">Rejected</h3>
+              <p className="text-xs text-neutral-20">Pending</p>
+              <p className="text-xl">{lists?.rejected?.length}</p>
+              
+            </div>
+          </div>
+        </aside>
+        </div>
       </div>
       {/* Botón solo visible en lg y superiores */}
       <button

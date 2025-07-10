@@ -257,7 +257,7 @@ const handleDownloadCV = async (resumeUrl, fileName = 'CV.pdf') => {
         </div>
 
         {/* PANEL DERECHO */}
-        <div className="col-span-1 lg:col-span-2 -mt-3.5">
+        <div className="col-span-1 lg:col-span-2">
           <RightPanel
             profileInfo={profileInfo}
             token={token}

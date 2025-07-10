@@ -8,7 +8,7 @@ export const MainLayout= () => {
         <>
             
                <Header />
-                <main className=" bg-neutral-90">
+                <main className=" bg-neutral-90 flex-1">
                     {<Outlet />}
                 </main>
             <Footer />

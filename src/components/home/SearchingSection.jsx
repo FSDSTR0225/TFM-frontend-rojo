@@ -58,19 +58,19 @@ export const SearchingSection = () => {
   };
 
   return (
-    <div className="w-full py-16">
+    <div className="w-full p-2 py-2 sm:pt-16 sm:pb-8">
       <div className="flex flex-col">
-        <div className="flex flex-col items-center text-center my-6">
-          <h1 className="text-6xl bg-gradient-to-r from-primary-50 to-secondary-50 text-transparent bg-clip-text leading-normal inline-block font-bold mb-2">
-            Connect Talent with Opportunity
+        <div className="flex flex-col items-center text-center my-6 md:px-20">
+          <h1 className="text-5xl md:text-6xl bg-gradient-to-r from-primary-50 to-secondary-50 text-transparent bg-clip-text leading-tight inline-block font-bold mb-2 ">
+            Connecting Talent with Opportunity
           </h1>
-          <span className="text-neutral-10 text-xl font-light">
+          <span className="text-neutral-10 text-lg md:text-xl font-light px-8 sm:px-20">
             The website where developers show their skills and recruiters find
             the perfect match
           </span>
         </div>
 
-        <div className="relative">
+        <div className="relative py-2 md:py-8">
           <SearchBar onResults={onResults} />
 
           {dropdownOpen && (
@@ -225,14 +225,11 @@ export const SearchingSection = () => {
                         >
                           <ProjectCard
                             developerId={item.owner?._id}
-                            name={item.owner?.name}
-                            surname={item.owner?.surname}
-                            avatar={item.owner?.avatar}
+                            developer={item.owner} // todo el objeto user/developer aquí
                             title={item.title}
                             category={item.category}
                             gallery={item.gallery}
                             projectid={item._id}
-                            badgeText={item.badgeText}
                             smallTitle={true}
                           />
                         </div>
@@ -244,9 +241,7 @@ export const SearchingSection = () => {
                           <SearchDevCard
                             key={item._id}
                             developerId={item._id}
-                            name={item.name}
-                            surname={item.surname}
-                            avatar={item.avatar}
+                            developer={item} // le pasas todo el objeto que contiene name, surname, avatar...
                             profession={
                               item.role?.developer?.professionalPosition
                             }

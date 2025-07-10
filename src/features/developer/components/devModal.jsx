@@ -361,20 +361,20 @@ export default function DevModal({
           </div>
 
           {/* Buttons */}
-          <div className="flex justify-end gap-4 pt-4">
-            <button
-              type="submit"
-              disabled={isSubmitting || !isAvatarValid}
-              className="btn bg-primary-60 text-neutral-10 hover:bg-primary-70 w-full md:w-auto"
-            >
-              {isSubmitting ? "Saving..." : "Save changes"}
-            </button>
+          <div className="flex flex-col sm:flex-row sm:justify-end gap-3 pt-4">
             <button
               type="button"
               onClick={handleClose}
-              className="btn bg-neutral-70 text-neutral-10 hover:bg-neutral-60 border border-neutral-60 w-full md:w-auto"
+              className="btn bg-neutral-70 hover:bg-neutral-60 border border-neutral-60"
             >
               Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={isSubmitting || !isAvatarValid}
+              className="btn bg-primary-60 hover:bg-primary-70"
+            >
+              {isSubmitting ? "Saving..." : "Save changes"}
             </button>
           </div>
         </form>
