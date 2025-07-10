@@ -71,18 +71,18 @@ export const OfferModal = ({ token, reloadPage, idOffer, isOpen, setIsOpen, oper
   return (
     // Overlay y centrar modal
     <dialog open={isOpen} className="modal">
-      <div className="inset-0 flex items-center justify-center">
+      <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/40">
         {/* Caja del modal centrada */}
-        <div className="modal-box max-w-3xl w-full bg-neutral-80 border border-neutral-70 text-neutral-0 shadow-md rounded-lg">
+        <div className="modal-box w-[95vw] max-w-full md:max-w-3xl bg-neutral-80 border border-neutral-70 text-neutral-0 shadow-md rounded-lg p-0">
           <form
             method="dialog"
             onSubmit={handleSubmit(onSubmit)}
-            className="space-y-6 p-6"
+            className="space-y-6 p-4 sm:p-6"
           >
-            <h2 className="text-3xl font-bold text-center mb-4">Post a Job Offer</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-center mb-4">Post a Job Offer</h2>
             <hr className="border-t border-neutral-60" />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 pt-2">
               {/* Position */}
               <div>
                 <label className="block text-sm text-neutral-20 mb-1">Position</label>
