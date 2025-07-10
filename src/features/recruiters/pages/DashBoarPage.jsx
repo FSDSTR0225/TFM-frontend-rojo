@@ -11,7 +11,7 @@ import { ChatContext } from "../../../layout/chat/context/ChatContext";
 export const DashBoarPage = () => {
   const { offerId } = useParams();
   const [viewList, setViewList] = useState(false);
-  const [ setNameOffer] = useState('');
+  const [nameOffer, setNameOffer] = useState('');
   const [skillsOffer, setSkillsOffer] = useState([]);
   const [offer, setOffer] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
