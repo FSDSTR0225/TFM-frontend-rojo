@@ -45,17 +45,15 @@ export const ProjectsPage = () => {
     const fetchProjects = async () => {
       setLoading(true);
       const response = await getAllProjects();
-
+      console.log("Projects fetched:", response);
       if (response?.error) {
         console.error("Error fetching projects:", response.message);
         setProjects([]);
       } else {
         setProjects(response);
       }
-
       setLoading(false);
     };
-
     fetchProjects();
   }, []);
 
