@@ -3,6 +3,8 @@ import { uploadPDF } from "../../../services/imageService";
 
 export const ResumeUpload = ({ onValidChange, data, onDataChange, error: externalError }) => {
   const fileInputRef = useRef(null);
+  
+  const [isDragging, setIsDragging] = useState(false);
   const [error, setError] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
 
@@ -47,6 +49,22 @@ export const ResumeUpload = ({ onValidChange, data, onDataChange, error: externa
   };
 
   const handleFileChange = (e) => handleFile(e.target.files[0]);
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+  
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+  
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+    handleFile(e.dataTransfer.files[0]);
+  };
   
   const openFileDialog = () => fileInputRef.current?.click();
 
@@ -83,19 +101,25 @@ export const ResumeUpload = ({ onValidChange, data, onDataChange, error: externa
       <div className="flex flex-col items-center space-y-3">
 
         <div
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
           onClick={openFileDialog}
           role="button"
           tabIndex={0}
           onKeyDown={(e) => ["Enter", " "].includes(e.key) && openFileDialog()}
-          className={'border-2 border-dashed rounded cursor-pointer text-neutral-40 flex flex-col items-center justify-center px-4 py-10 transition-colors duration-200 w-full'
-          }
+          className={`border-2 border-dashed rounded cursor-pointer flex flex-col items-center justify-center px-4 py-10 transition-colors duration-200 w-full ${
+            isDragging
+              ? "border-primary-60 bg-primary-10"
+              : "border-neutral-40 bg-neutral-90"
+          }`}
         >
           {hasFile ? (
             <div className="flex flex-col items-center text-neutral-20">
               {/* Icono de PDF */}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-16 w-16 mb-2 text-red-500"
+                className="h-16 w-16 mb-2 text-secondary-50"
                 fill="currentColor"
                 viewBox="0 0 24 24"
               >
@@ -104,7 +128,7 @@ export const ResumeUpload = ({ onValidChange, data, onDataChange, error: externa
               <p className="text-sm font-medium text-center" title={displayFileName}>
                 {truncateFileName(displayFileName)}
               </p>
-              <p className="text-xs text-neutral-40">Click to change PDF</p>
+              <p className="text-xs text-neutral-40">Drag and drop a PDF here, or click to select</p>
             </div>
           ) : (
             <div className="flex flex-col items-center text-neutral-50 select-none">
@@ -122,7 +146,7 @@ export const ResumeUpload = ({ onValidChange, data, onDataChange, error: externa
                   d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                 />
               </svg>
-              <span>Click here to select a PDF</span>
+              <span>Drag and drop a PDF here, or click to select</span>
             </div>
           )}
 

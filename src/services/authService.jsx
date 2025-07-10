@@ -50,3 +50,38 @@ export const getUserLogged = async (token) => {
     throw error;
   }
 };
+
+export const forgotPassword = async (email) => {
+  
+  const resp = await fetch(`${urlBackEnd}/forgot-password`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email }),
+  });
+
+  if (!resp.ok) {
+    const errorData = await resp.json();
+    throw new Error(errorData.message || "Error sending the link");
+  }
+
+  return await resp.json();
+};
+
+export const resetPassword = async (token, newPassword) => {
+  const resp = await fetch(`${urlBackEnd}/reset-password/${token}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ password: newPassword }),
+  });
+
+  if (!resp.ok) {
+    const errorData = await resp.json();
+    throw new Error(errorData.msg || "Erro changing the password");
+  }
+
+  return await resp.json();
+};

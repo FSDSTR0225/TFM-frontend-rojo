@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { AuthContext } from '../../../context/authContext';
 import { createExperience, updateExperience, getExperiencesByDeveloper, softDeleteExperience } from '../../../services/experienceService';
-import { PiPlusBold } from 'react-icons/pi';
+import { PiPlusBold, PiEye } from 'react-icons/pi';
 import NewExperienceModal from './newExperienceModal';
 import DotsComponent from './DotsComponent';
 
@@ -69,7 +69,7 @@ function ExperienceCard({ profileInfo }) {
   };
 
   const handleDelete = async (id) => {
-    const confirmed = confirm('¿Seguro que quieres eliminar esta experiencia?');
+    const confirmed = confirm('Are you sure you want to delete this experience?');
     if (!confirmed) return;
 
     const res = await softDeleteExperience(id, token);
@@ -106,8 +106,17 @@ function ExperienceCard({ profileInfo }) {
       ) : error ? (
         <div className="text-red-500 text-sm">{error}</div>
       ) : experiences.length === 0 ? (
-        <div className="text-neutral-50 text-sm">
-          No experiences yet.
+        <div className="flex flex-col items-center justify-center py-16 px-6 text-center">
+          <div className="w-20 h-20 mx-auto mb-6 bg-neutral-70 rounded-full flex items-center justify-center">
+            <PiEye className="text-3xl text-neutral-30" />
+          </div>
+          <h3 className="text-xl font-semibold text-neutral-20 mb-3">
+            There are no experiences yet
+          </h3>
+          <p className="text-neutral-40 max-w-md">
+            {profileInfo?.name || 'This developer'} hasn't shared any experience yet.
+          </p>
+          <p className="text-neutral-40 max-w-md">Check back soon to see them!</p>
         </div>
       ) : (
         <ul className="space-y-4">
@@ -146,7 +155,7 @@ function ExperienceCard({ profileInfo }) {
                       </h3>
                       <p className="mb-1 sm:mb-2">{exp.company}</p>
                       <p className="mb-2 sm:mb-4">{exp.description}</p>
-                      {exp.experienceSkills?.length > 0 && (
+                      {/* {exp.experienceSkills?.length > 0 && (
                         <div className="flex flex-wrap gap-2 mb-2 justify-center sm:justify-start">
                           {exp.experienceSkills.map((skill, i) => (
                             <span
@@ -157,17 +166,17 @@ function ExperienceCard({ profileInfo }) {
                             </span>
                           ))}
                         </div>
-                      )}
+                      )} */}
                     </div>
                     <div className="flex-shrink-0 flex flex-col justify-end items-center sm:items-end mt-4 sm:mt-0">
                       <p className="text-sm sm:text-base text-center sm:text-right">
-                        {new Date(exp.startDate).toLocaleDateString('es-ES', {
+                        {new Date(exp.startDate).toLocaleDateString('en-US', {
                           month: 'long',
                           year: 'numeric'
                         })}{' '}
                         -{' '}
                         {exp.endDate
-                          ? new Date(exp.endDate).toLocaleDateString('es-ES', {
+                          ? new Date(exp.endDate).toLocaleDateString('en-US', {
                               month: 'long',
                               year: 'numeric'
                             })
@@ -182,7 +191,7 @@ function ExperienceCard({ profileInfo }) {
                     </h3>
                     <p className="col-span-1 sm:col-span-2">{exp.company}</p>
                     <p className="col-span-1 sm:col-span-2">{exp.description}</p>
-                    {exp.experienceSkills?.length > 0 && (
+                    {/* {exp.experienceSkills?.length > 0 && (
                       <div className="col-span-1 sm:col-span-2 flex flex-wrap gap-2 mb-2">
                         {exp.experienceSkills.map((skill, i) => (
                           <span
@@ -193,15 +202,15 @@ function ExperienceCard({ profileInfo }) {
                           </span>
                         ))}
                       </div>
-                    )}
+                    )} */}
                     <p className="grid justify-items-center sm:justify-items-end text-sm sm:text-base">
-                      {new Date(exp.startDate).toLocaleDateString('es-ES', {
+                      {new Date(exp.startDate).toLocaleDateString('en-US', {
                         month: 'long',
                         year: 'numeric'
                       })}{' '}
                       -{' '}
                       {exp.endDate
-                        ? new Date(exp.endDate).toLocaleDateString('es-ES', {
+                        ? new Date(exp.endDate).toLocaleDateString('en-US', {
                             month: 'long',
                             year: 'numeric'
                           })

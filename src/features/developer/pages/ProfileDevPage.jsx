@@ -19,7 +19,7 @@ export function ProfileDevPage() {
             setProfileToShow(authProfile);
           }
         } catch (error) {
-          console.error("Error al cargar el perfil", error);
+          console.error("Error loading profile", error);
         }
     };
 
@@ -30,7 +30,7 @@ export function ProfileDevPage() {
     setProfileToShow(updatedProfile);
   };
 
-  if (!profileToShow) return <p>Cargando perfil...</p>;
+  if (!profileToShow) return <p>Loading profile...</p>;
 
   return (
     <div className="p-4 max-w-screen-xl mx-auto">
