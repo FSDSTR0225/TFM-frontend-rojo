@@ -14,7 +14,7 @@ import {
 import { AvatarImage } from "../../../components/AvatarImage";
 import { NameUsers } from "../../../components/NameUsers";
 
-export const ProjectInfoCard = ({ project }) => {
+export const ProjectInfoCard = ({ project, setSelectedOwner }) => {
   const [showAllSkills, setShowAllSkills] = useState(false);
 
   if (!project) return null;
@@ -30,9 +30,9 @@ export const ProjectInfoCard = ({ project }) => {
     owner,
   } = project;
 
-  const skillsToShow = showAllSkills
-    ? projectSkills
-    : projectSkills?.slice(0, 5) || [];
+  setSelectedOwner(owner);
+
+  const skillsToShow = showAllSkills ? projectSkills : projectSkills?.slice(0, 5) || [];
 
   console.log("owner en ProjectInfoCard:", owner);
 
@@ -153,9 +153,7 @@ export const ProjectInfoCard = ({ project }) => {
                       type="button"
                       onClick={() => setShowAllSkills(true)}
                       className="bg-neutral-60 text-neutral-30 px-2 py-0.5 rounded-full text-sm cursor-pointer"
-                      aria-label={`Show ${
-                        projectSkills.length - 5
-                      } more skills`}
+                      aria-label={`Show ${projectSkills.length - 5} more skills`}
                     >
                       +{projectSkills.length - 5}
                     </button>

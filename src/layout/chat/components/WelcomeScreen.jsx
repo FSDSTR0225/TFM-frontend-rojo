@@ -3,7 +3,6 @@ import { AvatarImage } from '../../../components/AvatarImage'
 import { NameUsers } from '../../../components/NameUsers'
 
 export const WelcomeScreen = ({ users, onlineUsers, user, handleSelectedUser, onClose, notifications, profile }) => {
-  console.log("+++++++++++++", notifications)
   return (
     <>
       <div
