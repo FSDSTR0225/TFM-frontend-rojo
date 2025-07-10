@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { getProjectById, incrementProjectView, toggleProjectLike, getProjectLikeStatus } from "../../../services/projectService";
 import { ProjectInfoCard } from "../components/ProjectInfoCard";
@@ -6,6 +6,8 @@ import { GitHubFileTree } from "../components/GitHubFileTree";
 import { GitHubLanguagesTag } from "../components/GitHubLanguagesTag";
 import { CodeBlock } from "../../../styles/ReactParser";
 import { LikeButtonRounded } from "../../../components/LikeButtonRounded";
+import { AuthContext } from "../../../context/authContext";
+
 
 function useWindowWidth() {
   const [width, setWidth] = useState(window.innerWidth);
@@ -34,7 +36,8 @@ export const ProjectDetailsPage = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const width = useWindowWidth();
   const isDesktop = width >= 1200;
-
+  const { profile, socket, setNotifications } = useContext(AuthContext);
+  const [selectedOwner, setSelectedOwner] = useState(null); 
   const token = localStorage.getItem('token') || '';
 
   // Estados del botón de like
@@ -43,46 +46,46 @@ export const ProjectDetailsPage = () => {
   const [loadingLike, setLoadingLike] = useState(true);
 
   useEffect(() => {
-  const incrementViewWithCooldown = async () => {
-    if (typeof window === "undefined" || !window.localStorage) return;
+    const incrementViewWithCooldown = async () => {
+      if (typeof window === "undefined" || !window.localStorage) return;
 
-    const cooldownTime = 1000 * 60 * 60; // 1 hora en ms
-    const lastViewKey = `project_${id}_last_view`;
-    const lastView = localStorage.getItem(lastViewKey);
-    const now = Date.now();
+      const cooldownTime = 1000 * 60 * 60; // 1 hora en ms
+      const lastViewKey = `project_${id}_last_view`;
+      const lastView = localStorage.getItem(lastViewKey);
+      const now = Date.now();
 
-    if (!lastView || now - parseInt(lastView, 10) > cooldownTime) {
+      if (!lastView || now - parseInt(lastView, 10) > cooldownTime) {
+        try {
+          await incrementProjectView(id);
+          localStorage.setItem(lastViewKey, now.toString());
+
+          // Actualizar localmente el contador de views para reflejar el cambio instantáneamente:
+          setProject(prev => prev ? { ...prev, views: (prev.views || 0) + 1 } : prev);
+        } catch (error) {
+          console.error("Error incrementando views:", error);
+        }
+      }
+    };
+
+    const fetchProjectAndLikeStatus = async () => {
       try {
-        await incrementProjectView(id);
-        localStorage.setItem(lastViewKey, now.toString());
-
-        // Actualizar localmente el contador de views para reflejar el cambio instantáneamente:
-        setProject(prev => prev ? { ...prev, views: (prev.views || 0) + 1 } : prev);
+        const data = await getProjectById(id);
+        if (data && !data.error) {
+          setProject(data);
+          setCurrentIndex(0);
+        }
+        const likeStatus = await getProjectLikeStatus(id, token);
+        setLiked(likeStatus.liked);
       } catch (error) {
-        console.error("Error incrementando views:", error);
+        console.error("Error fetching project or like status:", error);
+      } finally {
+        setLoadingLike(false);
       }
-    }
-  };
+    };
 
-  const fetchProjectAndLikeStatus = async () => {
-    try {
-      const data = await getProjectById(id);
-      if (data && !data.error) {
-        setProject(data);
-        setCurrentIndex(0);
-      }
-      const likeStatus = await getProjectLikeStatus(id, token);
-      setLiked(likeStatus.liked);
-    } catch (error) {
-      console.error("Error fetching project or like status:", error);
-    } finally {
-      setLoadingLike(false);
-    }
-  };
-
-  fetchProjectAndLikeStatus();
-  incrementViewWithCooldown();
-}, [id, token]);
+    fetchProjectAndLikeStatus();
+    incrementViewWithCooldown();
+  }, [id, token]);
 
 
   // Función para manejar el click del like
@@ -93,12 +96,24 @@ export const ProjectDetailsPage = () => {
     try {
       const data = await toggleProjectLike(id, token);
       setLiked(data.liked);
-      // Actualizamos el proyecto con la info de likes para que refleje contador, estado, etc.
       setProject((prevProject) => ({
         ...prevProject,
         liked: data.liked,
         likes: data.likes,
       }));
+
+      if (data.liked && selectedOwner._id && selectedOwner._id !== profile._id) {
+        const notif = {
+          senderId: profile._id,
+          senderName: profile.name,
+          receiverId: selectedOwner._id,
+          receiverName: selectedOwner.name,
+          type: 2,
+          createdAt: Date.now()
+        };
+        socket.emit("sendNotification", notif);
+        setNotifications(prev => [notif, ...prev]);
+      }
     } catch (error) {
       console.error(error);
     } finally {
@@ -133,7 +148,7 @@ export const ProjectDetailsPage = () => {
     ? parseRepoUrl(project.githubProjectLink)
     : null;
 
-  
+
   return (
     <div className="w-full flex flex-col items-center gap-6">
       <div className="relative w-full h-[256px] overflow-hidden">
@@ -164,9 +179,8 @@ export const ProjectDetailsPage = () => {
                       key={index}
                       src={url}
                       alt={`slide-${index}`}
-                      className={`absolute inset-0 w-full h-full object-cover rounded-lg transition-opacity duration-700 ease-in-out ${
-                        index === currentIndex ? "opacity-100 z-10" : "opacity-0 z-0"
-                      }`}
+                      className={`absolute inset-0 w-full h-full object-cover rounded-lg transition-opacity duration-700 ease-in-out ${index === currentIndex ? "opacity-100 z-10" : "opacity-0 z-0"
+                        }`}
                     />
                   ))}
                   <button
@@ -208,7 +222,7 @@ export const ProjectDetailsPage = () => {
             </div>
 
             <div className="flex flex-col">
-              <ProjectInfoCard project={project} />
+              <ProjectInfoCard project={project} setSelectedOwner={setSelectedOwner} />
 
               <div className="flex justify-center items-center rounded-full p-6">
                 <LikeButtonRounded
@@ -251,9 +265,8 @@ export const ProjectDetailsPage = () => {
                             key={index}
                             src={url}
                             alt={`slide-${index}`}
-                            className={`absolute inset-0 w-full h-full object-cover rounded-lg transition-opacity duration-700 ease-in-out ${
-                              index === currentIndex ? "opacity-100 z-10" : "opacity-0 z-0"
-                            }`}
+                            className={`absolute inset-0 w-full h-full object-cover rounded-lg transition-opacity duration-700 ease-in-out ${index === currentIndex ? "opacity-100 z-10" : "opacity-0 z-0"
+                              }`}
                           />
                         ))}
                         <button
@@ -273,7 +286,7 @@ export const ProjectDetailsPage = () => {
                   );
 
                 case "ProjectInfoCard":
-                  return <ProjectInfoCard key="infoCard" project={project} />;
+                  return <ProjectInfoCard key="infoCard" project={project} setSelectedOwner={setSelectedOwner} />;
 
                 case "Description":
                   return project.description ? (

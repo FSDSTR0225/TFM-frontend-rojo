@@ -12,6 +12,7 @@ import { AvatarImage } from "../../../components/AvatarImage";
 import { NameUsers } from "../../../components/NameUsers";
 import { ChatContext } from "../../../layout/chat/context/ChatContext";
 
+
 export const OfferCard = ({
   classProps,
   offer,
@@ -23,6 +24,9 @@ export const OfferCard = ({
   isOpenModalEdit,
   setIsOpenModalEdit,
 }) => {
+
+
+
   const navigate = useNavigate();
   const { profile, token } = useContext(AuthContext);
 
@@ -127,22 +131,24 @@ export const OfferCard = ({
           )}
           {hasApplied && <Badge text={"Applied"} />}
         </div>
+        <div className="flex flex-wrap justify-between items-center">
 
-        <div className="flex flex-col justify-between">
-          <h3 className="text-xl font-bold">{offer?.position}</h3>
+        <div className="flex flex-col justify-between ">
+          <h3 className="text-lg font-bold">{offer?.position}</h3>
           <p className="text-neutral-10">{offer?.role}</p>
         </div>
-        <div className="flex gap-4 flex-wrap">
-          <div className="flex items-center gap-2">
+        <div className="flex md:flex-col gap-4 md:gap-1 flex-wrap">
+          <div className="flex items-center gap-2 text-neutral-10">
             <PiMapPinArea className="size-4" />
             {offer.location}
           </div>
-          <div className="badge bg-neutral-60">
+          <div className="badge bg-neutral-60 md:self-end">
             {offer?.contractType}
           </div>
         </div>
+        </div>
         <div>
-          <p className="line-clamp-3">{offer?.description}</p>
+          <p className="line-clamp-2">{offer?.description}</p>
         </div>
 
         {!isOwner && !isRecruiter && (

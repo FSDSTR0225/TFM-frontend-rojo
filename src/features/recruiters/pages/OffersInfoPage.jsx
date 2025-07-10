@@ -39,6 +39,9 @@ export const OffersInfoPage = () => {
 
   const isDeveloper = profile?.role.type === "developer";
 
+
+
+
   const resetFilters = () => {
     setContractTypeFilter("");
     setSkillsFilter([]);
@@ -131,7 +134,7 @@ export const OffersInfoPage = () => {
   const totalPages = Math.ceil(filteredOffers.length / 6);
   const totalPagesApplied = Math.ceil(filteredAppliedOffers.length / 6);
   const totalPagesByDev = Math.ceil(filteredOffersByDev.length / 6);
-
+  
   const startIndex = (currentPage - 1) * 6;
 
   const token = localStorage.getItem("token");
@@ -227,16 +230,14 @@ export const OffersInfoPage = () => {
 
   return (
     <SectionContainer>
-      <div className="mt-4 md:mt-10">
-        <h2 className="text-3xl font-bold mb-2">
-          Your Next Tech Career Starts Here
-        </h2>
-        <p className="text-neutral-30 text-md font-normal">
-          Discover job opportunities for developers, designers, and engineers in
-          fast-growing tech fields.
+      <div>
+        <h2 className='text-3xl font-bold'>Your Next Tech Career Starts Here</h2>
+        <p className='text-neutral-10 text-lg '>
+          Discover job opportunities for developers, designers, and engineers in fast-growing tech
+          fields.
         </p>
       </div>
-
+   
       <div>
         {isDeveloper && (
           <div className="tabs tabs-border mt-4">
@@ -261,118 +262,112 @@ export const OffersInfoPage = () => {
                 resetFilters={resetFilters}
               />
 
-              <OfferList view={true}>
-                {currentOffersByDev?.map((offer) => {
-                  return (
-                    <OfferCard
-                      offer={offer}
-                      owner={offer.owner}
-                      setIsOpenModalDelete={setIsOpenModalDelete}
-                      isOpenModalDelete={isOpenModalDelete}
-                      isOpenApplyModal={isOpenApplyModal}
-                      setIsOpenApplyModal={setIsOpenApplyModal}
-                      setSelectedOfferId={setSelectedOfferId}
-                      isOpenModalEdit={isOpenModalEdit}
-                      setIsOpenModalEdit={setIsOpenModalEdit}
-                      key={offer._id}
-                    />
-                  );
-                })}
-              </OfferList>
-
-              <Pagination
-                currentPage={currentPage}
-                totalPages={totalPagesByDev}
-                handlePageChange={handlePageChange}
-                filteredProjects={filteredOffersByDev}
-              />
-            </div>
-
-            <input
-              type="radio"
-              name="my_tabs_2"
-              className="tab "
-              aria-label="Applied Offers"
+      <OfferList view={true}>
+        {currentOffersByDev?.map((offer) => {
+          return (
+            <OfferCard
+              offer={offer}
+              owner={offer.owner}
+              setIsOpenModalDelete={setIsOpenModalDelete}
+              isOpenModalDelete={isOpenModalDelete}
+              isOpenApplyModal={isOpenApplyModal}
+              setIsOpenApplyModal={setIsOpenApplyModal}
+              setSelectedOfferId={setSelectedOfferId}
+              isOpenModalEdit={isOpenModalEdit}
+              setIsOpenModalEdit={setIsOpenModalEdit}
+              key={offer._id}
             />
-            <div className="tab-content">
-              {" "}
-              <FilterOffers
-                offers={offersAplied}
-                filtersOpen={filtersOpen}
-                setFiltersOpen={setFiltersOpen}
-                contractTypeFilter={contractTypeFilter}
-                setContractTypeFilter={setContractTypeFilter}
-                skillsFilter={skillsFilter}
-                setSkillsFilter={setSkillsFilter}
-                sortOrder={sortOrder}
-                setSortOrder={setSortOrder}
-                resetFilters={resetFilters}
-              />
-              <OfferList view={true}>
-                {currentAppliedOffers?.map((offer) => {
-                  return (
-                    <OfferCard
-                      offer={offer}
-                      owner={offer.owner}
-                      setIsOpenModalDelete={setIsOpenModalDelete}
-                      isOpenModalDelete={isOpenModalDelete}
-                      setSelectedOfferId={setSelectedOfferId}
-                      isOpenModalEdit={isOpenModalEdit}
-                      setIsOpenModalEdit={setIsOpenModalEdit}
-                      key={offer._id}
-                    />
-                  );
-                })}
-              </OfferList>
-              <Pagination
-                currentPage={currentPage}
-                totalPages={totalPagesApplied}
-                handlePageChange={handlePageChange}
-                filteredProjects={filteredAppliedOffers}
-              />
-            </div>
-          </div>
+          );
+        })}
+      </OfferList>
+      
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPagesByDev}
+        handlePageChange={handlePageChange}
+        filteredProjects={filteredOffersByDev}
+      />
+  </div>
+
+  <input type="radio" name="my_tabs_2" className="tab " aria-label="Applied Offers"  />
+  <div className="tab-content"> <FilterOffers
+        offers={offersAplied}
+        filtersOpen={filtersOpen}
+        setFiltersOpen={setFiltersOpen}
+        contractTypeFilter={contractTypeFilter}
+        setContractTypeFilter={setContractTypeFilter}
+        skillsFilter={skillsFilter}
+        setSkillsFilter={setSkillsFilter}
+        sortOrder={sortOrder}
+        setSortOrder={setSortOrder}
+        resetFilters={resetFilters}
+      />
+
+      <OfferList view={true}>
+        {currentAppliedOffers?.map((offer) => {
+          return (
+            <OfferCard
+              offer={offer}
+              owner={offer.owner}
+              setIsOpenModalDelete={setIsOpenModalDelete}
+              isOpenModalDelete={isOpenModalDelete}
+              setSelectedOfferId={setSelectedOfferId}
+              isOpenModalEdit={isOpenModalEdit}
+              setIsOpenModalEdit={setIsOpenModalEdit}
+              key={offer._id}
+            />
+          );
+        })}
+      </OfferList>
+      
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPagesApplied}
+        handlePageChange={handlePageChange}
+        filteredProjects={filteredAppliedOffers}
+      /></div>
+
+  
+</div>
         )}
       </div>
+        
+      {!isDeveloper && ( <><FilterOffers
+        offers={offers}
+        filtersOpen={filtersOpen}
+        setFiltersOpen={setFiltersOpen}
+        contractTypeFilter={contractTypeFilter}
+        setContractTypeFilter={setContractTypeFilter}
+        skillsFilter={skillsFilter}
+        setSkillsFilter={setSkillsFilter}
+        sortOrder={sortOrder}
+        setSortOrder={setSortOrder}
+        resetFilters={resetFilters}
+      />
 
-      {!isDeveloper && (
-        <>
-          <FilterOffers
-            offers={offers}
-            filtersOpen={filtersOpen}
-            setFiltersOpen={setFiltersOpen}
-            contractTypeFilter={contractTypeFilter}
-            setContractTypeFilter={setContractTypeFilter}
-            skillsFilter={skillsFilter}
-            setSkillsFilter={setSkillsFilter}
-            sortOrder={sortOrder}
-            setSortOrder={setSortOrder}
-            resetFilters={resetFilters}
-          />
-          <OfferList view={true}>
-            {currentOffers?.map((offer) => {
-              return (
-                <OfferCard
-                  offer={offer}
-                  owner={offer.owner}
-                  setIsOpenModalDelete={setIsOpenModalDelete}
-                  isOpenModalDelete={isOpenModalDelete}
-                  setSelectedOfferId={setSelectedOfferId}
-                  isOpenModalEdit={isOpenModalEdit}
-                  setIsOpenModalEdit={setIsOpenModalEdit}
-                  key={offer._id}
-                />
-              );
-            })}
-          </OfferList>
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            handlePageChange={handlePageChange}
-            filteredProjects={offers}
-          />{" "}
-        </>
-      )}
+      <OfferList view={true}>
+        {currentOffers?.map((offer) => {
+          return (
+            <OfferCard
+              offer={offer}
+              owner={offer.owner}
+              setIsOpenModalDelete={setIsOpenModalDelete}
+              isOpenModalDelete={isOpenModalDelete}
+              setSelectedOfferId={setSelectedOfferId}
+              isOpenModalEdit={isOpenModalEdit}
+              setIsOpenModalEdit={setIsOpenModalEdit}
+              key={offer._id}
+            />
+          );
+        })}
+      </OfferList>
+      
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        handlePageChange={handlePageChange}
+        filteredProjects={offers}
+      /> </>)}
       {isOpenModalDelete && (
         <ModalDelete
           isOpen={isOpenModalDelete}
