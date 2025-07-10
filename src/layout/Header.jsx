@@ -5,7 +5,7 @@ import { SideMenu } from "./components/SideMenu";
 import { Navbar } from "./components/Navbar";
 import { AuthMenu } from "./components/AuthMenu";
 import { useState } from "react";
-import { Notifications } from "./components/Notifications";
+
 
 
 export const Header = () => {
@@ -34,7 +34,7 @@ export const Header = () => {
         </div> */}
 
         {/* Menu User */}
-        <AuthMenu profile={profile} logout={logout} notifications={notifications} setNotifications={setNotifications} setNotificationsOpen={setNotificationsOpen} getNotificationText={getNotificationText} />
+        <AuthMenu profile={profile} logout={logout} />
       </div>
       <SideMenu onClose={toggleSideMenu} />
     </header>
