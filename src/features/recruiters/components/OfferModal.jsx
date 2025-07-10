@@ -189,7 +189,7 @@ export const OfferModal = ({ token, reloadPage, idOffer, isOpen, setIsOpen, oper
             </div>
 
             <div className="flex flex-col md:flex-row justify-end gap-4 pt-4">
-              <button type="submit" className="btn bg-primary-60 text-neutral-90 hover:bg-primary-70 w-full md:w-auto">
+              <button type="submit" className="btn bg-primary-60 hover:bg-primary-70 w-full md:w-auto">
                 {operacion !== 'crear' ? "Edit Offer" : "Create Offer"}
               </button>
               <button

@@ -3,9 +3,6 @@ import { Link } from "react-router";
 import { CardUser } from "./CardUser";
 import { UserMenu } from "./UserMenu";
 
-
-
-
 export const AuthMenu = ({profile, logout}) => {
  
 
