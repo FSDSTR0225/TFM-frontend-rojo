@@ -112,7 +112,6 @@ export const ProjectDetailsPage = () => {
           createdAt: Date.now()
         };
         socket.emit("sendNotification", notif);
-        setNotifications(prev => [notif, ...prev]);
       }
     } catch (error) {
       console.error(error);
