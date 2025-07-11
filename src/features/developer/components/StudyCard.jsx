@@ -4,6 +4,7 @@ import { getStudiesByDeveloper, softDeleteStudy, createStudy, updateStudy } from
 import { PiPlusBold, PiEye } from 'react-icons/pi';
 import StudyModal from '../components/studyModal';
 import DotsComponent from '../components/DotsComponent';
+import { Pagination } from "../../../components/Pagination";
 
 function StudyCard({ profileInfo }) {
   const { profile: currentUser, token } = useContext(AuthContext);
@@ -12,6 +13,8 @@ function StudyCard({ profileInfo }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedStudy, setSelectedStudy] = useState(null);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [studiesPerPage] = useState(4);
 
   const isCurrentUser = currentUser?._id === profileInfo?._id;
 
@@ -77,7 +80,21 @@ function StudyCard({ profileInfo }) {
     }
   };
 
-   return (
+  const sortedStudies = [...studies].sort((a, b) => new Date(b.endDate) - new Date(a.endDate));
+
+  // Cálculos para la paginación
+  const totalPages = Math.ceil(sortedStudies.length / studiesPerPage);
+  const indexOfLastStudy = currentPage * studiesPerPage;
+  const indexOfFirstStudy = indexOfLastStudy - studiesPerPage;
+  const currentStudies = sortedStudies.slice(indexOfFirstStudy, indexOfLastStudy);
+  
+  // Función para cambiar de página
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  return (
     <div className="w-full">
       <div className="flex justify-end mb-2">
         {isCurrentUser && (
@@ -118,80 +135,92 @@ function StudyCard({ profileInfo }) {
           <p className="text-neutral-40 max-w-md">Check back soon to see them!</p>
         </div>
       ) : (
-        <ul className="space-y-4">
-          {studies
-          .sort((a, b) => new Date(b.endDate) - new Date(a.endDate))
-          .map(stu => (
-            <li
-              key={stu._id}
-              className={`
-                relative
-                bg-neutral-80 border border-neutral-60 p-6 sm:p-8 mb-4 rounded-md
-                ${stu.instituteLogo ? 'flex flex-col sm:flex-row gap-4' : 'grid grid-cols-1 sm:grid-cols-3 gap-4'}
-              `}
-            >
-              {isCurrentUser && (
-                <div className="absolute top-4 right-4 flex gap-2">
-                  <DotsComponent
-                    onEdit={() => openEditModal(stu)}
-                    onDelete={() => handleDelete(stu._id)}
-                  />
-                </div>
-              )}
-
-              {stu.instituteLogo ? (
-                <>
-                  <div className="flex-shrink-0 mx-auto sm:mx-0">
-                    <img
-                      src={stu.instituteLogo}
-                      alt={stu.instituteName}
-                      className="w-24 h-24 sm:w-32 sm:h-32 object-cover rounded-full"
+        <div className="w-full">
+          <ul className="space-y-4">
+            {currentStudies.map(stu => (
+              <li
+                key={stu._id}
+                className={`
+                  relative 
+                  bg-neutral-80 border border-neutral-60 p-6 sm:p-8 mb-4 rounded-md min-h-[200px]
+                  ${stu.instituteLogo ? 'flex flex-col sm:flex-row gap-4' : 'grid grid-cols-1 sm:grid-cols-3 gap-4'}
+                `}
+              >
+                {isCurrentUser && (
+                  <div className="absolute top-4 right-4 flex gap-2">
+                    <DotsComponent
+                      onEdit={() => openEditModal(stu)}
+                      onDelete={() => handleDelete(stu._id)}
                     />
                   </div>
-                  <div className="flex-1 ml-0 sm:ml-2 text-center sm:text-left">
-                    <h3 className="text-lg sm:text-xl uppercase font-bold mb-1 sm:mb-2">
-                      {stu.degree}
-                    </h3>
-                    <p className="mb-1 sm:mb-2">{stu.instituteName}</p>
-                    <p className="mb-2 sm:mb-4">{stu.description}</p>
-                  </div>
-                  <div className="flex-shrink-0 flex flex-col justify-end items-center sm:items-end mt-4 sm:mt-0">
-                    <p className="text-sm sm:text-base text-center sm:text-right">
-                      {new Date(stu.startDate).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })} {' '}
+                )}
+
+                {stu.instituteLogo ? (
+                  <>
+                    <div className="flex-shrink-0 mx-auto sm:mx-0">
+                      <img
+                        src={stu.instituteLogo}
+                        alt={stu.instituteName}
+                        className="w-24 h-24 sm:w-32 sm:h-32 object-cover rounded-full"
+                      />
+                    </div>
+                    <div className="flex-1 ml-0 sm:ml-2 text-center sm:text-left flex flex-col justify-center">
+                      <h3 className="text-lg sm:text-xl uppercase font-bold mb-1 sm:mb-2">
+                        {stu.degree}
+                      </h3>
+                      <p className="mb-1 sm:mb-2">{stu.instituteName}</p>
+                      <p className="mb-2 sm:mb-4">{stu.description}</p>
+                    </div>
+                    <div className="flex-shrink-0 flex flex-col justify-end items-center sm:items-end mt-4 sm:mt-0">
+                      <p className="text-sm sm:text-base text-center sm:text-right whitespace-nowrap">
+                        {new Date(stu.startDate).toLocaleDateString('en-US', {
+                          month: 'long',
+                          year: 'numeric'
+                        })}{' '}
                         -{' '}
-                      {stu.endDate
-                        ? new Date(stu.endDate).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
-                        : 'Current'}
-                    </p>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className="col-span-1 sm:col-span-3">
-                    <h3 className="text-lg sm:text-xl uppercase font-bold">
+                        {stu.endDate
+                          ? new Date(stu.endDate).toLocaleDateString('en-US', {
+                              month: 'long',
+                              year: 'numeric'
+                            })
+                          : 'Current'}
+                      </p>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <h3 className="col-span-1 sm:col-span-2 text-lg sm:text-xl uppercase font-bold text-center sm:text-left mb-1 sm:mb-0 mt-6 sm:mt-0">
                       {stu.degree}
                     </h3>
-                  </div>
-                  <div className="col-span-1 sm:col-span-3">
-                    <p>{stu.instituteName}</p>
-                  </div>
-                  <div className="col-span-1 sm:col-span-3">
-                    <p>{stu.description}</p>
-                  </div>
-                  <div className="col-span-1 sm:col-span-3">
-                    <p className="text-center sm:text-right text-sm sm:text-base">
-                      {new Date(stu.startDate).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })} {' '}
-                        -{' '}  
+                    <p className="col-span-1 sm:col-span-2 text-center sm:text-left mb-1 sm:mb-0">{stu.instituteName}</p>
+                    <p className="col-span-1 sm:col-span-2 text-center sm:text-left mb-2 sm:mb-0">{stu.description}</p>
+                    <p className="grid justify-items-center sm:justify-items-end text-sm sm:text-base whitespace-nowrap">
+                      {new Date(stu.startDate).toLocaleDateString('en-US', {
+                        month: 'long',
+                        year: 'numeric'
+                      })}{' '}
+                      -{' '}
                       {stu.endDate
-                        ? new Date(stu.endDate).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+                        ? new Date(stu.endDate).toLocaleDateString('en-US', {
+                            month: 'long',
+                            year: 'numeric'
+                          })
                         : 'Current'}
                     </p>
-                  </div>
-                </>
-              )}
-            </li>
-          ))}
-        </ul>
+                  </>
+                )}
+              </li>
+            ))}
+          </ul>
+          
+          {/* Paginación */}
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            handlePageChange={handlePageChange}
+            filteredProjects={sortedStudies}
+          />
+        </div>
       )}
     </div>
   );
