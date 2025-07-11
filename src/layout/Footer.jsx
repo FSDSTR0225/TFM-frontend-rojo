@@ -30,9 +30,9 @@ export const Footer = () => {
         <Link to="/about" className="link link-hover">
           About us
         </Link>
-        {/* <Link to="/contact" className="link link-hover disabled:cursor-not-allowed " >
+        <Link to="/contact" className="link link-hover disabled:cursor-not-allowed " >
           Contact
-        </Link> */}
+        </Link>
         <Link to="/onboarding" className="link link-hover">
           Onboarding
         </Link>
