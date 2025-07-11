@@ -1,8 +1,8 @@
-import React from 'react'
+
 import { AvatarImage } from '../../../components/AvatarImage'
 import { NameUsers } from '../../../components/NameUsers'
 
-export const WelcomeScreen = ({ users, onlineUsers, user, handleSelectedUser, onClose, notifications, profile }) => {
+export const WelcomeScreen = ({ users, user, handleSelectedUser, onClose, notifications, profile }) => {
   return (
     <>
       <div
@@ -19,32 +19,45 @@ export const WelcomeScreen = ({ users, onlineUsers, user, handleSelectedUser, on
       </div>
 
       <div className="flex flex-col mt-2 p-2 gap-4 space-x-2 overflow-x-auto bg-neutral-">
-        {users.map((usuario) => {
-          // Cuenta notificaciones de tipo 1 que vienen de este usuario y son para el usuario logueado
-          const newMessages = notifications.filter(
-            n =>
-              n.senderId === usuario._id &&
-              n.type === 1 &&
-              n.receiverId === profile?._id
-          ).length;
+       {Array.isArray(users) && users.filter(usuario => usuario && usuario._id).map((usuario) => {
+  const roleType = usuario?.role?.type || (Array.isArray(usuario?.roles) ? usuario.roles[0]?.type : usuario?.roles?.type);
+  const isRecruiter = roleType === "recruiter";
+  const newMessages = Array.isArray(notifications)
+  ? notifications.filter(
+      (n) =>
+        n &&
+        usuario?._id &&
+      profile?._id &&
+        n.senderId === usuario._id &&
+        n.type === 1 &&
+        n.receiverId === profile?._id
+    ).length
+  : 0;
 
           return (
             <button
               key={usuario._id}
-              className={`relative btn p-2 py-6 flex items-center justify-between mx-2 focus:outline-none ${(usuario?.role?.type || usuario?.roles?.type) === "recruiter"
-                ? "bg-primary-50/10 border-primary-50 shadow-primary-50"
-                : "bg-secondary-50/10 border-secondary-50 hover:border-secondary-300 shadow-secondary-50"
+              className={`relative btn p-2  py-6 flex items-center justify-between gap-4 mx-2 focus:outline-none ${isRecruiter
+                ? "bg-primary-50/10 border-secondary-50 hover:border-secondary-30 shadow-secondary-50"
+                : "bg-secondary-50/10 border-primary-50 hover:border-primary-30 shadow-primary-50"
                 } hover:scale-105 shadow transition-all duration-200 ease-in-out`}
               onClick={() => handleSelectedUser(usuario)}
               type="button"
             >
+            <div className='flex  gap-4'>
+
               <div>
                 <AvatarImage user={usuario} width={8} />
               </div>
-              <NameUsers user={usuario} classProps={"text-xs "} />
-              <div className="text-sm relative">
+              <NameUsers user={usuario} align='items-start' classProps={"text-xs"} >
+                <span className={`text-[10px] text-neutral-30 font-normal `}>
+                  {isRecruiter ? "Recruiter" : "Developer"}
+                </span>
+              </NameUsers>
+            </div>
+              <div className="text-sm items-center ">
                 {newMessages > 0 && (
-                  <span className="bg-red-500 text-white text-xs px-2 py-0.5 rounded-full animate-pulse inline-block ml-2">
+                  <span className="bg-red-500 text-xs px-2 py-0.5 self-end rounded-full animate-pulse inline-block ml-2 ">
                     {newMessages}
                   </span>
                 )}

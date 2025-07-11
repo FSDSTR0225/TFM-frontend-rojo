@@ -1,4 +1,4 @@
-import React from 'react'
+
 import { AvatarImage } from '../../../components/AvatarImage'
 import { NameUsers } from '../../../components/NameUsers'
 import { PiCaretLeft } from 'react-icons/pi'
@@ -7,19 +7,21 @@ import { CiImageOn } from 'react-icons/ci'
 import { IoSend } from 'react-icons/io5'
 import { formatMessageTime } from '../../../utils/utils'
 
-export const ChatScreen = ({ onClose, messages, messageEndRef, userSelected, onlineUsers, profile, backToWelcome, sendMessage, fileInputRef, imagePreview, setMessage, message, removeImage, imageChange }) => {
+export const ChatScreen = ({ onClose, messages, messageEndRef, userSelected, profile, backToWelcome, sendMessage, fileInputRef, imagePreview, setMessage, message, removeImage, imageChange }) => {
   return (
-    <div className="flex flex-col h-full bg-neutral-100 rounded-xl shadow-lg overflow-hidden border border-zinc-700">
+    <div className="flex flex-col h-full bg-neutral-100 rounded-xl shadow-lg overflow-hidden border border-neutral-80">
       {/* Encabezado */}
       <div className="p-4 border-b border-neutral-80 flex justify-between items-center bg-linear-130 from-[#37c84880] from-30% via-[#37c84880] via-30% to-[#0077ff80] to-70% ">
         <div className="flex items-center gap-4">
           <button className="" onClick={backToWelcome} aria-label="Close"><PiCaretLeft /></button>
           <AvatarImage user={userSelected} width={8} />
           <div>
-            <NameUsers user={userSelected} classProps={"text-sm font-bold"} />
-            <span className="text-xs text-zinc-200">
-              {onlineUsers.includes(userSelected?._id) ? "online" : "offline"}
-            </span>
+            <NameUsers user={userSelected} align='items-start' classProps={"text-sm font-bold"}>
+              <span className={`text-xs  ${userSelected.role.type === "recruiter" ? "text-secondary-40" : "text-primary-50"}`}>
+                {userSelected.role.type === "recruiter" ? "Recruiter" : "Developer"}
+              </span>
+            </NameUsers>
+         
           </div>
         </div>
 
@@ -79,10 +81,10 @@ export const ChatScreen = ({ onClose, messages, messageEndRef, userSelected, onl
       )}
 
       {/* Input y botones */}
-      <div className="p-3 border-t border-zinc-700 bg-zinc-900 flex items-center gap-2">
+      <div className="p-3 border-t border-neutral-80 bg-neutral-90 flex items-center gap-2">
         <form
           onSubmit={sendMessage}
-          className="flex items-center justify-between bg-zinc-800 border border-zinc-600 rounded-lg px-2 py-1 space-x-2"
+          className="flex items-center justify-between bg-neutral-80 border border-neutral-50 rounded-lg px-2 py-1 space-x-2"
         >
           {/* Campo de texto contenido dentro de su propio bloque */}
           <div className="flex-1">
@@ -91,7 +93,7 @@ export const ChatScreen = ({ onClose, messages, messageEndRef, userSelected, onl
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               placeholder="Escribe un mensaje..."
-              className="w-full bg-transparent text-white text-sm px-2 py-1 focus:outline-none"
+              className="w-full bg-transparent text-sm px-2 py-1 focus:outline-none"
             />
           </div>
 
@@ -109,7 +111,7 @@ export const ChatScreen = ({ onClose, messages, messageEndRef, userSelected, onl
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              className={`text-xl hover:text-emerald-500 transition-colors ${imagePreview ? "text-emerald-500" : "text-zinc-400"
+              className={`text-3xl hover:text-emerald-500 transition-colors ${imagePreview ? "text-primary-20" : "text-neutral-20"
                 }`}
             >
               <CiImageOn />
@@ -117,7 +119,7 @@ export const ChatScreen = ({ onClose, messages, messageEndRef, userSelected, onl
 
             <button
               type="submit"
-              className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-md"
+              className="bg-secondary-60 hover:bg-secondary-70 p-2 rounded-md"
             >
               <IoSend size={16} />
             </button>

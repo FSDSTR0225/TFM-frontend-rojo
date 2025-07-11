@@ -25,6 +25,7 @@ export const ChatProvider = ({ children }) => {
   };
 
   const closeChat = () => {
+
     setSelectedUser(null);
     setIsChatOpen(false);
   };

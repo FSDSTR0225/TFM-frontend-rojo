@@ -118,7 +118,15 @@ export default function ChatPanel({ onClose, user }) {
         senderName: SENDER_NAME,
         receiverId: selectedUser._id,
         receiverName: selectedUser.name,
-        type: 1
+        type: 1,
+        user: {
+    _id: profile._id,
+    name: profile.name,
+    role: profile.role,
+    roles: profile.roles,
+    avatar: profile.avatar,
+    // cualquier otra propiedad útil
+  }
       });
 
        setUsuariosConectados((prev) => {
@@ -146,7 +154,7 @@ export default function ChatPanel({ onClose, user }) {
       if (data.type === 1) {
         setUsuariosConectados((prev) => {
           if (!prev.some(user => user._id === data.senderId)) {
-            return [...prev, data];
+            return [...prev, data.user];
           }
           return prev;
         });
