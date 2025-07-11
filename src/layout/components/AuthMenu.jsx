@@ -26,7 +26,7 @@ export const AuthMenu = ({profile, logout}) => {
               </Link>
             </div>
           ) : (
-            <div className='flex items-center gap-4 bg-neutral-60 py-2 pl-3 pr-2 rounded-full shadow outline outline-neutral-90  min-w-35 sm:min-w-45 lg:min-w-50'>
+            <div className='flex justify-between items-center gap-4 bg-neutral-60 py-2 pl-3 pr-2 rounded-full shadow outline outline-neutral-90  min-w-35 sm:min-w-45 lg:min-w-50'>
 
             <Notifications />
             <div className='dropdown dropdown-end  items-center '>
