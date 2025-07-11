@@ -190,7 +190,7 @@ export const OfferInfoPage = () => {
                   {/* Izquierda: avatar + info */}
                   <div className='flex flex-col items-center gap-2 '>
                     <div className='flex flex-col items-center gap-2 '>
-                      <div className='flex gap-2 self-start '>
+                      <div className='flex gap-2 self-start cursor-pointer' onClick={() => navigate(`/profile/${candidato?.user?._id}`)}>
                         <div>
                         <AvatarImage user={candidato?.user} width={10} />
                         </div>

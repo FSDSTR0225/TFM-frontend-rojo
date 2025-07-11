@@ -113,13 +113,21 @@ export default function ChatPanel({ onClose, user }) {
       const resp = await sendMessage(token, message, imagePreview, selectedUser._id);
       setMessages((prevMessages) => [...prevMessages, resp]);
       //Emitir evento de socket para enviar la notificación
-      socket.emit("sendNotification", {
-        senderId: profile._id,           // <--- agrega esto
-        senderName: SENDER_NAME,
-        receiverId: selectedUser._id,
-        receiverName: selectedUser.name,
-        type: 1
-      });
+  //     socket.emit("sendNotification", {
+  //       senderId: profile._id,           // <--- agrega esto
+  //       senderName: SENDER_NAME,
+  //       receiverId: selectedUser._id,
+  //       receiverName: selectedUser.name,
+  //       type: 1,
+  //       user: {
+  //   _id: profile._id,
+  //   name: profile.name,
+  //   role: profile.role,
+  //   roles: profile.roles,
+  //   avatar: profile.avatar,
+  //   // cualquier otra propiedad útil
+  // }
+  //     });
 
        setUsuariosConectados((prev) => {
       if (!prev.some(user => user._id === selectedUser._id)) {
@@ -146,7 +154,7 @@ export default function ChatPanel({ onClose, user }) {
       if (data.type === 1) {
         setUsuariosConectados((prev) => {
           if (!prev.some(user => user._id === data.senderId)) {
-            return [...prev, data];
+            return [...prev, data.user];
           }
           return prev;
         });
