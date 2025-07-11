@@ -2,6 +2,7 @@ import { Link } from "react-router";
 
 import { CardUser } from "./CardUser";
 import { UserMenu } from "./UserMenu";
+import { Notifications } from "./Notifications";
 
 export const AuthMenu = ({profile, logout}) => {
  
@@ -25,13 +26,17 @@ export const AuthMenu = ({profile, logout}) => {
               </Link>
             </div>
           ) : (
-            <div className='dropdown dropdown-end   items-center gap-4  pr-6 '>
+            <div className='flex items-center gap-4 bg-neutral-60 py-2 pl-3 pr-2 rounded-full shadow outline outline-neutral-90  min-w-35 sm:min-w-45 lg:min-w-50'>
+
+            <Notifications />
+            <div className='dropdown dropdown-end  items-center '>
               <CardUser profile={profile}  />
                 
             <UserMenu profile={profile} logout={logout}  />
           
               {/* Botones */}
               
+            </div>
             </div>
           )}
         </div>

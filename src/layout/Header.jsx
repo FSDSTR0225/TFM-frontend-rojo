@@ -16,7 +16,7 @@ export const Header = () => {
   };
 
   return (
-    <header className='bg-neutral-80 py-2 pl-2  drawer border-b-1 border-neutral-70'>
+    <header className='bg-neutral-80 py-2  px-4  drawer border-b-1 border-neutral-70'>
       <input
         id='my-drawer-3'
         type='checkbox'

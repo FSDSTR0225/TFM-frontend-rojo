@@ -39,7 +39,7 @@ export const Notifications = () => {
 
             {/* Panel de notificaciones */}
             {profile && notificationsOpen && (
-                <div className="absolute right-0 mt-2 w-80 max-w-xs bg-neutral-70 shadow-lg rounded-xl z-50">
+                <div className="absolute left-1/7 transform -translate-x-1/2 top-3/2 mt-2 w-80 max-w-xs bg-neutral-70 shadow-lg rounded-xl z-50">
                     <div className="flex justify-between items-center px-4 py-3 border-b border-base-200">
                         <span className="font-semibold text-base-content">Notificaciones</span>
                         <button

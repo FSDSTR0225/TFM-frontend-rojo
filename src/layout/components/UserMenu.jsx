@@ -12,7 +12,7 @@ export const UserMenu = ({ profile, logout }) => {
   return (
     <ul
       tabIndex={0}
-      className='dropdown-content mt-2 menu bg-neutral-60 rounded-box min-w-38 lg:min-w-48 left-1 '
+      className='dropdown-content mt-2 menu bg-neutral-60 rounded-box min-w-38 lg:min-w-48 top-12  z-10'
     >
       {profile.role.type === "recruiter" ? (
         <>
