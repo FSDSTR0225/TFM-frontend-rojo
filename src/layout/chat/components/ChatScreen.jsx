@@ -25,7 +25,7 @@ export const ChatScreen = ({ onClose, messages, messageEndRef, userSelected, pro
           </div>
         </div>
 
-        <button onClick={onClose} className="text-sm">
+        <button onClick={onClose} className="text-sm cursor-pointer">
           ✕
         </button>
       </div>
