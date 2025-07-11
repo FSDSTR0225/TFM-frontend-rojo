@@ -18,12 +18,12 @@ export const Notifications = () => {
     };
 
     return (
-        <div className="relative">
+        <div className="relative ">
             {
                 profile && (
                     <button
                         type="button"
-                        className="relative flex items-center justify-center text-white hover:text-gray-200"
+                        className="relative flex items-center justify-center text-white hover:text-gray-200 cursor-pointer"
                         aria-label="Notificaciones"
                         onClick={() => setNotificationsOpen((prev) => !prev)}
                     >

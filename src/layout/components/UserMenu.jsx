@@ -1,10 +1,15 @@
 
+import { useContext } from "react";
 import { PiGear } from "react-icons/pi";
 import { Link, useNavigate } from "react-router";
+import { ChatContext } from "../chat/context/ChatContext";
 
 export const UserMenu = ({ profile, logout }) => {
   const navigate = useNavigate();
+  const {toggleChat, closeChat} = useContext(ChatContext);
   const handleLogout = () => {
+        toggleChat();
+    closeChat();
     logout();
     navigate("/");
   };

@@ -1,10 +1,10 @@
 import { AvatarImage } from "../../components/AvatarImage"
 import { NameUsers } from "../../components/NameUsers"
-import { Notifications } from "./Notifications"
+
 
 export const CardUser = ({ profile }) => {
   return (
-    <div tabIndex={0} role="button" className="flex items-center gap-2">
+    <div tabIndex={0} role="button" className="flex items-center gap-2 cursor-pointer">
       {/* <Notifications /> */}
       <div className="flex flex-col text-right leading-tight max-w-[6rem] sm:max-w-[8rem]">
         <NameUsers

@@ -13,7 +13,7 @@ export const WelcomeScreen = ({ users, user, handleSelectedUser, onClose, notifi
           <AvatarImage user={user} width={9} />
           <h2 className="text-md font-medium">Messages</h2>
         </div>
-        <button onClick={onClose} className="text-sm">
+        <button onClick={onClose} className="text-sm cursor-pointer">
           ✕
         </button>
       </div>

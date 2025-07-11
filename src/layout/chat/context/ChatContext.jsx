@@ -10,6 +10,7 @@ export const ChatProvider = ({ children }) => {
   const { setNotifications } = useContext(AuthContext);
 
   const toggleChat = () => {
+    setScreen("welcome");
     setIsOpen(!isOpen);
   };
 
