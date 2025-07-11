@@ -1,5 +1,9 @@
 import { useState } from "react";
-import { getOffers, getOffersAppliedByDeveloper, getOffersByDeveloper } from "../../../services/offersServices";
+import {
+  getOffers,
+  getOffersAppliedByDeveloper,
+  getOffersByDeveloper,
+} from "../../../services/offersServices";
 import { useEffect } from "react";
 import { OfferCard } from "../components/OfferCard";
 import { SectionContainer } from "../../../components/SectionContainer";
@@ -11,7 +15,6 @@ import { FilterOffers } from "../components/FilterOffers";
 import { useContext } from "react";
 import { AuthContext } from "../../../context/authContext";
 import { ApplyModal } from "../components/ApplyModal";
-
 
 export const OffersInfoPage = () => {
   const [offers, setOffers] = useState([]);
@@ -45,7 +48,7 @@ export const OffersInfoPage = () => {
   };
 
   const getFilteredOffers = () => {
-    let filtered = [ ...offers];
+    let filtered = [...offers];
 
     if (contractTypeFilter) {
       filtered = filtered.filter(
@@ -68,60 +71,60 @@ export const OffersInfoPage = () => {
   };
 
   const getFilteredAppliedOffers = () => {
-  if (!offersAplied || !Array.isArray(offersAplied)) {
-    return [];
-  }
-  
-  let filtered = [...offersAplied];
+    if (!offersAplied || !Array.isArray(offersAplied)) {
+      return [];
+    }
 
-  if (contractTypeFilter) {
-    filtered = filtered.filter(
-      (offer) => offer && offer.contractType.includes(contractTypeFilter)
-    );
-  }
+    let filtered = [...offersAplied];
 
-  if (skillsFilter.length > 0) {
-    filtered = filtered.filter((offer) =>
-      skillsFilter.every((skill) => offer.skills.includes(skill))
-    );
-  }
+    if (contractTypeFilter) {
+      filtered = filtered.filter(
+        (offer) => offer && offer.contractType.includes(contractTypeFilter)
+      );
+    }
 
-  filtered.sort((a, b) => {
-    const dateA = new Date(a.createdAt);
-    const dateB = new Date(b.createdAt);
-    return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
-  });
-  
-  return filtered;
-};
+    if (skillsFilter.length > 0) {
+      filtered = filtered.filter((offer) =>
+        skillsFilter.every((skill) => offer.skills.includes(skill))
+      );
+    }
 
-const getFilteredOffersByDev = () => {
-  if (!offersAplied || !Array.isArray(offersAplied)) {
-    return [];
-  }
-  
-  let filtered = [...offersByDev];
+    filtered.sort((a, b) => {
+      const dateA = new Date(a.createdAt);
+      const dateB = new Date(b.createdAt);
+      return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
+    });
 
-  if (contractTypeFilter) {
-    filtered = filtered.filter(
-      (offer) => offer && offer.contractType.includes(contractTypeFilter)
-    );
-  }
+    return filtered;
+  };
 
-  if (skillsFilter.length > 0) {
-    filtered = filtered.filter((offer) =>
-      skillsFilter.every((skill) => offer.skills.includes(skill))
-    );
-  }
+  const getFilteredOffersByDev = () => {
+    if (!offersAplied || !Array.isArray(offersAplied)) {
+      return [];
+    }
 
-  filtered.sort((a, b) => {
-    const dateA = new Date(a.createdAt);
-    const dateB = new Date(b.createdAt);
-    return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
-  });
-  
-  return filtered;
-};
+    let filtered = [...offersByDev];
+
+    if (contractTypeFilter) {
+      filtered = filtered.filter(
+        (offer) => offer && offer.contractType.includes(contractTypeFilter)
+      );
+    }
+
+    if (skillsFilter.length > 0) {
+      filtered = filtered.filter((offer) =>
+        skillsFilter.every((skill) => offer.skills.includes(skill))
+      );
+    }
+
+    filtered.sort((a, b) => {
+      const dateA = new Date(a.createdAt);
+      const dateB = new Date(b.createdAt);
+      return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
+    });
+
+    return filtered;
+  };
 
   const filteredOffers = getFilteredOffers();
   const filteredAppliedOffers = getFilteredAppliedOffers();
@@ -136,48 +139,52 @@ const getFilteredOffersByDev = () => {
 
   const token = localStorage.getItem("token");
   const currentOffers = filteredOffers.slice(startIndex, startIndex + 6);
-const currentAppliedOffers = filteredAppliedOffers.slice(startIndex, startIndex + 6);
-const currentOffersByDev = filteredOffersByDev.slice(startIndex, startIndex + 6);
+  const currentAppliedOffers = filteredAppliedOffers.slice(
+    startIndex,
+    startIndex + 6
+  );
+  const currentOffersByDev = filteredOffersByDev.slice(
+    startIndex,
+    startIndex + 6
+  );
   const handlePageChange = (pageNum) => {
     if (pageNum === currentPage) return;
     setCurrentPage(pageNum); // Primero actualizamos la página
   };
 
   const fetchOffersForDeveloper = async () => {
-  try {
-    const applied = await getOffersAppliedByDeveloper(profile._id, token);
-    const created = await getOffersByDeveloper(token);
-    setOffersApplied(applied);
-    setOffersByDev(created);
-  } catch (error) {
-    setError(error.message);
-  } finally {
-    setLoading(false);
-  }
-};
+    try {
+      const applied = await getOffersAppliedByDeveloper(profile._id, token);
+      const created = await getOffersByDeveloper(token);
+      setOffersApplied(applied);
+      setOffersByDev(created);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-const fetchOffers= async () => {
-  try {
-    const offers = await getOffers();
-    setOffers(offers);
-  } catch (error) {
-    setError(error.message);
-  } finally {
-    setLoading(false);
-  }
-};
+  const fetchOffers = async () => {
+    try {
+      const offers = await getOffers();
+      setOffers(offers);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-  
-  if (isDeveloper) {
-    console.log("Fetching offers for developer:", profile._id);
-    fetchOffersForDeveloper();
-  } else {
-    console.log("Fetching general offers");
-    fetchOffers();
-  }
-}, [isDeveloper, token]);
-
+    if (isDeveloper) {
+      console.log("Fetching offers for developer:", profile._id);
+      fetchOffersForDeveloper();
+    } else {
+      console.log("Fetching general offers");
+      fetchOffers();
+    }
+  }, [isDeveloper, token]);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -185,24 +192,24 @@ const fetchOffers= async () => {
 
   if (loading) {
     return (
-      <SectionContainer classProps='flex flex-col space-y-6'>
+      <SectionContainer classProps="flex flex-col space-y-6">
         {/* Título y descripción skeleton */}
-        <div className='space-y-4 p-4'>
-          <div className='h-8 bg-base-200 rounded-lg skeleton'></div>
-          <div className='h-4 bg-base-200 rounded-lg skeleton w-5/6'></div>
-          <div className='h-4 bg-base-200 rounded-lg skeleton w-4/6'></div>
+        <div className="space-y-4 p-4">
+          <div className="h-8 bg-base-200 rounded-lg skeleton"></div>
+          <div className="h-4 bg-base-200 rounded-lg skeleton w-5/6"></div>
+          <div className="h-4 bg-base-200 rounded-lg skeleton w-4/6"></div>
         </div>
         {/* Lista de tarjetas skeleton */}
-        <div className='grid grid-cols-1 lg:grid-cols-2 gap-8 p-4'>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-4">
           {Array.from({ length: 6 }).map((_, idx) => (
             <div
               key={idx}
-              className='p-4 border rounded-lg space-y-3 animate-pulse'
+              className="p-4 border rounded-lg space-y-3 animate-pulse"
             >
-              <div className='h-4 bg-base-200 rounded-lg skeleton w-3/4'></div>
-              <div className='h-3 bg-base-200 rounded-lg skeleton w-full'></div>
-              <div className='h-3 bg-base-200 rounded-lg skeleton w-5/6'></div>
-              <div className='h-8 bg-base-200 rounded-lg skeleton w-1/2'></div>
+              <div className="h-4 bg-base-200 rounded-lg skeleton w-3/4"></div>
+              <div className="h-3 bg-base-200 rounded-lg skeleton w-full"></div>
+              <div className="h-3 bg-base-200 rounded-lg skeleton w-5/6"></div>
+              <div className="h-8 bg-base-200 rounded-lg skeleton w-1/2"></div>
             </div>
           ))}
         </div>
@@ -213,9 +220,11 @@ const fetchOffers= async () => {
 
   const handleApplySuccess = (updatedOffer) => {
     console.log("Offer applied successfully:", updatedOffer);
-    setOffersByDev((prevOffers) =>{
-      console.log( "🚀 ~ handleApplySuccess ~ prevOffers:", prevOffers);
-     return prevOffers.map((offer) => (offer._id === updatedOffer._id ? updatedOffer : offer))
+    setOffersByDev((prevOffers) => {
+      console.log("🚀 ~ handleApplySuccess ~ prevOffers:", prevOffers);
+      return prevOffers.map((offer) =>
+        offer._id === updatedOffer._id ? updatedOffer : offer
+      );
     });
   };
 
@@ -228,24 +237,30 @@ const fetchOffers= async () => {
           fields.
         </p>
       </div>
-
+   
       <div>
         {isDeveloper && (
-        <div className="tabs tabs-border mt-4">
-  <input type="radio" name="my_tabs_2" className="tab" aria-label="Job offers" defaultChecked />
-  <div className="tab-content  ">
-    <FilterOffers
-        offers={offersByDev}
-        filtersOpen={filtersOpen}
-        setFiltersOpen={setFiltersOpen}
-        contractTypeFilter={contractTypeFilter}
-        setContractTypeFilter={setContractTypeFilter}
-        skillsFilter={skillsFilter}
-        setSkillsFilter={setSkillsFilter}
-        sortOrder={sortOrder}
-        setSortOrder={setSortOrder}
-        resetFilters={resetFilters}
-      />
+          <div className="tabs tabs-border mt-4">
+            <input
+              type="radio"
+              name="my_tabs_2"
+              className="tab"
+              aria-label="Job offers"
+              defaultChecked
+            />
+            <div className="tab-content  ">
+              <FilterOffers
+                offers={offersByDev}
+                filtersOpen={filtersOpen}
+                setFiltersOpen={setFiltersOpen}
+                contractTypeFilter={contractTypeFilter}
+                setContractTypeFilter={setContractTypeFilter}
+                skillsFilter={skillsFilter}
+                setSkillsFilter={setSkillsFilter}
+                sortOrder={sortOrder}
+                setSortOrder={setSortOrder}
+                resetFilters={resetFilters}
+              />
 
       <OfferList view={true}>
         {currentOffersByDev?.map((offer) => {
@@ -376,7 +391,7 @@ const fetchOffers= async () => {
           setIsOpen={setIsOpenApplyModal}
           token={token}
           onApplySuccess={handleApplySuccess}
-          />
+        />
       )}
     </SectionContainer>
   );

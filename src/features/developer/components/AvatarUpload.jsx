@@ -1,7 +1,13 @@
 import React, { useRef, useState, useEffect } from "react";
 import { uploadImage } from "../../../services/imageService";
 
-export const AvatarUpload = ({ onValidChange, data, onDataChange, error: externalError }) => {
+export const AvatarUpload = ({
+  onValidChange,
+  data,
+  onDataChange,
+  error: externalError,
+  showTitle = true,
+}) => {
   const fileInputRef = useRef(null);
   const [isDragging, setIsDragging] = useState(false);
   const [error, setError] = useState(null);
@@ -9,9 +15,10 @@ export const AvatarUpload = ({ onValidChange, data, onDataChange, error: externa
 
   const imageFile = data?.imageFile || null;
   const avatarUrl = data?.avatarUrl || null;
-  
+
   // Para preview: usar URL del servidor si existe, sino crear una temporal del archivo
-  const previewUrl = avatarUrl || (imageFile ? URL.createObjectURL(imageFile) : null);
+  const previewUrl =
+    avatarUrl || (imageFile ? URL.createObjectURL(imageFile) : null);
 
   const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
@@ -44,24 +51,24 @@ export const AvatarUpload = ({ onValidChange, data, onDataChange, error: externa
     } catch (uploadError) {
       setIsUploading(false);
       setError("Error uploading the image.");
-      console.error('Upload error:', uploadError);
+      console.error("Upload error:", uploadError);
       // En caso de error, mantenemos el archivo para el preview
       onDataChange({ ...data, imageFile: file, avatarUrl: null });
     }
   };
 
   const handleFileChange = (e) => handleFile(e.target.files[0]);
-  
+
   const handleDragOver = (e) => {
     e.preventDefault();
     setIsDragging(true);
   };
-  
+
   const handleDragLeave = (e) => {
     e.preventDefault();
     setIsDragging(false);
   };
-  
+
   const handleDrop = (e) => {
     e.preventDefault();
     setIsDragging(false);
@@ -82,13 +89,17 @@ export const AvatarUpload = ({ onValidChange, data, onDataChange, error: externa
 
   return (
     <div className="form-control">
-      <label className="block text-sm text-neutral-20 mb-1">
-        <span className="label-text font-semibold">Avatar</span>
-      </label>
-      <p className="text-sm text-neutral-30 mb-4">
-        Accepted formats: JPG, PNG, GIF. Max size: 5MB.
-      </p>
-      
+      {showTitle && (
+        <>
+          <label className="block text-sm text-neutral-20 mb-1">
+            <span className="label-text font-semibold">Avatar</span>
+          </label>
+          <p className="text-sm text-neutral-30 mb-4">
+            Accepted formats: JPG, PNG, GIF. Max size: 5MB.
+          </p>
+        </>
+      )}
+
       <div className="flex flex-col items-center space-y-3">
         {/* Zona de drag and drop */}
         <div
@@ -136,7 +147,9 @@ export const AvatarUpload = ({ onValidChange, data, onDataChange, error: externa
           )}
 
           {isUploading && (
-            <p className="mt-2 text-sm text-blue-600 text-center">Uploading...</p>
+            <p className="mt-2 text-sm text-blue-600 text-center">
+              Uploading...
+            </p>
           )}
 
           {error && (
@@ -144,7 +157,10 @@ export const AvatarUpload = ({ onValidChange, data, onDataChange, error: externa
           )}
 
           {imageFile && !error && (
-            <p className="mt-2 text-sm text-neutral-40 text-center truncate" title={imageFile.name}>
+            <p
+              className="mt-2 text-sm text-neutral-40 text-center truncate"
+              title={imageFile.name}
+            >
               {truncateFileName(imageFile.name)}
             </p>
           )}

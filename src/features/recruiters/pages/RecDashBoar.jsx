@@ -3,6 +3,7 @@ import { updateCandidateStatus } from '../../../services/offersServices';
 import { AvatarImage } from '../../../components/AvatarImage';
 import { NameUsers } from '../../../components/NameUsers';
 import { getDaysSince } from '../../../utils/utils';
+import { PiInfo } from 'react-icons/pi';
 export const RecDashBoar = ({ offerId, lists, setLists }) => {
   //guarda temporalmente de dónde (qué columna) y qué candidato estamos arrastrando.
   const [dragInfo, setDragInfo] = useState({ fromList: null, candidate: null });
@@ -53,36 +54,47 @@ export const RecDashBoar = ({ offerId, lists, setLists }) => {
 
   // 5. Render
   return (
-    <div className="hidden lg:flex flex-col md:flex-row gap-4 py-4  min-h-screen w-auto overflow-x-auto">
+    <div className="hidden lg:flex flex-col md:flex-row gap-4 py-4  min-h-screen w-full overflow-x-auto">
       {Object.entries(lists).map(([key, items]) => (
         <div
           key={key}
-          className={`w-72 bg-neutral-80 rounded-box flex flex-col border-t-4 ${colors[key]}`}
+          className={` bg-neutral-80 rounded-box flex flex-col border-t-4 ${colors[key]}`}
           onDragOver={handleDragOver}
           onDrop={e => handleDrop(e, key)}
         >
           <div className="p-4 border-b border-neutral-60">
             <h2 className="font-semibold capitalize">{key}</h2>
           </div>
-          <div className="flex-1 p-4 space-y-2 text-sm text-left">
+          <div className="p-4 space-y-2 text-sm text-left">
             {items.length > 0 ? (
               items.map(c => (
+               
                 <div
                   key={c._id}
-                  className="candidate-card bg-neutral-60 p-4 rounded-md flex items-start gap-2 mb-4 cursor-grab active:cursor-grabbing"
+                  className="bg-neutral-60 p-4 rounded-md flex items-start gap-2 mb-4 cursor-grab active:cursor-grabbing justify-between "
                   draggable
                   onDragStart={e => handleDragStart(e, c, key)}
                 >
+                  
+                  
+                
                   <AvatarImage user={c.user} />
                   <div className="flex flex-col">
-                    <NameUsers user={c.user} align='items-start' classProps={'line-clamp-1'} />
+                    <NameUsers user={c.user} align='items-start' classProps={' line-clamp-1'} />
+                    
+                    
                     {/* <p className="font-semibold text-base leading-tight">{c.user.name} {c.user.surname}</p> */}
                     <p className="text-xs line-clamp-1 w-full">{c.user.email}</p>
                     <p className="text-[10px] text-neutral-30 mt-1">
                       Last {getDaysSince(c.appliedDate)} days ago
                     </p>
                   </div>
+                  <div>
+                    <PiInfo  className='text-secondary-30 text-3xl z-48 size-6' />
+                  </div>
+                  
                 </div>
+                 
               ))
             ) : (
               <p>No hay candidatos</p>

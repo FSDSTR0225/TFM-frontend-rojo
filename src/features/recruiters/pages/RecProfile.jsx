@@ -12,6 +12,7 @@ import { RecProfileCard } from '../components/RecProfileCard';
 import { ModalDelete } from '../components/ModalDelete';
 import { ApplyModal } from '../components/ApplyModal';
 
+
 export const RecProfile = () => {
   const [offers, setOffers] = useState([]);
   const [isOpenModalDelete, setIsOpenModalDelete] = useState(false);
@@ -31,6 +32,8 @@ export const RecProfile = () => {
 
 
 
+
+
   const totalPages = Math.ceil(offers.length / 4);
   const startIndex = (currentPage - 1) * 4;
   const currentOffers = offers.slice(startIndex, startIndex + 4);
@@ -39,6 +42,15 @@ export const RecProfile = () => {
     if (pageNum === currentPage) return;
     setCurrentPage(pageNum); // Primero actualizamos la página 
   };
+
+  const updateRecruiterData = async () => {
+  try {
+    const recruiterData = await getRecruiterById(id);
+    setRecruiter(recruiterData);
+  } catch (error) {
+    console.error("Error fetching recruiter data:", error);
+  }
+};
 
   const fetchData = async () => {
     try {
@@ -54,6 +66,8 @@ export const RecProfile = () => {
   };
 
 
+
+
   useEffect(() => {
     console.log("isOpenModalEdit:", isOpenModalEdit)
     fetchData();
@@ -61,14 +75,16 @@ export const RecProfile = () => {
 
 
   return (
-    <SectionContainer >
+    <SectionContainer classProps={"py-12"} >
 
-      <div className='flex flex-col md:flex-row md:justify-between gap-8 items-start'>
-        <RecProfileCard recruiter={recruiter} token={token} profile={profile} id={id} setProfile={setProfile}/>
-        <div className="w-full">
+      <div className='flex flex-col md:flex-row  gap-4 '>
+        <RecProfileCard recruiter={recruiter} token={token} profile={profile} id={id} setProfile={setProfile} onRecruiterUpdate={updateRecruiterData}/>
+        <div className="w-full flex flex-col">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-semibold">Mis ofertas de empleo</h2>
-            {(isOwner && profile?.role?.type === 'recruiter') && (<><button onClick={() => setTsOpenModalCreate(true)} className="bg-green-600 text-black px-4 py-2 rounded hover:bg-green-700 transition cursor-pointer text-sm">
+            <h2 className="text-lg font-semibold">My Offers</h2>
+          </div>
+          <div className='flex flex-col p-6 h-full justify-between'>
+          {(isOwner && profile?.role?.type === 'recruiter') && (<><button onClick={() => setTsOpenModalCreate(true)} className="bg-secondary-50 text-black px-4 py-2 rounded hover:bg-secondary-70 transition cursor-pointer text-sm self-end">
               + Create new offer
             </button>
               <OfferModal
@@ -78,9 +94,14 @@ export const RecProfile = () => {
                 operacion={operacion}
                 reloadPage={fetchData} />
             </>)}
-          </div>
-          <div>
-            <div className=" grid lg:grid-cols-2 gap-8 py-10">
+            {offers.length === 0 && 
+            <div className="flex  self-center items-end gap-8 py-4 flex-1">
+              <div className=" bg-neutral-80 p-4 rounded-lg border border-neutral-70 md:w-md">
+                <p className="text-center self-center text-neutral-20">You don't have any job offers yet. Create one now and start receiving applications!</p>
+              </div>
+            </div>
+            }
+            <div className=" grid lg:grid-cols-1 gap-8 py-4 flex-1">
               {currentOffers?.map((offer) => {
                 return (
                   <OfferCard
@@ -93,7 +114,10 @@ export const RecProfile = () => {
               setIsOpenApplyModal={setIsOpenModalApply}
                     isOpenModalEdit={isOpenModalEdit}
                     setIsOpenModalEdit={setIsOpenModalEdit}
-                    key={offer._id} />
+                    key={offer._id} 
+                    classProps={""}
+                    />
+                    
                 )
               })}
             </div>
@@ -103,6 +127,7 @@ export const RecProfile = () => {
               handlePageChange={handlePageChange}
               filteredProjects={offers}
             />
+            
           </div>
 
         </div>

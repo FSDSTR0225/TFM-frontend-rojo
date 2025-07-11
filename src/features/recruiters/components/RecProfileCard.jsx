@@ -6,7 +6,7 @@ import { AvatarImage } from '../../../components/AvatarImage';
 import { NameUsers } from '../../../components/NameUsers'
 import { RecModalEdit } from './RecModalEdit';
 import { getUserLogged } from '../../../services/authService';
-export const RecProfileCard = ({ recruiter, profile, id, token, setProfile }) => {
+export const RecProfileCard = ({ recruiter, profile, id, token, setProfile, onRecruiterUpdate}) => {
   const navigate = useNavigate();
   const [isRecModalOpen, setIsRecModalOpen] = useState(false);
   const isOwner = profile?._id === id;
@@ -18,6 +18,9 @@ export const RecProfileCard = ({ recruiter, profile, id, token, setProfile }) =>
   const updateProfile = async() => {
     let freshProfile = await getUserLogged(token);
     setProfile(freshProfile);
+    if (onRecruiterUpdate) {
+      await onRecruiterUpdate();
+    }
   }
 
   const handleOpenModal = () => {
@@ -25,7 +28,7 @@ export const RecProfileCard = ({ recruiter, profile, id, token, setProfile }) =>
   };
 
   return (
-    <div className="flex flex-col gap-4 w-full md:w-1/2 lg:w-1/3">
+    <div className="flex flex-col gap-4 w-full md:w-1/2 lg:w-1/2">
       <div className="card bg-neutral-80 shadow-xl border border-neutral-70 flex-col text-sm md:text-lg w-full md:max-w-100">
         <div className="card-body gap-3 items-center">
           {isOwner && profile?.role?.type === 'recruiter' &&
@@ -39,55 +42,55 @@ export const RecProfileCard = ({ recruiter, profile, id, token, setProfile }) =>
             </div>
             <h1 className="text-xl font-bold mt-4 text-center">
               <NameUsers user={recruiter} classProps="text-lg font-semibold">
-                {profile?.role.type}
+                {recruiter?.role.type}
               </NameUsers>
             </h1>
           </div>
 
           <ul className="text-gray-300 space-y-1 mb-4">
             {/* Solo muestra si companyName está disponible */}
-            {profile?.role?.recruiter?.companyName && (
+            {recruiter?.role?.recruiter?.companyName && (
               <li className="flex gap-2 items-center">
                 <PiBuildingOffice size={20} />
-                {profile.role.recruiter.companyName}
+                {recruiter?.role?.recruiter?.companyName}
               </li>
             )}
 
             {/* Solo muestra si location está disponible */}
-            {profile?.role?.recruiter?.location && (
+            {recruiter?.role?.recruiter?.location && (
               <li className="flex gap-2 items-center">
                 <PiMapPinArea size={20} />
-                {profile.role.recruiter.location}
+                {recruiter?.role?.recruiter?.location}
               </li>
             )}
 
             {/* Solo muestra si contact.email está disponible */}
-            {profile?.role?.recruiter?.contact?.email && (
+            {recruiter?.role?.recruiter?.contact?.email && (
               <li className="flex gap-2 items-center">
                 <PiEnvelope size={20} />
-                {profile.role.recruiter.contact.email}
+                {recruiter.role.recruiter.contact.email}
               </li>
             )}
 
             {/* Solo muestra si contact.phone está disponible */}
-            {profile?.role?.recruiter?.contact?.phone && (
+            {recruiter?.role?.recruiter?.contact?.phone && (
               <li className="flex gap-2 items-center">
                 <PiPhone size={20} />
-                {profile.role.recruiter.contact.phone}
+                {recruiter?.role?.recruiter?.contact?.phone}
               </li>
             )}
 
             {/* Solo muestra si website está disponible */}
-            {profile?.role?.recruiter?.website && (
+            {recruiter?.role?.recruiter?.website && (
               <li className="flex gap-2 items-center">
                 <a
-                  href={profile.role.recruiter.website}
+                  href={recruiter?.role?.recruiter?.website}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex gap-2 items-center hover:underline"
                 >
                   <PiGlobe size={20} />
-                  {profile.role.recruiter.website}
+                  {recruiter?.role?.recruiter?.website}
                 </a>
               </li>
             )}
@@ -95,7 +98,7 @@ export const RecProfileCard = ({ recruiter, profile, id, token, setProfile }) =>
           <div>
             <h3 className="text-white font-semibold mb-1">About the recruiter:</h3>
             <p className="text-sm text-gray-400">
-              {profile?.description}
+              {recruiter?.description}
             </p>
           </div>
         </div>
@@ -142,6 +145,7 @@ export const RecProfileCard = ({ recruiter, profile, id, token, setProfile }) =>
             setOpenModal={setIsRecModalOpen}
             profile={profile}
             onProfileUpdate={updateProfile}
+            setProfile={setProfile}
           />
         )}
 

@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { Link } from "react-router";
+import { NameUsers } from "../components/NameUsers";
+import { useContainerWidth } from "../hooks/useContainerWidth"; // Ajusta ruta según corresponda
 
 export const TalentsCard = ({
-  name,
-  surname,
+  developer,
   avatar,
   profession,
   experienceYears,
@@ -12,6 +13,36 @@ export const TalentsCard = ({
   developerId,
   projectImage,
 }) => {
+  const skillsContainerRef = useRef(null);
+  const containerWidth = useContainerWidth(skillsContainerRef);
+  const [visibleSkills, setVisibleSkills] = useState([]);
+
+  useEffect(() => {
+    if (!containerWidth || skills.length === 0) return;
+
+    const estimateSkillWidth = (skill) => {
+      const baseWidth = 24; // padding + margen aproximado para text-xs y px-2 py-0.5
+      const charWidth = 6; // ancho aproximado por carácter para text-xs
+      return baseWidth + charWidth * skill.length;
+    };
+
+    let usedWidth = 0;
+    const selected = [];
+
+    for (let i = 0; i < skills.length; i++) {
+      const w = estimateSkillWidth(skills[i]);
+      if (usedWidth + w <= containerWidth - 40) {
+        // 40px margen para el +N
+        usedWidth += w + 4; // 4px espacio entre skills
+        selected.push(skills[i]);
+      } else {
+        break;
+      }
+    }
+
+    setVisibleSkills(selected);
+  }, [containerWidth, skills]);
+
   return (
     <Link
       to={`/profile/${developerId}`}
@@ -36,21 +67,33 @@ export const TalentsCard = ({
 
       {/* Avatar flotante */}
       <div className="absolute top-11 left-1/2 transform -translate-x-1/2 z-20">
+        {/* Capa con borde degradado */}
         <div className="p-0.5 rounded-full bg-gradient-to-br from-primary-40 to-secondary-40">
-          <figure>
+          {/* Máscara circular con fondo blanco */}
+          <div className="rounded-full bg-white w-24 h-24 overflow-hidden flex items-center justify-center">
+            {/* Imagen centrada, ajustando proporciones sin deformar */}
             <img
               src={avatar}
               alt="Avatar"
-              className="w-24 h-24 rounded-full bg-white"
+              className="max-w-none max-h-full"
+              style={{
+                width: "auto",
+                height: "100%",
+              }}
             />
-          </figure>
+          </div>
         </div>
       </div>
 
       {/* Info */}
       <div className="pt-10 mt-2 pb-4 px-4 text-center">
         <div className="text-neutral-0 font-semibold text-lg leading-tight group-hover:text-primary-40">
-          {name} {surname}
+          <NameUsers
+            classProps={
+              "font-semibold text-lg leading-tight group-hover:text-primary-40 "
+            }
+            user={developer}
+          />
         </div>
 
         {/* Profesión + años de experiencia */}
@@ -64,37 +107,26 @@ export const TalentsCard = ({
           )}
         </div>
 
-        <div className="flex gap-1 mt-4 justify-center flex-wrap max-w-full">
-          {skills.length > 0 && (
-            <>
-              {(() => {
-                // Calcular si las dos primeras skills son demasiado largas
-                const limitLength = 10; // ajustable
-                const shortSkills = skills
-                  .slice(0, 3)
-                  .filter((s) => s.length <= limitLength);
-                const displayedSkills =
-                  shortSkills.length < 3
-                    ? skills.slice(0, 2)
-                    : skills.slice(0, 3);
-
-                return displayedSkills.map((skill, index) => (
-                  <span
-                    key={index}
-                    className="bg-primary-70 text-neutral-00 px-2 py-0.5 rounded-full text-xs whitespace-nowrap items-center flex"
-                  >
-                    {skill}
-                  </span>
-                ));
-              })()}
-              {skills.length > 3 && (
-                <span className="bg-neutral-60 text-neutral-30 px-2 py-0.5 rounded-full text-sm">
-                  +{skills.length - 3}
-                </span>
-              )}
-            </>
+        <div
+          className="flex gap-1 mt-4 justify-center flex-nowrap overflow-hidden max-w-full"
+          ref={skillsContainerRef}
+        >
+          {visibleSkills.length > 0 &&
+            visibleSkills.map((skill, index) => (
+              <span
+                key={index}
+                className="bg-primary-70 text-neutral-00 px-2 py-0.5 rounded-full text-xs whitespace-nowrap items-center flex"
+              >
+                {skill}
+              </span>
+            ))}
+          {skills.length > visibleSkills.length && (
+            <span className="bg-neutral-60 text-neutral-30 px-2 py-0.5 rounded-full text-sm">
+              +{skills.length - visibleSkills.length}
+            </span>
           )}
         </div>
+
         {/* Location */}
         {location && (
           <div className="text-center text-neutral-20 text-sm mt-4 flex justify-center items-center mb-1">

@@ -6,12 +6,14 @@ import { ChatContext } from "./context/ChatContext";
 
 export function Widget() {
   // const [isOpen, setIsOpen] = useState(false);
-  const { profile, token } = useContext(AuthContext);
-  const {toggleChat, isOpen} = useContext(ChatContext);
+  const { profile, token, notifications } = useContext(AuthContext);
+  const { toggleChat, isOpen } = useContext(ChatContext);
 
   // const toggleChat = () => {
   //   setIsOpen(!isOpen);
   // };
+
+  const unreadChats = notifications.filter(n => n.type === 1).length;
 
   return (
     <>
@@ -28,7 +30,7 @@ export function Widget() {
                 ${isOpen ? 'scale-100 opacity-100' : 'scale-0 opacity-0 pointer-events-none'}
               `}
               style={{
-                boxShadow: '0 50px 50px rgba(0, 0, 0, 0.8)' // más profunda
+                boxShadow: '0 50px 50px rgba(0, 0, 0, 0.8)'
               }}
             >
               <ChatPanel onClose={toggleChat} user={profile} />
@@ -42,9 +44,14 @@ export function Widget() {
               }}
               className="
                 w-14 h-14 rounded-full text-white flex items-center justify-center shadow-2xl hover:brightness-90
-                transition transform active:scale-90 duration-150 ease-out"
+                transition transform active:scale-90 duration-150 ease-out relative"
             >
               <PiChat size={28} />
+              {unreadChats > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-2 py-0.5 rounded-full animate-pulse min-w-[22px] text-center">
+                  {unreadChats}
+                </span>
+              )}
             </button>
           </div>
         </div>

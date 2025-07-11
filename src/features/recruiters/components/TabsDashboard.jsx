@@ -7,7 +7,7 @@ export const TabsDashboard = ({activeTab, setActiveTab, lists, colors}) => {
           <button
             key={key}
             onClick={() => setActiveTab(key)}
-            className={` py-2 px-2  sm:px-4 capitalize transition-all text-sm sm:text-md duration-200 rounded-t-md
+            className={` py-2 px-2  sm:px-4 capitalize transition-all text-sm sm:text-md duration-200 rounded-t-md cursor-pointer
           ${activeTab === key
                 ? `${colors[key] || 'bg-black'} text-white`
                 : 'text-neutral-20'
