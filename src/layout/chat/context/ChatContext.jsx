@@ -25,7 +25,7 @@ export const ChatProvider = ({ children }) => {
   };
 
   const closeChat = () => {
-
+    setScreen("welcome");
     setSelectedUser(null);
     setIsChatOpen(false);
   };
