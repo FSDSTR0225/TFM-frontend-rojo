@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import { getSkillsByQuery } from "../../../services/offersServices";
-import { set } from "react-hook-form";
+
 
 export const TagsInputRecruiter = ({ value = [], onChange }) => {
   const [inputValue, setInputValue] = useState("");

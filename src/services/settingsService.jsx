@@ -51,8 +51,8 @@ export async function updatePassword(updPass, token) {
 
 export async function deleteAccount(token) {
   try {
-    const res = await fetch(urlBackEnd + `/settings/delete-account`, {
-      method: 'DELETE',
+    const res = await fetch(urlBackEnd + `/settings/delete-account/soft-delete`, {
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
@@ -70,6 +70,32 @@ export async function deleteAccount(token) {
     }
   } catch (error) {
     console.error('Error deleting account:', error);
+    throw error;
+  }
+};
+
+export const updateUserInfo = async (userInfo, token) => {
+  console.log("User Info:", userInfo);
+  console.log("Token:", token);
+
+  try {
+    const resp = await fetch(urlBackEnd + "/settings/profile", {
+      method: "PUT",
+      headers: {
+        authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userInfo),
+    });
+    
+    if (!resp.ok) {
+      throw new Error("Error updating user information");
+    }
+    
+    const data = await resp.json();
+    return data;
+  } catch (error) {
+    console.log("Error: ", error);
     throw error;
   }
 };

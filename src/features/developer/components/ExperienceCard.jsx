@@ -4,6 +4,7 @@ import { createExperience, updateExperience, getExperiencesByDeveloper, softDele
 import { PiPlusBold, PiEye } from 'react-icons/pi';
 import NewExperienceModal from './newExperienceModal';
 import DotsComponent from './DotsComponent';
+import { Pagination } from "../../../components/Pagination";
 
 function ExperienceCard({ profileInfo }) {
   const { profile: currentUser, token } = useContext(AuthContext);
@@ -12,6 +13,8 @@ function ExperienceCard({ profileInfo }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedExperience, setSelectedExperience] = useState(null);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [experiencesPerPage] = useState(4);
 
   const isCurrentUser = currentUser?._id === profileInfo?._id;
 
@@ -78,6 +81,20 @@ function ExperienceCard({ profileInfo }) {
     }
   };
 
+  const sortedExperiences = [...experiences].sort((a, b) => new Date(b.endDate) - new Date(a.endDate));
+
+  // Cálculos para la paginación
+  const totalPages = Math.ceil(sortedExperiences.length / experiencesPerPage);
+  const indexOfLastExperience = currentPage * experiencesPerPage;
+  const indexOfFirstExperience = indexOfLastExperience - experiencesPerPage;
+  const currentExperiences = sortedExperiences.slice(indexOfFirstExperience, indexOfLastExperience);
+  
+  // Función para cambiar de página
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <div className="w-full">
       <div className="flex justify-end mb-2">
@@ -119,15 +136,14 @@ function ExperienceCard({ profileInfo }) {
           <p className="text-neutral-40 max-w-md">Check back soon to see them!</p>
         </div>
       ) : (
-        <ul className="space-y-4">
-          {experiences
-            .sort((a, b) => new Date(b.endDate) - new Date(a.endDate))
-            .map(exp => (
+        <div className="w-full">
+          <ul className="space-y-4">
+            {currentExperiences.map(exp => (
               <li
                 key={exp._id}
                 className={`
                   relative 
-                  bg-neutral-80 border border-neutral-60 p-6 sm:p-8 mb-4 rounded-md
+                  bg-neutral-80 border border-neutral-60 p-6 sm:p-8 mb-4 rounded-md min-h-[200px]
                   ${exp.companyLogo ? 'flex flex-col sm:flex-row gap-4' : 'grid grid-cols-1 sm:grid-cols-3 gap-4'}
                 `}
               >
@@ -149,27 +165,15 @@ function ExperienceCard({ profileInfo }) {
                         className="w-24 h-24 sm:w-32 sm:h-32 object-cover rounded-full"
                       />
                     </div>
-                    <div className="flex-1 ml-0 sm:ml-2 text-center sm:text-left">
+                    <div className="flex-1 ml-0 sm:ml-2 text-center sm:text-left flex flex-col justify-center">
                       <h3 className="text-lg sm:text-xl uppercase font-bold mb-1 sm:mb-2">
                         {exp.position}
                       </h3>
                       <p className="mb-1 sm:mb-2">{exp.company}</p>
                       <p className="mb-2 sm:mb-4">{exp.description}</p>
-                      {/* {exp.experienceSkills?.length > 0 && (
-                        <div className="flex flex-wrap gap-2 mb-2 justify-center sm:justify-start">
-                          {exp.experienceSkills.map((skill, i) => (
-                            <span
-                              key={i}
-                              className="bg-primary-70 text-neutral-0 rounded-full px-2 py-0.5 text-xs sm:text-sm"
-                            >
-                              {skill}
-                            </span>
-                          ))}
-                        </div>
-                      )} */}
                     </div>
                     <div className="flex-shrink-0 flex flex-col justify-end items-center sm:items-end mt-4 sm:mt-0">
-                      <p className="text-sm sm:text-base text-center sm:text-right">
+                      <p className="text-sm sm:text-base text-center sm:text-right whitespace-nowrap">
                         {new Date(exp.startDate).toLocaleDateString('en-US', {
                           month: 'long',
                           year: 'numeric'
@@ -186,24 +190,12 @@ function ExperienceCard({ profileInfo }) {
                   </>
                 ) : (
                   <>
-                    <h3 className="col-span-1 sm:col-span-2 text-lg sm:text-xl uppercase font-bold">
+                    <h3 className="col-span-1 sm:col-span-2 text-lg sm:text-xl uppercase font-bold text-center sm:text-left mb-1 sm:mb-0 mt-6 sm:mt-0">
                       {exp.position}
                     </h3>
-                    <p className="col-span-1 sm:col-span-2">{exp.company}</p>
-                    <p className="col-span-1 sm:col-span-2">{exp.description}</p>
-                    {/* {exp.experienceSkills?.length > 0 && (
-                      <div className="col-span-1 sm:col-span-2 flex flex-wrap gap-2 mb-2">
-                        {exp.experienceSkills.map((skill, i) => (
-                          <span
-                            key={i}
-                            className="bg-primary-70 rounded-full px-2 py-0.5 text-xs sm:text-sm"
-                          >
-                            {skill}
-                          </span>
-                        ))}
-                      </div>
-                    )} */}
-                    <p className="grid justify-items-center sm:justify-items-end text-sm sm:text-base">
+                    <p className="col-span-1 sm:col-span-2 text-center sm:text-left mb-1 sm:mb-0">{exp.company}</p>
+                    <p className="col-span-1 sm:col-span-2 text-center sm:text-left mb-2 sm:mb-0">{exp.description}</p>
+                    <p className="grid justify-items-center sm:justify-items-end text-sm sm:text-base whitespace-nowrap">
                       {new Date(exp.startDate).toLocaleDateString('en-US', {
                         month: 'long',
                         year: 'numeric'
@@ -220,11 +212,19 @@ function ExperienceCard({ profileInfo }) {
                 )}
               </li>
             ))}
-        </ul>
+          </ul>
+          
+          {/* Paginación */}
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            handlePageChange={handlePageChange}
+            filteredProjects={sortedExperiences}
+          />
+        </div>
       )}
     </div>
   );
 }
-
 
 export default ExperienceCard;
