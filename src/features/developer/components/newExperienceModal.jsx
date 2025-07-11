@@ -118,13 +118,6 @@ export default function NewExperienceModal({ open, setOpen, handleExperience, ex
             )}
           </div>
 
-          {/* Logo Upload con drag and drop */}
-          <ExperienceLogoUpload
-            data={logoData}
-            onDataChange={setLogoData}
-            error={errors.companyLogo?.message}
-          />
-
           {/* Position */}
           <div className="form-control">
             <label className="block text-sm text-neutral-20 mb-1">
@@ -139,6 +132,13 @@ export default function NewExperienceModal({ open, setOpen, handleExperience, ex
               <span className="text-red-500 text-sm">This field is required</span>
             )}
           </div>
+
+          {/* Logo Upload con drag and drop */}
+          <ExperienceLogoUpload
+            data={logoData}
+            onDataChange={setLogoData}
+            error={errors.companyLogo?.message}
+          />
 
           {/* Skills */}
           {/* <div className="form-control">

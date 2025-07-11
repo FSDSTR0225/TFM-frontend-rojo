@@ -117,14 +117,6 @@ export default function StudyModal({ open, setOpen, handleStudy, study = null })
             )}
           </div>
 
-          {/* Logo Upload con drag and drop */}
-          <StudyLogoUpload
-            data={logoData}
-            onDataChange={setLogoData}
-            error={errors.instituteLogo?.message}
-          />
-
-
           {/* Institute */}
           <div className="form-control">
             <label className="block text-sm text-neutral-20 mb-1">
@@ -139,6 +131,13 @@ export default function StudyModal({ open, setOpen, handleStudy, study = null })
               <span className="text-red-500 text-sm">This field is required</span>
             )}
           </div>
+
+          {/* Logo Upload con drag and drop */}
+          <StudyLogoUpload
+            data={logoData}
+            onDataChange={setLogoData}
+            error={errors.instituteLogo?.message}
+          />
 
           {/* Description */}
           {/* <div className="form-control">

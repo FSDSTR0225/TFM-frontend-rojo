@@ -41,7 +41,7 @@ const handleSubmit = async (e) => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            className="input input-bordered w-full bg-neutral-90"
+            className="input input-bordered w-full bg-neutral-80"
           />
 
           <button

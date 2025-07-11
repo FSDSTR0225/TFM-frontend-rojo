@@ -31,12 +31,11 @@ export default function DevModal({
   });
   const [isAvatarValid, setIsAvatarValid] = useState(false);
 
-    // Estado para manejar los datos del curriculum
+  // Estado para manejar los datos del curriculum
   const [resumeData, setResumeData] = useState({
     imageFile: null,
     resumeUrl: "",
   });
-
 
   const {
     fields: languageFields,
@@ -59,13 +58,11 @@ export default function DevModal({
       // Inicializar el estado del curriculum
       setResumeData({
         pdfFile: null,
-        resumeUrl: profileData.resume || "",
+        resumeUrl: profileData.role?.developer?.resume || "",
       });
 
       reset({
         avatar: profileData.avatar || "",
-        name: profileData.name || "",
-        surname: profileData.surname || "",
         description: profileData.description || "",
         email: profileData.email || "",
         _id: profileData._id || "",
@@ -74,7 +71,6 @@ export default function DevModal({
             professionalPosition: profileData.role?.developer?.professionalPosition || "",
             resume: profileData.role?.developer?.resume || "",
             experienceYears: profileData.role?.developer?.experienceYears || "",
-            location: profileData.role?.developer?.location || "",
             github: profileData.role?.developer?.github || "",
             linkedin: profileData.role?.developer?.linkedin || "",
             languages: profileData.role?.developer?.languages || [
@@ -95,19 +91,15 @@ export default function DevModal({
         pdfFile: null,
         resumeUrl: "",
       });
-      
 
       reset({
         avatar: "",
-        name: "",
-        surname: "",
         description: "",
         role: {
           developer: {
             professionalPosition: "",
             resume: "",
             experienceYears: "",
-            location: "",
             github: "",
             linkedin: "",
             languages: [{ language: "", languageLevel: "" }],
@@ -129,6 +121,15 @@ export default function DevModal({
     const resumeValue = resumeData.resumeUrl || "";
     setValue("role.developer.resume", resumeValue, { shouldValidate: true });
   }, [resumeData, setValue]);
+
+  // Función para borrar el CV
+  const handleRemoveCV = () => {
+    setResumeData({
+      pdfFile: null,
+      resumeUrl: "",
+    });
+    setValue("role.developer.resume", "", { shouldValidate: true });
+  };
 
   const onSubmit = async (data) => {
     try {
@@ -188,41 +189,6 @@ export default function DevModal({
             onValidChange={setIsAvatarValid}
             error={errors.avatar?.message}
           />
-          {/* Avatar */}
-          {/* <div className="form-control">
-            <label className="block text-sm text-neutral-20 mb-1">
-              <span className="label-text font-semibold">Avatar</span>
-            </label>
-            <input 
-              {...register("avatar")} 
-              placeholder="Avatar URL" 
-              className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic" 
-            />
-          </div> */}
-
-          {/* Name y Surname */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="form-control">
-              <label className="block text-sm text-neutral-20 mb-1">
-                <span className="label-text font-semibold">Name</span>
-              </label>
-              <input
-                {...register("name")}
-                placeholder="Name"
-                className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
-              />
-            </div>
-            <div className="form-control">
-              <label className="block text-sm text-neutral-20 mb-1">
-                <span className="label-text font-semibold">Surname</span>
-              </label>
-              <input
-                {...register("surname")}
-                placeholder="Surname"
-                className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
-              />
-            </div>
-          </div>
 
           {/* Professional Position */}
           <div className="form-control">
@@ -233,29 +199,44 @@ export default function DevModal({
             </label>
             <input
               {...register("role.developer.professionalPosition")}
-              placeholder="Puesto profesional"
+              placeholder="Professional Position"
               className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
             />
           </div>
 
           {/* Resume Upload */}
-          <ResumeUpload
-            data={resumeData}
-            onDataChange={setResumeData}
-            error={errors.role?.developer?.resume?.message}
-          />
-
-          {/* Location */}
           <div className="form-control">
             <label className="block text-sm text-neutral-20 mb-1">
-              <span className="label-text font-semibold">Location</span>
+              <span className="label-text font-semibold">Resume</span>
+            </label>
+            <ResumeUpload
+              data={resumeData}
+              onDataChange={setResumeData}
+              error={errors.role?.developer?.resume?.message}
+            />
+            {/* Botón para borrar CV */}
+            {resumeData.resumeUrl && (
+              <button
+                type="button"
+                onClick={handleRemoveCV}
+                className="btn btn-sm bg-red-600 hover:bg-red-700 text-white mt-2 self-start"
+              >
+                Remove CV
+              </button>
+            )}
+          </div>
+
+          {/* Experience Years */}
+          {/* <div className="form-control">
+            <label className="block text-sm text-neutral-20 mb-1">
+              <span className="label-text font-semibold">Experience Years</span>
             </label>
             <input
-              {...register("role.developer.location")}
-              placeholder="Location"
+              {...register("role.developer.experienceYears")}
+              placeholder="Years of experience"
               className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
             />
-          </div>
+          </div> */}
 
           {/* Languages */}
           <div className="form-control">
@@ -363,19 +344,20 @@ export default function DevModal({
           {/* Buttons */}
           <div className="flex flex-col sm:flex-row sm:justify-end gap-3 pt-4">
             <button
-              type="button"
-              onClick={handleClose}
-              className="btn bg-neutral-70 hover:bg-neutral-60 border border-neutral-60"
-            >
-              Cancel
-            </button>
-            <button
               type="submit"
               disabled={isSubmitting || !isAvatarValid}
               className="btn bg-primary-60 hover:bg-primary-70"
             >
               {isSubmitting ? "Saving..." : "Save changes"}
             </button>
+            <button
+              type="button"
+              onClick={handleClose}
+              className="btn bg-neutral-70 hover:bg-neutral-60 border border-neutral-60"
+            >
+              Cancel
+            </button>
+
           </div>
         </form>
       </div>
