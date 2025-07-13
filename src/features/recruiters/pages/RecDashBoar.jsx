@@ -54,11 +54,11 @@ export const RecDashBoar = ({ offerId, lists, setLists }) => {
 
   // 5. Render
   return (
-    <div className="hidden lg:flex flex-col md:flex-row gap-4 py-4  min-h-screen w-full overflow-x-auto">
+    <div className="hidden lg:grid grid-cols-5  gap-4 py-4  min-h-screen w-full overflow-x-auto">
       {Object.entries(lists).map(([key, items]) => (
         <div
           key={key}
-          className={` bg-neutral-80 rounded-box flex flex-col border-t-4 ${colors[key]}`}
+          className={` bg-neutral-80 rounded-box grid grid-cols-1 grid-rows-[auto_1fr] items-start border-t-4 ${colors[key]}`}
           onDragOver={handleDragOver}
           onDrop={e => handleDrop(e, key)}
         >
@@ -71,28 +71,32 @@ export const RecDashBoar = ({ offerId, lists, setLists }) => {
                
                 <div
                   key={c._id}
-                  className="bg-neutral-60 p-4 rounded-md flex items-start gap-2 mb-4 cursor-grab active:cursor-grabbing justify-between "
+                  className="bg-neutral-60 p-4 rounded flex flex-col  gap-2 mb-4 cursor-grab active:cursor-grabbing  "
                   draggable
                   onDragStart={e => handleDragStart(e, c, key)}
                 >
                   
                   
                 
-                  <AvatarImage user={c.user} />
-                  <div className="flex flex-col">
-                    <NameUsers user={c.user} align='items-start' classProps={' line-clamp-1'} />
-                    
-                    
-                    {/* <p className="font-semibold text-base leading-tight">{c.user.name} {c.user.surname}</p> */}
-                    <p className="text-xs line-clamp-1 w-full">{c.user.email}</p>
-                    <p className="text-[10px] text-neutral-30 mt-1">
-                      Last {getDaysSince(c.appliedDate)} days ago
-                    </p>
-                  </div>
+<div className='flex justify-between'>
+                  <AvatarImage user={c.user} width={6}/>
                   <div>
                     <PiInfo  className='text-secondary-30 text-3xl z-48 size-6' />
                   </div>
-                  
+                    
+                  </div>
+                  <div className="flex flex-col">
+                    <NameUsers user={c.user} align='items-start' classProps={' line-clamp-1'} >
+                      {c.user.role.developer.professionalPosition}
+                    </NameUsers>
+                    
+                    
+                    {/* <p className="font-semibold text-base leading-tight">{c.user.name} {c.user.surname}</p> */}
+                    
+                    <p className="text-[10px] text-neutral-30 mt-1">
+                      Last {getDaysSince(c.appliedDate)} days ago
+                    </p>
+                  </div>           
                 </div>
                  
               ))

@@ -43,12 +43,12 @@ export function Widget() {
                 background: 'linear-gradient(135deg, #37C848 10%, #0077FF 100%)'
               }}
               className="
-                w-14 h-14 rounded-full text-white flex items-center justify-center shadow-2xl hover:brightness-90
-                transition transform active:scale-90 duration-150 ease-out relative"
+                w-14 h-14 rounded-full  flex items-center justify-center shadow-2xl hover:brightness-90
+                transition transform active:scale-90 duration-150 ease-out relative cursor-pointer"
             >
               <PiChat size={28} />
               {unreadChats > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-2 py-0.5 rounded-full animate-pulse min-w-[22px] text-center">
+                <span className="absolute -top-2 -right-2 bg-red-500  text-xs px-2 py-0.5 rounded-full animate-pulse min-w-[22px] text-center">
                   {unreadChats}
                 </span>
               )}

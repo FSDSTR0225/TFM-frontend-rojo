@@ -1,5 +1,5 @@
-export const DashBoardCard = () => {
+export const DashBoardUserModal = () => {
   return (
-    <div>DashBoardCard</div>
+    <div>DashBoardUserModal</div>
   )
 }
