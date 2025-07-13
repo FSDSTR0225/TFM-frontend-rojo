@@ -9,7 +9,7 @@ import { PiUserList, PiTrash, PiPassword } from "react-icons/pi";
 import { AuthContext } from '../context/authContext';
 
 export const SettingsPage = () => {
-  const { token, logout } = useContext(AuthContext);
+  const { token, logout, setProfile } = useContext(AuthContext);
   const navigate = useNavigate();
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const [isRemoveModalOpen, setIsRemoveModalOpen] = useState(false);
@@ -103,6 +103,10 @@ const handleUserInfoUpdate = async (data) => {
           ...profileData.role?.developer,
           location: data.location,
         },
+        recruiter: {
+          ...profileData.role?.recruiter,
+          location: data.location,
+        },
       },
     };
 
@@ -114,6 +118,7 @@ const handleUserInfoUpdate = async (data) => {
     if (result && result.user) {
       // console.log('User info updated:', result);
       setProfileData(result.user);
+      setProfile(result.user);
       setIsUserAccountModalOpen(false);
       alert('User information updated successfully!');
     } else {
@@ -128,8 +133,8 @@ const handleUserInfoUpdate = async (data) => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="loading loading-spinner loading-lg"></div>
+      <div className="w-full flex justify-center items-center min-h-[200px]">
+        <span className="loading loading-spinner loading-md"></span>
       </div>
     );
   }

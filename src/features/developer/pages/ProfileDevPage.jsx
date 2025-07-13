@@ -30,7 +30,10 @@ export function ProfileDevPage() {
     setProfileToShow(updatedProfile);
   };
 
-  if (!profileToShow) return <p>Loading profile...</p>;
+  if (!profileToShow) return 
+    <div className="w-full flex justify-center items-center min-h-[200px]">
+      <span className="loading loading-spinner loading-md"></span>
+    </div>;
 
   return (
     <div className="p-4 max-w-screen-xl mx-auto">
