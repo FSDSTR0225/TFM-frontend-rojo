@@ -1,13 +1,16 @@
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { PiTrash, PiImages, PiCodeBlock, PiFile } from "react-icons/pi";
 import { CategorySelect } from "../components/CategorySelect";
 import { TagsInputDev } from "../components/TagsInputDev";
-import { createProject } from "../../../services/projectService";
 import { AvatarUpload } from "../components/AvatarUpload";
 
-export const NewProjectModal = ({ onClose }) => {
+export const NewProjectModal = ({
+  project = null,
+  onClose,
+  onSubmitProject,
+}) => {
   const navigate = useNavigate();
 
   const {
@@ -79,6 +82,34 @@ export const NewProjectModal = ({ onClose }) => {
     });
   };
 
+  useEffect(() => {
+    if (project) {
+      reset({
+        title: project.title,
+        year: project.year,
+        professionalRole: project.professionalRole,
+        duration: project.duration,
+        projectSkills: project.projectSkills || [],
+        category: project.category,
+        description: project.description,
+        liveLink: project.liveLink,
+        githubLink: project.githubLink,
+      });
+
+      setCodeSections(project.codeSections || []);
+      setGallerySlots(
+        (project.gallery || []).map((url) => ({
+          avatarUrl: url,
+          imageFile: null,
+        }))
+      );
+    } else {
+      reset(); // Limpia el formulario si no hay proyecto
+      setCodeSections([]);
+      setGallerySlots([{ avatarUrl: null, imageFile: null }]);
+    }
+  }, [project, reset]);
+
   const onSubmit = async (data) => {
     setLoading(true);
     setError(null);
@@ -93,23 +124,23 @@ export const NewProjectModal = ({ onClose }) => {
       gallery: filteredGallery,
     };
 
-    const token = localStorage.getItem("token");
-    if (!token) {
-      setError("No authentication token found, please login");
+    if (!onSubmitProject) {
+      setError("No submit handler provided");
       setLoading(false);
       return;
     }
 
     try {
-      const project = await createProject(payload, token);
-      console.log("ID del proyecto creado:", project.project._id);
+      await onSubmitProject(payload);
 
       reset();
       setCodeSections([]);
       setGallerySlots([{ avatarUrl: null, imageFile: null }]);
       onClose();
 
-      navigate(`/projects/${project.project._id}`);
+      if (!project) {
+        navigate(`/projects/${payload._id || ""}`);
+      }
     } catch (err) {
       setError(err.message || "Unknown error");
     } finally {
@@ -165,9 +196,9 @@ export const NewProjectModal = ({ onClose }) => {
 
   return (
     <dialog id="project_modal" className="modal modal-open">
-      <div className="modal-box max-w-3xl bg-neutral-70 border border-neutral-60 text-neutral-0 shadow-md rounded-lg">
-        <h2 className="space-y-4 pt-2 text-2xl font-bold mb-4">
-          Create New Project
+      <div className="modal-box max-w-3xl bg-neutral-70 border border-neutral-60 text-neutral-0 shadow-md rounded-lg xl:max-h-[850px]">
+        <h2 className="text-2xl font-bold mb-4">
+          {project ? "Edit Project" : "Create New Project"}
         </h2>
         <hr className="border-t border-neutral-55 pt-4 mt-3" />
 
@@ -181,19 +212,38 @@ export const NewProjectModal = ({ onClose }) => {
               <h3>Project Details</h3>
             </header>
 
-            <label
-              className="block text-sm text-neutral-20 mb-1"
-              htmlFor="title"
-            >
-              Project Title
-            </label>
-            <input
-              id="title"
-              type="text"
-              placeholder="Write your project title..."
-              className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
-              {...register("title", { required: true })}
-            />
+            <div className="grid grid-cols-[3fr_2fr] gap-4">
+              <div>
+                <label
+                  className="block text-sm text-neutral-20 mb-1"
+                  htmlFor="title"
+                >
+                  Project Title
+                </label>
+                <input
+                  id="title"
+                  type="text"
+                  placeholder="Write your project title..."
+                  className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
+                  {...register("title", { required: true })}
+                />
+              </div>
+
+              <div>
+                <label
+                  className="block text-sm text-neutral-20 mb-1"
+                  htmlFor="category-select"
+                >
+                  Category
+                </label>
+                <CategorySelect
+                  id="category"
+                  register={register}
+                  error={errors.category}
+                  setValue={setValue}
+                />
+              </div>
+            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
@@ -260,42 +310,25 @@ export const NewProjectModal = ({ onClose }) => {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label
-                  className="block text-sm text-neutral-20 mb-1"
-                  htmlFor="projectSkills"
-                >
-                  Skills
-                </label>
-                <TagsInputDev
-                  value={skills}
-                  onChange={(tags) =>
-                    setValue("projectSkills", tags, { shouldValidate: true })
-                  }
-                  placeholder="Add skill and press enter"
-                />
-                {errors.projectSkills && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.projectSkills.message}
-                  </p>
-                )}
-              </div>
-
-              <div>
-                <label
-                  className="block text-sm text-neutral-20 mb-1"
-                  htmlFor="category-select"
-                >
-                  Category
-                </label>
-                <CategorySelect
-                  id="category"
-                  register={register}
-                  error={errors.category}
-                  setValue={setValue}
-                />
-              </div>
+            <div>
+              <label
+                className="block text-sm text-neutral-20 mb-1"
+                htmlFor="projectSkills"
+              >
+                Skills
+              </label>
+              <TagsInputDev
+                value={skills}
+                onChange={(tags) =>
+                  setValue("projectSkills", tags, { shouldValidate: true })
+                }
+                placeholder="Add skill and press enter"
+              />
+              {errors.projectSkills && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.projectSkills.message}
+                </p>
+              )}
             </div>
 
             <label
@@ -417,17 +450,21 @@ export const NewProjectModal = ({ onClose }) => {
           </div>
 
           {/* Buttons */}
-          <div className="flex justify-end gap-4 pt-4">
+          <div className="flex justify-end gap-4 pt-4 w-full">
             <button
               type="submit"
               disabled={loading}
-              className="btn bg-primary-60 text-neutral-0 hover:bg-primary-70 w-full md:w-auto"
+              className="btn bg-primary-60 hover:bg-primary-70"
             >
-              {loading ? "Saving..." : "Publish Project"}
+              {loading
+                ? "Saving..."
+                : project
+                ? "Update Project"
+                : "Publish Project"}
             </button>
             <button
               type="button"
-              className="btn bg-neutral-70 text-neutral-10 hover:bg-neutral-60 border border-neutral-60 w-full md:w-auto"
+              className="btn bg-neutral-70 text-neutral-10 hover:bg-neutral-60 border border-neutral-60  md:w-auto"
               onClick={onClose}
               disabled={loading}
             >
