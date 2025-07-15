@@ -33,7 +33,7 @@ export const Login = () => {
     if (!email) {
       setError("email", {
         type: "required",
-        message: "Este campo es requerido",
+        message: "This field is required",
       });
       hasEmpty = true;
     }
