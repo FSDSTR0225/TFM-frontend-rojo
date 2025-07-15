@@ -4,7 +4,7 @@ import { TabsDashboard } from './TabsDashboard';
 import { ListDashBoardCard } from './ListDashBoardCard';
 
 
-export const ListDashBoard = ({ classProps, offerId, lists, setLists, getCandidates,skillsOffer, openChat, handleDownloadCV, handleDownloadCoverLetter }) => {
+export const ListDashBoard = ({ offerId, lists, getCandidates,skillsOffer, openChat, handleDownloadCV, handleDownloadCoverLetter }) => {
   const [activeTab, setActiveTab] = useState(Object.keys(lists)[0]);
 
   const changeStatusCandidate = async (status, idCandidato) => {

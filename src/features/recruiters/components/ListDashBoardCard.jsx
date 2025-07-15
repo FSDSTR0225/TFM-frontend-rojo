@@ -5,11 +5,13 @@ import { CandidateSkills } from "./candidateSkills"
 
 import { GoChevronDown } from "react-icons/go"
 import { capitalize } from "../../../utils/utils"
+import { useNavigate } from "react-router"
 
 
 
-export const ListDashBoardCard = ({lists, activeTab, skillsOffer, colors, fadedColors, textColors, changeStatusCandidate, offerId, openChat, handleDownloadCV, handleDownloadCoverLetter }) => {
+export const ListDashBoardCard = ({lists, activeTab, skillsOffer, colors, fadedColors, textColors, changeStatusCandidate, offerId, openChat, handleDownloadCV, handleDownloadCoverLetter  }) => {
 
+  const navigate = useNavigate();
   
 
 
@@ -18,6 +20,7 @@ export const ListDashBoardCard = ({lists, activeTab, skillsOffer, colors, fadedC
         <div className='flex flex-col gap-4'>
            {lists[activeTab]?.length > 0 ? (
         lists[activeTab].map((candidato) => {
+          
           const name = capitalize(candidato?.user?.name || '');
           const surname = capitalize(candidato?.user?.surname || '');
           const completeName = `${name} ${surname}`.trim() || 'Unknown Profile';
@@ -31,8 +34,8 @@ export const ListDashBoardCard = ({lists, activeTab, skillsOffer, colors, fadedC
                 >
                   {/* Izquierda: avatar + info */}
                   <div className='flex flex-col items-center gap-2 '>
-                    <div className='flex flex-col items-center gap-2 '>
-                      <div className='flex gap-2 self-start '>
+                    <div className='flex flex-col items-center gap-2  '>
+                      <div className='flex gap-2 self-start cursor-pointer' onClick={() => navigate(`/profile/${candidato?.user?._id}`)}>
                         <div>
                         <AvatarImage user={candidato?.user} width={10} />
                         </div>
@@ -57,10 +60,7 @@ export const ListDashBoardCard = ({lists, activeTab, skillsOffer, colors, fadedC
                         </NameUsers>
                         </div>
                       </div>
-                      {/* <p className=' self-start flex items-center gap-1 text-xs'>
-                        <PiEnvelope />
-                        {candidato?.user?.email}
-                      </p> */}
+                    
                     </div>
                     {/* Tecnologías */}
                   </div>

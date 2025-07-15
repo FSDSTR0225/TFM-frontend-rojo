@@ -218,7 +218,7 @@ function OwnProjectCard({ profileInfo }) {
                     
                     {/* Contenido - con scroll interno si es necesario */}
                     <div className="flex-1 px-4 min-h-0 overflow-hidden">
-                      <p className="text-sm mb-2 line-clamp-2">
+                      <p className="text-sm mb-2 line-clamp-2 mr-8">
                         {project.description || 'No description'}
                       </p>
                       
@@ -317,7 +317,7 @@ function OwnProjectCard({ profileInfo }) {
                     
                     {/* Contenido */}
                     <div className="flex-1 px-4 min-h-0 overflow-hidden">
-                      <p className="text-sm mb-2 line-clamp-3">
+                      <p className="text-sm mb-2 line-clamp-3 mr-8">
                         {project.description || 'No description'}
                       </p>
                       

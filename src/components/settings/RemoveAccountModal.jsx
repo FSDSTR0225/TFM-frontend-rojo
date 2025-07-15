@@ -57,9 +57,9 @@ export default function RemoveAccountModal({ open, setOpen, profileData, onSubmi
     <div className="modal modal-open fixed inset-0 flex justify-center items-center z-50">
       <div className="modal-box max-w-3xl bg-neutral-80 border border-neutral-70 rounded-lg p-6 relative">
         <form onSubmit={handleSubmit(handleDeleteSubmit)} className="flex flex-col gap-4">
-          <h2 className="text-2xl font-bold text-center text-primary-50">Desactivate your account</h2>
+          <h2 className="text-2xl font-bold text-center text-yellow-500">Desactivate your account</h2>
           
-          <div className="bg-primary-10 border border-primary-40 text-primary-70 px-4 py-3 rounded mb-4">
+          <div className="bg-primary-10 border border-yellow-400 text-yellow-700 px-4 py-3 rounded mb-4">
             <strong>Notice:</strong> Your account will be desactivated. You won't be able to access it, but your data will be preserved. Contact support if you need to reactivate your account.
           </div>
               
@@ -77,7 +77,7 @@ export default function RemoveAccountModal({ open, setOpen, profileData, onSubmi
               className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
             />
             {errors.email && (
-              <span className="text-primary-500 text-sm mt-1">{errors.email.message}</span>
+              <span className="text-yellow-500 text-sm mt-1">{errors.email.message}</span>
             )}
           </div>
                      
@@ -86,14 +86,14 @@ export default function RemoveAccountModal({ open, setOpen, profileData, onSubmi
             <button 
               type="submit"
               disabled={isSubmitting}
-              className="btn bg-primary-60 text-neutral-0 hover:bg-primary-70 border"
+              className="btn bg-red-600 text-neutral-0 hover:bg-red-700 border"
             >
               {isSubmitting ? "Desactivating..." : "Desactivate Account"}
             </button>
             <button 
               type="button"
               onClick={handleClose}
-              className="btn bg-neutral-90 border border-neutral-70 text-neutral-0 hover:text-primary-40"
+              className="btn bg-neutral-90 border border-neutral-70 text-neutral-0 hover:text-yellow-400"
             >
               Cancel
             </button>

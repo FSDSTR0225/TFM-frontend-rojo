@@ -289,7 +289,9 @@ const handleDownloadCV = async (resumeUrl, fileName = 'CV.pdf') => {
               <PiChatCenteredDots className="text-xl mr-2 text-primary-50" />
               About Me
             </h2>
-            <span>{profileInfo.description}</span>
+            <span className={!profileInfo.description ? "text-neutral-40" : ""}>
+              {profileInfo.description || "This user has not completed their 'About Me' yet."}
+            </span>
           </div>
         </div>
 

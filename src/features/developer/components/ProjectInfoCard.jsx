@@ -13,9 +13,14 @@ import {
 } from "react-icons/pi";
 import { AvatarImage } from "../../../components/AvatarImage";
 import { NameUsers } from "../../../components/NameUsers";
+import { useContext } from "react";
+import { ChatContext } from "../../../layout/chat/context/ChatContext";
+import { AuthContext } from "../../../context/authContext";
 
 export const ProjectInfoCard = ({ project, setSelectedOwner }) => {
   const [showAllSkills, setShowAllSkills] = useState(false);
+  const { openChat } = useContext(ChatContext);
+  const { profile } = useContext(AuthContext);
 
   if (!project) return null;
 
@@ -32,7 +37,9 @@ export const ProjectInfoCard = ({ project, setSelectedOwner }) => {
 
   setSelectedOwner(owner);
 
-  const skillsToShow = showAllSkills ? projectSkills : projectSkills?.slice(0, 5) || [];
+  const skillsToShow = showAllSkills
+    ? projectSkills
+    : projectSkills?.slice(0, 5) || [];
 
   console.log("owner en ProjectInfoCard:", owner);
 
@@ -122,14 +129,16 @@ export const ProjectInfoCard = ({ project, setSelectedOwner }) => {
                   <PiArrowSquareOut size={18} />
                   Live Project
                 </a>
-                <button
-                  type="button"
-                  onClick={() => alert("Chat not created yet")}
-                  className="btn flex-1 bg-primary-60 text-neutral-0 hover:bg-primary-70 focus:bg-primary-80 flex items-center justify-center gap-2 whitespace-nowrap"
-                >
-                  <PiChatText size={18} />
-                  Contact
-                </button>
+                {owner?._id && profile?._id && owner._id !== profile._id && (
+                  <button
+                    type="button"
+                    onClick={() => openChat(owner)}
+                    className="btn flex-1 bg-primary-60 text-neutral-0 hover:bg-primary-70 focus:bg-primary-80 flex items-center justify-center gap-2 whitespace-nowrap"
+                  >
+                    <PiChatText size={18} />
+                    Contact
+                  </button>
+                )}
               </div>
             )}
 
@@ -153,7 +162,9 @@ export const ProjectInfoCard = ({ project, setSelectedOwner }) => {
                       type="button"
                       onClick={() => setShowAllSkills(true)}
                       className="bg-neutral-60 text-neutral-30 px-2 py-0.5 rounded-full text-sm cursor-pointer"
-                      aria-label={`Show ${projectSkills.length - 5} more skills`}
+                      aria-label={`Show ${
+                        projectSkills.length - 5
+                      } more skills`}
                     >
                       +{projectSkills.length - 5}
                     </button>

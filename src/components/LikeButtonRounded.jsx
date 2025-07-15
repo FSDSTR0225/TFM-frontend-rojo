@@ -1,6 +1,7 @@
 import React from "react";
 import { PiHeartStraight, PiHeartStraightFill } from "react-icons/pi";
 import "../animations/LikeButtonRounded.css";
+import { AuthContext } from "../context/authContext";
 
 export const LikeButtonRounded = ({
   liked,
