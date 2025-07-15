@@ -7,7 +7,7 @@ import { CiImageOn } from 'react-icons/ci'
 import { IoSend } from 'react-icons/io5'
 import { formatMessageTime } from '../../../utils/utils'
 
-export const ChatScreen = ({ onClose, messages, messageEndRef, userSelected, profile, backToWelcome, sendMessage, fileInputRef, imagePreview, setMessage, message, removeImage, imageChange }) => {
+export const ChatScreen = ({ onClose, onlineUsers,messages, messageEndRef, userSelected, profile, backToWelcome, sendMessage, fileInputRef, imagePreview, setMessage, message, removeImage, imageChange }) => {
   return (
 <div className="flex flex-col h-dvh max-h-dvh bg-neutral-100 rounded-xl shadow-lg overflow-hidden border border-zinc-700">
   {/* Encabezado */}
