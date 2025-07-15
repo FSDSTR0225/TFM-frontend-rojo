@@ -74,7 +74,7 @@ export const Contact = () => {
   return (
     <SectionContainer classProps="max-w-4xl mx-auto">
       <div className="text-center mb-8">
-        <h1 className='text-gradient text-3xl sm:text-5xl font-bold mb-4'>
+        <h1 className='bg-gradient-to-r from-primary-50 to-secondary-50 text-transparent bg-clip-text leading-normal inline-block text-3xl sm:text-4xl lg:text-5xl font-bold mb-2'>
           Support Tickets
         </h1>
         <p className="text-neutral-20 text-lg">
@@ -84,15 +84,15 @@ export const Contact = () => {
 
       {submitStatus === 'success' && (
         <div className="bg-primary-50 bg-opacity-20 border border-primary-50 rounded-lg p-4 mb-6">
-          <p className="text-primary-50 font-semibold">✓ Message sent successfully!</p>
-          <p className="text-neutral-20 text-sm">We'll get back to you within 24-48 hours.</p>
+          <p className="text-primary-10 font-semibold">✓ Message sent successfully!</p>
+          <p className="text-neutral-10 text-sm">We'll get back to you within 24-48 hours.</p>
         </div>
       )}
 
       {submitStatus === 'error' && (
         <div className="bg-red-500 bg-opacity-20 border border-red-500 rounded-lg p-4 mb-6">
-          <p className="text-red-400 font-semibold">✗ Error sending message</p>
-          <p className="text-neutral-20 text-sm">{errorMessage}</p>
+          <p className="text-red-300 font-semibold">✗ Error sending message</p>
+          <p className="text-neutral-10 text-sm">{errorMessage}</p>
         </div>
       )}
 
