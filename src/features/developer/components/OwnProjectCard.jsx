@@ -167,11 +167,11 @@ function OwnProjectCard({ profileInfo }) {
         <div className="w-full">
           <div className="grid grid-cols-1 gap-6">
             {currentProjects.map(project => (
-              <div key={project._id + Math.random()} onClick={() => handleViewProject(project._id)} className="bg-neutral-80 border border-neutral-60 shadow-sm rounded-lg overflow-hidden min-h-[600px] lg:min-h-[320px] flex flex-col">
+              <div key={project._id + Math.random()} onClick={() => handleViewProject(project._id)} className="bg-neutral-80 border border-neutral-60 shadow-sm rounded-lg overflow-hidden h-[520px] lg:h-[280px] flex flex-col cursor-pointer hover:shadow-md transition-shadow">
                 {/* Layout para móviles */}
-                <div className="lg:hidden flex-1 flex flex-col">
-                  {/* Imagen en móviles */}
-                  <div className="w-full h-48 overflow-hidden relative flex-shrink-0">
+                <div className="lg:hidden flex-1 flex flex-col h-full">
+                  {/* Imagen en móviles - altura fija */}
+                  <div className="w-full h-40 overflow-hidden relative flex-shrink-0">
                     {project.gallery?.length > 0 ? (
                       <img 
                         src={project.gallery[0]} 
@@ -180,7 +180,7 @@ function OwnProjectCard({ profileInfo }) {
                       />
                     ) : (
                       <div className="bg-neutral-90 h-full w-full flex items-center justify-center text-neutral-40">
-                        <span className="text-center px-4">{project.title}</span>
+                        <span className="text-center px-4 text-sm truncate">{project.title}</span>
                       </div>
                     )}
                     {/* Botón de opciones en móviles */}
@@ -194,21 +194,21 @@ function OwnProjectCard({ profileInfo }) {
                     )}
                   </div>
                   
-                  {/* Contenido en móviles */}
-                  <div className="flex flex-col flex-1">
+                  {/* Contenido en móviles - altura calculada */}
+                  <div className="flex flex-col flex-1 min-h-0">
                     {/* Header */}
-                    <div className="p-6 pb-2">
-                      <div className="mb-3">
+                    <div className="p-4 pb-2 flex-shrink-0">
+                      <div className="mb-2">
                         <div className="flex items-center gap-2 mb-2">
-                          <h2 className="card-title">{project.title}</h2>
+                          <h2 className="text-lg font-semibold truncate">{project.title}</h2>
                         </div>
                         
                         {/* Categoría y views en móviles */}
                         <div className="flex items-center justify-between mb-2">
-                          <span className="bg-primary-60/20 text-primary-50 rounded-md px-2 py-0.5 w-fit h-fit inline-block text-xs">
-                            {project.category || 'No se especifica el tipo de proyecto'}
+                          <span className="bg-primary-60/20 text-primary-50 rounded-md px-2 py-0.5 text-xs truncate max-w-32">
+                            {project.category || 'No category'}
                           </span>
-                          <div className="flex items-center gap-1 text-neutral-40 text-sm">
+                          <div className="flex items-center gap-1 text-neutral-40 text-sm flex-shrink-0">
                             <PiEye className="text-primary-80" size={16} />
                             <span>{Math.floor((project.views || 0) / 2)}</span>
                           </div>
@@ -216,64 +216,63 @@ function OwnProjectCard({ profileInfo }) {
                       </div>
                     </div>
                     
-                    {/* Contenido */}
-                    <div className="flex-1 px-6">
-                      <p className="text-sm mb-2">
+                    {/* Contenido - con scroll interno si es necesario */}
+                    <div className="flex-1 px-4 min-h-0 overflow-hidden">
+                      <p className="text-sm mb-2 line-clamp-2 mr-8">
                         {project.description || 'No description'}
                       </p>
                       
-                      <p className="font-medium mb-4">{project.year || ''}</p>
+                      <p className="font-medium mb-3 text-sm">{project.year || ''}</p>
                       
-                      {/* Skills en móviles */}
+                      {/* Skills en móviles - limitado a 2 líneas */}
                       {project.projectSkills?.length > 0 && (
-                        <div className="flex flex-wrap gap-2">
-                          {project.projectSkills.map((skill, i) => (
-                            <span key={i} className="bg-primary-70 text-neutral-0 rounded-full px-2 py-0.5 text-sm">
+                        <div className="flex flex-wrap gap-1 max-h-16 overflow-hidden">
+                          {project.projectSkills.slice(0, 4).map((skill, i) => (
+                            <span key={i} className="bg-primary-70 text-neutral-0 rounded-full px-2 py-0.5 text-xs truncate max-w-20">
                               {skill}
                             </span>
                           ))}
+                          {project.projectSkills.length > 4 && (
+                            <span className="text-xs text-neutral-40 self-center">+{project.projectSkills.length - 4}</span>
+                          )}
                         </div>
                       )}
                     </div>
                     
                     {/* Botones en móviles */}
-                    <div className="p-6 pt-4 mt-auto">
-                      <div className="card-actions justify-end">
-                        <div className="flex flex-col gap-2 w-full">
-                          <div className="flex gap-2">
-                            {project.githubProjectLink && (
-                              <a 
-                                href={project.githubProjectLink} 
-                                target="_blank" 
-                                rel="noreferrer" 
-                                className="flex-1 btn bg-neutral-90 hover:bg-neutral-60 border border-neutral-60 rounded-md flex items-center justify-center gap-1"
-                                onClick={(e) => e.stopPropagation()}
-                              >
-                                <PiGithubLogo className="text-xl" /> Github
-                              </a>
-                            )}
-                            {project.liveLink && (
-                              <a 
-                                href={project.liveLink} 
-                                target="_blank" 
-                                rel="noreferrer" 
-                                className="flex-1 btn bg-transparent border-2 border-primary-50 text-primary-50 hover:bg-neutral-0 hover:text-neutral-90 hover:border-neutral-0 rounded-md hover:shadow-lg flex items-center justify-center gap-1"
-                                onClick={(e) => e.stopPropagation()}
-                              >
-                                <PiArrowSquareOut className="text-xl" /> Live View
-                              </a>
-                            )}
-                          </div>
-                        </div>
+                    <div className="p-4 pt-2 mt-auto flex-shrink-0">
+                      <div className="flex gap-2">
+                        {project.githubProjectLink && (
+                          <a 
+                            href={project.githubProjectLink} 
+                            target="_blank" 
+                            rel="noreferrer" 
+                            className="flex-1 btn btn-sm bg-neutral-90 hover:bg-neutral-60 border border-neutral-60 rounded-md flex items-center justify-center gap-1"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <PiGithubLogo className="text-lg" /> Github
+                          </a>
+                        )}
+                        {project.liveLink && (
+                          <a 
+                            href={project.liveLink} 
+                            target="_blank" 
+                            rel="noreferrer" 
+                            className="flex-1 btn btn-sm bg-transparent border-2 border-primary-50 text-primary-50 hover:bg-neutral-0 hover:text-neutral-90 hover:border-neutral-0 rounded-md hover:shadow-lg flex items-center justify-center gap-1"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <PiArrowSquareOut className="text-lg" /> Live
+                          </a>
+                        )}
                       </div>
                     </div>
                   </div>
                 </div>
 
                 {/* Layout para tablets y desktop */}
-                <div className="hidden lg:flex flex-1">
-                  {/* Imagen en desktop */}
-                  <div className="flex-shrink-0 w-80">
+                <div className="hidden lg:flex flex-1 h-full">
+                  {/* Imagen en desktop - ancho fijo */}
+                  <div className="flex-shrink-0 w-72">
                     {project.gallery?.length > 0 ? (
                       <img 
                         src={project.gallery[0]} 
@@ -282,21 +281,21 @@ function OwnProjectCard({ profileInfo }) {
                       />
                     ) : (
                       <div className="bg-neutral-90 w-full h-full flex items-center justify-center text-neutral-40">
-                        <span className="text-center px-4">{project.title}</span>
+                        <span className="text-center px-4 truncate">{project.title}</span>
                       </div>
                     )}
                   </div>
                   
                   {/* Contenido en desktop */}
-                  <div className="flex flex-col flex-grow">
+                  <div className="flex flex-col flex-1 min-w-0">
                     {/* Header */}
-                    <div className="p-6 pb-2">
-                      <div className="grid grid-cols-2 mb-2">
-                        <div className="flex items-center gap-2">
-                          <h2 className="card-title">{project.title}</h2>
+                    <div className="p-4 pb-2 flex-shrink-0">
+                      <div className="flex items-start justify-between mb-2">
+                        <div className="flex-1 min-w-0 mr-4">
+                          <h2 className="text-lg font-semibold truncate">{project.title}</h2>
                         </div>
                         {isCurrentUserProfile && (
-                          <div className="justify-self-end flex gap-2" onClick={(e) => e.stopPropagation()}>
+                          <div className="flex-shrink-0" onClick={(e) => e.stopPropagation()}>
                             <DotsComponent
                               onEdit={(e) => handleOpenEditModal(project, e)}
                               onDelete={(e) => handleDelete(project._id, e)}
@@ -306,10 +305,10 @@ function OwnProjectCard({ profileInfo }) {
                       </div>
                       
                       <div className="flex items-center justify-between mb-2">
-                        <span className="bg-primary-60/20 text-primary-50 rounded-md px-2 py-0.5 w-fit h-fit inline-block text-xs">
-                          {project.category || 'The type of project is not specified'}
+                        <span className="bg-primary-60/20 text-primary-50 rounded-md px-2 py-0.5 text-xs truncate max-w-40">
+                          {project.category || 'No category'}
                         </span>
-                        <div className="flex items-center gap-1 text-neutral-40 text-sm">
+                        <div className="flex items-center gap-1 text-neutral-40 text-sm flex-shrink-0">
                           <PiEye className="text-primary-80" size={16} />
                           <span>{Math.floor((project.views || 0) / 2)}</span>
                         </div>
@@ -317,35 +316,40 @@ function OwnProjectCard({ profileInfo }) {
                     </div>
                     
                     {/* Contenido */}
-                    <div className="flex-1 px-6">
-                      <p className="text-sm mb-2">
+                    <div className="flex-1 px-4 min-h-0 overflow-hidden">
+                      <p className="text-sm mb-2 line-clamp-3 mr-8">
                         {project.description || 'No description'}
                       </p>
                       
-                      <p className="font-medium mb-4">{project.year || ''}</p>
+                      <p className="font-medium mb-3 text-sm">{project.year || ''}</p>
                       
-                      {/* Skills */}
+                      {/* Skills - limitado a 1 línea en desktop */}
                       {project.projectSkills?.length > 0 && (
-                        <div className="flex flex-wrap gap-2">
-                          {project.projectSkills.map((s, i) => (
-                            <span key={i} className="bg-primary-70 text-neutral-0 rounded-full px-2 py-0.5 text-sm">{s}</span>
+                        <div className="flex items-center gap-1 h-8 overflow-hidden">
+                          {project.projectSkills.slice(0, 3).map((skill, i) => (
+                            <span key={i} className="bg-primary-70 text-neutral-0 rounded-full px-2 py-0.5 text-xs flex-shrink-0">
+                              {skill}
+                            </span>
                           ))}
+                          {project.projectSkills.length > 3 && (
+                            <span className="text-xs text-neutral-40 flex-shrink-0">+{project.projectSkills.length - 3}</span>
+                          )}
                         </div>
                       )}
                     </div>
                     
                     {/* Botones */}
-                    <div className="p-6 pt-4 mt-auto">
-                      <div className="card-actions justify-end">
+                    <div className="p-4 pt-2 mt-auto flex-shrink-0">
+                      <div className="flex gap-2 justify-end">
                         {project.githubProjectLink && (
                           <a 
                             href={project.githubProjectLink} 
                             target="_blank" 
                             rel="noreferrer" 
-                            className="btn bg-neutral-90 hover:bg-neutral-60 border border-neutral-60 rounded-md flex items-center gap-1"
+                            className="btn btn-sm bg-neutral-90 hover:bg-neutral-60 border border-neutral-60 rounded-md flex items-center gap-1"
                             onClick={(e) => e.stopPropagation()}
                           >
-                            <PiGithubLogo className="text-xl" /> Github
+                            <PiGithubLogo className="text-lg" /> Github
                           </a>
                         )}
                         {project.liveLink && (
@@ -353,10 +357,10 @@ function OwnProjectCard({ profileInfo }) {
                             href={project.liveLink} 
                             target="_blank" 
                             rel="noreferrer" 
-                            className="btn bg-primary-60 hover:bg-primary-70 text-neutral-90 rounded-md flex items-center gap-1"
+                            className="btn btn-sm bg-primary-60 hover:bg-primary-70 text-neutral-90 rounded-md flex items-center gap-1"
                             onClick={(e) => e.stopPropagation()}
                           >
-                            <PiArrowSquareOut className="text-xl" />Live View
+                            <PiArrowSquareOut className="text-lg" /> Live
                           </a>
                         )}
                       </div>

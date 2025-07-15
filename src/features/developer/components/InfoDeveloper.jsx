@@ -86,6 +86,11 @@ const handleDownloadCV = async (resumeUrl, fileName = 'CV.pdf') => {
 
   if (!profileInfo) return <p>Error al cargar el profile</p>;
 
+  // Verificar si hay LinkedIn y GitHub
+  const hasLinkedIn = profileInfo.role.developer.linkedin && profileInfo.role.developer.linkedin.trim() !== '';
+  const hasGitHub = profileInfo.role.developer.github && profileInfo.role.developer.github.trim() !== '';
+  const hasResume = profileInfo.role.developer.resume && profileInfo.role.developer.resume.trim() !== '';
+
   return (
     <SectionContainer classProps="lg:flex-row flex-col-reverse gap-4 lg:items-start">
       <div className="grid grid-cols-1 lg:grid-cols-3">
@@ -136,47 +141,79 @@ const handleDownloadCV = async (resumeUrl, fileName = 'CV.pdf') => {
               >
                 <PiEnvelope className="text-xl" />
               </Link>
-              <Link
-                to={profileInfo.role.developer.linkedin}
-                className="btn btn-circle bg-transparent border-2 border-primary-50 text-primary-50  hover:bg-neutral-0 hover:text-neutral-90 hover:border-neutral-0 "
-                aria-label="Linkedin"
-              >
-                <PiLinkedinLogo className="text-xl" />
-              </Link>
-              <Link
-                to={profileInfo.role.developer.github}
-                className="btn btn-circle bg-transparent border-2 border-primary-50 text-primary-50  hover:bg-neutral-0 hover:text-neutral-90 hover:border-neutral-0 "
-                aria-label="GitHub"
-              >
-                <PiGithubLogo className="text-xl" />
-              </Link>
+              
+              {/* LINKEDIN */}
+              {hasLinkedIn ? (
+                <Link
+                  to={profileInfo.role.developer.linkedin}
+                  className="btn btn-circle bg-transparent border-2 border-primary-50 text-primary-50 hover:bg-neutral-0 hover:text-neutral-90 hover:border-neutral-0"
+                  aria-label="Linkedin"
+                >
+                  <PiLinkedinLogo className="text-xl" />
+                </Link>
+              ) : (
+                <button
+                  onClick={isCurrentUser ? handleOpenModal : undefined}
+                  disabled={!isCurrentUser}
+                  className="btn btn-circle bg-transparent border-2 border-neutral-40 text-neutral-40 cursor-not-allowed disabled:cursor-not-allowed"
+                  aria-label="Linkedin"
+                >
+                  <PiLinkedinLogo className="text-xl" />
+                </button>
+              )}
+              
+              {/* GITHUB */}
+              {hasGitHub ? (
+                <Link
+                  to={profileInfo.role.developer.github}
+                  className="btn btn-circle bg-transparent border-2 border-primary-50 text-primary-50 hover:bg-neutral-0 hover:text-neutral-90 hover:border-neutral-0"
+                  aria-label="GitHub"
+                >
+                  <PiGithubLogo className="text-xl" />
+                </Link>
+              ) : (
+                <button
+                  onClick={isCurrentUser ? handleOpenModal : undefined}
+                  disabled={!isCurrentUser}
+                  className="btn btn-circle bg-transparent border-2 border-neutral-40 text-neutral-40 cursor-not-allowed disabled:cursor-not-allowed"
+                  aria-label="GitHub"
+                >
+                  <PiGithubLogo className="text-xl" />
+                </button>
+              )}
             </div>
           </div>
 
           {/* CONTACT Y DOWNLOAD CV */}
           <div className="grid grid-cols-1 gap-2 w-full my-4">
-            <Link
-              onClick={() => openChat(profileInfo)}
-              className="btn w-full bg-neutral-90 hover:bg-neutral-60 border border-neutral-60 rounded-md"
-            >
-              <PiChatText className="text-xl" />
-              Contact
-            </Link>
+            {!isCurrentUser && (
+              <Link
+                onClick={() => openChat(profileInfo)}
+                className="btn w-full bg-neutral-90 hover:bg-neutral-60 border border-neutral-60 rounded-md"
+              >
+                <PiChatText className="text-xl" />
+                Contact
+              </Link>
+            )}
 
-
-
-            {profileInfo.role.developer.resume && (
+            {/* CV BUTTON */}
+            {(hasResume || isCurrentUser) && (
               <button
-                onClick={() =>
+                onClick={hasResume ? () =>
                   handleDownloadCV(
                     profileInfo.role.developer.resume,
                     `${profileInfo.name}_${profileInfo.surname}_CV.pdf`
-                  )
+                  ) : (isCurrentUser ? handleOpenModal : undefined)
                 }
-                className="btn w-full bg-neutral-90 hover:bg-neutral-60 border border-neutral-60 rounded-md"
+                disabled={!hasResume && !isCurrentUser}
+                className={`btn w-full border rounded-md ${
+                  hasResume 
+                    ? "bg-neutral-90 hover:bg-neutral-60 border-neutral-60" 
+                    : "bg-neutral-70 border-neutral-50 text-neutral-40 cursor-not-allowed"
+                }`}
               >
                 <PiReadCvLogo className="text-xl" />
-                Download CV
+                {hasResume ? "Download CV" : (isCurrentUser ? "Add your CV!" : "No CV available")}
               </button>
             )}
           </div>
@@ -188,7 +225,7 @@ const handleDownloadCV = async (resumeUrl, fileName = 'CV.pdf') => {
               Most Viewed Projects
             </h2>
             {loadingProjects ? (
-              <p>CLoading projects...</p>
+              <p>Loading projects...</p>
             ) : mostViewedProjects.length === 0 ? (
               <p>There are no projects to show</p>
             ) : (
@@ -252,7 +289,9 @@ const handleDownloadCV = async (resumeUrl, fileName = 'CV.pdf') => {
               <PiChatCenteredDots className="text-xl mr-2 text-primary-50" />
               About Me
             </h2>
-            <span>{profileInfo.description}</span>
+            <span className={!profileInfo.description ? "text-neutral-40" : ""}>
+              {profileInfo.description || "This user has not completed their 'About Me' yet."}
+            </span>
           </div>
         </div>
 

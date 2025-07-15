@@ -28,8 +28,8 @@ const handleSubmit = async (e) => {
 };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-neutral-60 px-4">
-      <div className="bg-neutral-80 shadow-lg rounded-lg p-8 max-w-md w-full">
+    <div className="min-h-screen flex items-center justify-center bg-neutral-90 px-4">
+      <div className="bg-neutral-80 shadow-lg rounded-lg p-8 max-w-md w-full border-1 border-neutral-60">
         <h2 className="text-2xl font-bold text-center mb-4">
           Reset your Password
         </h2>
@@ -41,12 +41,12 @@ const handleSubmit = async (e) => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            className="input input-bordered w-full bg-neutral-90"
+            className="input input-bordered w-full bg-neutral-80"
           />
 
           <button
             type="submit"
-            className="btn bg-primary-60 text-neutral-10 hover:bg-primary-70 w-full"
+            className="btn bg-primary-60 hover:bg-primary-70 w-full"
             disabled={isSubmitting}
           >
             {isSubmitting ? "Saving..." : "Change password"}

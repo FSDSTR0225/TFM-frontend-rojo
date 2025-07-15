@@ -12,7 +12,7 @@ export const CandidateSkills = ({skills,skillsOffer}) => {
             sortedSkills.map((tech) => (
               <span
                 key={tech}
-                className={`px-2 py-0.5 rounded-full text-neutral-0 ${
+                className={`px-2 mx-0.5 py-0.5 rounded-full text-neutral-0 ${
                   ofertaSkills.includes(tech) ? 'bg-green-600' : 'bg-primary-70'
                 }`}
               >

@@ -10,6 +10,7 @@ export const ChatProvider = ({ children }) => {
   const { setNotifications } = useContext(AuthContext);
 
   const toggleChat = () => {
+    setScreen("welcome");
     setIsOpen(!isOpen);
   };
 
@@ -25,6 +26,8 @@ export const ChatProvider = ({ children }) => {
   };
 
   const closeChat = () => {
+    setIsOpen(false);
+    setScreen("welcome");
     setSelectedUser(null);
     setIsChatOpen(false);
   };

@@ -13,7 +13,7 @@ export const Navbar = () => {
               aria-label='open sidebar'
               className='btn btn-square btn-ghost'
             >
-              <PiList className="text-3xl"/>
+              <PiList className="text-2xl"/>
 
             </label>
           </div>
@@ -40,7 +40,7 @@ export const Navbar = () => {
           <li>
             <Link
               to="/developers"
-              className="btn items-center gap-2  bg-neutral-90  hover:bg-primary-60  focus:bg-neutral-60 m-0 w-32 no-noise btn-shadow-black "
+              className="btn items-center gap-2  w-30 bg-neutral-90  hover:bg-primary-60  focus:bg-neutral-60 m-0 md:w-32 no-noise btn-shadow-black "
             >
               <PiUsers />
               Developers
@@ -51,7 +51,7 @@ export const Navbar = () => {
           <li>
             <Link
               to="/projects"
-              className="btn items-center gap-2  bg-neutral-90  hover:bg-primary-60  focus:bg-neutral-60 m-0  w-32 no-noise btn-shadow-black "
+              className="btn items-center gap-2  bg-neutral-90  hover:bg-primary-60  focus:bg-neutral-60 m-0 w-30   md:w-32 no-noise btn-shadow-black "
             >
               <PiStack />
               Projects
@@ -60,7 +60,7 @@ export const Navbar = () => {
           <li>
             <Link
               to="/offers"
-              className="btn items-center gap-2  bg-neutral-90  hover:bg-primary-60  focus:bg-neutral-60 m-0 w-32 no-noise btn-shadow-black "
+              className="btn items-center gap-2  bg-neutral-90  hover:bg-primary-60  focus:bg-neutral-60 m-0 w-30   md:w-32 no-noise btn-shadow-black "
             >
               <PiBriefcase />
               Jobs
