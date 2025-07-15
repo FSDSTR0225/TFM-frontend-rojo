@@ -5,7 +5,7 @@ import { getMessages, getUsers, sendMessage, suscribeToMessages, unsubscribeFrom
 import { ChatScreen } from "./components/ChatScreen";
 import { WelcomeScreen } from "./components/WelcomeScreen";
 import { ChatContext } from "./context/ChatContext";
-
+import imageCompression from "browser-image-compression";
 
 
 
@@ -87,18 +87,31 @@ export default function ChatPanel({ onClose, user }) {
 
 
 
-  const handleImageChange = (e) => {
+  const handleImageChange = async (e) => {
     const file = e.target.files[0];
     if (!file.type.startsWith("image/")) {
       // toast.error("Please select an image file");
       return;
     }
+    try{
+      const options = {
+        maxSizeMB: 1, // Tamaño máximo en MB
+        maxWidthOrHeight: 800, // Ancho o alto máximo
+        useWebWorker: true, // Usar Web Worker para compresión
+      }
+      const compressedFile = await imageCompression(file, options);
+      const base64 = await imageCompression.getDataUrlFromFile(compressedFile);
+      setImagePreview(base64);
 
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setImagePreview(reader.result);
-    };
-    reader.readAsDataURL(file);
+    }catch (error) {
+      console.error("Error al comprimir la imagen:", error);
+    }
+
+    // const reader = new FileReader();
+    // reader.onloadend = () => {
+    //   setImagePreview(reader.result);
+    // };
+    // reader.readAsDataURL(file);
   };
 
   const removeImage = () => {

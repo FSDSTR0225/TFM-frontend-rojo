@@ -4,7 +4,8 @@ import { AvatarImage } from '../../../components/AvatarImage';
 import { NameUsers } from '../../../components/NameUsers';
 import { getDaysSince } from '../../../utils/utils';
 import { PiInfo } from 'react-icons/pi';
-export const RecDashBoar = ({ offerId, lists, setLists }) => {
+
+export const RecDashBoar = ({ offerId, lists, setLists, setIsOpenApplicantsModal }) => {
   //guarda temporalmente de dónde (qué columna) y qué candidato estamos arrastrando.
   const [dragInfo, setDragInfo] = useState({ fromList: null, candidate: null });
   // Esto es para iniciar el arrastre del drag-and-drop.
@@ -80,9 +81,9 @@ export const RecDashBoar = ({ offerId, lists, setLists }) => {
                 
 <div className='flex justify-between'>
                   <AvatarImage user={c.user} width={6}/>
-                  <div>
-                    <PiInfo  className='text-secondary-30 text-3xl z-48 size-6' />
-                  </div>
+                  <button className='cursor-pointer' onClick={() => setIsOpenApplicantsModal(c)}>
+                    <PiInfo  className='text-secondary-30 hover:text-secondary-50 text-3xl z-48 size-6' />
+                  </button>
                     
                   </div>
                   <div className="flex flex-col">

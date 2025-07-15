@@ -8,7 +8,7 @@ export const UserMenu = ({ profile, logout }) => {
   const navigate = useNavigate();
   const {toggleChat, closeChat} = useContext(ChatContext);
   const handleLogout = () => {
-        toggleChat();
+       
     closeChat();
     logout();
     navigate("/");

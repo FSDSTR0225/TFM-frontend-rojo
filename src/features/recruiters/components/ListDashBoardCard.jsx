@@ -9,7 +9,7 @@ import { useNavigate } from "react-router"
 
 
 
-export const ListDashBoardCard = ({lists, activeTab, skillsOffer, colors, fadedColors, textColors, changeStatusCandidate, offerId, openChat, handleDownloadCV, handleDownloadCoverLetter }) => {
+export const ListDashBoardCard = ({lists, activeTab, skillsOffer, colors, fadedColors, textColors, changeStatusCandidate, offerId, openChat, handleDownloadCV, handleDownloadCoverLetter  }) => {
 
   const navigate = useNavigate();
   
@@ -20,6 +20,7 @@ export const ListDashBoardCard = ({lists, activeTab, skillsOffer, colors, fadedC
         <div className='flex flex-col gap-4'>
            {lists[activeTab]?.length > 0 ? (
         lists[activeTab].map((candidato) => {
+          
           const name = capitalize(candidato?.user?.name || '');
           const surname = capitalize(candidato?.user?.surname || '');
           const completeName = `${name} ${surname}`.trim() || 'Unknown Profile';

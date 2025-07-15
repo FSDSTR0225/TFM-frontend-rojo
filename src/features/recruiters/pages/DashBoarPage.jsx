@@ -3,19 +3,21 @@ import { RecDashBoar } from "./RecDashBoar";
 import { Link, useParams } from "react-router";
 import { PiDotsNine, PiDotsThreeVertical, PiListBullets } from "react-icons/pi";
 import { ListDashBoard } from "../components/ListDashBoard";
-import { getCandidatesByOfferId, getCoverLetter, getOffersById } from "../../../services/offersServices";
+import { getCandidatesByOfferId, getCoverLetter, getOffersById, updateCandidateStatus } from "../../../services/offersServices";
 import { useContext } from "react";
 import { ChatContext } from "../../../layout/chat/context/ChatContext";
+import { DashBoardUserModal } from "../components/DashBoardUserModal";
 
 
 export const DashBoarPage = () => {
   const { offerId } = useParams();
   const [viewList, setViewList] = useState(false);
-  const [nameOffer, setNameOffer] = useState('');
   const [skillsOffer, setSkillsOffer] = useState([]);
   const [offer, setOffer] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isOpenApplicantsModal, setIsOpenApplicantsModal] = useState(false);
+  const [candidate, setCandidate] = useState();
 
 
 const handleDownloadCoverLetter = async (offerId, userId) => {
@@ -60,10 +62,10 @@ const handleDownloadCoverLetter = async (offerId, userId) => {
     accepted: [],
     rejected: [],
   });
+  const [activeTab, setActiveTab] = useState(Object.keys(lists)[0]);
 
   const getCandidates = async()=>{
     const data = await getCandidatesByOfferId(offerId, localStorage.getItem('token'));
-    setNameOffer(data.nameOffer);
     setSkillsOffer(data.skills);
     const candidates = data.applicants;
     console.log('candidatos',candidates);
@@ -75,6 +77,15 @@ const handleDownloadCoverLetter = async (offerId, userId) => {
     console.log(grouped);
     setLists(grouped);
   } 
+  useEffect(() => {
+  getCandidates(); // Aquí llamas a getCandidates
+}, [offerId]);
+
+    const changeStatusCandidate = async (status, idCandidato) => {
+      await updateCandidateStatus(offerId, idCandidato, status, localStorage.getItem('token'));
+      setActiveTab(status);
+      getCandidates(); // Actualiza la lista de candidatos
+    }
 
   const fetchOfferByid = async () => {
     try {
@@ -86,6 +97,36 @@ const handleDownloadCoverLetter = async (offerId, userId) => {
     }finally{
       setIsLoading(false);
     }
+  };
+  const colors = {
+    pending: 'bg-blue-500',
+    reviewed: 'bg-purple-500',
+    interviewed: 'bg-yellow-500',
+    accepted: 'bg-green-500',
+    rejected: 'bg-red-500',
+  };
+  const fadedColors = {
+    pending: 'bg-blue-500/20',
+    reviewed: 'bg-purple-500/20',
+    interviewed: 'bg-yellow-500/20',
+    accepted: 'bg-green-500/20',
+    rejected: 'bg-red-500/20',
+  };
+  const textColors = {
+    pending: 'text-blue-500',
+    reviewed: 'text-purple-500',
+    interviewed: 'text-yellow-500',
+    accepted: 'text-green-500',
+    rejected: 'text-red-500',
+  };
+
+  const handleOpenApplicantsModal = (candidate) => {
+    setCandidate(candidate);
+    setIsOpenApplicantsModal(true);
+  };
+
+  const handleCloseApplicantsModal = () => {
+    setIsOpenApplicantsModal(false);
   };
 
   // 1. Carga candidatos
@@ -189,9 +230,26 @@ const handleDownloadCoverLetter = async (offerId, userId) => {
           lists={lists}
           setLists={setLists}
           getCandidates={getCandidates} /> : <RecDashBoar offerId={offerId}
+            setIsOpenApplicantsModal={handleOpenApplicantsModal}
+            
             lists={lists}
             setLists={setLists} />}
       </div>
+      {isOpenApplicantsModal && <DashBoardUserModal offerId={offerId}
+       key={candidate._id}
+      candidate={candidate}
+      handleCloseApplicantsModal={handleCloseApplicantsModal}
+       openChat={openChat}
+        handleDownloadCoverLetter={handleDownloadCoverLetter}
+        handleDownloadCV={handleDownloadCV}
+        skillsOffer={skillsOffer}
+        getCandidates={getCandidates}
+        setIsOpenApplicantsModal={setIsOpenApplicantsModal}
+        colors={colors}
+        fadedColors={fadedColors}
+        textColors={textColors}
+        changeStatusCandidate={changeStatusCandidate}
+        />}
     </>
   )
 }

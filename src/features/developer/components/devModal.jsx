@@ -327,7 +327,11 @@ export default function DevModal({
               {...register("description", {
                 maxLength: {
                   value: 500,
-                  message: "Máximo 500 caracteres",
+                  message: "Max 500 characters",
+                },
+                minLength: {
+                  value: 50,
+                  message: "Min 50 characters",
                 },
               })}
               placeholder="Text a description about you..."
