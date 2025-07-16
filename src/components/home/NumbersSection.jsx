@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useCounter } from "../../hooks/useCounter";
 import { getOffers } from "../../services/offersServices";
 import { getAllDevelopers } from "../../services/devService";
 import { getAllRecruiters } from "../../services/profileService";
@@ -7,50 +8,42 @@ export const NumbersSection = () => {
   const [offers, setOffers] = useState([]);
   const [devs, setDevs] = useState([]);
   const [companies, setCompanies] = useState([]);
+  const [acceptedApplications, setAcceptedApplications] = useState(0);
+
+  const devsCount = useCounter(devs.length * 100);
+  const companiesCount = useCounter(companies.length * 100);
+  const offersCount = useCounter(offers.length * 100);
+  const hiresCount = useCounter(acceptedApplications * 100);
 
   useEffect(() => {
-    const fetchOffers = async () => {
+    const fetchData = async () => {
       try {
-        const offersData = await getOffers();
+        const [offersData, devsData, companiesData] = await Promise.all([
+          getOffers(),
+          getAllDevelopers(),
+          getAllRecruiters(),
+        ]);
+
         setOffers(offersData);
-      } catch (error) {
-        console.error("Error fetching offers:", error);
-      }
-    };
-
-    const fetchDevs = async () => {
-      try {
-        const devsData = await getAllDevelopers();
         setDevs(devsData);
-      } catch (error) {
-        console.error("Error fetching devs:", error);
-      }
-    };
-
-    const fetchCompany = async () => {
-      try {
-        const companiesData = await getAllRecruiters();
         setCompanies(companiesData);
+
+        let accepted = 0;
+        offersData.forEach((offer) => {
+          offer.applicants?.forEach((applicant) => {
+            if (applicant.status === "accepted") {
+              accepted++;
+            }
+          });
+        });
+        setAcceptedApplications(accepted);
       } catch (error) {
-        console.error("Error fetching companies:", error);
+        console.error("Error fetching data:", error);
       }
     };
 
-    fetchOffers();
-    fetchDevs();
-    fetchCompany();
+    fetchData();
   }, []);
-
-  let acceptedApplications = 0;
-  offers.map((offer) => {
-    if (offer.applicants) {
-      offer.applicants.map((applicant) => {
-        if (applicant.status === "accepted") {
-          acceptedApplications++;
-        }
-      });
-    }
-  });
 
   return (
     <div className="flex justify-center items-center w-full mt-8 px-2">
@@ -58,7 +51,7 @@ export const NumbersSection = () => {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 text-center">
           <div className="flex flex-col items-center">
             <span className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary-50 mb-2 block">
-              +{devs.length * 100}
+              +{devsCount}
             </span>
             <span className="text-neutral-20 text-sm md:text-base block">
               Developers
@@ -66,7 +59,7 @@ export const NumbersSection = () => {
           </div>
           <div className="flex flex-col items-center">
             <span className="text-3xl sm:text-4xl md:text-5xl font-bold text-secondary-50 mb-2 block">
-              +{companies.length * 100}
+              +{companiesCount}
             </span>
             <span className="text-neutral-20 text-sm md:text-base block">
               Companies
@@ -74,7 +67,7 @@ export const NumbersSection = () => {
           </div>
           <div className="flex flex-col items-center">
             <span className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary-50 mb-2 block">
-              +{offers.length * 100}
+              +{offersCount}
             </span>
             <span className="text-neutral-20 text-sm md:text-base block">
               Active Offers
@@ -82,7 +75,7 @@ export const NumbersSection = () => {
           </div>
           <div className="flex flex-col items-center">
             <span className="text-3xl sm:text-4xl md:text-5xl font-bold text-secondary-50 mb-2 block">
-              +{acceptedApplications * 100}
+              +{hiresCount}
             </span>
             <span className="text-neutral-20 text-sm md:text-base block">
               Total hires
