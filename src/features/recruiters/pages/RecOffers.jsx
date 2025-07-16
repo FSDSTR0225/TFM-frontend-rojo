@@ -20,8 +20,6 @@ export const RecOffers = () => {
   const [isOpenModalDelete, setIsOpenModalDelete] = useState(false)
   const [stats, setStats] = useState(null)
   const {profile} = useContext(AuthContext)
-
-  const [operacion, setOperacion] = useState('crear');
   const [selectedOfferId, setSelectedOfferId] = useState(null);
   const [isOpenModalEdit, setIsOpenModalEdit] = useState(false);
 

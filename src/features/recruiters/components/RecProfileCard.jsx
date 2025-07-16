@@ -6,7 +6,7 @@ import { AvatarImage } from '../../../components/AvatarImage';
 import { NameUsers } from '../../../components/NameUsers'
 import { RecModalEdit } from './RecModalEdit';
 import { getUserLogged } from '../../../services/authService';
-export const RecProfileCard = ({ recruiter, profile, id, token, setProfile, onRecruiterUpdate}) => {
+export const RecProfileCard = ({ recruiter, profile, id, token, setProfile, onRecruiterUpdate, stats}) => {
   const navigate = useNavigate();
   const [isRecModalOpen, setIsRecModalOpen] = useState(false);
   const isOwner = profile?._id === id;
@@ -103,27 +103,31 @@ export const RecProfileCard = ({ recruiter, profile, id, token, setProfile, onRe
           </div>
         </div>
       </div>
-      <div className="card bg-neutral-80 shadow-xl border border-neutral-70 flex-col text-sm md:text-lg w-full md:max-w-100">
-        <div className="p-8 w-full max-w-md shadow-xl">
-          <p className="text-center text-sm mb-6">Total data since</p>
+      {isOwner && profile?.role?.type === 'recruiter' && <div className="card bg-neutral-80 shadow-xl border border-neutral-70 flex-col text-sm md:text-lg w-full md:max-w-100">
+        <div className="flex flex-col p-4 ">
+          <h2 className="text-center text-md mb-6 self-center">Total data since</h2>
 
           {/* Stats */}
-          <div className="grid grid-cols-2 gap-4 mb-6">
-            <div className="bg-[#2e2e2e] p-4 rounded-lg text-center">
-              <p className="text-sm">Reviewed</p>
-              <p className="text-2xl font-bold">12.945</p>
+          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-2 gap-4 mb-6">
+            <div className="flex flex-col justify-between bg-[#2e2e2e] p-4 rounded-lg text-center">
+              <h3 className="text-sm">Offers</h3>
+            <p className="text-2xl">{stats?.totalOffers}</p>
+            <p className="text-sm text-neutral-20">Active Offers</p>
             </div>
-            <div className="bg-[#2e2e2e] p-4 rounded-lg text-center">
-              <p className="text-sm">Interviewed</p>
-              <p className="text-2xl font-bold">458</p>
+            <div className="flex flex-col justify-between bg-[#2e2e2e] p-4 rounded-lg text-center">
+               <h3 className="text-sm">Applications</h3>
+            <p className="text-2xl">{stats?.totalApplicants}</p>
+            <p className="text-sm text-neutral-20">{stats?.avgDailyApplicationsLast7Days}% Last 7 days</p>
             </div>
-            <div className="bg-[#2e2e2e] p-4 rounded-lg text-center">
-              <p className="text-sm">Applicants</p>
-              <p className="text-2xl font-bold text-[#007bff]">25.578</p>
+            <div className="flex flex-col justify-between bg-[#2e2e2e] p-4 rounded-lg text-center">
+               <h3 className="text-sm font-bold">Average</h3>
+            <p className="text-2xl text-secondary-50">{stats?.avgApplicationsPerOffer}</p>
+            <p className="text-sm text-neutral-20">Applications per offer</p>
             </div>
-            <div className="bg-[#2e2e2e] p-4 rounded-lg text-center">
-              <p className="text-sm">Hired</p>
-              <p className="text-2xl font-bold text-[#007bff]">84</p>
+            <div className="flex flex-col justify-between bg-[#2e2e2e] p-4 rounded-lg text-center">
+              <h3 className="text-sm ">Recent</h3>
+            <p className="text-2xl">{stats?.applicationsLast7Days}</p>
+            <p className="text-sm text-neutral-20">Aplications last week</p>
             </div>
           </div>
 
@@ -131,13 +135,13 @@ export const RecProfileCard = ({ recruiter, profile, id, token, setProfile, onRe
           {(isOwner && profile?.role?.type === 'recruiter') && (
             <button
               onClick={() => navigate('/private-rec/offers')}
-              className="bg-[#007bff] text-white text-sm w-full py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
+              className="bg-secondary-50 text-sm w-full py-3 rounded-lg font-semibold hover:bg-secondary-40 transition cursor-pointer"
             >
               Offers Dashboard
             </button>
           )}
         </div>
-
+    
         {isRecModalOpen && (
           <RecModalEdit
             token={token}
@@ -149,7 +153,7 @@ export const RecProfileCard = ({ recruiter, profile, id, token, setProfile, onRe
           />
         )}
 
-      </div>
+      </div>  }
 
     </div>
   )

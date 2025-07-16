@@ -30,6 +30,7 @@ import { Onboarding } from "../pages/Onboarding/Onboarding";
 import { Home } from "../pages/Home";
 import { SettingsPage } from "../pages/SettingsPage";
 import { TermsPage, PrivacyPage, CookiesPage, AboutPage } from "./LegalRoutes";
+import { Contact } from "../pages/Contact";
 
 const router = createBrowserRouter([
   {
@@ -61,6 +62,7 @@ const router = createBrowserRouter([
           { path: "legal/terms", element: <TermsPage /> },
           { path: "legal/privacy", element: <PrivacyPage /> },
           { path: "legal/cookies", element: <CookiesPage /> },
+          { path: "contact", element: <Contact /> },
 
           // --- Private Dev (developers) ---
           {
