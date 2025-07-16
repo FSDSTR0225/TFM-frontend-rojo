@@ -7,26 +7,17 @@ export default function ChangePasswordModal({ open, setOpen, profileData, onProf
     handleSubmit,
     reset,
     watch,
-    formState: { isSubmitting }
+    formState: { isSubmitting, errors }
   } = useForm();
 
-  // Observar las contraseñas para validar que coincidan
   const newPassword = watch("newPassword");
 
   useEffect(() => {
-    if (profileData) {
-      reset({
-        oldPassword: "",
-        newPassword: "",
-        confirmPassword: "",
-      });
-    } else {
-      reset({
-        oldPassword: "",
-        newPassword: "",
-        confirmPassword: "",
-      });
-    }
+    reset({
+      oldPassword: "",
+      newPassword: "",
+      confirmPassword: "",
+    });
   }, [profileData, reset]);
 
   const handleClose = () => {
@@ -36,11 +27,6 @@ export default function ChangePasswordModal({ open, setOpen, profileData, onProf
 
   const handlePassSubmit = async (data) => {
     try {
-      if (data.newPassword !== data.confirmPassword) {
-        alert("Your new passwords don't match");
-        return;
-      }
-
       if (onSubmit) {
         await onSubmit(data);
       }
@@ -50,7 +36,6 @@ export default function ChangePasswordModal({ open, setOpen, profileData, onProf
       }
 
       handleClose();
-
     } catch (error) {
       console.error("Error when you tried change the password: ",error);
     }
@@ -61,11 +46,10 @@ export default function ChangePasswordModal({ open, setOpen, profileData, onProf
   return (
     <div className="modal modal-open fixed inset-0 flex justify-center items-center z-50">
       <div className="modal-box max-w-3xl bg-neutral-80 border border-neutral-70 rounded-lg p-6 relative">
-        <form onSubmit={handleSubmit(handlePassSubmit)} className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4">
           <h2 className="text-2xl font-bold text-center">Change your password</h2>
 
-
-          {/* Password Viejo*/}
+          {/* Current Password */}
           <div className="form-control">
             <label className="block text-sm text-neutral-20 mb-1">
               <span className="label-text font-semibold">Current password</span>
@@ -73,14 +57,17 @@ export default function ChangePasswordModal({ open, setOpen, profileData, onProf
             <input 
               type="password"
               {...register("oldPassword", {
-                required: "Your current password is requiered"
+                required: "Current password is required"
               })} 
               placeholder="Enter your current password" 
-              className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic" 
+              className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
             />
+            {errors.oldPassword && (
+              <span className="text-red-500 text-sm mt-1">{errors.oldPassword.message}</span>
+            )}
           </div>
 
-          {/* Password nuevo */}
+          {/* New Password */}
           <div className="form-control">
             <label className="block text-sm text-neutral-20 mb-1">
               <span className="label-text font-semibold">New password</span>
@@ -88,14 +75,21 @@ export default function ChangePasswordModal({ open, setOpen, profileData, onProf
             <input 
               type="password"
               {...register("newPassword", {
-                required: "Your new password is requiered"
+                required: "New password is required",
+                minLength: {
+                  value: 6,
+                  message: "Password must be at least 6 characters"
+                }
               })} 
               placeholder="Enter your new password" 
-              className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic" 
+              className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
             />
+            {errors.newPassword && (
+              <span className="text-red-500 text-sm mt-1">{errors.newPassword.message}</span>
+            )}
           </div>
 
-          {/* Password nuevo again */}
+          {/* Confirm Password */}
           <div className="form-control">
             <label className="block text-sm text-neutral-20 mb-1">
               <span className="label-text font-semibold">Confirm new password</span>
@@ -103,24 +97,26 @@ export default function ChangePasswordModal({ open, setOpen, profileData, onProf
             <input 
               type="password"
               {...register("confirmPassword", {
-                required: "Confirm your new password",
-                validate: value => value === newPassword
+                required: "Please confirm your password",
+                validate: value => value === newPassword || "Passwords don't match"
               })} 
               placeholder="Confirm your new password" 
-              className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic" 
+              className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
             />
+            {errors.confirmPassword && (
+              <span className="text-red-500 text-sm mt-1">{errors.confirmPassword.message}</span>
+            )}
           </div>
-
-          
 
           {/* Buttons */}
           <div className="flex justify-end gap-4 pt-4">
             <button 
               type="submit" 
               disabled={isSubmitting} 
-              className="btn bg-primary-60 text-neutral-0 hover:bg-primary-50 border border-primary-50"
+              className="btn bg-primary-60 text-neutral-0 hover:bg-primary-50 border border-primary-50 disabled:opacity-50"
+              onClick={handleSubmit(handlePassSubmit)}
             >
-              {isSubmitting ? "Changing..." : "Change your password"}
+              {isSubmitting ? "Changing..." : "Change password"}
             </button>
             <button 
               type="button" 
@@ -130,7 +126,7 @@ export default function ChangePasswordModal({ open, setOpen, profileData, onProf
               Cancel
             </button>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );
