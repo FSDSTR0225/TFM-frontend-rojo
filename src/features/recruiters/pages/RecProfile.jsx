@@ -3,7 +3,7 @@ import { OfferCard } from '../components/OfferCard'
 import { OfferModal } from '../components/OfferModal'
 import { AuthContext } from '../../../context/authContext';
 import { useParams } from "react-router";
-import { getOffersbyOwner } from '../../../services/offersServices';
+import { getOffersbyOwner, getRecruitersStats } from '../../../services/offersServices';
 import { SectionContainer } from '../../../components/SectionContainer';
 import { Pagination } from '../../../components/Pagination';
 import { getRecruiterById } from '../../../services/profileService';
@@ -22,6 +22,7 @@ export const RecProfile = () => {
   const [recruiter, setRecruiter] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedOfferId, setSelectedOfferId] = useState(null);
+  const [stats, setStats] = useState(null)
   const { profile, token, setProfile } = useContext(AuthContext) || {};
   const [operacion, setOperacion] = useState('crear');
 
@@ -73,12 +74,24 @@ export const RecProfile = () => {
     fetchData();
   }, [id, isOwner, isOpenModalEdit]);
 
+  const fetchStats = async () =>{
+      try {
+        const statsData = await getRecruitersStats(profile._id)
+        setStats(statsData)
+      } catch (error) {
+        console.error("Stats Error:", error);
+      }
+    }
+
+  useEffect(() => {
+    fetchStats()
+  }, [])
 
   return (
     <SectionContainer classProps={"py-12"} >
 
       <div className='flex flex-col md:flex-row  gap-4 '>
-        <RecProfileCard recruiter={recruiter} token={token} profile={profile} id={id} setProfile={setProfile} onRecruiterUpdate={updateRecruiterData}/>
+        <RecProfileCard stats={stats} recruiter={recruiter} token={token} profile={profile} id={id} setProfile={setProfile} onRecruiterUpdate={updateRecruiterData}/>
         <div className="w-full flex flex-col">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-semibold">My Offers</h2>
