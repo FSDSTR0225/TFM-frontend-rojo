@@ -9,7 +9,17 @@ export const registeredUser = async (user) => {
     },
     body: JSON.stringify(user),
   });
+
   const data = await resp.json();
+
+  // Verificamos si la respuesta es exitosa (200-299)
+  if (!resp.ok) {
+    // Lanzamos el error para que el componente lo capture
+    const error = new Error(data.message || "Error al registrar usuario");
+    error.status = resp.status;
+    throw error;
+  }
+
   return data;
 };
 
@@ -52,7 +62,6 @@ export const getUserLogged = async (token) => {
 };
 
 export const forgotPassword = async (email) => {
-  
   const resp = await fetch(`${urlBackEnd}/forgot-password`, {
     method: "POST",
     headers: {

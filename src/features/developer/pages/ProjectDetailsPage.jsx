@@ -1,13 +1,17 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { getProjectById, incrementProjectView, toggleProjectLike, getProjectLikeStatus } from "../../../services/projectService";
+import {
+  getProjectById,
+  incrementProjectView,
+  toggleProjectLike,
+  getProjectLikeStatus,
+} from "../../../services/projectService";
 import { ProjectInfoCard } from "../components/ProjectInfoCard";
 import { GitHubFileTree } from "../components/GitHubFileTree";
 import { GitHubLanguagesTag } from "../components/GitHubLanguagesTag";
 import { CodeBlock } from "../../../styles/ReactParser";
 import { LikeButtonRounded } from "../../../components/LikeButtonRounded";
 import { AuthContext } from "../../../context/authContext";
-
 
 function useWindowWidth() {
   const [width, setWidth] = useState(window.innerWidth);
@@ -37,8 +41,8 @@ export const ProjectDetailsPage = () => {
   const width = useWindowWidth();
   const isDesktop = width >= 1200;
   const { profile, socket, setNotifications } = useContext(AuthContext);
-  const [selectedOwner, setSelectedOwner] = useState(null); 
-  const token = localStorage.getItem('token') || '';
+  const [selectedOwner, setSelectedOwner] = useState(null);
+  const token = localStorage.getItem("token") || "";
 
   // Estados del botón de like
   const [liked, setLiked] = useState(false);
@@ -60,7 +64,9 @@ export const ProjectDetailsPage = () => {
           localStorage.setItem(lastViewKey, now.toString());
 
           // Actualizar localmente el contador de views para reflejar el cambio instantáneamente:
-          setProject(prev => prev ? { ...prev, views: (prev.views || 0) + 1 } : prev);
+          setProject((prev) =>
+            prev ? { ...prev, views: (prev.views || 0) + 1 } : prev
+          );
         } catch (error) {
           console.error("Error incrementando views:", error);
         }
@@ -87,7 +93,6 @@ export const ProjectDetailsPage = () => {
     incrementViewWithCooldown();
   }, [id, token]);
 
-
   // Función para manejar el click del like
   const handleLikeClick = async () => {
     if (animating || loadingLike) return;
@@ -102,16 +107,21 @@ export const ProjectDetailsPage = () => {
         likes: data.likes,
       }));
 
-      if (data.liked && selectedOwner._id && selectedOwner._id !== profile._id) {
+      if (
+        data.liked &&
+        selectedOwner._id &&
+        selectedOwner._id !== profile._id
+      ) {
         const notif = {
           senderId: profile._id,
           senderName: profile.name,
           receiverId: selectedOwner._id,
           receiverName: selectedOwner.name,
           type: 2,
-          createdAt: Date.now()
+          createdAt: Date.now(),
         };
         socket.emit("sendNotification", notif);
+        setNotifications((prev) => [notif, ...prev]);
       }
     } catch (error) {
       console.error(error);
@@ -147,7 +157,6 @@ export const ProjectDetailsPage = () => {
     ? parseRepoUrl(project.githubProjectLink)
     : null;
 
-
   return (
     <div className="w-full flex flex-col items-center gap-6">
       <div className="relative w-full h-[256px] overflow-hidden">
@@ -178,8 +187,11 @@ export const ProjectDetailsPage = () => {
                       key={index}
                       src={url}
                       alt={`slide-${index}`}
-                      className={`absolute inset-0 w-full h-full object-cover rounded-lg transition-opacity duration-700 ease-in-out ${index === currentIndex ? "opacity-100 z-10" : "opacity-0 z-0"
-                        }`}
+                      className={`absolute inset-0 w-full h-full object-cover rounded-lg transition-opacity duration-700 ease-in-out ${
+                        index === currentIndex
+                          ? "opacity-100 z-10"
+                          : "opacity-0 z-0"
+                      }`}
                     />
                   ))}
                   <button
@@ -221,20 +233,27 @@ export const ProjectDetailsPage = () => {
             </div>
 
             <div className="flex flex-col">
-              <ProjectInfoCard project={project} setSelectedOwner={setSelectedOwner} />
+              <ProjectInfoCard
+                project={project}
+                setSelectedOwner={setSelectedOwner}
+              />
 
-              <div className="flex justify-center items-center rounded-full p-6">
-                <LikeButtonRounded
-                  liked={liked}
-                  animating={animating}
-                  loadingLike={loadingLike}
-                  onClick={handleLikeClick}
-                />
-              </div>
+              {profile && (
+                <div className="flex justify-center items-center rounded-full p-6">
+                  <LikeButtonRounded
+                    liked={liked}
+                    animating={animating}
+                    loadingLike={loadingLike}
+                    onClick={handleLikeClick}
+                  />
+                </div>
+              )}
 
               {githubRepoInfo && (
                 <>
-                  <h1 className="text-white text-2xl font-semibold p-4">GitHub</h1>
+                  <h1 className="text-white text-2xl font-semibold p-4">
+                    GitHub
+                  </h1>
                   <div key="githubFileTree" className="-mt-6">
                     <GitHubFileTree repoUrl={project.githubProjectLink} />
                   </div>
@@ -264,8 +283,11 @@ export const ProjectDetailsPage = () => {
                             key={index}
                             src={url}
                             alt={`slide-${index}`}
-                            className={`absolute inset-0 w-full h-full object-cover rounded-lg transition-opacity duration-700 ease-in-out ${index === currentIndex ? "opacity-100 z-10" : "opacity-0 z-0"
-                              }`}
+                            className={`absolute inset-0 w-full h-full object-cover rounded-lg transition-opacity duration-700 ease-in-out ${
+                              index === currentIndex
+                                ? "opacity-100 z-10"
+                                : "opacity-0 z-0"
+                            }`}
                           />
                         ))}
                         <button
@@ -285,7 +307,13 @@ export const ProjectDetailsPage = () => {
                   );
 
                 case "ProjectInfoCard":
-                  return <ProjectInfoCard key="infoCard" project={project} setSelectedOwner={setSelectedOwner} />;
+                  return (
+                    <ProjectInfoCard
+                      key="infoCard"
+                      project={project}
+                      setSelectedOwner={setSelectedOwner}
+                    />
+                  );
 
                 case "Description":
                   return project.description ? (
@@ -311,7 +339,8 @@ export const ProjectDetailsPage = () => {
                   ) : null;
 
                 case "CodeSections":
-                  return project.codeSections && project.codeSections.length > 0 ? (
+                  return project.codeSections &&
+                    project.codeSections.length > 0 ? (
                     <section
                       key="codeSections"
                       className="relative bg-neutral-80 flex flex-col rounded-lg shadow-md overflow-hidden border border-neutral-70 p-6 text-inherit no-underline w-full -mt-6"
@@ -326,7 +355,7 @@ export const ProjectDetailsPage = () => {
                   ) : null;
 
                 case "LikeButton":
-                  return (
+                  return profile ? (
                     <div className="flex justify-center items-center rounded-full p-6">
                       <LikeButtonRounded
                         liked={liked}
@@ -335,10 +364,7 @@ export const ProjectDetailsPage = () => {
                         onClick={handleLikeClick}
                       />
                     </div>
-                  );
-
-                default:
-                  return null;
+                  ) : null;
               }
             })}
           </div>
