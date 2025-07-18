@@ -154,7 +154,7 @@ export default function ChatPanel({ onClose, user }) {
       setImagePreview(null);
       if (fileInputRef.current) fileInputRef.current.value = "";
     } catch (error) {
-      console.log("Failed to send message: ", error);
+      console.error("Failed to send message: ", error);
     }
   }
 

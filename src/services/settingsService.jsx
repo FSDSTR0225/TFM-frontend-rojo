@@ -62,7 +62,7 @@ export async function deleteAccount(token) {
     const data = await res.json();
         
     if (res.ok) {
-      console.log('Account deleted successfully');
+      //console.log('Account deleted successfully');
       return data;
     } else {
       console.error('Error:', data.msg);
@@ -75,8 +75,8 @@ export async function deleteAccount(token) {
 };
 
 export const updateUserInfo = async (userInfo, token) => {
-  console.log("User Info:", userInfo);
-  console.log("Token:", token);
+  // console.log("User Info:", userInfo);
+  // console.log("Token:", token);
 
   try {
     const resp = await fetch(urlBackEnd + "/settings/profile", {
@@ -95,7 +95,7 @@ export const updateUserInfo = async (userInfo, token) => {
     const data = await resp.json();
     return data;
   } catch (error) {
-    console.log("Error: ", error);
+    console.error("Error: ", error);
     throw error;
   }
 };

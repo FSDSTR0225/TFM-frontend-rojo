@@ -7,7 +7,7 @@ export const getOffers = async () => {
       throw new Error("Error getting offers");
     }
     const offersData = await response.json();
-    console.log("🚀 ~ getOffers ~ offersData:", offersData);
+   
     return offersData;
   } catch (error) {
     console.error("OffersService Error:", error);
@@ -22,7 +22,7 @@ export const getOffersbyOwner = async (ownerId) => {
       throw new Error("Error getting offers");
     }
     const offersData = await response.json();
-    console.log("🚀 ~ getOffers ~ offersData:", offersData);
+  
     return offersData;
   } catch (error) {
     console.error("OffersService Error:", error);
@@ -59,7 +59,7 @@ export const deleteOffer = async (id, token) => {
     const data = await resp.json();
     return data;
   } catch (error) {
-    console.log("Error: ", error);
+    console.error("Error: ", error.message);
     throw error;
   }
 };

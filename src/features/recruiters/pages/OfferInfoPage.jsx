@@ -105,7 +105,7 @@ export const OfferInfoPage = () => {
     );
     setSkillsOffer(data.skills);
     const candidates = data.applicants;
-    console.log("candidatos", candidates);
+   
     //Crea grouped, un objeto vacío con las cinco claves.
     setLists(candidates);
   };
@@ -122,7 +122,6 @@ export const OfferInfoPage = () => {
   };
 
   useEffect(() => {
-    console.log(lists[1]);
     getCandidates();
     fetchOffer();
   }, [id]);
@@ -198,7 +197,7 @@ export const OfferInfoPage = () => {
                 const surname = capitalize(candidato?.user?.surname || "");
                 const completeName =
                   `${name} ${surname}`.trim() || "Unknown Profile";
-                const isResume = candidato?.user?.role?.developer?.resume;
+                const isResume = candidato?.role?.developer?.resume;
                 const isCoverLetter =
                   (candidato.coverLetter?.length ?? 0) >= 10;
                 return (

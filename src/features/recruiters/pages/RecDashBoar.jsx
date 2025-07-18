@@ -44,9 +44,7 @@ export const RecDashBoar = ({
       return { ...prev, [fromList]: src, [toList]: dst };
     });
     // 4. Actualiza en backend
-    console.log(
-      `Actualizando candidato ${candidate._id} de ${fromList} a ${toList}`
-    );
+   
     const daysAgo = getDaysSince(candidate?.appliedDate);
     await updateCandidateStatus(
       offerId,

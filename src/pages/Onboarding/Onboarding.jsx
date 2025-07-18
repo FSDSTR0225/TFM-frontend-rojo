@@ -135,7 +135,7 @@ export const Onboarding = () => {
       const token = localStorage.getItem("token");
       if (!token) throw new Error("No token found");
 
-      console.log("Enviando datos de onboarding:", { formData, role, token });
+      // console.log("Enviando datos de onboarding:", { formData, role, token });
 
       await sendProfileUpdate(formData, role, token);
 

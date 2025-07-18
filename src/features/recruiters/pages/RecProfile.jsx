@@ -70,7 +70,6 @@ export const RecProfile = () => {
 
 
   useEffect(() => {
-    console.log("isOpenModalEdit:", isOpenModalEdit)
     fetchData();
   }, [id, isOwner, isOpenModalEdit]);
 

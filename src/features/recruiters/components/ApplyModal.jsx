@@ -27,7 +27,7 @@ export const ApplyModal = ({ isOpen, setIsOpen, idOffer, onApplySuccess }) => {
     }
     try {
       const response = await applyToOffer(idOffer, { phone, coverLetter, gdprAccepted }, token);
-      console.log( "🚀 ~ handleSubmit ~ response:", response);
+      
       onApplySuccess?.(response.offer);
       setIsOpen(false);
     } catch (error) {

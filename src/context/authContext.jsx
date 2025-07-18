@@ -38,13 +38,13 @@ export const AuthProvider = ({ children }) => {
         query: { userId: profile._id },
       });
       socketRef.current.on("connect", () => {
-        console.log("Socket conectado con id:", socketRef.current.id);
+        
       });
       socketRef.current.on("disconnect", () => {
-        console.log("Socket desconectado");
+       
       });
       socketRef.current.on("getOnlineUsers", (users) => {
-        console.log("getOnlineUsers", users);
+        
         setOnlineUsers(users);
       });
     }
@@ -67,7 +67,6 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     if (token && !profile) {
-      console.log("🚀 ~ useEffect ~ token:", token);
       infoUserLogged();
     }
   }, [token]);
