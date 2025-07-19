@@ -23,7 +23,7 @@ export const ForgotPasswordModal = ({ open, setOpen }) => {
     setMessage("");
 
     try {
-      console.log(email)
+      //console.log(email)
       const res = await forgotPassword(email);
       setMessage(res.message || "Mail Send. Check your inbox.");
       setTimeout(() => {

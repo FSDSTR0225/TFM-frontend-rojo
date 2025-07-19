@@ -9,7 +9,7 @@ export const TagsInputRecruiter = ({ value = [], onChange }) => {
 
   const skills = async (inputValue) => {
     const skillsSuggestions = await getSkillsByQuery(inputValue);
-    console.log("🚀 ~ skills:", skillsSuggestions);
+   
     setSuggestions(skillsSuggestions);
   }
 

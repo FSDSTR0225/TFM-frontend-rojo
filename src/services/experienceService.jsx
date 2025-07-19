@@ -48,7 +48,7 @@ export const createExperience = async (payload, token) => {
     if (!resp.ok) throw new Error("Error saving the experience");
 
     const experience = await resp.json();
-    console.log("Respuesta del backend (createExperience):", experience);
+    //console.log("Respuesta del backend (createExperience):", experience);
     return experience;
   } catch (error) {
     console.error("Failed to create experience:", error);
@@ -70,7 +70,7 @@ export const updateExperience = async (id, payload, token) => {
     if (!resp.ok) throw new Error("Error updating the experience");
 
     const experience = await resp.json();
-    console.log("Respuesta del backend (updateExperience):", experience);
+    // console.log("Respuesta del backend (updateExperience):", experience);
     return experience;
   } catch (error) {
     console.error("Failed to update experience:", error);

@@ -48,7 +48,7 @@ export const createStudy = async (payload, token) => {
     if (!resp.ok) throw new Error("Error saving the study");
 
     const study = await resp.json();
-    console.log("Respuesta del backend (createStudy):", study);
+    //console.log("Respuesta del backend (createStudy):", study);
     return study;
   } catch (error) {
     console.error("Failed to create study:", error);
@@ -70,7 +70,7 @@ export const updateStudy = async (id, payload, token) => {
     if (!resp.ok) throw new Error("Error updating the study");
 
     const study = await resp.json();
-    console.log("Respuesta del backend (updateStudy):", study);
+    //console.log("Respuesta del backend (updateStudy):", study);
     return study;
   } catch (error) {
     console.error("Failed to update study:", error);

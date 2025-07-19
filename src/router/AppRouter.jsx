@@ -1,5 +1,4 @@
-/// src/router/AppRouter.jsx
-import React from "react";
+
 import { createBrowserRouter, RouterProvider } from "react-router";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { ErrorPage } from "../pages/ErrorPage";
@@ -12,12 +11,11 @@ import { ProfileDevPage } from "../features/developer/pages/ProfileDevPage";
 import { EditDevProfilePage } from "../features/developer/pages/EditDevProfilePage";
 import { InfoEditDevPage } from "../features/developer/pages/InfoEditDevPage";
 import { DevsPage } from "../features/developer/pages/DevsPage";
-import { RecDashBoar } from "../features/recruiters/pages/RecDashBoar";
+
 import { RecProfile } from "../features/recruiters/pages/RecProfile";
-import { RecruiterEditForm } from "../features/recruiters/pages/RecruiterEditForm";
+
 import { RecOffers } from "../features/recruiters/pages/RecOffers";
-import { RecOfferForm } from "../features/recruiters/pages/RecOfferForm";
-import { RecApplications } from "../features/recruiters/pages/RecApplications";
+
 import { MainLayout } from "../layout/MainLayout";
 import { Register } from "../features/auth/register";
 import { Login } from "../features/auth/login";
@@ -99,15 +97,12 @@ const router = createBrowserRouter([
 
               // 2. Perfil de recruiter (ver y editar)
               { path: "profile", element: <RecProfile /> },
-              { path: "profile/edit", element: <RecruiterEditForm /> },
 
               // 3. Gestión de ofertas
               { path: "offers", element: <RecOffers /> },
-              { path: "offers/new", element: <RecOfferForm /> },
-              { path: "offers/:offerId/edit", element: <RecOfferForm /> },
 
               // 4. Ver candidaturas recibidas
-              { path: "applications", element: <RecApplications /> },
+              
             ],
           },
         ],

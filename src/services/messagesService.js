@@ -16,7 +16,7 @@ export const getUsers = async (token) => {
 };
 
 export const getMessages = async (token, userId) => {
-  console.log("userId", userId);
+  //console.log("userId", userId);
   const messages = await fetch(`${urlBackEnd}/${userId}`, {
     method: "GET",
     headers: {

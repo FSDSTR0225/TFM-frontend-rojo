@@ -105,7 +105,7 @@ export const OfferInfoPage = () => {
     );
     setSkillsOffer(data.skills);
     const candidates = data.applicants;
-    console.log("candidatos", candidates);
+   
     //Crea grouped, un objeto vacío con las cinco claves.
     setLists(candidates);
   };
@@ -122,7 +122,6 @@ export const OfferInfoPage = () => {
   };
 
   useEffect(() => {
-    console.log(lists[1]);
     getCandidates();
     fetchOffer();
   }, [id]);

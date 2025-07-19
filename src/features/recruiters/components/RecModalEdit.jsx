@@ -20,7 +20,6 @@ export const RecModalEdit = ({ openModal, setOpenModal, profile, token, onProfil
 
     useEffect(() => {
         if (profile) {
-            console.log("Perfil en modal:", profile);
             reset({
                 name: profile?.name || "",
                 surname: profile?.surname || "",
@@ -43,8 +42,8 @@ export const RecModalEdit = ({ openModal, setOpenModal, profile, token, onProfil
 
     const onSubmit = async (data) => {
         try {
-            console.log("Submitting data:", data);
-            console.log("Avatar data:", avatarData);
+            //console.log("Submitting data:", data);
+            //console.log("Avatar data:", avatarData);
             const formattedData = {
                 ...profile,
                 ...data,
@@ -63,10 +62,10 @@ export const RecModalEdit = ({ openModal, setOpenModal, profile, token, onProfil
                 },
             };
 
-            console.log("Formatted data:", formattedData);
+            //console.log("Formatted data:", formattedData);
 
             const updated = await updateProfileRecruiter(formattedData, token);
-            console.log("Updated profile:", updated);
+            //console.log("Updated profile:", updated);
             if (updated?.recruiter) {
                  setProfile(updated.recruiter);
                 onProfileUpdate();

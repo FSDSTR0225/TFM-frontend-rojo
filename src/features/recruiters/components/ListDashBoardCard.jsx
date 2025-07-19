@@ -38,6 +38,7 @@ export const ListDashBoardCard = ({
             const completeName =
               `${name} ${surname}`.trim() || "Unknown Profile";
             const isResume = candidato?.user?.role?.developer?.resume;
+            console.log(isResume);
             const isCoverLetter = (candidato?.coverLetter?.length ?? 0) >= 5;
             return (
               <div

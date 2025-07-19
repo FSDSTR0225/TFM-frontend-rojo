@@ -9,13 +9,11 @@ export const OfferModal = ({ token, reloadPage, idOffer, isOpen, setIsOpen, oper
     handleSubmit,
     reset,
     setValue,
-    formState: { errors } } = useForm();
+    formState: { _errors } } = useForm();
 
   const skills = watch("skills") || [];
 
   useEffect(() => {
-    console.log("isOpen", isOpen);
-    console.log("idOffer", idOffer);
     const fetchOffer = async () => {
       if (!idOffer) return;
       const resp = await getOffersById(idOffer);
@@ -43,16 +41,16 @@ export const OfferModal = ({ token, reloadPage, idOffer, isOpen, setIsOpen, oper
       }
 
       try {
-        const resp = await updateOffert(idOffer, formDatos, token);
-        console.log("Oferta actualizada:", resp);
+        const _resp = await updateOffert(idOffer, formDatos, token);
+       
       } catch (error) {
         console.error("Error al actualizar la oferta:", error.message || error);
         alert("Hubo un error al actualizar la oferta.");
       }
     } else {
       try {
-        const resp = await createdOffert(formDatos, token);
-        console.log("Oferta creada:", resp);
+        const _resp = await createdOffert(formDatos, token);
+        
       } catch (error) {
         console.error("Error al crear la oferta:", error.message || error);
         alert("Hubo un error al crear la oferta.");

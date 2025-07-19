@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import { getSkillsByQuery } from "../../../services/offersServices";
-import { set } from "react-hook-form";
+
 
 export const TagsInputDev = ({ value = [], onChange }) => {
   const [inputValue, setInputValue] = useState("");
@@ -9,7 +9,7 @@ export const TagsInputDev = ({ value = [], onChange }) => {
 
   const skills = async (inputValue) => {
     const skillsSuggestions = await getSkillsByQuery(inputValue);
-    console.log("🚀 ~ skills:", skillsSuggestions);
+    
     setSuggestions(skillsSuggestions);
   }
 

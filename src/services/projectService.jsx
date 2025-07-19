@@ -11,7 +11,7 @@ export const getAllProjects = async () => {
     });
 
     const data = await resp.json();
-    console.log("data: ", data);
+    //console.log("data: ", data);
     return data;
   } catch (error) {
     console.error("Failed to fetch projects:", error);
@@ -33,7 +33,7 @@ export const createProject = async (payload, token) => {
     if (!resp.ok) throw new Error("Error saving the project");
 
     const project = await resp.json();
-    console.log("Respuesta del backend (createProject):", project);
+    // console.log("Respuesta del backend (createProject):", project);
     return project;
   } catch (error) {
     console.error("Failed to create project:", error);

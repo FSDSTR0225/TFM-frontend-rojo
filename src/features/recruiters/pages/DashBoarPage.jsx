@@ -68,13 +68,12 @@ const handleDownloadCoverLetter = async (offerId, userId) => {
     const data = await getCandidatesByOfferId(offerId, localStorage.getItem('token'));
     setSkillsOffer(data.skills);
     const candidates = data.applicants;
-    console.log('candidatos',candidates);
+   
     //Crea grouped, un objeto vacío con las cinco claves.
     const grouped = { pending: [], reviewed: [], interviewed: [], accepted: [], rejected: [] };
     //Recorre cada candidato (data.forEach) y, según su status, lo añade al array correspondiente.
     candidates.forEach(c => grouped[c.status]?.push(c));
     //Llama a setLists(grouped), que actualiza el estado con los candidatos ya clasificados.
-    console.log(grouped);
     setLists(grouped);
   } 
   useEffect(() => {
@@ -145,6 +144,10 @@ const handleDownloadCoverLetter = async (offerId, userId) => {
   
     </>
   )}
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
 
   return (
     <>
@@ -231,7 +234,7 @@ const handleDownloadCoverLetter = async (offerId, userId) => {
           setLists={setLists}
           getCandidates={getCandidates} /> : <RecDashBoar offerId={offerId}
             setIsOpenApplicantsModal={handleOpenApplicantsModal}
-            
+            activeTab={activeTab}
             lists={lists}
             setLists={setLists} />}
       </div>
