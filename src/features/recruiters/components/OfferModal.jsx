@@ -9,7 +9,7 @@ export const OfferModal = ({ token, reloadPage, idOffer, isOpen, setIsOpen, oper
     handleSubmit,
     reset,
     setValue,
-    formState: { errors } } = useForm();
+    formState: { _errors } } = useForm();
 
   const skills = watch("skills") || [];
 

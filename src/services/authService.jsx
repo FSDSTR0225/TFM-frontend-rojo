@@ -57,7 +57,7 @@ export const getUserLogged = async (token) => {
     const data = await resp.json();
     return data;
   } catch (error) {
-    throw error;
+    throw new error.message;
   }
 };
 

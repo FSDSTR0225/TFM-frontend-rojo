@@ -45,7 +45,7 @@ export const RecDashBoar = ({
     });
     // 4. Actualiza en backend
    
-    const daysAgo = getDaysSince(candidate?.appliedDate);
+    // const daysAgo = getDaysSince(candidate?.appliedDate);
     await updateCandidateStatus(
       offerId,
       candidate._id,

@@ -31,7 +31,7 @@ export const ApplyModal = ({ isOpen, setIsOpen, idOffer, onApplySuccess }) => {
       onApplySuccess?.(response.offer);
       setIsOpen(false);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

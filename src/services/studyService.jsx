@@ -13,7 +13,7 @@ export async function getStudiesByDeveloper(developerId, token) {
     const data = await res.json();
     return data;
   } catch (error) {
-    //console.error("Failed to fetch studies by developer:", error);
+    console.error("Failed to fetch studies by developer:", error);
     return { error: true, message: "Request failed" };
   }
 }

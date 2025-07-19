@@ -145,6 +145,10 @@ const handleDownloadCoverLetter = async (offerId, userId) => {
     </>
   )}
 
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
   return (
     <>
       <div className="flex flex-col gap-4 mb-4 items-center sm:items-stretch">
@@ -230,7 +234,7 @@ const handleDownloadCoverLetter = async (offerId, userId) => {
           setLists={setLists}
           getCandidates={getCandidates} /> : <RecDashBoar offerId={offerId}
             setIsOpenApplicantsModal={handleOpenApplicantsModal}
-            
+            activeTab={activeTab}
             lists={lists}
             setLists={setLists} />}
       </div>

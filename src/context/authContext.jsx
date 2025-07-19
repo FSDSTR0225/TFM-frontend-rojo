@@ -23,10 +23,11 @@ export const AuthProvider = ({ children }) => {
       setIsCheckingOnboarding(true);
       const resp = await getUserLogged(token);
       setProfile(resp);
-    } catch (err) {
+    } catch (error) {
       setProfile(null);
       setToken(null);
       localStorage.removeItem("token");
+      console.error(error);
     } finally {
       setIsCheckingOnboarding(false);
     }

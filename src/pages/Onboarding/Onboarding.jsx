@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import {AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router";
 import { AuthContext } from "../../context/authContext";
 import { StartingComponent } from "../Onboarding/StartingStepper";

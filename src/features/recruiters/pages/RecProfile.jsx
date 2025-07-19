@@ -24,7 +24,7 @@ export const RecProfile = () => {
   const [selectedOfferId, setSelectedOfferId] = useState(null);
   const [stats, setStats] = useState(null)
   const { profile, token, setProfile } = useContext(AuthContext) || {};
-  const [operacion, setOperacion] = useState('crear');
+  const [operacion, _setOperacion] = useState('crear');
 
   const { id } = useParams(); // ID del reclutador desde la URL
 
