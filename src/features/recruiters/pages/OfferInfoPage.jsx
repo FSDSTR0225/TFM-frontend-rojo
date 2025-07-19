@@ -197,7 +197,7 @@ export const OfferInfoPage = () => {
                 const surname = capitalize(candidato?.user?.surname || "");
                 const completeName =
                   `${name} ${surname}`.trim() || "Unknown Profile";
-                const isResume = candidato?.role?.developer?.resume;
+                const isResume = candidato?.user?.role?.developer?.resume;
                 const isCoverLetter =
                   (candidato.coverLetter?.length ?? 0) >= 10;
                 return (
