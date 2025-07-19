@@ -71,7 +71,7 @@ export default function ChatPanel({ onClose, user }) {
   }, [selectedUser, socket]);
 
   useEffect(() => {
-    console.log('🔔 Notificaciones actualizadas:', notifications);
+   // console.log('🔔 Notificaciones actualizadas:', notifications);
   }, [notifications]);
 
   useEffect(() => {
@@ -154,7 +154,7 @@ export default function ChatPanel({ onClose, user }) {
       setImagePreview(null);
       if (fileInputRef.current) fileInputRef.current.value = "";
     } catch (error) {
-      console.log("Failed to send message: ", error);
+      console.error("Failed to send message: ", error);
     }
   }
 
@@ -162,7 +162,7 @@ export default function ChatPanel({ onClose, user }) {
     if (!socket) return;
 
     const handler = (data) => {
-      console.log("🔔 Nueva notificación:", data);
+      //console.log("🔔 Nueva notificación:", data);
       setNotifications((prev) => [...prev, { ...data, createdAt: Date.now() }]);
       if (data.type === 1) {
         setUsuariosConectados((prev) => {

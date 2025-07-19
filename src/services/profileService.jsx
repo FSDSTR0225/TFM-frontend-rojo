@@ -27,18 +27,15 @@ export const getProfileDev = async (_id) => {
       },
     });
     const data = await response.json();
-    console.log("Data: " + data);
     return data;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw error;
   }
 };
 
 export const updateProfile = async (devProfile, token) => {
-  console.log("Dev Profile:", devProfile);
-  console.log("Dev token:", token);
-
+  
   try {
     const resp = await fetch(urlBackEnd + "/devs/profile", {
       method: "PUT",
@@ -54,15 +51,12 @@ export const updateProfile = async (devProfile, token) => {
     const data = await resp.json();
     return data;
   } catch (error) {
-    console.log("Error: ", error);
+    console.error("Error: ", error);
     throw error;
   }
 };
 
 export const updateProfileRecruiter = async (recProfile, token) => {
-  console.log("Rec Profile:", recProfile);
-  console.log("Dev token:", token);
-
   try {
     const resp = await fetch(urlBackEnd + "/recruiters/profile", {
       method: "PUT",
@@ -78,7 +72,7 @@ export const updateProfileRecruiter = async (recProfile, token) => {
     const data = await resp.json();
     return data;
   } catch (error) {
-    console.log("Error: ", error);
+    console.error("Error: ", error);
     throw error;
   }
 };
@@ -90,7 +84,6 @@ export const getRecruiterById = async (_id) => {
       throw new Error("Error getting user");
     }
     const recruiterData = await response.json();
-    console.log("🚀 ~ getRecruiterById ~ recruiterData:", recruiterData);
 
     return recruiterData;
   } catch (error) {

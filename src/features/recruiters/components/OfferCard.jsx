@@ -21,7 +21,7 @@ export const OfferCard = ({
   isOpenModalDelete,
   setIsOpenApplyModal,
   setSelectedOfferId,
-  isOpenModalEdit,
+  
   setIsOpenModalEdit,
 }) => {
 
@@ -50,21 +50,6 @@ export const OfferCard = ({
     setSelectedOfferId(offer?._id);
   };
 
-  // const handleApply = async (e) => {
-  //   e.stopPropagation();
-  //   if (!token) {
-  //     console.log("por aqui no pasaras");
-  //     navigate("/login");
-  //   }
-
-  //   try {
-  //     const response = await applyToOffer(offer._id, token);
-  //     console.log(response.msg || "se envio");
-  //     onApplySuccess?.(response.offer);
-  //   } catch (error) {
-  //     console.log(error.message || "Error al aplicar a la oferta");
-  //   }
-  // };
   const hasApplied =
     Array.isArray(offer.applicants) &&
     profile?._id &&
@@ -74,14 +59,13 @@ export const OfferCard = ({
 
     setIsOpenModalDelete(true);
     setSelectedOfferId(offer?._id);
-    console.log("🚀 ~ handleOnModal ~ isOpenModalDelete:", isOpenModalDelete);
   };
 
   const handleOnModalEdit = (e) => {
     e.stopPropagation();
     setSelectedOfferId(offer?._id);
     setIsOpenModalEdit(true);
-    console.log("🚀 ~ handleOnModal ~ isOpenModalEdit:", isOpenModalEdit);
+    
   };
 
   const handleOnClick = (e) => {

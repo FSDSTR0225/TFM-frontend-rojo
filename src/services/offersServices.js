@@ -7,7 +7,7 @@ export const getOffers = async () => {
       throw new Error("Error getting offers");
     }
     const offersData = await response.json();
-    console.log("🚀 ~ getOffers ~ offersData:", offersData);
+   
     return offersData;
   } catch (error) {
     console.error("OffersService Error:", error);
@@ -22,7 +22,7 @@ export const getOffersbyOwner = async (ownerId) => {
       throw new Error("Error getting offers");
     }
     const offersData = await response.json();
-    console.log("🚀 ~ getOffers ~ offersData:", offersData);
+  
     return offersData;
   } catch (error) {
     console.error("OffersService Error:", error);
@@ -59,7 +59,7 @@ export const deleteOffer = async (id, token) => {
     const data = await resp.json();
     return data;
   } catch (error) {
-    console.log("Error: ", error);
+    console.error("Error: ", error.message);
     throw error;
   }
 };
@@ -73,7 +73,7 @@ export const getSkillsByQuery = async (query) => {
     const data = await resp.json();
     return data;
   } catch (error) {
-    console.log("Error: ", error);
+    console.error("Error: ", error);
     throw error;
   }
 };
@@ -105,7 +105,7 @@ export const createdOffert = async (offert, token) => {
     const data = await resp.json();
     return data;
   } catch (error) {
-    console.log("Error: ", error);
+    console.error("Error: ", error);
     throw error;
   }
 };
@@ -125,7 +125,7 @@ export const updateOffert = async (id, offert, token) => {
     const data = await resp.json();
     return data;
   } catch (error) {
-    console.log("Error: ", error);
+    console.error("Error: ", error);
     throw error;
   }
 };
@@ -143,7 +143,7 @@ export const getRecruitersStats = async (recId) => {
       throw new Error("Error getting stats");
     }
     const data = await resp.json();
-    console.log("🚀 ~ getRecruitersStats ~ data:", data);
+    
 
     return data;
   } catch (error) {
@@ -168,7 +168,7 @@ export const applyToOffer = async (id, applicationData, token) => {
       throw Error(data.msg || "Error applying to the offer");
     }
 
-    console.log("🚀 ~ applyToOffer ~ data:", data);
+ 
 
     return {
       msg: data.msg || "Application successful",
@@ -191,7 +191,7 @@ export const getCandidatesByOfferId = async (offerId, token) => {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.log("Error: ", error);
+    console.error("Error: ", error);
     throw error;
   }
 };
@@ -238,7 +238,6 @@ export const getOffersAppliedByDeveloper = async (developerId, token) => {
       throw new Error("Error getting offers");
     }
     const offersData = await response.json();
-    console.log("🚀 ~ getOffers ~ offersData:", offersData);
     return offersData.offers || [];
   } catch (error) {
     console.error("OffersService Error:", error);
@@ -263,7 +262,7 @@ export const getOffersByDeveloper = async (token) => {
       );
     }
     const offersData = await response.json();
-    console.log("🚀 ~ getOffers ~ offersData:", offersData);
+   
     return offersData.offers || [];
   } catch (error) {
     console.error("OffersService Error:", error);
@@ -310,33 +309,20 @@ export const getCoverLetter = async (offerId, userId) => {
     let filename = "cover-letter.pdf";
     const disposition = response.headers.get("Content-Disposition");
 
-    // DEBUG: Log para verificar qué está recibiendo el frontend
-    console.log("🔍 Cover Letter Debug:");
-    console.log("Headers disponibles:", [...response.headers.entries()]);
-    console.log("Content-Disposition header:", disposition);
-
     if (disposition && disposition.includes("filename=")) {
       // Mejorar la regex para capturar correctamente el filename
       const filenameMatch = disposition.match(/filename="([^"]+)"/); // Para filename="nombre.pdf"
       const filenameStarMatch = disposition.match(/filename=([^;]+)/); // Para filename=nombre.pdf (sin comillas)
-
-      console.log("filenameMatch:", filenameMatch);
-      console.log("filenameStarMatch:", filenameStarMatch);
-
       if (filenameMatch && filenameMatch[1]) {
-        filename = filenameMatch[1];
-        console.log("✅ Filename extraído (con comillas):", filename);
+        filename = filenameMatch[1];  
       } else if (filenameStarMatch && filenameStarMatch[1]) {
         filename = filenameStarMatch[1].replace(/"/g, ""); // Remover comillas si las hay
-        console.log("✅ Filename extraído (sin comillas):", filename);
       }
     } else {
       console.log(
-        "❌ No se encontró Content-Disposition o filename en el header"
+        "❌ Content-Disposition or filename not found in header"
       );
     }
-
-    console.log("📁 Filename final para descarga:", filename);
 
     const a = document.createElement("a");
     a.href = url;

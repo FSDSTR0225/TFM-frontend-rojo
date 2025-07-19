@@ -40,8 +40,8 @@ export const loginUser = async (email, password) => {
     const data = await resp.json();
     return data;
   } catch (err) {
-    console.error("Error en loginUser:", err.message);
-    throw err;
+    console.error(err);
+    throw err.message;
   }
 };
 
@@ -57,7 +57,7 @@ export const getUserLogged = async (token) => {
     const data = await resp.json();
     return data;
   } catch (error) {
-    throw error;
+    throw new error.message;
   }
 };
 

@@ -12,7 +12,7 @@ export const RecProfileCard = ({ recruiter, profile, id, token, setProfile, onRe
   const isOwner = profile?._id === id;
 
   useEffect(() => {
-    console.log('Profile updated:', profile);
+   
   }, [profile]);
 
   const updateProfile = async() => {

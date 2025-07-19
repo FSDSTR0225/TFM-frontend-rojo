@@ -6,7 +6,7 @@ import { CiBellOn } from "react-icons/ci";
 export const Notifications = () => {
     const { profile, notifications } = useContext(AuthContext);
     const [notificationsOpen, setNotificationsOpen] = useState(false);
-    console.log("Notificaciones:", notifications);
+    //console.log("Notificaciones:", notifications);
     const getNotificationText = (notif) => {
         if (notif.type === 1) return null;
         const types = {

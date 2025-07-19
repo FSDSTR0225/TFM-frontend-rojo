@@ -26,8 +26,8 @@ export const Register = () => {
 
     try {
       let newUser = { ...formData };
-      const resp = await registeredUser(newUser);
-      console.log("Registration successful:", resp);
+      const _resp = await registeredUser(newUser);
+      //console.log("Registration successful:", resp);
       navigate(`/login`);
     } catch (error) {
       console.error("Registration error:", error);

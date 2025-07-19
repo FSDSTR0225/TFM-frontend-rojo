@@ -50,7 +50,7 @@ export const SettingsPage = () => {
       const result = await updatePassword(data, token);
       
       if (result) {
-        console.log('Password change data:', result);
+        //console.log('Password change data:', result);
         setIsPasswordModalOpen(false);
       } else {
         console.error('Error changing password:', result.error);
@@ -70,7 +70,7 @@ export const SettingsPage = () => {
       const result = await deleteAccount(token);
       
       if (result) {
-        console.log('Account soft deleted:', result);
+        //console.log('Account soft deleted:', result);
         setIsRemoveModalOpen(false);
         
         // Limpiar la sesión del usuario y redireccionar
