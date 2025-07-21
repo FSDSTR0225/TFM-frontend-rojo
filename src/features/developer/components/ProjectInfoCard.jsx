@@ -105,13 +105,13 @@ export const ProjectInfoCard = ({ project, setSelectedOwner }) => {
 
             {/* GitHub link justo debajo de Duration */}
             {githubProjectLink && (
-              <div className="flex items-center gap-2">
+              <div className="flex break-words items-center gap-2">
                 <PiGithubLogo className="text-primary-50" size={18} />
                 <a
                   href={githubProjectLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-primary-50 underline hover:text-primary-30"
+                  className="text-primary-50 underline break-all hover:text-primary-30"
                 >
                   {githubProjectLink}
                 </a>

@@ -40,7 +40,7 @@ export const ProjectDetailsPage = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const width = useWindowWidth();
   const isDesktop = width >= 1200;
-  const { profile, socket, setNotifications } = useContext(AuthContext);
+  const { profile, socket } = useContext(AuthContext);
   const [selectedOwner, setSelectedOwner] = useState(null);
   const token = localStorage.getItem("token") || "";
 
@@ -121,7 +121,6 @@ export const ProjectDetailsPage = () => {
           createdAt: Date.now(),
         };
         socket.emit("sendNotification", notif);
-        
       }
     } catch (error) {
       console.error(error);

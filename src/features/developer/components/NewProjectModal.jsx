@@ -93,7 +93,7 @@ export const NewProjectModal = ({
         category: project.category,
         description: project.description,
         liveLink: project.liveLink,
-        githubLink: project.githubLink,
+        githubProjectLink: project.githubProjectLink,
       });
 
       setCodeSections(project.codeSections || []);
@@ -123,6 +123,8 @@ export const NewProjectModal = ({
       codeSections,
       gallery: filteredGallery,
     };
+
+    console.log("Payload enviado al backend:", payload); // <--- Aquí el console.log
 
     if (!onSubmitProject) {
       setError("No submit handler provided");
@@ -435,16 +437,17 @@ export const NewProjectModal = ({
             <div>
               <label
                 className="block text-sm text-neutral-20 mb-1"
-                htmlFor="githubLink"
+                htmlFor="githubProjectLink"
               >
                 GitHub Repository URL
               </label>
+
               <input
-                id="githubLink"
+                id="githubProjectLink"
                 type="url"
                 placeholder="(e.g. https://github.com/user/repo)"
                 className="input input-bordered bg-neutral-90 text-neutral-0 border-neutral-60 w-full placeholder-neutral-40 placeholder:italic"
-                {...register("githubLink")}
+                {...register("githubProjectLink")}
               />
             </div>
           </div>
