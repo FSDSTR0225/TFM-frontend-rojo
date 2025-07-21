@@ -1,11 +1,10 @@
 import { deleteOffer } from "../../../services/offersServices";
 
 export const ModalDelete = ({ isOpen, setIsOpen, idOffer,reloadPage }) => {
-    console.log("🚀 ~ ModalDelete ~ idOffer:", idOffer)
     const deleted = async()=>{
       const token = localStorage.getItem('token');
-      const resp = await deleteOffer(idOffer, token);
-      console.log("resp: ",resp);
+      const _resp = await deleteOffer(idOffer, token);
+
       reloadPage();
       setIsOpen(false);
     }

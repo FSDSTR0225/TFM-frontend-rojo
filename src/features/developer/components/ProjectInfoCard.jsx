@@ -41,7 +41,7 @@ export const ProjectInfoCard = ({ project, setSelectedOwner }) => {
     ? projectSkills
     : projectSkills?.slice(0, 5) || [];
 
-  console.log("owner en ProjectInfoCard:", owner);
+  // console.log("owner en ProjectInfoCard:", owner);
 
   return (
     <div className="relative bg-neutral-80 flex flex-col rounded-lg shadow-md overflow-hidden border border-neutral-70 p-8 text-inherit no-underline w-full max-w-full">

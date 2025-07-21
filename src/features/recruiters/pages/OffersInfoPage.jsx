@@ -129,7 +129,7 @@ export const OffersInfoPage = () => {
   const filteredOffers = getFilteredOffers();
   const filteredAppliedOffers = getFilteredAppliedOffers();
   const filteredOffersByDev = getFilteredOffersByDev();
-  console.log("Filtered offers:", filteredOffers);
+ 
 
   const totalPages = Math.ceil(filteredOffers.length / 6);
   const totalPagesApplied = Math.ceil(filteredAppliedOffers.length / 6);
@@ -178,10 +178,10 @@ export const OffersInfoPage = () => {
 
   useEffect(() => {
     if (isDeveloper) {
-      console.log("Fetching offers for developer:", profile._id);
+     
       fetchOffersForDeveloper();
     } else {
-      console.log("Fetching general offers");
+      
       fetchOffers();
     }
   }, [isDeveloper, token]);
@@ -219,9 +219,9 @@ export const OffersInfoPage = () => {
   if (error) return <p>Error al cargar las ofertas: {error}</p>;
 
   const handleApplySuccess = (updatedOffer) => {
-    console.log("Offer applied successfully:", updatedOffer);
+  
     setOffersByDev((prevOffers) => {
-      console.log("🚀 ~ handleApplySuccess ~ prevOffers:", prevOffers);
+      
       return prevOffers.map((offer) =>
         offer._id === updatedOffer._id ? updatedOffer : offer
       );

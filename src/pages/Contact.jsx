@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { SectionContainer } from '../components/SectionContainer';
 
 const API_URL = import.meta.env.VITE_BASE_URL; // Ajusta según tu configuración
